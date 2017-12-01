@@ -3,6 +3,7 @@ package Dota2Parser.Dota2Parser;
 import java.io.File;
 import java.io.PrintWriter;
 
+import skadistats.clarity.Clarity;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.FieldPath;
 import skadistats.clarity.processor.entities.OnEntityCreated;
@@ -12,6 +13,7 @@ import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.source.Source;
+import skadistats.clarity.wire.common.proto.Demo.CDemoFileInfo;
 
 @UsesEntities
 public class App
@@ -72,22 +74,31 @@ public class App
         if (updatePosition)
         {
         	writer.format("%d [POSITION] %s %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(x), e.getPropertyForFieldPath(y));
+        	writer.flush();
             System.out.format("%d [POSITION] %s %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(x), e.getPropertyForFieldPath(y));
         }
-        else if (updateHealth)
+        if (updateHealth)
         {
         	writer.format("%d [HEALTH] %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(health));
+        	writer.flush();
             System.out.format("%d [HEALTH] %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(health));
         }
     }
     
     public void run(String[] args) throws Exception
     {
-    	File file = new File(args[1] + "/replay.txt");
-    	writer = new PrintWriter(file);
+    	File replayFile = new File(args[1] + "/replay.txt");
+    	writer = new PrintWriter(replayFile);
+
+    	CDemoFileInfo info = Clarity.infoForFile(args[0]);
+    	File infoFile = new File(args[1] + "/info.txt");
+    	PrintWriter w = new PrintWriter(infoFile);
+    	w.write(info.getGameInfo().toString());
+    	w.close();
     	
     	Source source = new MappedFileSource(args[0]);
-    	new SimpleRunner(source).runWith(this);    	
+    	new SimpleRunner(source).runWith(this);
+    	writer.close();
     }
 
     public static void main(String[] args) throws Exception
