@@ -1,9 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gaming Supervisor", "WindowsFormsApp1\Gaming Supervisor.csproj", "{170336B4-5DD4-4673-B421-2ECC9D60109D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06B4C1FC-2218-4132-95E1-9044C4EDAC52}"
+	ProjectSection(SolutionItems) = preProject
+		WindowsFormsApp1\Parser\parser.jar = WindowsFormsApp1\Parser\parser.jar
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
