@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;Dota2Parser&apos;&#x0D;&#x0A;- Original project: &apos;Dota2Parser&apos;&#x0D;&#x0A;- Original element: &apos;replay.txt&apos;" description="Delete element" element1="replay.txt" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="1" stamp="1512151146885" subPackages="false" version="1.0"/>
+</session>
