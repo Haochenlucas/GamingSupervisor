@@ -1,16 +1,7 @@
-﻿using ICSharpCode.SharpZipLib.BZip2;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GamingSupervisor
@@ -251,6 +242,16 @@ namespace GamingSupervisor
             filename = ofd.FileName;
         }
 
+        private void startDota()
+        {
+            Console.WriteLine("Starting dota...");
+            Process p = new Process();
+            p.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Steam\Steam.exe");
+            p.StartInfo.Arguments = "-applaunch 570 -fullscreen";
+            p.Start();
+            Console.WriteLine("Dota running!");
+        }
+
         private void go_button_Click(object sender, EventArgs e)
         {
             go_button.Hide();
@@ -262,6 +263,8 @@ namespace GamingSupervisor
             thread.Start();
 
             timer1.Start();
+
+            startDota();
 
             //thread.Join();
         }
