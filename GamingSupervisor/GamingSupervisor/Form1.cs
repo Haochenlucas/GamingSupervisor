@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ICSharpCode.SharpZipLib.BZip2;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -223,7 +224,7 @@ namespace GamingSupervisor
 
         private void replay_button_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "dem files (*.dem)|*.dem";
+            openFileDialog1.Filter = "dem files (*.dem)|*.dem|bz2 files (*.bz2)|*.bz2";
             openFileDialog1.Title = "Select a replay file";
             DialogResult result = openFileDialog1.ShowDialog();
 
@@ -250,8 +251,36 @@ namespace GamingSupervisor
             filename = ofd.FileName;
         }
 
+        private void decompressFile()
+        {
+            Console.WriteLine("Starting decompressing...");
+            FileInfo zipFile = new FileInfo(filename);
+            using (FileStream fileToDecompressAsStream = zipFile.OpenRead())
+            {
+                filename = Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\" + Path.GetFileNameWithoutExtension(filename));
+                using (FileStream decompressedStream = File.Create(filename))
+                {
+                    try
+                    {
+                        BZip2.Decompress(fileToDecompressAsStream, decompressedStream, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+            }
+            Console.WriteLine("Finished decompressing!");
+        }
+
         private void parseReplayFile()
         {
+            if (Path.GetExtension(filename) == ".bz2")
+            {
+                decompressFile();
+            }
+
+            Console.WriteLine("Starting parsing...");
             Process p = new Process();
             p.StartInfo.UseShellExecute        = false;
             p.StartInfo.RedirectStandardOutput = true;
@@ -264,8 +293,11 @@ namespace GamingSupervisor
                 + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\"); // Data dump location
             p.Start();
 
-            //String s = p.StandardOutput.ReadToEnd();
-            //Console.Write(s);
+            while (!p.HasExited)
+            {
+                Console.WriteLine(p.StandardOutput.ReadLine());
+            }
+
             p.WaitForExit();
             Console.WriteLine("Finished parsing!");
         }
