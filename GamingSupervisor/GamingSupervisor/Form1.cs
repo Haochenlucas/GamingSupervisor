@@ -251,69 +251,19 @@ namespace GamingSupervisor
             filename = ofd.FileName;
         }
 
-        private void decompressFile()
-        {
-            Console.WriteLine("Starting decompressing...");
-            FileInfo zipFile = new FileInfo(filename);
-            using (FileStream fileToDecompressAsStream = zipFile.OpenRead())
-            {
-                filename = Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\" + Path.GetFileNameWithoutExtension(filename));
-                using (FileStream decompressedStream = File.Create(filename))
-                {
-                    try
-                    {
-                        BZip2.Decompress(fileToDecompressAsStream, decompressedStream, true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                }
-            }
-            Console.WriteLine("Finished decompressing!");
-        }
-
-        private void parseReplayFile()
-        {
-            if (Path.GetExtension(filename) == ".bz2")
-            {
-                decompressFile();
-            }
-
-            Console.WriteLine("Starting parsing...");
-            Process p = new Process();
-            p.StartInfo.UseShellExecute        = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName               = "java";
-            p.StartInfo.Arguments =        
-                "-jar " 
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
-                + filename.Replace(@"\", @"\\")
-                + " "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\"); // Data dump location
-            p.Start();
-
-            while (!p.HasExited)
-            {
-                Console.WriteLine(p.StandardOutput.ReadLine());
-            }
-
-            p.WaitForExit();
-            Console.WriteLine("Finished parsing!");
-        }
-
         private void go_button_Click(object sender, EventArgs e)
         {
             go_button.Hide();
             timer_text.Show();
             back_button.Hide();
 
-            Thread thread = new Thread(parseReplayFile);
+            ParserHandler parser = new ParserHandler(filename);
+            Thread thread = new Thread(parser.ParseReplayFile);
             thread.Start();
 
             timer1.Start();
 
-            //uthread.Join();
+            //thread.Join();
         }
 
         private void timer1_Tick(object sender, EventArgs e)

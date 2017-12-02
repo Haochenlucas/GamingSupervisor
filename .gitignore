@@ -259,3 +259,5 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/GamingSupervisor/GamingSupervisor/Parser/info.txt
+/GamingSupervisor/GamingSupervisor/Parser/replay.txt
