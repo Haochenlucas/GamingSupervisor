@@ -60,9 +60,9 @@
             this.title_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.title_label.Location = new System.Drawing.Point(43, 9);
             this.title_label.Name = "title_label";
-            this.title_label.Size = new System.Drawing.Size(196, 25);
+            this.title_label.Size = new System.Drawing.Size(243, 25);
             this.title_label.TabIndex = 0;
-            this.title_label.Text = "Gaming Supervisor";
+            this.title_label.Text = "GAMING SUPERVISOR";
             // 
             // novice_button
             // 
@@ -141,7 +141,7 @@
             // jg_checkbox
             // 
             this.jg_checkbox.AutoSize = true;
-            this.jg_checkbox.Location = new System.Drawing.Point(3, 95);
+            this.jg_checkbox.Location = new System.Drawing.Point(67, 72);
             this.jg_checkbox.Name = "jg_checkbox";
             this.jg_checkbox.Size = new System.Drawing.Size(65, 17);
             this.jg_checkbox.TabIndex = 7;
@@ -152,7 +152,7 @@
             // sfa_checkbox
             // 
             this.sfa_checkbox.AutoSize = true;
-            this.sfa_checkbox.Location = new System.Drawing.Point(3, 118);
+            this.sfa_checkbox.Location = new System.Drawing.Point(3, 95);
             this.sfa_checkbox.Name = "sfa_checkbox";
             this.sfa_checkbox.Size = new System.Drawing.Size(113, 17);
             this.sfa_checkbox.TabIndex = 8;
@@ -170,7 +170,7 @@
             this.checkbox_container.Controls.Add(this.sfa_checkbox);
             this.checkbox_container.Location = new System.Drawing.Point(89, 95);
             this.checkbox_container.Name = "checkbox_container";
-            this.checkbox_container.Size = new System.Drawing.Size(123, 269);
+            this.checkbox_container.Size = new System.Drawing.Size(141, 269);
             this.checkbox_container.TabIndex = 9;
             // 
             // player_level_text
@@ -195,9 +195,9 @@
             // 
             // cb_confirm
             // 
-            this.cb_confirm.Location = new System.Drawing.Point(13, 421);
+            this.cb_confirm.Location = new System.Drawing.Point(13, 412);
             this.cb_confirm.Name = "cb_confirm";
-            this.cb_confirm.Size = new System.Drawing.Size(75, 23);
+            this.cb_confirm.Size = new System.Drawing.Size(75, 32);
             this.cb_confirm.TabIndex = 12;
             this.cb_confirm.Text = "Confirm";
             this.cb_confirm.UseVisualStyleBackColor = true;
@@ -206,9 +206,9 @@
             // 
             // back_button
             // 
-            this.back_button.Location = new System.Drawing.Point(209, 421);
+            this.back_button.Location = new System.Drawing.Point(209, 412);
             this.back_button.Name = "back_button";
-            this.back_button.Size = new System.Drawing.Size(75, 23);
+            this.back_button.Size = new System.Drawing.Size(75, 32);
             this.back_button.TabIndex = 13;
             this.back_button.Text = "Back";
             this.back_button.UseVisualStyleBackColor = true;
@@ -235,6 +235,7 @@
             this.live_button.Text = "Live Gameplay";
             this.live_button.UseVisualStyleBackColor = true;
             this.live_button.Visible = false;
+            this.live_button.Click += new System.EventHandler(this.live_button_Click);
             // 
             // openFileDialog1
             // 

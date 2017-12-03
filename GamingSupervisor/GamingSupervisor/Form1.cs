@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -38,6 +39,60 @@ namespace GamingSupervisor
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
+            //this.Icon = new Icon();
+
+            Color dotaBackgroundColor = Color.FromArgb(0x1B, 0x1E, 0x21);
+
+            this.BackColor = dotaBackgroundColor;
+            title_label.BackColor = dotaBackgroundColor;
+            novice_button.BackColor = dotaBackgroundColor;
+            learning_button.BackColor = dotaBackgroundColor;
+            almost_button.BackColor = dotaBackgroundColor;
+            replay_button.BackColor = dotaBackgroundColor;
+            live_button.BackColor = dotaBackgroundColor;
+            go_button.BackColor = dotaBackgroundColor;
+            cb_confirm.BackColor = dotaBackgroundColor;
+            back_button.BackColor = dotaBackgroundColor;
+
+            title_label.ForeColor = Color.WhiteSmoke;
+            novice_button.ForeColor = Color.WhiteSmoke;
+            learning_button.ForeColor = Color.WhiteSmoke;
+            almost_button.ForeColor = Color.WhiteSmoke;
+            replay_button.ForeColor = Color.WhiteSmoke;
+            live_button.ForeColor = Color.WhiteSmoke;
+            go_button.ForeColor = Color.WhiteSmoke;
+            cb_confirm.ForeColor = Color.WhiteSmoke;
+            back_button.ForeColor = Color.WhiteSmoke;
+            lh_checkbox.ForeColor = Color.WhiteSmoke;
+            hs_checkbox.ForeColor = Color.WhiteSmoke;
+            ih_checkbox.ForeColor = Color.WhiteSmoke;
+            ln_checkbox.ForeColor = Color.WhiteSmoke;
+            jg_checkbox.ForeColor = Color.WhiteSmoke;
+            sfa_checkbox.ForeColor = Color.WhiteSmoke;
+            player_level_text.ForeColor = Color.WhiteSmoke;
+            player_level.ForeColor = Color.WhiteSmoke;
+
+            title_label.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            player_level_text.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+            player_level.Font = new Font("Segoe UI", 8, FontStyle.Regular);
+
+            Font smallFont = new Font("Segoe UI", 10, FontStyle.Regular);
+
+            novice_button.Font = smallFont;
+            learning_button.Font = smallFont;
+            almost_button.Font = smallFont;
+            replay_button.Font = smallFont;
+            live_button.Font = smallFont;
+            go_button.Font = smallFont;
+            cb_confirm.Font = smallFont;
+            back_button.Font = smallFont;
+            lh_checkbox.Font = smallFont;
+            hs_checkbox.Font = smallFont;
+            ih_checkbox.Font = smallFont;
+            ln_checkbox.Font = smallFont;
+            jg_checkbox.Font = smallFont;
+            sfa_checkbox.Font = smallFont;
+
             checkbox_container.Left = (this.ClientSize.Width - checkbox_container.Width) / 2;
             checkbox_container.Top  = (this.ClientSize.Height - checkbox_container.Height) / 2;
             checkbox_container.Hide();
@@ -55,6 +110,7 @@ namespace GamingSupervisor
 
             player_level_text.Left = title_label.Left;
             player_level.Left      = player_level_text.Right;
+            player_level.Top       = player_level_text.Top;
 
             replay_button.Left = (this.ClientSize.Width - replay_button.Width) / 2;
             replay_button.Top  = (this.ClientSize.Height + player_level.Bottom - replay_button.Width) / 2 - 50;
@@ -66,7 +122,7 @@ namespace GamingSupervisor
             go_button.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
 
             timer_text.Left = (this.ClientSize.Width - go_button.Width) / 2;
-            timer_text.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
+            timer_text.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;           
         }
         
         private void novice_button_Click(object sender, EventArgs e)
@@ -83,6 +139,13 @@ namespace GamingSupervisor
 
             cb_confirm.Show();
             back_button.Show();
+
+            lh_checkbox.Checked  = true;
+            hs_checkbox.Checked  = true;
+            ih_checkbox.Checked  = true;
+            ln_checkbox.Checked  = true;
+            jg_checkbox.Checked  = true;
+            sfa_checkbox.Checked = true;
 
             state = State.customize;
         }
@@ -102,6 +165,13 @@ namespace GamingSupervisor
             cb_confirm.Show();
             back_button.Show();
 
+            lh_checkbox.Checked  = true;
+            hs_checkbox.Checked  = false;
+            ih_checkbox.Checked  = false;
+            ln_checkbox.Checked  = true;
+            jg_checkbox.Checked  = true;
+            sfa_checkbox.Checked = true;
+
             state = State.customize;
         }
 
@@ -119,6 +189,13 @@ namespace GamingSupervisor
 
             cb_confirm.Show();
             back_button.Show();
+
+            lh_checkbox.Checked  = false;
+            hs_checkbox.Checked  = false;
+            ih_checkbox.Checked  = false;
+            ln_checkbox.Checked  = false;
+            jg_checkbox.Checked  = true;
+            sfa_checkbox.Checked = true;
 
             state = State.customize;
         }
@@ -191,6 +268,8 @@ namespace GamingSupervisor
                     learning_button.Show();
                     almost_button.Show();
 
+                    player_level.Text = "";
+
                     state = State.select_difficulty;
                     break;
                 case State.game_type:
@@ -232,6 +311,16 @@ namespace GamingSupervisor
             go_button.Show();
 
             replay_selected = true;
+        }
+
+        private void live_button_Click(object sender, EventArgs e)
+        {
+            state = State.start;
+
+            replay_button.Hide();
+            live_button.Hide();
+
+            go_button.Show();
         }
 
         public int timeleft = 5;
