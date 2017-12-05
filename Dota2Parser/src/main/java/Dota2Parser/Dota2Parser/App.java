@@ -29,25 +29,41 @@ public class App
 		return e.getDtClass().getDtName().startsWith("CDOTA_Unit_Hero");
 	}
 	
-	private void ensureFieldPaths(Entity e)
+	private void ensurePositionFieldPaths(Entity e)
 	{
         if (x == null)
         {
             x = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellX");
             y = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellY");
-            health = e.getDtClass().getFieldPathForName("m_iHealth");
         }
     }
 	
-	/*@OnEntityCreated
-    public void onCreated(Context ctx, Entity e) {
+	private void ensureHealthFieldPaths(Entity e)
+	{
+		if (health == null)
+		{
+            health = e.getDtClass().getFieldPathForName("m_iHealth");
+		}
+	}
+	
+	@OnEntityCreated
+    public void onCreated(Context ctx, Entity e)
+	{
         if (!isHero(e))
         {
             return;
         }
-        ensureFieldPaths(e);
-        //System.out.format("%s (%s/%s)\n", e.getDtClass().getDtName(), e.getPropertyForFieldPath(x), e.getPropertyForFieldPath(y));
-    }*/
+        ensurePositionFieldPaths(e);
+        ensureHealthFieldPaths(e);
+        
+        writer.format("%d [POSITION] %s %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(x), e.getPropertyForFieldPath(y));
+    	writer.flush();
+        System.out.format("%d [POSITION] %s %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(x), e.getPropertyForFieldPath(y));
+    
+        writer.format("%d [HEALTH] %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(health));
+    	writer.flush();
+        System.out.format("%d [HEALTH] %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(health));
+    }
 
     @OnEntityUpdated
     public void onUpdated(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
@@ -56,7 +72,8 @@ public class App
         {
             return;
         }
-        ensureFieldPaths(e);
+        ensurePositionFieldPaths(e);
+        ensureHealthFieldPaths(e);
         
         boolean updatePosition = false;
         boolean updateHealth = false;
