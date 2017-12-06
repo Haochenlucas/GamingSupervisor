@@ -22,15 +22,3 @@ D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\SharpDX.xml
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
 D:\College\SeniorProject\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe.config
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.pdb
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.dll
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.dll
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.dll
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.xml
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache

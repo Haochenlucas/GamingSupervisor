@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{5EE54822-9BAB-43D5-B1A5-DB5D1EE0072F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "replayParse", "ClassLibrary1\replayParse.csproj", "{5EE54822-9BAB-43D5-B1A5-DB5D1EE0072F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{464B5525-FFAF-4579-8BD1-BBDA7F0AC7D3}"
 EndProject
