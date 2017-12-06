@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ClassLibrary1
+namespace replayParse
 {
 
 
@@ -14,15 +14,39 @@ namespace ClassLibrary1
         public static int[,,] replayinfo = new int[200000, 10, 3];
         private int[,] prev_stat = new int[10, 3];
         public static Dictionary< string, int> heros = new Dictionary<string, int>();
+        public int offsetTic = 0;
         public replay_version01() {
             
-            string[] lines = System.IO.File.ReadAllLines(@"D:\College\SeniorProject\GamingSupervisor\GamingSupervisor\Parser\replay.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"X:\data_info\replay.txt");
             int tic = 0;
             int value = 0;
             foreach (string line in lines)
             {
                 string[] words = line.Split(' ');
                 int time = Int32.Parse(words[0]);
+                if (tic == 0)
+                {
+                    offsetTic = time;
+                    tic = time;
+                }
+                else
+                {
+                    while (time > tic)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            for (int j = 0; j < 3; j++)
+                            {
+                                if (prev_stat[i, j] != 0)
+                                {
+                                    replayinfo[tic - offsetTic, i, j] = prev_stat[i, j];
+                                }
+                            }
+                        }
+                        tic++;
+                    }
+                    tic = time;
+                }
                 int mode = 0;
                 int heroID = 0;
                 if (words[1].Contains('P'))
@@ -42,35 +66,81 @@ namespace ClassLibrary1
                 }
                 if (mode == 1)
                 {
-                    replayinfo[time, heroID, 1] = Int32.Parse(words[3]);
-                    replayinfo[time, heroID, 2] = Int32.Parse(words[4]);
+                    replayinfo[time - offsetTic, heroID, 1] = Int32.Parse(words[3]);
+                    replayinfo[time - offsetTic, heroID, 2] = Int32.Parse(words[4]);
                     prev_stat[heroID, 1] = Int32.Parse(words[3]);
                     prev_stat[heroID, 2] = Int32.Parse(words[4]);
                 }
                 else
                 {
-                    replayinfo[time, heroID, 0] = Int32.Parse(words[3]);
+                    replayinfo[time - offsetTic, heroID, 0] = Int32.Parse(words[3]);
                     prev_stat[heroID, 0] = Int32.Parse(words[3]);
                 }
+            }
+        }
 
+        public replay_version01(string fileAddress)
+        {
+
+            string[] lines = System.IO.File.ReadAllLines(fileAddress);
+            int tic = 0;
+            int value = 0;
+            foreach (string line in lines)
+            {
+                string[] words = line.Split(' ');
+                int time = Int32.Parse(words[0]);
                 if (tic == 0)
-                    tic = time;
-
-                while (time > tic)
                 {
-                    for (int i = 0; i < 10; i++)
+                    offsetTic = time;
+                    tic = time;
+                }
+                else
+                {
+                    while (time > tic)
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int i = 0; i < 10; i++)
                         {
-                            if (prev_stat[i, j] != 0)
+                            for (int j = 0; j < 3; j++)
                             {
-                                replayinfo[tic, i, j] = prev_stat[i, j];
+                                if (prev_stat[i, j] != 0)
+                                {
+                                    replayinfo[tic - offsetTic, i, j] = prev_stat[i, j];
+                                }
                             }
                         }
+                        tic++;
                     }
-                    tic++;
+                    tic = time;
                 }
-                tic = time;
+                int mode = 0;
+                int heroID = 0;
+                if (words[1].Contains('P'))
+                {
+                    mode = 1;
+                }
+                string[] substrings = Regex.Split(words[2], "Hero_");
+                if (!heros.Keys.Contains(substrings[1]))
+                {
+                    heros.Add(substrings[1], value);
+                    heroID = heros[substrings[1]];
+                    value++;
+                }
+                else
+                {
+                    heroID = heros[substrings[1]];
+                }
+                if (mode == 1)
+                {
+                    replayinfo[time - offsetTic, heroID, 1] = Int32.Parse(words[3]);
+                    replayinfo[time - offsetTic, heroID, 2] = Int32.Parse(words[4]);
+                    prev_stat[heroID, 1] = Int32.Parse(words[3]);
+                    prev_stat[heroID, 2] = Int32.Parse(words[4]);
+                }
+                else
+                {
+                    replayinfo[time - offsetTic, heroID, 0] = Int32.Parse(words[3]);
+                    prev_stat[heroID, 0] = Int32.Parse(words[3]);
+                }
             }
         }
 
@@ -83,7 +153,10 @@ namespace ClassLibrary1
         {
             return replayinfo;
         }
+        public int  getOffSet()
+        {
+            return offsetTic;
+        }
 
-        
     }
 }
