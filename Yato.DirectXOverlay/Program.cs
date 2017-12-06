@@ -33,7 +33,9 @@ namespace Yato.DirectXOverlay
                 {
                     continue;
                 }
-                draw_overlay(VS_HWND, overlay, d2d);
+
+                draw_overlay(VS_HWND, overlay, d2d, true);
+
                 watch.Restart();
             }
         }
@@ -64,7 +66,7 @@ namespace Yato.DirectXOverlay
             d2d.font = d2d.CreateFont("Consolas", 22);
         }
 
-        static void draw_overlay(IntPtr parentWindowHandle, OverlayWindow overlay, Direct2DRenderer d2d)
+        static void draw_overlay(IntPtr parentWindowHandle, OverlayWindow overlay, Direct2DRenderer d2d, bool retreate)
         {
             IntPtr fg = GetForegroundWindow();
             if (fg == parentWindowHandle)
@@ -73,8 +75,11 @@ namespace Yato.DirectXOverlay
                 d2d.ClearScene();
 
                 d2d.DrawTextWithBackground("FPS: " + d2d.FPS, 20, 40, d2d.font, d2d.redBrush, d2d.blackBrush);
-                d2d.DrawTextWithBackground("Go back or DIE. The choice is simple ", 30, overlay.Height / 5 * 3, d2d.font, d2d.redBrush, d2d.blackBrush);
-                d2d.DrawCircle(overlay.Width / 2, overlay.Height / 2, 150, 2, d2d.redBrush);
+                if (retreate)
+                {
+                    d2d.DrawTextWithBackground("Go back or DIE. The choice is simple ", 30, overlay.Height / 5 * 3, d2d.font, d2d.redBrush, d2d.blackBrush);
+                    d2d.DrawCircle(overlay.Width / 2, overlay.Height / 2, 150, 2, d2d.redBrush);
+                }
 
                 d2d.DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, d2d.redBrush);
 
