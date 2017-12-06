@@ -14,3 +14,11 @@ D:\College\SeniorProject\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleAppl
 D:\College\SeniorProject\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\bin\Debug\ClassLibrary1.dll
 D:\College\SeniorProject\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\bin\Debug\ClassLibrary1.pdb
 D:\College\SeniorProject\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\bin\Debug\ClassLibrary1.dll
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\bin\Debug\ClassLibrary1.pdb
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\data_info\ClassLibrary1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
