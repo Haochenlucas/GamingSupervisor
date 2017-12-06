@@ -80,6 +80,7 @@ namespace GamingSupervisor
             hero_select_label.ForeColor = Color.WhiteSmoke;
             timer_text.ForeColor = Color.WhiteSmoke;
             hero_select_button.ForeColor = Color.WhiteSmoke;
+            parsing_label.ForeColor = Color.WhiteSmoke;
 
             title_label.Font = new Font("Segoe UI", 16, FontStyle.Bold);
             player_level_text.Font = new Font("Segoe UI", 8, FontStyle.Regular);
@@ -134,7 +135,10 @@ namespace GamingSupervisor
             timer_text.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
 
             hero_select_box.Left = (this.ClientSize.Width - hero_select_box.Width) / 2;
-            hero_select_box.Top = hero_select_label.Top + 25;
+            hero_select_box.Top  = hero_select_label.Top + 25;
+
+            parsing_label.Left = (this.ClientSize.Width - parsing_label.Width) / 2;
+            parsing_label.Top  = (this.ClientSize.Height - parsing_label.Height) / 2;
         }
         
         private void novice_button_Click(object sender, EventArgs e)
@@ -333,21 +337,31 @@ namespace GamingSupervisor
             Thread thread = new Thread(parser.ParseReplayFile);
             thread.Start();
 
-            MessageBox.Show("Parsing!");
-
-            thread.Join();
-
             replay_button.Hide();
             live_button.Hide();
+            parsing_label.Show();
+            back_button.Hide();
+            //MessageBox.Show("Parsing!");
+
+            thread.Join();
+            parsing_label.Hide();
+            back_button.Show();
 
             string[] info = File.ReadAllLines(@"../../Parser/info.txt");
-            foreach (string line in info)
+            foreach (string test in info)
             {
-                if (line.Contains("hero_name"))
+                if (test.Contains("hero_name"))
                 {
-                    string name = line.Split(new char[] { '_' }).Last().Trim(new char[] { '"' });
-                    name = name.First().ToString().ToUpper() + name.Substring(1);
-                    hero_select_box.Items.Add(name);
+                    String parsed = test.Split(new string[] { "hero_" }, StringSplitOptions.None).Last();
+                    parsed = parsed.Split(new char[] { '\"' }).First();
+                    String[] temp = parsed.Split(new char[] { '_' });
+                    String[] to_upper = new String[temp.Length];
+                    for (int i = 0; i < temp.Length; i++)
+                    {
+                        to_upper[i] = temp[i].First().ToString().ToUpper() + temp[i].Substring(1);
+                    }
+                    parsed = string.Join(" ", to_upper);
+                    hero_select_box.Items.Add(parsed);
                 }
             }
 
