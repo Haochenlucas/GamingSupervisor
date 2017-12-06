@@ -337,7 +337,7 @@ namespace GamingSupervisor
             Process p = new Process();
             p.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Steam\Steam.exe");
             p.StartInfo.Arguments = "-applaunch 570 -fullscreen";
-            p.Start();
+            //p.Start();
             Console.WriteLine("Dota running!");
         }
 

@@ -16,7 +16,7 @@ namespace ClassLibrary1
         public static Dictionary< string, int> heros = new Dictionary<string, int>();
         public replay_version01() {
             
-            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\dominate\Documents\replay.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"D:\College\SeniorProject\GamingSupervisor\GamingSupervisor\Parser\replay.txt");
             int tic = 0;
             int value = 0;
             foreach (string line in lines)

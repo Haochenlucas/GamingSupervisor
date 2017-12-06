@@ -1,58 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Yato.DirectXOverlay
 {
     class Program
     {
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern IntPtr GetForegroundWindow();
+
         static void Main(string[] args)
         {
-            bool runExample = false;
-
-            if(runExample) example();
-
-            overlay_manager_example(Process.GetCurrentProcess().MainWindowHandle);
-        }
-
-        static void example()
-        {
-            var overlay = new OverlayWindow(0, 0, 800, 600);
-
-            var rendererOptions = new Direct2DRendererOptions()
-            {
-                AntiAliasing = true,
-                Hwnd = overlay.WindowHandle,
-                MeasureFps = true,
-                VSync = false
-            };
-
-            var d2d = new Direct2DRenderer(rendererOptions);
-
-            var whiteSmoke = d2d.CreateBrush(0xF5, 0xF5, 0xF5, 100);
-
-            var blackBrush = d2d.CreateBrush(0, 0, 0, 255);
-            var redBrush = d2d.CreateBrush(255, 0, 0, 255);
-            var greenBrush = d2d.CreateBrush(0, 255, 0, 255);
-            var blueBrush = d2d.CreateBrush(0, 0, 255, 255);
-
-            var font = d2d.CreateFont("Consolas", 22);
-
-            while(true)
-            {
-                d2d.BeginScene();
-                d2d.ClearScene(whiteSmoke);
-
-                d2d.DrawTextWithBackground("FPS: " + d2d.FPS, 20, 40, font, greenBrush, blackBrush);
-
-                d2d.BorderedRectangle(300, 40, 100, 200, 4, redBrush, blackBrush);
-                d2d.DrawHorizontalBar(100, 290, 40, 2, 200, 4, greenBrush, blackBrush);
-                d2d.DrawHorizontalBar(100, 280, 40, 2, 200, 4, blueBrush, blackBrush);
-
-                d2d.DrawCrosshair(CrosshairStyle.Gap, 400, 300, 25, 4, redBrush);
-
-                d2d.EndScene();
-            }
+            var dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
+            overlay_manager_example(dota_HWND);
+            //overlay_manager_example(Process.GetCurrentProcess().MainWindowHandle);
         }
 
         static void overlay_manager_example(IntPtr parentWindowHandle)
@@ -81,20 +43,43 @@ namespace Yato.DirectXOverlay
 
             var font = d2d.CreateFont("Consolas", 22);
 
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+
             while (true)
             {
-                d2d.BeginScene();
-                d2d.ClearScene(whiteSmoke);
+                //Process currentProcess = Process.GetCurrentProcess();
+                //IntPtr hWnd = currentProcess.MainWindowHandle;
 
-                d2d.DrawTextWithBackground("FPS: " + d2d.FPS, 20, 40, font, greenBrush, blackBrush);
+                if (watch.ElapsedMilliseconds < 15)
+                {
+                    continue;
+                }
 
-                d2d.BorderedRectangle(300, 40, 100, 200, 4, redBrush, blackBrush);
-                d2d.DrawHorizontalBar(100, 290, 40, 2, 200, 4, greenBrush, blackBrush);
-                d2d.DrawHorizontalBar(100, 280, 40, 2, 200, 4, blueBrush, blackBrush);
 
-                d2d.DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
+                watch.Restart();
+                IntPtr fg = GetForegroundWindow();
+                if (fg == parentWindowHandle)
+                {
+                    d2d.BeginScene();
+                    d2d.ClearScene();
 
-                d2d.EndScene();
+                    d2d.DrawTextWithBackground("FPS: " + d2d.FPS, 20, 40, font, greenBrush, blackBrush);
+                    d2d.DrawTextWithBackground("Go back or DIE. The choice is simple ", 30, Screen.PrimaryScreen.Bounds.Height / 5 * 3, font, greenBrush, blackBrush);
+
+                    d2d.DrawCircle(overlay.Width / 2, overlay.Height / 2, 150, 2, redBrush);
+
+                    d2d.DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
+
+                    d2d.EndScene();
+                }
+                else
+                {
+                    d2d.BeginScene();
+                    d2d.ClearScene();
+                    d2d.EndScene();
+                }
             }
         }
     }
