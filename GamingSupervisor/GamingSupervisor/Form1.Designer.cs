@@ -54,6 +54,7 @@
             this.hero_select_box = new System.Windows.Forms.ComboBox();
             this.hero_select_button = new System.Windows.Forms.Button();
             this.tick_timer = new System.Windows.Forms.Timer(this.components);
+            this.parsing_label = new System.Windows.Forms.Label();
             this.checkbox_container.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -309,11 +310,23 @@
             // 
             this.tick_timer.Interval = 33;
             // 
+            // parsing_label
+            // 
+            this.parsing_label.AutoSize = true;
+            this.parsing_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.parsing_label.Location = new System.Drawing.Point(60, 190);
+            this.parsing_label.Name = "parsing_label";
+            this.parsing_label.Size = new System.Drawing.Size(93, 25);
+            this.parsing_label.TabIndex = 21;
+            this.parsing_label.Text = "Parsing...";
+            this.parsing_label.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(296, 456);
+            this.Controls.Add(this.parsing_label);
             this.Controls.Add(this.hero_select_button);
             this.Controls.Add(this.hero_select_box);
             this.Controls.Add(this.hero_select_label);
@@ -366,6 +379,7 @@
         private System.Windows.Forms.ComboBox hero_select_box;
         private System.Windows.Forms.Button hero_select_button;
         private System.Windows.Forms.Timer tick_timer;
+        private System.Windows.Forms.Label parsing_label;
     }
 }
 

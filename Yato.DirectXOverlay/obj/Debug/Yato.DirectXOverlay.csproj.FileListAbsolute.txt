@@ -22,6 +22,3 @@ D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\SharpDX.xml
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
 D:\College\SeniorProject\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
-C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe.config
-C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
-C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
