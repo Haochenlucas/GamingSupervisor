@@ -14,6 +14,7 @@ namespace replayParse
         public static int[,,] replayinfo = new int[200000, 10, 3];
         private int[,] prev_stat = new int[10, 3];
         public static Dictionary< string, int> heros = new Dictionary<string, int>();
+        private int[,] hero_sequence = new int[10, 2];
         public int offsetTic = 0;
         public replay_version01() {
             

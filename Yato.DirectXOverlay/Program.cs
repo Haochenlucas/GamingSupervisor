@@ -12,21 +12,24 @@ namespace Yato.DirectXOverlay
 
         static void Main(string[] args)
         {
+            // Declare window and overlay object
             OverlayWindow overlay;
             Direct2DRenderer d2d;
 
+            // Pass window handle of Dota2 into Initialization function
             if (Process.GetProcessesByName("dota2").Length > 0)
             {
                 var dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
                 overlay_manager_example(dota_HWND, out overlay, out d2d);
             }
 
+            // For test use only. Show overlay on Visual Studio
             var VS_HWND = Process.GetProcessesByName("devenv")[0].MainWindowHandle;
             overlay_manager_example(VS_HWND, out overlay, out d2d);
 
+            // Control FPS
             Stopwatch watch = new Stopwatch();
             watch.Start();
-
             while (true)
             {
                 if (watch.ElapsedMilliseconds < 15)
@@ -34,8 +37,8 @@ namespace Yato.DirectXOverlay
                     continue;
                 }
 
+                // Draw
                 draw_overlay(VS_HWND, overlay, d2d, true);
-
                 watch.Restart();
             }
         }
@@ -75,6 +78,8 @@ namespace Yato.DirectXOverlay
                 d2d.ClearScene();
 
                 d2d.DrawTextWithBackground("FPS: " + d2d.FPS, 20, 40, d2d.font, d2d.redBrush, d2d.blackBrush);
+
+                // Add things to draw if ...
                 if (retreate)
                 {
                     d2d.DrawTextWithBackground("Go back or DIE. The choice is simple ", 30, overlay.Height / 5 * 3, d2d.font, d2d.redBrush, d2d.blackBrush);
