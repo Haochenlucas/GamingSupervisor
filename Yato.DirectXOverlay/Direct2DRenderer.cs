@@ -51,7 +51,13 @@ namespace Yato.DirectXOverlay
 
         public int Width { get; private set; }
         public int Height { get; private set; }
-
+        public Direct2DBrush whiteSmoke { get; set; }
+        public Direct2DBrush blackBrush { get; set; }
+        public Direct2DBrush redBrush { get; set; }
+        public Direct2DBrush greenBrush { get; set; }
+        public Direct2DBrush blueBrush { get; set; }
+        public Direct2DFont font { get; set; }
+        
         #endregion
 
         #region construct & destruct
