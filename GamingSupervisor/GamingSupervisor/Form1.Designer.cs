@@ -50,6 +50,10 @@
             this.go_button = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer_text = new System.Windows.Forms.Label();
+            this.hero_select_label = new System.Windows.Forms.Label();
+            this.hero_select_box = new System.Windows.Forms.ComboBox();
+            this.hero_select_button = new System.Windows.Forms.Button();
+            this.tick_timer = new System.Windows.Forms.Timer(this.components);
             this.checkbox_container.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -239,7 +243,6 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // go_button
@@ -261,6 +264,7 @@
             // timer_text
             // 
             this.timer_text.Font = new System.Drawing.Font("Microsoft Sans Serif", 50F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.timer_text.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.timer_text.Location = new System.Drawing.Point(122, 115);
             this.timer_text.Name = "timer_text";
             this.timer_text.Size = new System.Drawing.Size(150, 150);
@@ -269,11 +273,50 @@
             this.timer_text.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.timer_text.Visible = false;
             // 
+            // hero_select_label
+            // 
+            this.hero_select_label.AutoSize = true;
+            this.hero_select_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hero_select_label.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.hero_select_label.Location = new System.Drawing.Point(45, 75);
+            this.hero_select_label.Name = "hero_select_label";
+            this.hero_select_label.Size = new System.Drawing.Size(87, 13);
+            this.hero_select_label.TabIndex = 18;
+            this.hero_select_label.Text = "Select a hero:";
+            this.hero_select_label.Visible = false;
+            // 
+            // hero_select_box
+            // 
+            this.hero_select_box.FormattingEnabled = true;
+            this.hero_select_box.Location = new System.Drawing.Point(109, 51);
+            this.hero_select_box.Name = "hero_select_box";
+            this.hero_select_box.Size = new System.Drawing.Size(121, 21);
+            this.hero_select_box.TabIndex = 19;
+            this.hero_select_box.Visible = false;
+            // 
+            // hero_select_button
+            // 
+            this.hero_select_button.Location = new System.Drawing.Point(13, 412);
+            this.hero_select_button.Name = "hero_select_button";
+            this.hero_select_button.Size = new System.Drawing.Size(75, 32);
+            this.hero_select_button.TabIndex = 20;
+            this.hero_select_button.Text = "Confirm";
+            this.hero_select_button.UseVisualStyleBackColor = true;
+            this.hero_select_button.Visible = false;
+            this.hero_select_button.Click += new System.EventHandler(this.hero_select_button_Click);
+            // 
+            // tick_timer
+            // 
+            this.tick_timer.Interval = 33;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(296, 456);
+            this.Controls.Add(this.hero_select_button);
+            this.Controls.Add(this.hero_select_box);
+            this.Controls.Add(this.hero_select_label);
             this.Controls.Add(this.timer_text);
             this.Controls.Add(this.live_button);
             this.Controls.Add(this.replay_button);
@@ -319,6 +362,10 @@
         private System.Windows.Forms.Button go_button;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label timer_text;
+        private System.Windows.Forms.Label hero_select_label;
+        private System.Windows.Forms.ComboBox hero_select_box;
+        private System.Windows.Forms.Button hero_select_button;
+        private System.Windows.Forms.Timer tick_timer;
     }
 }
 

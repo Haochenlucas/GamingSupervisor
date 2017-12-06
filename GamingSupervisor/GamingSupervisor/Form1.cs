@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using System.IO;
+using System.Linq;
 
 namespace GamingSupervisor
 {
@@ -20,11 +22,14 @@ namespace GamingSupervisor
 
         public Boolean replay_selected = false;
 
+        public string hero_selected = "";
+
         public enum State
         {
             select_difficulty,
             customize,
             game_type,
+            hero_select,
             start
         };
 
@@ -53,6 +58,7 @@ namespace GamingSupervisor
             go_button.BackColor = dotaBackgroundColor;
             cb_confirm.BackColor = dotaBackgroundColor;
             back_button.BackColor = dotaBackgroundColor;
+            hero_select_button.BackColor = dotaBackgroundColor;
 
             title_label.ForeColor = Color.WhiteSmoke;
             novice_button.ForeColor = Color.WhiteSmoke;
@@ -71,6 +77,9 @@ namespace GamingSupervisor
             sfa_checkbox.ForeColor = Color.WhiteSmoke;
             player_level_text.ForeColor = Color.WhiteSmoke;
             player_level.ForeColor = Color.WhiteSmoke;
+            hero_select_label.ForeColor = Color.WhiteSmoke;
+            timer_text.ForeColor = Color.WhiteSmoke;
+            hero_select_button.ForeColor = Color.WhiteSmoke;
 
             title_label.Font = new Font("Segoe UI", 16, FontStyle.Bold);
             player_level_text.Font = new Font("Segoe UI", 8, FontStyle.Regular);
@@ -122,7 +131,10 @@ namespace GamingSupervisor
             go_button.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
 
             timer_text.Left = (this.ClientSize.Width - go_button.Width) / 2;
-            timer_text.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;           
+            timer_text.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
+
+            hero_select_box.Left = (this.ClientSize.Width - hero_select_box.Width) / 2;
+            hero_select_box.Top = hero_select_label.Top + 25;
         }
         
         private void novice_button_Click(object sender, EventArgs e)
@@ -281,13 +293,25 @@ namespace GamingSupervisor
 
                     state = State.customize;
                     break;
-                case State.start:
-                    go_button.Hide();
+                case State.hero_select:
+                    hero_select_label.Hide();
+                    hero_select_box.Hide();
+                    hero_select_button.Hide();
 
                     replay_button.Show();
                     live_button.Show();
 
                     state = State.game_type;
+
+                    break;
+                case State.start:
+                    go_button.Hide();
+
+                    hero_select_box.Show();
+                    hero_select_label.Show();
+                    hero_select_button.Show();
+
+                    state = State.hero_select;
                     break;
             }
         }
@@ -303,12 +327,34 @@ namespace GamingSupervisor
                 return;
             }
 
-            state = State.start;
+            state = State.hero_select;
+
+            ParserHandler parser = new ParserHandler(filename);
+            Thread thread = new Thread(parser.ParseReplayFile);
+            thread.Start();
+
+            MessageBox.Show("Parsing!");
+
+            thread.Join();
 
             replay_button.Hide();
             live_button.Hide();
 
-            go_button.Show();
+            string[] info = File.ReadAllLines(@"../../Parser/info.txt");
+            foreach (string line in info)
+            {
+                if (line.Contains("hero_name"))
+                {
+                    string name = line.Split(new char[] { '_' }).Last().Trim(new char[] { '"' });
+                    name = name.First().ToString().ToUpper() + name.Substring(1);
+                    hero_select_box.Items.Add(name);
+                }
+            }
+
+            hero_select_label.Show();
+            hero_select_box.Show();
+            hero_select_button.Show();
+            //go_button.Show();
 
             replay_selected = true;
         }
@@ -347,9 +393,7 @@ namespace GamingSupervisor
             timer_text.Show();
             back_button.Hide();
 
-            ParserHandler parser = new ParserHandler(filename);
-            Thread thread = new Thread(parser.ParseReplayFile);
-            thread.Start();
+            
 
             timer1.Start();
 
@@ -370,6 +414,28 @@ namespace GamingSupervisor
                 timer1.Stop();
                 timer_text.Text = "0";
             }
+        }
+
+        private void hero_select_button_Click(object sender, EventArgs e)
+        {
+            if (hero_select_box.SelectedItem == null)
+            {
+                MessageBox.Show("Select a hero!");
+                return;
+            }
+             
+
+            state = State.start;
+
+            hero_selected = hero_select_box.SelectedText;
+
+            //TODO: Logic that passes this information to the overlay
+
+            hero_select_button.Hide();
+            hero_select_box.Hide();
+            hero_select_label.Hide();
+
+            go_button.Show();
         }
     }
 }
