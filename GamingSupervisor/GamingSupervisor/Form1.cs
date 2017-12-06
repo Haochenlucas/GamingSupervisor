@@ -393,6 +393,7 @@ namespace GamingSupervisor
             timer_text.Show();
             back_button.Hide();
 
+            
 
             timer1.Start();
 

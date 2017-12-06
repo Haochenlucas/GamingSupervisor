@@ -53,6 +53,7 @@
             this.hero_select_label = new System.Windows.Forms.Label();
             this.hero_select_box = new System.Windows.Forms.ComboBox();
             this.hero_select_button = new System.Windows.Forms.Button();
+            this.tick_timer = new System.Windows.Forms.Timer(this.components);
             this.checkbox_container.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -304,6 +305,10 @@
             this.hero_select_button.Visible = false;
             this.hero_select_button.Click += new System.EventHandler(this.hero_select_button_Click);
             // 
+            // tick_timer
+            // 
+            this.tick_timer.Interval = 33;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -360,6 +365,7 @@
         private System.Windows.Forms.Label hero_select_label;
         private System.Windows.Forms.ComboBox hero_select_box;
         private System.Windows.Forms.Button hero_select_button;
+        private System.Windows.Forms.Timer tick_timer;
     }
 }
 
