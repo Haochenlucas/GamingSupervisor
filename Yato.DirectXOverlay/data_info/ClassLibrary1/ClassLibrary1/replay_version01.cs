@@ -11,9 +11,10 @@ namespace replayParse
 
     public class replay_version01
     { 
-        public static int[,,] replayinfo = new int[200000, 10, 3];
-        private int[,] prev_stat = new int[10, 3];
+        public static int[,,] replayinfo = new int[200000, 10, 4];
+        private int[,] prev_stat = new int[10, 4]; // first index is heroID for this match, the second index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z;
         public static Dictionary< string, int> heros = new Dictionary<string, int>();
+        private int[] sideOfHero = new int[10];  // the index is the heroID: the sort of ID show the sequence of picking , the number in string shows the side of heros. 0: for one side, 1 : for another side.
         public int offsetTic = 0;
         public replay_version01() {
             
@@ -58,6 +59,10 @@ namespace replayParse
                 {
                     heros.Add(substrings[1], value);
                     heroID = heros[substrings[1]];
+                    if (Int32.Parse(words[3]) > 100)
+                    {
+                        sideOfHero[heroID] = 1;
+                    }
                     value++;
                 }
                 else
@@ -66,10 +71,17 @@ namespace replayParse
                 }
                 if (mode == 1)
                 {
+                    if (words.Length < 6)
+                    {
+                        throw new System.ArgumentOutOfRangeException("lost position information");
+                    }
+                       
                     replayinfo[time - offsetTic, heroID, 1] = Int32.Parse(words[3]);
                     replayinfo[time - offsetTic, heroID, 2] = Int32.Parse(words[4]);
+                    replayinfo[time - offsetTic, heroID, 3] = Int32.Parse(words[5]);
                     prev_stat[heroID, 1] = Int32.Parse(words[3]);
                     prev_stat[heroID, 2] = Int32.Parse(words[4]);
+                    prev_stat[heroID, 3] = Int32.Parse(words[5]);
                 }
                 else
                 {
@@ -123,6 +135,10 @@ namespace replayParse
                 {
                     heros.Add(substrings[1], value);
                     heroID = heros[substrings[1]];
+                    if (Int32.Parse(words[3]) > 100)
+                    {
+                        sideOfHero[heroID] = 1;
+                    }
                     value++;
                 }
                 else
@@ -133,8 +149,10 @@ namespace replayParse
                 {
                     replayinfo[time - offsetTic, heroID, 1] = Int32.Parse(words[3]);
                     replayinfo[time - offsetTic, heroID, 2] = Int32.Parse(words[4]);
+                    replayinfo[time - offsetTic, heroID, 3] = Int32.Parse(words[5]);
                     prev_stat[heroID, 1] = Int32.Parse(words[3]);
                     prev_stat[heroID, 2] = Int32.Parse(words[4]);
+                    prev_stat[heroID, 3] = Int32.Parse(words[5]);
                 }
                 else
                 {
@@ -157,6 +175,9 @@ namespace replayParse
         {
             return offsetTic;
         }
-
+         public int[] getHeroSide()
+        {
+            return sideOfHero;
+        }
     }
 }
