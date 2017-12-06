@@ -5,7 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "replayParse", "ClassLibrary1\replayParse.csproj", "{5EE54822-9BAB-43D5-B1A5-DB5D1EE0072F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{464B5525-FFAF-4579-8BD1-BBDA7F0AC7D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo_replayParse", "ConsoleApplication1\demo_replayParse.csproj", "{464B5525-FFAF-4579-8BD1-BBDA7F0AC7D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo_heroID", "demo_heroID\demo_heroID.csproj", "{03B111A9-F6C7-4B81-AB20-50A39B87B12B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{464B5525-FFAF-4579-8BD1-BBDA7F0AC7D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{464B5525-FFAF-4579-8BD1-BBDA7F0AC7D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{464B5525-FFAF-4579-8BD1-BBDA7F0AC7D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03B111A9-F6C7-4B81-AB20-50A39B87B12B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03B111A9-F6C7-4B81-AB20-50A39B87B12B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03B111A9-F6C7-4B81-AB20-50A39B87B12B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03B111A9-F6C7-4B81-AB20-50A39B87B12B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

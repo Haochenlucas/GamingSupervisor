@@ -14,7 +14,7 @@ namespace replayParse
         public static int[,,] replayinfo = new int[200000, 10, 4];
         private int[,] prev_stat = new int[10, 4]; // first index is heroID for this match, the second index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z;
         public static Dictionary< string, int> heros = new Dictionary<string, int>();
-        private int[] sideOfHero = new int[10];  // the index is the heroID: the sort of ID show the sequence of picking , the number in string shows the side of heros. 0: for one side, 1 : for another side.
+        public int[] sideOfHero = new int[10];  // the index is the heroID: the sort of ID show the sequence of picking , the number in string shows the side of heros. 0: for one side, 1 : for another side.
         public int offsetTic = 0;
         public replay_version01() {
             

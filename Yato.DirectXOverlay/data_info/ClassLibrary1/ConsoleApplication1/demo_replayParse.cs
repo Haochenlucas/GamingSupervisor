@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace replaParse
+namespace demo_replayParse
 {
-    class Class1
+    class demo_replayParse
     {
         static void Main()
         {
