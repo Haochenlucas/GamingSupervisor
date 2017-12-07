@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-//using Yato.DirectXOverlay;
+using Yato.DirectXOverlay;
+using System.Timers;
+using System.Diagnostics;
 
 namespace GamingSupervisor
 {
@@ -15,6 +17,7 @@ namespace GamingSupervisor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            
         }
     }
 }
