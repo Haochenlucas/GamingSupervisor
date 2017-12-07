@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 namespace Yato.DirectXOverlay
 {
