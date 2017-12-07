@@ -2,7 +2,7 @@
 
 ## Dota2GSI
 
-Game state information, used to sync replay with overlay.
+Game state integration, used to sync replay with overlay.
 
 ## Dota2Parser
 
