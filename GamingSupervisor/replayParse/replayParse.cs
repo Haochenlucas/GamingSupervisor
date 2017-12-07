@@ -18,8 +18,7 @@ namespace replayParse
         public int offsetTic = 0;
         public replay_version01()
         {
-
-            string[] lines = System.IO.File.ReadAllLines(@"X:\data_info\replay.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"../../Parser/replay.txt");
             int tic = 0;
             int value = 0;
             foreach (string line in lines)
@@ -56,10 +55,16 @@ namespace replayParse
                     mode = 1;
                 }
                 string[] substrings = Regex.Split(words[2], "Hero_");
-                if (!heros.Keys.Contains(substrings[1]))
+                var r = new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z]) |
+                 (?<=[^A-Z])(?=[A-Z]) |
+                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+                string name = r.Replace(substrings[1], " ");
+                name = string.Join(" ", name.Split(new string[] { " _ " }, StringSplitOptions.None));
+                if (!heros.Keys.Contains(name))
                 {
-                    heros.Add(substrings[1], value);
-                    heroID = heros[substrings[1]];
+                    heros.Add(name, value);
+                    heroID = heros[name];
                     if (Int32.Parse(words[3]) > 100)
                     {
                         sideOfHero[heroID] = 1;
@@ -68,7 +73,7 @@ namespace replayParse
                 }
                 else
                 {
-                    heroID = heros[substrings[1]];
+                    heroID = heros[name];
                 }
                 if (mode == 1)
                 {
@@ -132,10 +137,16 @@ namespace replayParse
                     mode = 1;
                 }
                 string[] substrings = Regex.Split(words[2], "Hero_");
-                if (!heros.Keys.Contains(substrings[1]))
+                var r = new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z]) |
+                 (?<=[^A-Z])(?=[A-Z]) |
+                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+                string name = r.Replace(substrings[1], " ");
+                name = string.Join(" ", name.Split(new string[] { " _ " }, StringSplitOptions.None));
+                if (!heros.Keys.Contains(name))
                 {
-                    heros.Add(substrings[1], value);
-                    heroID = heros[substrings[1]];
+                    heros.Add(name, value);
+                    heroID = heros[name];
                     if (Int32.Parse(words[3]) > 100)
                     {
                         sideOfHero[heroID] = 1;
@@ -144,7 +155,7 @@ namespace replayParse
                 }
                 else
                 {
-                    heroID = heros[substrings[1]];
+                    heroID = heros[name];
                 }
                 if (mode == 1)
                 {
