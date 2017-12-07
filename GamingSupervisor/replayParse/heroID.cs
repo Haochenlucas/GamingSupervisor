@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace heroIDtable
+namespace replayParse
 {
-    class heroID
+    public class heroID
     {
-        static Dictionary<int, string> hero_IDDictionary = new Dictionary<int, string>();
-        static Dictionary<string, int> ID_heroDictionary = new Dictionary<string, int>();
+        public static Dictionary<int, string> hero_IDDictionary = new Dictionary<int, string>();
+        public static Dictionary<string, int> ID_heroDictionary = new Dictionary<string, int>();
+        public static string[] heroName = new string[116]; // make the index be the ID value, so the first string is empty
         public heroID()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"X:\data_info\dota_hero_info_1.txt");
+            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\dota_hero_info_1.txt");
+            string[] lines = System.IO.File.ReadAllLines(s);
             string[] second_lines = lines;
-            // Display the file contents by using a foreach loop.
-            System.Console.WriteLine("Contents of WriteLines2.txt = ");
             int key = 0;
             int length_name = 0;
             foreach (string line in lines)
@@ -37,8 +37,9 @@ namespace heroIDtable
                 second_string = (key + 1) + "     " + hero_name;
                 second_lines[key] = second_string;
                 key++;
-                hero_IDDictionary.Add(key, words[0]);
-                ID_heroDictionary.Add(words[0], key);
+                hero_IDDictionary.Add(key, hero_name);
+                ID_heroDictionary.Add(hero_name, key);
+                heroName[key] = hero_name;
             }
             string path = @"X:\data_info\heroIDtable.txt";
             if (!File.Exists(path))
@@ -108,6 +109,9 @@ namespace heroIDtable
             return ID_heroDictionary;
         }
 
-
+        public string[] getHeroName()
+        {
+            return heroName;
+        }
     }
 }

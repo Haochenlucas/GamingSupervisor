@@ -336,8 +336,8 @@ namespace GamingSupervisor
             state = State.hero_select;
 
             ParserHandler parser = new ParserHandler(filename);
-            //Thread thread = new Thread(parser.ParseReplayFile);
-            //thread.Start();
+            Thread thread = new Thread(parser.ParseReplayFile);
+            thread.Start();
 
             replay_button.Hide();
             live_button.Hide();
@@ -345,11 +345,11 @@ namespace GamingSupervisor
             back_button.Hide();
             //MessageBox.Show("Parsing!");
 
-            //thread.Join();
+            thread.Join();
             parsing_label.Hide();
             back_button.Show();
-
-            string[] info = File.ReadAllLines(@"../../Parser/info.txt");
+            //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
+            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\info.txt"));
             foreach (string test in info)
             {
                 if (test.Contains("hero_name"))
