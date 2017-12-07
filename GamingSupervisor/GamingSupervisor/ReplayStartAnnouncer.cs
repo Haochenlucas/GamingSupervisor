@@ -32,11 +32,20 @@ namespace GamingSupervisor
             return Convert.ToInt32(words[0]);
         }
 
+        public double GetCurrentClockTime()
+        {
+            return gameStateIntegration.ClockTime;
+        }
+
         public void waitForReplayToStart()
         {
             Console.WriteLine("Waiting for replay to start...");
             gameStateIntegration.StartListener();
-            listenerStarted = true;
+            if (!listenerStarted)
+            {
+                gameStateIntegration.StartListener();
+                listenerStarted = true;
+            }
             SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_HERO_SELECTION");
             Console.WriteLine("Replay started!");
         }
