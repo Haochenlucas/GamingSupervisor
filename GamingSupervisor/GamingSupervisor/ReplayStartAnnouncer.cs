@@ -12,6 +12,7 @@ namespace GamingSupervisor
     class ReplayStartAnnouncer
     {
         private static GameStateIntegration gameStateIntegration;
+        private static bool listenerStarted = false;
 
         public ReplayStartAnnouncer()
         {
@@ -35,6 +36,7 @@ namespace GamingSupervisor
         {
             Console.WriteLine("Waiting for replay to start...");
             gameStateIntegration.StartListener();
+            listenerStarted = true;
             SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_HERO_SELECTION");
             Console.WriteLine("Replay started!");
         }
@@ -42,7 +44,11 @@ namespace GamingSupervisor
         public void waitForHeroSelectionToComplete()
         {
             Console.WriteLine("Waiting for hero selection to complete...");
-            gameStateIntegration.StartListener();
+            if (!listenerStarted)
+            {
+                gameStateIntegration.StartListener();
+                listenerStarted = true;
+            }
             SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_TEAM_SHOWCASE");
             Console.WriteLine("Hero selection started!");
         }
