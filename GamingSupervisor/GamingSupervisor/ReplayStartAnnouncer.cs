@@ -12,11 +12,9 @@ namespace GamingSupervisor
     class ReplayStartAnnouncer
     {
         private static GameStateIntegration gameStateIntegration;
-        private static Semaphore semaphore;
 
         public ReplayStartAnnouncer()
         {
-            semaphore = new Semaphore(0, 1);
             gameStateIntegration = new GameStateIntegration();
         }
 
@@ -43,19 +41,10 @@ namespace GamingSupervisor
 
         public void waitForHeroSelectionToComplete()
         {
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleLibraryException);
-
             Console.WriteLine("Waiting for hero selection to complete...");
-            semaphore.WaitOne();
+            gameStateIntegration.StartListener();
+            SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_TEAM_SHOWCASE");
             Console.WriteLine("Hero selection started!");
-        }
-
-        static private void HandleLibraryException(object sender, UnhandledExceptionEventArgs args)
-        {
-            semaphore.Release();
-            Exception e = (Exception)args.ExceptionObject;
-            Console.WriteLine("HandleLibraryException caught : " + e.Message);
         }
     }
 }

@@ -82,7 +82,7 @@ namespace Dota2GSI
         /// </summary>
         public bool Start()
         {
-            if (!isRunning)
+            //if (!isRunning)
             {
                 Thread ListenerThread = new Thread(new ThreadStart(Run));
                 try
