@@ -11,6 +11,7 @@ namespace GamingSupervisor
     {
         private static GameStateListener gameStateListener;
         public bool GameStarted { get; set; }
+        public string GameState { get; set; }
 
         public GameStateIntegration()
         {
@@ -28,48 +29,20 @@ namespace GamingSupervisor
 
             gameStateListener = new GameStateListener(3000);
             gameStateListener.NewGameState += OnNewGameState;
+        }
 
+        public void StartListener()
+        {
             if (!gameStateListener.Start())
             {
                 throw new Exception("GameStateListener could not start. Try running this program as Administrator. Exiting.");
             }
             Console.WriteLine("Listening for game integration calls...");
-
-            while (true)
-            {
-                Thread.Sleep(1000);
-            }
         }
 
         private void OnNewGameState(GameState gs)
         {
-            if (gs.Map.ClockTime != -1)
-            {
-                GameStarted = true;
-            }
-
-            //Console.Clear();
-            //Console.WriteLine("Press ESC to quit");
-            //Console.WriteLine("Current Dota version: " + gs.Provider.Version);
-            //Console.WriteLine("Current time as displayed by the clock (in seconds): " + gs.Map.ClockTime);
-            //Console.WriteLine("Your steam name: " + gs.Player.Name);
-            //Console.WriteLine("hero ID: " + gs.Hero.ID);
-            //Console.WriteLine("Health: " + gs.Hero.Health);
-            //for (int i = 0; i < gs.Abilities.Count; i++)
-            //{
-            //    Console.WriteLine("Ability {0} = {1}", i, gs.Abilities[i].Name);
-            //}
-            //Console.WriteLine("First slot inventory: " + gs.Items.GetInventoryAt(0).Name);
-            //Console.WriteLine("Second slot inventory: " + gs.Items.GetInventoryAt(1).Name);
-            //Console.WriteLine("Third slot inventory: " + gs.Items.GetInventoryAt(2).Name);
-            //Console.WriteLine("Fourth slot inventory: " + gs.Items.GetInventoryAt(3).Name);
-            //Console.WriteLine("Fifth slot inventory: " + gs.Items.GetInventoryAt(4).Name);
-            //Console.WriteLine("Sixth slot inventory: " + gs.Items.GetInventoryAt(5).Name);
-            //
-            //if (gs.Items.InventoryContains("item_blink"))
-            //    Console.WriteLine("You have a blink dagger");
-            //else
-            //    Console.WriteLine("You DO NOT have a blink dagger");
+            GameState = gs.Map.GameState.ToString();
         }
 
         private static void CreateGameStateIntegrationFile()
