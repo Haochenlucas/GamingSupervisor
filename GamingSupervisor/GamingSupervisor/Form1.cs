@@ -24,6 +24,8 @@ namespace GamingSupervisor
 
         public string hero_selected = "";
 
+        private ReplayStartAnnouncer announcer;
+
         public enum State
         {
             select_difficulty,
@@ -334,8 +336,8 @@ namespace GamingSupervisor
             state = State.hero_select;
 
             ParserHandler parser = new ParserHandler(filename);
-            Thread thread = new Thread(parser.ParseReplayFile);
-            thread.Start();
+            //Thread thread = new Thread(parser.ParseReplayFile);
+            //thread.Start();
 
             replay_button.Hide();
             live_button.Hide();
@@ -343,7 +345,7 @@ namespace GamingSupervisor
             back_button.Hide();
             //MessageBox.Show("Parsing!");
 
-            thread.Join();
+            //thread.Join();
             parsing_label.Hide();
             back_button.Show();
 
@@ -397,8 +399,15 @@ namespace GamingSupervisor
             Process p = new Process();
             p.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Steam\Steam.exe");
             p.StartInfo.Arguments = "-applaunch 570 -fullscreen";
-            //p.Start();
-            Console.WriteLine("Dota running!");
+            try
+            {
+                p.Start();
+                Console.WriteLine("Dota running!");
+            }
+            catch (Win32Exception ex)
+            {
+                Console.WriteLine("Starting dota failed! " + ex.Message);
+            }
         }
 
         private void go_button_Click(object sender, EventArgs e)
@@ -406,14 +415,14 @@ namespace GamingSupervisor
             go_button.Hide();
             timer_text.Show();
             back_button.Hide();
-
             
-
             timer1.Start();
 
             startDota();
 
-            //thread.Join();
+            announcer = new ReplayStartAnnouncer();
+            announcer.waitForReplayToStart();
+            announcer.waitForHeroSelectionToComplete();
         }
 
         private void timer1_Tick(object sender, EventArgs e)

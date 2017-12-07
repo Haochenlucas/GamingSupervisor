@@ -11,11 +11,15 @@ using SharpDX.Mathematics.Interop;
 
 using FontFactory = SharpDX.DirectWrite.Factory;
 using Factory = SharpDX.Direct2D1.Factory;
+using System.Windows.Forms;
 
 namespace Yato.DirectXOverlay
 {
     public class Direct2DRenderer : IDisposable
     {
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern IntPtr GetForegroundWindow();
+
         #region private vars
 
         private Direct2DRendererOptions rendererOptions;
@@ -1181,6 +1185,32 @@ namespace Yato.DirectXOverlay
             GC.SuppressFinalize(this);
         }
         #endregion
+
+        public void retreat(IntPtr parentWindowHandle, OverlayWindow overlay, Direct2DRenderer d2d)
+        {
+            IntPtr fg = GetForegroundWindow();
+            if (fg == parentWindowHandle)
+            {
+                d2d.BeginScene();
+                d2d.ClearScene();
+
+                d2d.DrawTextWithBackground("FPS: " + d2d.FPS, 20, 40, d2d.font, d2d.redBrush, d2d.blackBrush);
+
+                d2d.DrawTextWithBackground("Go back or DIE. The choice is simple.\nNew line test", 30, overlay.Height / 5 * 3, d2d.font, d2d.redBrush, d2d.blackBrush);
+
+                d2d.DrawCircle(overlay.Width / 2, overlay.Height / 2, 150, 2, d2d.redBrush);
+
+                d2d.DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, d2d.redBrush);
+
+                d2d.EndScene();
+            }
+            else
+            {
+                d2d.BeginScene();
+                d2d.ClearScene();
+                d2d.EndScene();
+            }
+        }
     }
 
     public enum CrosshairStyle

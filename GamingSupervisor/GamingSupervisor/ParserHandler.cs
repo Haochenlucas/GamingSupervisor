@@ -25,7 +25,7 @@ namespace GamingSupervisor
                 DecompressFile();
             }
 
-            Console.WriteLine("Starting parsing...");
+            Console.WriteLine("Starting parsing..." + fileName);
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
@@ -33,7 +33,7 @@ namespace GamingSupervisor
             p.StartInfo.Arguments =
                 "-jar "
                 + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
-                + fileName.Replace(@"\", @"\\")
+                + "\"" + fileName.Replace(@"\", @"\\") + "\""
                 + " "
                 + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\"); // Data dump location
             p.Start();
