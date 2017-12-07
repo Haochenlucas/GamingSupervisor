@@ -357,8 +357,8 @@ namespace GamingSupervisor
             
             parsing_label.Hide();
             back_button.Show();
-
-            string[] info = File.ReadAllLines(@"../../Parser/info.txt");
+            //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
+            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\info.txt"));
             foreach (string test in info)
             {
                 if (test.Contains("hero_name"))

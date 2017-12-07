@@ -15,10 +15,13 @@ namespace replayParse
         private int[,] prev_stat = new int[10, 4]; // first index is heroID for this match, the second index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z;
         public static Dictionary<string, int> heros = new Dictionary<string, int>();
         public int[] sideOfHero = new int[10];  // the index is the heroID: the sort of ID show the sequence of picking , the number in string shows the side of heros. 0: for one side, 1 : for another side.
-        public int offsetTic = 0;
+        public int offsetTic = 0;    // offset is the first tic in the replay file.
         public replay_version01()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"../../Parser/replay.txt");
+            //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
+            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\GamingSupervisor\Parser\replay.txt");
+            //s = @"C: \Users\yuchengy\Source\Repos\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\replay.txt";
+            string[] lines = System.IO.File.ReadAllLines(s);
             int tic = 0;
             int value = 0;
             foreach (string line in lines)
