@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using replayParse;
 using System.Collections.Generic;
+using Yato.DirectXOverlay;
 
 namespace GamingSupervisor
 {
@@ -31,7 +32,15 @@ namespace GamingSupervisor
         public string hero_selected = "";
         public int hero_id;
 
+        private double currentTick;
+
+        private System.Timers.Timer tickTimer;
+
         private ReplayStartAnnouncer announcer;
+        private OverlayManager overlayManager;
+        private OverlayWindow window;
+        private Direct2DRenderer d2d;
+        private IntPtr dota_HWND;
 
         public enum State
         {
@@ -48,6 +57,9 @@ namespace GamingSupervisor
 
         public Form1()
         {
+            tickTimer = new System.Timers.Timer(1000.0 / 30.0);
+            tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(tick_timer_Tick);
+
             InitializeComponent();
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -352,13 +364,13 @@ namespace GamingSupervisor
             back_button.Hide();
 
             //thread.Join();
-            parsed_replay = new replay_version01(parsed_file);
+            parsed_replay = new replay_version01();
             parsed_info = parsed_replay.getReplayInfo();
             
             parsing_label.Hide();
             back_button.Show();
             //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
-            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\info.txt"));
+            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\info.txt"));
             foreach (string test in info)
             {
                 if (test.Contains("hero_name"))
@@ -419,6 +431,16 @@ namespace GamingSupervisor
             }
         }
 
+        private void StartAnalyzing()
+        {
+            announcer = new ReplayStartAnnouncer();
+            currentTick = announcer.GetStartTick();
+            //announcer.waitForReplayToStart();
+            announcer.waitForHeroSelectionToComplete();
+            Console.WriteLine("got here");
+            tickTimer.Start();
+        }
+
         private void go_button_Click(object sender, EventArgs e)
         {
             go_button.Hide();
@@ -429,10 +451,27 @@ namespace GamingSupervisor
 
             startDota();
 
-            announcer = new ReplayStartAnnouncer();
-            announcer.waitForReplayToStart();
-            announcer.waitForHeroSelectionToComplete();
-            tick_timer.Start();
+            if (Process.GetProcessesByName("dota2").Length > 0)
+            {
+                dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
+                overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
+            }
+
+            StartAnalyzing();
+        }
+
+        private void tick_timer_Tick(object sender, EventArgs e)
+        {
+            Console.WriteLine(currentTick++);
+            int health = 0;
+            if (health < 200)
+            {
+                d2d.retreat(dota_HWND, window, "Health is low, retreat");
+            }
+            else
+            {
+                d2d.clear();
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -470,11 +509,6 @@ namespace GamingSupervisor
             hero_select_label.Hide();
 
             go_button.Show();
-        }
-
-        private void tick_timer_Tick(object sender, EventArgs e)
-        {
-            //TODO
         }
     }
 }
