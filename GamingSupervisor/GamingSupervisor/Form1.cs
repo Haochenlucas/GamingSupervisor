@@ -437,8 +437,21 @@ namespace GamingSupervisor
             currentTick = announcer.GetStartTick();
             //announcer.waitForReplayToStart();
             announcer.waitForHeroSelectionToComplete();
-            Console.WriteLine("got here");
             tickTimer.Start();
+
+            while (true)
+            {
+                Thread.Sleep(33);
+                int health = 0;
+                if (health < 200)
+                {
+                    d2d.retreat(dota_HWND, window, "Health is low, retreat");
+                }
+                else
+                {
+                    d2d.clear();
+                }
+            }
         }
 
         private void go_button_Click(object sender, EventArgs e)
@@ -449,13 +462,15 @@ namespace GamingSupervisor
             
             timer1.Start();
 
-            startDota();
+            //startDota();
 
-            if (Process.GetProcessesByName("dota2").Length > 0)
+            while (Process.GetProcessesByName("dota2").Length == 0)
             {
-                dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
-                overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
+                Thread.Sleep(500);
             }
+
+            dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
+            overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
 
             StartAnalyzing();
         }
@@ -463,15 +478,6 @@ namespace GamingSupervisor
         private void tick_timer_Tick(object sender, EventArgs e)
         {
             Console.WriteLine(currentTick++);
-            int health = 0;
-            if (health < 200)
-            {
-                d2d.retreat(dota_HWND, window, "Health is low, retreat");
-            }
-            else
-            {
-                d2d.clear();
-            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
