@@ -41,7 +41,7 @@ namespace replayParse
                 ID_heroDictionary.Add(hero_name, key);
                 heroName[key] = hero_name;
             }
-            string path = @"X:\data_info\heroIDtable.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable.txt");
             if (!File.Exists(path))
             {
                 // Create a file to write to.
@@ -85,7 +85,7 @@ namespace replayParse
                 hero_IDDictionary.Add(key, words[0]);
                 ID_heroDictionary.Add(words[0], key);
             }
-            string path = @"X:\data_info\heroIDtable.txt";
+            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable.txt");
             if (!File.Exists(path))
             {
                 // Create a file to write to.
