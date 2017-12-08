@@ -41,7 +41,6 @@ namespace GamingSupervisor
         private OverlayWindow window;
         private Direct2DRenderer d2d;
         private IntPtr dota_HWND;
-        private IntPtr VS_HWND;
 
         public enum State
         {
@@ -372,6 +371,7 @@ namespace GamingSupervisor
             back_button.Show();
             //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
             string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\info.txt"));
+            hero_select_box.Items.Clear();
             foreach (string test in info)
             {
                 if (test.Contains("hero_name"))
@@ -455,8 +455,7 @@ namespace GamingSupervisor
             if (Process.GetProcessesByName("dota2").Length > 0)
             {
                 dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
-                VS_HWND = Process.GetProcessesByName("devenv")[0].MainWindowHandle;
-                overlayManager = new OverlayManager(VS_HWND, out window, out d2d);
+                overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
             }
 
             StartAnalyzing();
@@ -468,8 +467,7 @@ namespace GamingSupervisor
             int health = 0;
             if (health < 200)
             {
-                string message = "Low Health";
-                d2d.retreat(VS_HWND, window, message);
+                d2d.retreat(dota_HWND, window, "Health is low, retreat");
             }
             else
             {
