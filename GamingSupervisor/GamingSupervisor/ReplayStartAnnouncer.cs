@@ -32,9 +32,14 @@ namespace GamingSupervisor
             return Convert.ToInt32(words[0]);
         }
 
-        public double GetCurrentClockTime()
+        public double GetCurrentGameTime()
         {
-            return gameStateIntegration.ClockTime;
+            return gameStateIntegration.GameTime;
+        }
+
+        public string GetCurrentGameState()
+        {
+            return gameStateIntegration.GameState;
         }
 
         public void waitForReplayToStart()
@@ -58,7 +63,7 @@ namespace GamingSupervisor
                 gameStateIntegration.StartListener();
                 listenerStarted = true;
             }
-            SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_PRE_GAME");
+            SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_TEAM_SHOWCASE");
             Console.WriteLine("Game started!");
         }
     }

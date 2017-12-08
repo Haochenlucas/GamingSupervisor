@@ -12,7 +12,7 @@ namespace GamingSupervisor
         private static GameStateListener gameStateListener;
         public bool GameStarted { get; set; }
         public string GameState { get; set; }
-        public double ClockTime { get; set; }
+        public double GameTime { get; set; }
 
         public GameStateIntegration()
         {
@@ -44,7 +44,7 @@ namespace GamingSupervisor
         private void OnNewGameState(GameState gs)
         {
             GameState = gs.Map.GameState.ToString();
-            ClockTime = Convert.ToDouble(gs.Map.ClockTime);
+            GameTime = Convert.ToDouble(gs.Map.GameTime);
         }
 
         private static void CreateGameStateIntegrationFile()

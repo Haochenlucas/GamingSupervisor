@@ -28,6 +28,7 @@ namespace GamingSupervisor
         public Boolean safe_farming_area = false;
 
         public Boolean replay_selected = false;
+        public bool isReplayRunning = false;
 
         public string hero_selected = "";
         public int hero_id;
@@ -36,10 +37,10 @@ namespace GamingSupervisor
 
         private System.Timers.Timer tickTimer;
 
-        private ReplayStartAnnouncer announcer;
-        private OverlayManager overlayManager;
-        private OverlayWindow window;
-        private Direct2DRenderer d2d;
+        private ReplayStartAnnouncer announcer = null;
+        private OverlayManager overlayManager = null;
+        private OverlayWindow window = null;
+        private Direct2DRenderer d2d = null;
         private IntPtr dota_HWND;
 
         public enum State
@@ -355,15 +356,15 @@ namespace GamingSupervisor
             state = State.hero_select;
 
             ParserHandler parser = new ParserHandler(filename);
-            //Thread thread = new Thread(parser.ParseReplayFile);
-            //thread.Start();
+            Thread thread = new Thread(parser.ParseReplayFile);
+            thread.Start();
 
             replay_button.Hide();
             live_button.Hide();
             //parsing_label.Show();
             back_button.Hide();
 
-            //thread.Join();
+            thread.Join();
             parsed_replay = new replay_version01();
             parsed_info = parsed_replay.getReplayInfo();
 
@@ -420,7 +421,7 @@ namespace GamingSupervisor
             Console.WriteLine("Starting dota...");
             Process p = new Process();
             p.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Steam\Steam.exe");
-            p.StartInfo.Arguments = "-applaunch 570 -fullscreen";
+            p.StartInfo.Arguments = "-applaunch 570";
             try
             {
                 p.Start();
@@ -434,17 +435,27 @@ namespace GamingSupervisor
 
         private void StartAnalyzing()
         {
-            announcer = new ReplayStartAnnouncer();
+            if (announcer == null)
+            {
+                announcer = new ReplayStartAnnouncer();
+            }
             currentTick = announcer.GetStartTick();
             //announcer.waitForReplayToStart();
             announcer.waitForHeroSelectionToComplete();
             tickTimer.Start();
 
+            if (overlayManager == null)
+            {
+                dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
+                overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
+            }
+
             while (true)
             {
                 Thread.Sleep(33);
-                int health = parsed_info[Convert.ToInt32(currentTick),hero_id,0];
-                if (health < 200)
+                int health = parsed_info[Convert.ToInt32(currentTick) - parsed_replay.getOffSet(), hero_id, 0];
+                
+                if (health < 470)
                 {
                     d2d.retreat(dota_HWND, window, "Health is low, retreat");
                 }
@@ -452,7 +463,30 @@ namespace GamingSupervisor
                 {
                     d2d.clear();
                 }
+                
+                if (announcer.GetCurrentGameState() == "Undefined")
+                {
+                    tickTimer.Stop();
+                    break;
+                }
             }
+
+            Console.WriteLine("Replay stopped!");
+
+            cb_confirm.Hide();
+            back_button.Hide();
+            checkbox_container.Hide();
+            player_level.Hide();
+            player_level_text.Hide();
+            timer_text.Hide();
+
+            novice_button.Show();
+            learning_button.Show();
+            almost_button.Show();
+
+            player_level.Text = "";
+
+            state = State.select_difficulty;
         }
 
         private void go_button_Click(object sender, EventArgs e)
@@ -463,22 +497,20 @@ namespace GamingSupervisor
 
             timer1.Start();
 
-            //startDota();
+            startDota();
 
             while (Process.GetProcessesByName("dota2").Length == 0)
             {
                 Thread.Sleep(500);
             }
 
-            dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
-            overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
-
             StartAnalyzing();
         }
 
         private void tick_timer_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine(currentTick++);
+            //Console.WriteLine(currentTick++);
+            currentTick++;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
