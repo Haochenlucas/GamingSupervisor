@@ -58,8 +58,8 @@ namespace GamingSupervisor
                 gameStateIntegration.StartListener();
                 listenerStarted = true;
             }
-            SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_TEAM_SHOWCASE");
-            Console.WriteLine("Hero selection started!");
+            SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_PRE_GAME");
+            Console.WriteLine("Game started!");
         }
     }
 }
