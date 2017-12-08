@@ -20,6 +20,9 @@ namespace Yato.DirectXOverlay
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         public static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll")]
+        static extern IntPtr GetDesktopWindow();
+
 
         #region private vars
 
@@ -1190,7 +1193,7 @@ namespace Yato.DirectXOverlay
         public void retreat(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
         {
             IntPtr fg = GetForegroundWindow();
-            if (fg == parentWindowHandle)
+            if (fg == parentWindowHandle || (GetDesktopWindow() != parentWindowHandle))
             {
                 BeginScene();
                 ClearScene();
