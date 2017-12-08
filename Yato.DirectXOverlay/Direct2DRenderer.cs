@@ -1187,34 +1187,37 @@ namespace Yato.DirectXOverlay
         }
         #endregion
 
-        public void retreat(IntPtr parentWindowHandle, OverlayWindow overlay, Direct2DRenderer d2d, string text)
+        public void retreat(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
         {
             IntPtr fg = GetForegroundWindow();
             if (fg == parentWindowHandle)
             {
-                d2d.BeginScene();
-                d2d.ClearScene();
+                BeginScene();
+                ClearScene();
 
-                d2d.DrawTextWithBackground("FPS: " + d2d.FPS, 20, 40, d2d.font, d2d.redBrush, d2d.blackBrush);
+                DrawTextWithBackground("FPS: " + FPS, 20, 40, font, redBrush, blackBrush);
 
-                d2d.DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, d2d.font, d2d.redBrush, d2d.blackBrush);
+                DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
 
-                d2d.DrawCircle(overlay.Width / 2, overlay.Height / 2, 150, 2, d2d.redBrush);
+                DrawCircle(overlay.Width / 2, overlay.Height / 2, 150, 2, redBrush);
 
-                d2d.DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, d2d.redBrush);
+                DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
 
-                d2d.EndScene();
+                EndScene();
             }
             else
             {
+                BeginScene();
                 ClearScene();
-                //EndScene();
+                EndScene();
             }
         }
 
-        public void clear(Direct2DRenderer d2d)
+        public void clear()
         {
-            d2d.ClearScene();
+            BeginScene();
+            ClearScene();
+            EndScene();
         }
     }
 

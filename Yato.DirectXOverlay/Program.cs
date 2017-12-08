@@ -36,7 +36,7 @@ namespace Yato.DirectXOverlay
 
                 // Low health
                 if (true)
-                    d2d.retreat(VS_HWND, overlay, d2d, "Run");
+                    d2d.retreat(VS_HWND, overlay,"Run");
 
                 watch.Restart();
             }

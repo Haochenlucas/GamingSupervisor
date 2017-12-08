@@ -30,9 +30,6 @@ D:\College\SeniorProject\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.cspro
 \\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.xml
 \\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
 \\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll.config
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll
-\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.dll
 C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll.config
 C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll
 C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.pdb
@@ -45,3 +42,6 @@ C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Sh
 C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
 C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.dll
 C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
+\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll.config
+\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll
+\\chips.eng.utah.edu\home\haochenz\.win_desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.dll
