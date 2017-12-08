@@ -6,12 +6,18 @@ using System.Threading;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
+using replayParse;
+using System.Collections.Generic;
 
 namespace GamingSupervisor
 {
     public partial class Form1 : Form
     {
-        public string difficulty;        
+        public string difficulty;
+
+        private static string parsed_file = @"../../Parser/replay.txt";
+        public replay_version01 parsed_replay;
+        public int[,,] parsed_info;
 
         public Boolean hero_selection    = false;
         public Boolean item_helper       = false;
@@ -23,6 +29,7 @@ namespace GamingSupervisor
         public Boolean replay_selected = false;
 
         public string hero_selected = "";
+        public int hero_id;
 
         private ReplayStartAnnouncer announcer;
 
@@ -336,16 +343,18 @@ namespace GamingSupervisor
             state = State.hero_select;
 
             ParserHandler parser = new ParserHandler(filename);
-            Thread thread = new Thread(parser.ParseReplayFile);
-            thread.Start();
+            //Thread thread = new Thread(parser.ParseReplayFile);
+            //thread.Start();
 
             replay_button.Hide();
             live_button.Hide();
-            parsing_label.Show();
+            //parsing_label.Show();
             back_button.Hide();
-            //MessageBox.Show("Parsing!");
 
-            thread.Join();
+            //thread.Join();
+            parsed_replay = new replay_version01(parsed_file);
+            parsed_info = parsed_replay.getReplayInfo();
+            
             parsing_label.Hide();
             back_button.Show();
             //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
@@ -423,6 +432,7 @@ namespace GamingSupervisor
             announcer = new ReplayStartAnnouncer();
             announcer.waitForReplayToStart();
             announcer.waitForHeroSelectionToComplete();
+            tick_timer.Start();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -450,15 +460,21 @@ namespace GamingSupervisor
 
             state = State.start;
 
-            hero_selected = hero_select_box.SelectedText;
+            hero_selected = hero_select_box.SelectedItem.ToString();
+            hero_id = parsed_replay.getHeros()[hero_selected];
 
-            //TODO: Logic that passes this information to the overlay
+            //TODO: Logic that passes this information to the overlay or not??
 
             hero_select_button.Hide();
             hero_select_box.Hide();
             hero_select_label.Hide();
 
             go_button.Show();
+        }
+
+        private void tick_timer_Tick(object sender, EventArgs e)
+        {
+            //TODO
         }
     }
 }

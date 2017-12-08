@@ -309,6 +309,7 @@
             // tick_timer
             // 
             this.tick_timer.Interval = 33;
+            this.tick_timer.Tick += new System.EventHandler(this.tick_timer_Tick);
             // 
             // parsing_label
             // 

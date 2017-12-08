@@ -34,14 +34,12 @@ namespace Yato.DirectXOverlay
                     continue;
                 }
 
-                //Low health
+                // Low health
                 if (true)
-                    d2d.retreat(VS_HWND, overlay, "Run");
+                    d2d.retreat(VS_HWND, overlay, d2d, "Run");
+
                 watch.Restart();
             }
-
-            // Clear overlay
-            d2d.clear();
         }
     }
 }
