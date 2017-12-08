@@ -16,7 +16,7 @@ namespace GamingSupervisor
     {
         public string difficulty;
 
-        private static string parsed_file = @"../../Parser/replay.txt";
+        //private static string parsed_file = @"../../Parser/replay.txt";
         public replay_version01 parsed_replay;
         public int[,,] parsed_info;
 
@@ -371,6 +371,7 @@ namespace GamingSupervisor
             back_button.Show();
             //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
             string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\info.txt"));
+            hero_select_box.Items.Clear();
             foreach (string test in info)
             {
                 if (test.Contains("hero_name"))
@@ -442,7 +443,7 @@ namespace GamingSupervisor
             while (true)
             {
                 Thread.Sleep(33);
-                int health = 0;
+                int health = parsed_info[Convert.ToInt32(currentTick),hero_id,0];
                 if (health < 200)
                 {
                     d2d.retreat(dota_HWND, window, "Health is low, retreat");
