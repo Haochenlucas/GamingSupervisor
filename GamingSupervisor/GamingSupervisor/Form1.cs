@@ -16,15 +16,15 @@ namespace GamingSupervisor
     {
         public string difficulty;
 
-        private static string parsed_file = @"../../Parser/replay.txt";
+        //private static string parsed_file = @"../../Parser/replay.txt";
         public replay_version01 parsed_replay;
         public int[,,] parsed_info;
 
-        public Boolean hero_selection    = false;
-        public Boolean item_helper       = false;
-        public Boolean laning            = false;
-        public Boolean last_hit          = false;
-        public Boolean jungling          = false;
+        public Boolean hero_selection = false;
+        public Boolean item_helper = false;
+        public Boolean laning = false;
+        public Boolean last_hit = false;
+        public Boolean jungling = false;
         public Boolean safe_farming_area = false;
 
         public Boolean replay_selected = false;
@@ -125,43 +125,43 @@ namespace GamingSupervisor
             sfa_checkbox.Font = smallFont;
 
             checkbox_container.Left = (this.ClientSize.Width - checkbox_container.Width) / 2;
-            checkbox_container.Top  = (this.ClientSize.Height - checkbox_container.Height) / 2;
+            checkbox_container.Top = (this.ClientSize.Height - checkbox_container.Height) / 2;
             checkbox_container.Hide();
-            
+
             title_label.Left = (this.ClientSize.Width - title_label.Width) / 2;
 
             novice_button.Left = (this.ClientSize.Width - novice_button.Width) / 2;
-            novice_button.Top  = (this.ClientSize.Height - novice_button.Height) / 2 - 100;
+            novice_button.Top = (this.ClientSize.Height - novice_button.Height) / 2 - 100;
 
             learning_button.Left = (this.ClientSize.Width - novice_button.Width) / 2;
-            learning_button.Top  = (this.ClientSize.Height - novice_button.Height) / 2;
+            learning_button.Top = (this.ClientSize.Height - novice_button.Height) / 2;
 
             almost_button.Left = (this.ClientSize.Width - novice_button.Width) / 2;
-            almost_button.Top  = (this.ClientSize.Height - novice_button.Height) / 2 + 100;
+            almost_button.Top = (this.ClientSize.Height - novice_button.Height) / 2 + 100;
 
             player_level_text.Left = title_label.Left;
-            player_level.Left      = player_level_text.Right;
-            player_level.Top       = player_level_text.Top;
+            player_level.Left = player_level_text.Right;
+            player_level.Top = player_level_text.Top;
 
             replay_button.Left = (this.ClientSize.Width - replay_button.Width) / 2;
-            replay_button.Top  = (this.ClientSize.Height + player_level.Bottom - replay_button.Width) / 2 - 50;
+            replay_button.Top = (this.ClientSize.Height + player_level.Bottom - replay_button.Width) / 2 - 50;
 
             live_button.Left = (this.ClientSize.Width - live_button.Width) / 2;
-            live_button.Top  = (this.ClientSize.Height + player_level.Bottom - live_button.Width) / 2 + 50;
+            live_button.Top = (this.ClientSize.Height + player_level.Bottom - live_button.Width) / 2 + 50;
 
             go_button.Left = (this.ClientSize.Width - go_button.Width) / 2;
-            go_button.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
+            go_button.Top = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
 
             timer_text.Left = (this.ClientSize.Width - go_button.Width) / 2;
-            timer_text.Top  = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
+            timer_text.Top = (this.ClientSize.Height + player_level.Bottom - go_button.Width) / 2;
 
             hero_select_box.Left = (this.ClientSize.Width - hero_select_box.Width) / 2;
-            hero_select_box.Top  = hero_select_label.Top + 25;
+            hero_select_box.Top = hero_select_label.Top + 25;
 
             parsing_label.Left = (this.ClientSize.Width - parsing_label.Width) / 2;
-            parsing_label.Top  = (this.ClientSize.Height - parsing_label.Height) / 2;
+            parsing_label.Top = (this.ClientSize.Height - parsing_label.Height) / 2;
         }
-        
+
         private void novice_button_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
@@ -177,11 +177,11 @@ namespace GamingSupervisor
             cb_confirm.Show();
             back_button.Show();
 
-            lh_checkbox.Checked  = true;
-            hs_checkbox.Checked  = true;
-            ih_checkbox.Checked  = true;
-            ln_checkbox.Checked  = true;
-            jg_checkbox.Checked  = true;
+            lh_checkbox.Checked = true;
+            hs_checkbox.Checked = true;
+            ih_checkbox.Checked = true;
+            ln_checkbox.Checked = true;
+            jg_checkbox.Checked = true;
             sfa_checkbox.Checked = true;
 
             state = State.customize;
@@ -202,11 +202,11 @@ namespace GamingSupervisor
             cb_confirm.Show();
             back_button.Show();
 
-            lh_checkbox.Checked  = true;
-            hs_checkbox.Checked  = false;
-            ih_checkbox.Checked  = false;
-            ln_checkbox.Checked  = true;
-            jg_checkbox.Checked  = true;
+            lh_checkbox.Checked = true;
+            hs_checkbox.Checked = false;
+            ih_checkbox.Checked = false;
+            ln_checkbox.Checked = true;
+            jg_checkbox.Checked = true;
             sfa_checkbox.Checked = true;
 
             state = State.customize;
@@ -227,11 +227,11 @@ namespace GamingSupervisor
             cb_confirm.Show();
             back_button.Show();
 
-            lh_checkbox.Checked  = false;
-            hs_checkbox.Checked  = false;
-            ih_checkbox.Checked  = false;
-            ln_checkbox.Checked  = false;
-            jg_checkbox.Checked  = true;
+            lh_checkbox.Checked = false;
+            hs_checkbox.Checked = false;
+            ih_checkbox.Checked = false;
+            ln_checkbox.Checked = false;
+            jg_checkbox.Checked = true;
             sfa_checkbox.Checked = true;
 
             state = State.customize;
@@ -272,7 +272,7 @@ namespace GamingSupervisor
             CheckBox cb = sender as CheckBox;
             safe_farming_area = cb.Checked;
         }
-        
+
         private void cb_confirm_Click(object sender, EventArgs e)
         {
             if (!(hero_selection || item_helper || laning || last_hit || jungling || safe_farming_area))
@@ -366,11 +366,11 @@ namespace GamingSupervisor
             //thread.Join();
             parsed_replay = new replay_version01();
             parsed_info = parsed_replay.getReplayInfo();
-            
+
             parsing_label.Hide();
             back_button.Show();
             //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
-            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\info.txt"));
+            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\info.txt"));
             hero_select_box.Items.Clear();
             foreach (string test in info)
             {
@@ -438,8 +438,21 @@ namespace GamingSupervisor
             currentTick = announcer.GetStartTick();
             //announcer.waitForReplayToStart();
             announcer.waitForHeroSelectionToComplete();
-            Console.WriteLine("got here");
             tickTimer.Start();
+
+            while (true)
+            {
+                Thread.Sleep(33);
+                int health = parsed_info[Convert.ToInt32(currentTick),hero_id,0];
+                if (health < 200)
+                {
+                    d2d.retreat(dota_HWND, window, "Health is low, retreat");
+                }
+                else
+                {
+                    d2d.clear();
+                }
+            }
         }
 
         private void go_button_Click(object sender, EventArgs e)
@@ -447,16 +460,18 @@ namespace GamingSupervisor
             go_button.Hide();
             timer_text.Show();
             back_button.Hide();
-            
+
             timer1.Start();
 
-            startDota();
+            //startDota();
 
-            if (Process.GetProcessesByName("dota2").Length > 0)
+            while (Process.GetProcessesByName("dota2").Length == 0)
             {
-                dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
-                overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
+                Thread.Sleep(500);
             }
+
+            dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
+            overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
 
             StartAnalyzing();
         }
@@ -464,20 +479,11 @@ namespace GamingSupervisor
         private void tick_timer_Tick(object sender, EventArgs e)
         {
             Console.WriteLine(currentTick++);
-            int health = 0;
-            if (health < 200)
-            {
-                d2d.retreat(dota_HWND, window, "Health is low, retreat");
-            }
-            else
-            {
-                d2d.clear();
-            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if(timeleft > 0)
+            if (timeleft > 0)
             {
                 timeleft--;
                 timer_text.Text = timeleft + "";
@@ -496,7 +502,7 @@ namespace GamingSupervisor
                 MessageBox.Show("Select a hero!");
                 return;
             }
-             
+
 
             state = State.start;
 
