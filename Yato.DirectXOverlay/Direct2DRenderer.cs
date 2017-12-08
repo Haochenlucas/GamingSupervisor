@@ -1199,7 +1199,7 @@ namespace Yato.DirectXOverlay
 
                 DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
 
-                DrawCircle(overlay.Width / 2, overlay.Height / 2, 150, 2, redBrush);
+                DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height/8, 2, redBrush);
 
                 DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
 
