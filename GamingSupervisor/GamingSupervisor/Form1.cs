@@ -471,6 +471,8 @@ namespace GamingSupervisor
                 }
             }
 
+            d2d.clear();
+
             Console.WriteLine("Replay stopped!");
 
             cb_confirm.Hide();
