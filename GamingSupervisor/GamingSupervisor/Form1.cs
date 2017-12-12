@@ -409,6 +409,7 @@ namespace GamingSupervisor
             }
 
             hero_select_label.Show();
+            hero_select_box.Text = "";
             hero_select_box.Show();
             hero_select_button.Show();
             //go_button.Show();
@@ -457,7 +458,7 @@ namespace GamingSupervisor
             {
                 announcer = new ReplayStartAnnouncer();
             }
-            CurrentTick = announcer.GetStartTick();
+            CurrentTick = announcer.GetStartTick() - 200;
             //announcer.waitForReplayToStart();
             announcer.waitForHeroSelectionToComplete();
             tickTimer.Start();
