@@ -458,10 +458,9 @@ namespace GamingSupervisor
             {
                 announcer = new ReplayStartAnnouncer();
             }
-            CurrentTick = announcer.GetStartTick() - 200;
+            CurrentTick = announcer.GetStartTick();
             //announcer.waitForReplayToStart();
             announcer.waitForHeroSelectionToComplete();
-            tickTimer.Start();
 
             if (overlayManager == null)
             {
@@ -470,6 +469,7 @@ namespace GamingSupervisor
             }
 
             announcer.waitForHeroShowcaseToComplete();
+            tickTimer.Start();
 
             int lastGameTime = announcer.GetCurrentGameTime();
             int currentGameTime = 0;
