@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Yato.DirectXOverlay
 {
@@ -24,6 +25,7 @@ namespace Yato.DirectXOverlay
             var VS_HWND = Process.GetProcessesByName("devenv")[0].MainWindowHandle;
             manager = new OverlayManager(VS_HWND,out overlay,out d2d);
 
+            //Thread.Sleep(2000);
             // Control FPS
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -36,7 +38,15 @@ namespace Yato.DirectXOverlay
 
                 // Low health
                 if (true)
-                    d2d.retreat(VS_HWND, overlay,"Run");
+                {
+                    d2d.addMessage(0, "Run");
+                    d2d.addMessage(1, "Dont Run");
+                    d2d.addMessage(2, "Actually... Run");
+                }
+                if (Control.ModifierKeys == Keys.Alt)
+                    d2d.deleteMessage(1);
+
+                d2d.draw(VS_HWND, overlay, "Run");
 
                 watch.Restart();
             }

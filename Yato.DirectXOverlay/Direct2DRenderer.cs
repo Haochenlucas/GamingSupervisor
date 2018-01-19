@@ -47,6 +47,8 @@ namespace Yato.DirectXOverlay
 
         private int internalFps;
 
+        private Hint[] hints = new Hint[3];
+        
         #endregion
 
         #region public vars
@@ -1190,29 +1192,63 @@ namespace Yato.DirectXOverlay
         }
         #endregion
 
-        public void retreat(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
+        // Type: 
+        //      Low health: 0
+        public void addMessage(int type, string text)
+        {
+            switch (type)
+            {
+                case 0:
+                    hints[type] = new Hint(text, 0, 0);
+                    break;
+                case 1:
+                    hints[type] = new Hint(text, 500, 500);
+                    break;
+                case 2:
+                    hints[type] = new Hint(text, 1000, 1000);
+                    break;
+                default:
+                    Console.WriteLine("Message not found.");
+                    break;
+            }
+        }
+
+        public void deleteMessage(int type)
+        {
+            hints[type].clear();
+        }
+
+        public void draw(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
         {
             IntPtr fg = GetForegroundWindow();
-            if (fg == parentWindowHandle || (GetDesktopWindow() != parentWindowHandle))
+            
+            if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
             {
                 BeginScene();
                 ClearScene();
 
-                DrawTextWithBackground("FPS: " + FPS, 20, 40, font, redBrush, blackBrush);
+                //DrawTextWithBackground("FPS: " + FPS, 20, 40, font, redBrush, blackBrush);
 
-                DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
+                //DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
 
-                DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height/8, 2, redBrush);
+                //DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height / 8, 2, redBrush);
 
-                DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
+                //DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
+
+                // Loop through all the messages
+                for (int i = 0; i < hints.Length; i++)
+                {
+                    if (hints[i].on)
+                    {
+                        DrawTextWithBackground(hints[i].text, hints[i].x, hints[i].y, font, redBrush, blackBrush);
+                    }
+                }
 
                 EndScene();
             }
             else
             {
-                BeginScene();
-                ClearScene();
-                EndScene();
+                clear();
             }
         }
 
@@ -1221,6 +1257,31 @@ namespace Yato.DirectXOverlay
             BeginScene();
             ClearScene();
             EndScene();
+        }
+    }
+
+    public struct Hint
+    {
+        public bool on;
+        //public Direct2DBrush background;
+        //public Direct2DBrush color;
+        //public Direct2DFont font;
+        public float x;
+        public float y;
+        public string text;
+        //public Bitmap image;
+
+        public Hint(string _text, float _x, float _y)
+        {
+            text = _text;
+            x = _x;
+            y = _y;
+            on = true;
+        }
+
+        public void clear()
+        {
+            on = false;
         }
     }
 
