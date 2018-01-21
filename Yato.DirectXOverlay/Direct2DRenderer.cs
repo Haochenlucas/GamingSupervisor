@@ -1228,12 +1228,8 @@ namespace Yato.DirectXOverlay
                 ClearScene();
 
                 //DrawTextWithBackground("FPS: " + FPS, 20, 40, font, redBrush, blackBrush);
-
                 //DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
-
                 //DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height / 8, 2, redBrush);
-
-                //DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
 
                 // Loop through all the messages
                 for (int i = 0; i < hints.Length; i++)
@@ -1243,6 +1239,10 @@ namespace Yato.DirectXOverlay
                         DrawTextWithBackground(hints[i].text, hints[i].x, hints[i].y, font, redBrush, blackBrush);
                     }
                 }
+
+                Direct2DBitmap bmp = new Direct2DBitmap(device, @"D:\College\SeniorProject\Yato.DirectXOverlay\Smiley.bmp");
+                DrawBitmap(bmp, 0.5f, 2000, 1000, 500, 500);
+                DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
 
                 EndScene();
             }
