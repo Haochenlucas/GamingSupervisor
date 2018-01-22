@@ -23,16 +23,14 @@ import skadistats.clarity.wire.common.proto.Demo.CDemoFileInfo;
 @UsesEntities
 public class App
 {    
-    private PrintWriter positionWriter;
+    private PrintWriter heroPositionWriter;
     private PrintWriter healthWriter;
     private PrintWriter heroSelectionWriter;
+    private PrintWriter cameraWriter;
     
-    private FieldPath x;
-    private FieldPath y;
-    private FieldPath z;
-    private FieldPath health;
-    private FieldPath heroSelections[];
-    private FieldPath heroBans[];
+    private Hero hero;
+    private Camera camera;
+    private Selection selection;
     
     private boolean isHero(Entity e)
     {
@@ -44,39 +42,32 @@ public class App
     	return e.getDtClass().getDtName().equals("CDOTAGamerulesProxy");
     }
     
-    private void ensureHeroSelectionFieldPaths(Entity e)
+    private boolean isPlayer(Entity e)
     {
-    	if (heroSelections == null)
+    	return e.getDtClass().getDtName().equals("CDOTAPlayer");
+    }
+    
+    private void initializeSelection(Entity e)
+    {
+    	if (selection == null)
     	{
-    		heroSelections = new FieldPath[10];
-    		heroBans = new FieldPath[12];
-    		
-    		for (int i = 0; i < 10; i++)
-    		{
-    			heroSelections[i] = e.getDtClass().getFieldPathForName("m_pGameRules.m_SelectedHeroes.000" + i);
-    		}
-    		for (int i = 0; i < 10; i++)
-    		{
-    			heroBans[i] = e.getDtClass().getFieldPathForName("m_pGameRules.m_BannedHeroes.000" + i);
-    		}
+    		selection = new Selection(e);
     	}
     }
     
-    private void ensurePositionFieldPaths(Entity e)
+    private void initializeHero(Entity e)
     {
-        if (x == null)
+        if (hero == null)
         {
-            x = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellX");
-            y = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellY");
-            z = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellZ");
+        	hero = new Hero(e);            
         }
     }
     
-    private void ensureHealthFieldPaths(Entity e)
+    private void initializeCamera(Entity e)
     {
-        if (health == null)
+        if (camera == null)
         {
-            health = e.getDtClass().getFieldPathForName("m_iHealth");
+        	camera = new Camera(e);
         }
     }
     
@@ -87,19 +78,9 @@ public class App
         {
             return;
         }
-        ensurePositionFieldPaths(e);
-        ensureHealthFieldPaths(e);
+        initializeHero(e);
         
-        positionWriter.format("%d [POSITION] %s %s %s %s\n", ctx.getTick(),
-                e.getDtClass().getDtName(),
-                e.getPropertyForFieldPath(x),
-                e.getPropertyForFieldPath(y),
-                e.getPropertyForFieldPath(z));
-        positionWriter.flush();
-    
-        healthWriter.format("%d [HEALTH] %s %s\n", ctx.getTick(),
-                e.getDtClass().getDtName(), e.getPropertyForFieldPath(health));
-        healthWriter.flush();
+        handleHero(ctx, e, null, 0, true);
     }
 
     @OnEntityUpdated
@@ -107,17 +88,46 @@ public class App
     {
         if (isHero(e))
         {
-            handleHero(ctx, e, updatedPaths, updateCount);
+            handleHero(ctx, e, updatedPaths, updateCount, false);
         }
         else if (isGameRules(e))
         {
         	handleHeroSelection(ctx, e, updatedPaths, updateCount);
-        }        
+        }
+        else if (isPlayer(e))
+        {
+        	handleCamera(ctx, e, updatedPaths, updateCount);
+        }
+    }
+    
+    private void handleCamera(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
+    {
+    	initializeCamera(e);
+    	
+    	boolean updatePosition = false;
+        for (int i = 0; i < updateCount; i++)
+        {
+            if (camera.isPosition(updatedPaths[i]))
+            {
+                updatePosition = true;
+                break;
+            }
+        }
+        
+        if (updatePosition)
+        {
+        	cameraWriter.format("%d [POSITION] %s %s %s %s\n", ctx.getTick(),
+                    e.getPropertyForFieldPath(camera.playerID),
+                    e.getPropertyForFieldPath(camera.x),
+                    e.getPropertyForFieldPath(camera.y),
+                    e.getPropertyForFieldPath(camera.z));
+        	cameraWriter.flush();
+        }
     }
     
     private void handleHeroSelection(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
     {
-    	ensureHeroSelectionFieldPaths(e);
+    	initializeSelection(e);
     	
     	boolean updateSelection[] = new boolean[10];
         boolean updateBan[] = new boolean[12];
@@ -125,7 +135,7 @@ public class App
         {
         	for (int j = 0; j < 10; j++)
         	{
-        		if (updatedPaths[i].equals(heroSelections[j]))
+        		if (updatedPaths[i].equals(selection.selections[j]))
                 {
         			updateSelection[j] = true;
                 }
@@ -133,7 +143,7 @@ public class App
             
         	for (int j = 0; j < 10; j++)
         	{
-        		if (updatedPaths[i].equals(heroBans[j]))
+        		if (updatedPaths[i].equals(selection.bans[j]))
                 {
         			updateBan[j] = true;
                 }
@@ -146,7 +156,7 @@ public class App
         	{
         		heroSelectionWriter.format("%d [SELECT] %s\n",
         				ctx.getTick(),
-        				e.getPropertyForFieldPath(heroSelections[i]));
+        				e.getPropertyForFieldPath(selection.selections[i]));
             	heroSelectionWriter.flush();
         	}
         }
@@ -157,74 +167,71 @@ public class App
         	{
         		heroSelectionWriter.format("%d [BAN] %s\n",
         				ctx.getTick(),
-        				e.getPropertyForFieldPath(heroBans[i]));
+        				e.getPropertyForFieldPath(selection.bans[i]));
             	heroSelectionWriter.flush();
         	}
         }
     }
     
-    private void handleHero(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
-    {
-    	ensurePositionFieldPaths(e);
-        ensureHealthFieldPaths(e);
-        
+    private void handleHero(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
+    {        
         boolean updatePosition = false;
         boolean updateHealth = false;
         for (int i = 0; i < updateCount; i++)
         {
-            if (updatedPaths[i].equals(x) || updatedPaths[i].equals(y))
+            if (hero.isPosition(updatedPaths[i]))
             {
                 updatePosition = true;
             }
-            if (updatedPaths[i].equals(health))
+            if (hero.isHealth(updatedPaths[i]))
             {
                 updateHealth = true;
             }
         }
         
-        if (updatePosition)
+        if (updatePosition || forceUpdate)
         {
-            positionWriter.format("%d [POSITION] %s %s %s %s\n", ctx.getTick(),
+        	heroPositionWriter.format("%d [POSITION] %s %s %s %s\n", ctx.getTick(),
                     e.getDtClass().getDtName(),
-                    e.getPropertyForFieldPath(x),
-                    e.getPropertyForFieldPath(y),
-                    e.getPropertyForFieldPath(z));
-            positionWriter.flush();
-            //System.out.format("%d [POSITION] %s %s %s %s\n", ctx.getTick(),
-            //        e.getDtClass().getDtName(),
-            //        e.getPropertyForFieldPath(x),
-            //        e.getPropertyForFieldPath(y),
-            //        e.getPropertyForFieldPath(z));
+                    e.getPropertyForFieldPath(hero.x),
+                    e.getPropertyForFieldPath(hero.y),
+                    e.getPropertyForFieldPath(hero.z));
+        	heroPositionWriter.flush();
         }
-        if (updateHealth)
+        if (updateHealth || forceUpdate)
         {
-            healthWriter.format("%d [HEALTH] %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(health));
+            healthWriter.format("%d [HEALTH] %s %s\n", ctx.getTick(),
+            		e.getDtClass().getDtName(),
+            		e.getPropertyForFieldPath(hero.health));
             healthWriter.flush();
-            //System.out.format("%d [HEALTH] %s %s\n", ctx.getTick(), e.getDtClass().getDtName(), e.getPropertyForFieldPath(health));
         }
     }
     
     public void run(String[] args) throws Exception
     {
-        File positionFile = new File(args[1] + "/position.txt");
-        File healthFile = new File(args[1] + "/health.txt");
-        File selectionFile = new File(args[1] + "/selection.txt");
-        positionWriter = new PrintWriter(positionFile);
-        healthWriter = new PrintWriter(healthFile);
-        heroSelectionWriter = new PrintWriter(selectionFile);
-
-        CDemoFileInfo info = Clarity.infoForFile(args[0]);
+    	CDemoFileInfo info = Clarity.infoForFile(args[0]);
         File infoFile = new File(args[1] + "/info.txt");
         PrintWriter w = new PrintWriter(infoFile);
         w.write(info.toString());
         w.close();
         
+        File positionFile = new File(args[1] + "/position.txt");
+        File healthFile = new File(args[1] + "/health.txt");
+        File selectionFile = new File(args[1] + "/selection.txt");
+        File cameraFile = new File(args[1] + "/camera.txt");
+        
+        heroPositionWriter = new PrintWriter(positionFile);
+        healthWriter = new PrintWriter(healthFile);
+        heroSelectionWriter = new PrintWriter(selectionFile);
+        cameraWriter = new PrintWriter(cameraFile);
+        
         Source source = new MappedFileSource(args[0]);
         new SimpleRunner(source).runWith(this);
         
-        positionWriter.close();
+        heroPositionWriter.close();
         healthWriter.close();
         heroSelectionWriter.close();
+        cameraWriter.close();
     }
 
     public static void main(String[] args) throws Exception

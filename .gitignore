@@ -261,3 +261,7 @@ __pycache__/
 *.pyc
 /GamingSupervisor/GamingSupervisor/Parser/info.txt
 /GamingSupervisor/GamingSupervisor/Parser/replay.txt
+/GamingSupervisor/GamingSupervisor/Parser/camera.txt
+/GamingSupervisor/GamingSupervisor/Parser/health.txt
+/GamingSupervisor/GamingSupervisor/Parser/position.txt
+/GamingSupervisor/GamingSupervisor/Parser/selection.txt
