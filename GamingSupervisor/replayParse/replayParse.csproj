@@ -63,6 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="counterpick_info.cs" />
+    <Compile Include="counter_pick_logic.cs" />
     <Compile Include="demo.cs" />
     <Compile Include="heroID.cs" />
     <Compile Include="replayParse.cs" />

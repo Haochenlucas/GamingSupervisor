@@ -19,8 +19,8 @@ namespace replayParse
         public replay_version01()
         {
             //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
-            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\replay.txt");
-            //s = @"C: \Users\yuchengy\Source\Repos\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\replay.txt";
+            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\replay.txt");
+            s = @"C: \Users\dominate\Desktop\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\replay.txt";
             string[] lines = System.IO.File.ReadAllLines(s);
             int tic = 0;
             int value = 0;

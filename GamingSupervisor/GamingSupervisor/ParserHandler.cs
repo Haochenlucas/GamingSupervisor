@@ -32,10 +32,10 @@ namespace GamingSupervisor
             p.StartInfo.FileName = "java";
             p.StartInfo.Arguments =
                 "-jar "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\parser.jar ")
+                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
                 + "\"" + fileName.Replace(@"\", @"\\") + "\""
                 + " "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\"); // Data dump location
+                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\"); // Data dump location
             p.Start();
 
             while (!p.HasExited)

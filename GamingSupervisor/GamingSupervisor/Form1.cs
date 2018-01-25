@@ -371,7 +371,7 @@ namespace GamingSupervisor
             parsing_label.Hide();
             back_button.Show();
             //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
-            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\info.txt"));
+            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\info.txt"));
             hero_select_box.Items.Clear();
             foreach (string test in info)
             {
