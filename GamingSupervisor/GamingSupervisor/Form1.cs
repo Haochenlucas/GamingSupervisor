@@ -32,8 +32,26 @@ namespace GamingSupervisor
 
         public string hero_selected = "";
         public int hero_id;
-
-        private double currentTick;
+        
+        private readonly object tickLock = new object();
+        private int currentTick;
+        private int CurrentTick
+        {
+            get
+            {
+                lock (tickLock)
+                {
+                    return currentTick;
+                }
+            }
+            set
+            {
+                lock (tickLock)
+                {
+                    currentTick = value;
+                }
+            }
+        }
 
         private System.Timers.Timer tickTimer;
 
@@ -391,6 +409,7 @@ namespace GamingSupervisor
             }
 
             hero_select_label.Show();
+            hero_select_box.Text = "";
             hero_select_box.Show();
             hero_select_button.Show();
             //go_button.Show();
@@ -439,10 +458,9 @@ namespace GamingSupervisor
             {
                 announcer = new ReplayStartAnnouncer();
             }
-            currentTick = announcer.GetStartTick();
+            CurrentTick = announcer.GetStartTick();
             //announcer.waitForReplayToStart();
             announcer.waitForHeroSelectionToComplete();
-            tickTimer.Start();
 
             if (overlayManager == null)
             {
@@ -450,26 +468,53 @@ namespace GamingSupervisor
                 overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
             }
 
+            announcer.waitForHeroShowcaseToComplete();
+            tickTimer.Start();
+
+            int lastGameTime = announcer.GetCurrentGameTime();
+            int currentGameTime = 0;
+            int lastTickSynced = CurrentTick;
             while (true)
             {
-                Thread.Sleep(33);
-                int health = parsed_info[Convert.ToInt32(currentTick) - parsed_replay.getOffSet(), hero_id, 0];
-                
-                if (health < 470)
-                {
-                    d2d.retreat(dota_HWND, window, "Health is low, retreat");
-                }
-                else
-                {
-                    d2d.clear();
-                }
-                
                 if (announcer.GetCurrentGameState() == "Undefined")
                 {
                     tickTimer.Stop();
                     break;
                 }
+
+                currentGameTime = announcer.GetCurrentGameTime();
+                if (currentGameTime != lastGameTime)
+                {
+                    int gameTimeChange = currentGameTime - lastGameTime;
+                    lastGameTime = currentGameTime;
+                    lastTickSynced += 30 * gameTimeChange;
+                    CurrentTick = lastTickSynced;
+                }
+
+                if (CurrentTick < 0)
+                {
+                    tickTimer.Stop();
+                    break;
+                }
+
+                int health = parsed_info[CurrentTick - parsed_replay.getOffSet(), hero_id, 0];
+                
+
+                //if (health < 470)
+                if (true)
+                {
+                    //d2d.retreat(dota_HWND, window, "Health is low, retreat");
+                    d2d.retreat(dota_HWND, window, "Health: " + health);
+                }
+                else
+                {
+                    d2d.clear();
+                }
+
+                Thread.Sleep(10);
             }
+
+            d2d.clear();
 
             Console.WriteLine("Replay stopped!");
 
@@ -510,7 +555,7 @@ namespace GamingSupervisor
         private void tick_timer_Tick(object sender, EventArgs e)
         {
             //Console.WriteLine(currentTick++);
-            currentTick++;
+            CurrentTick++;
         }
 
         private void timer1_Tick(object sender, EventArgs e)

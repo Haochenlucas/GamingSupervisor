@@ -47,6 +47,16 @@ namespace Yato.DirectXOverlay
 
         private int internalFps;
 
+        // Type:
+        // 0: hero selection
+        // 1: items selection
+        // 2: retreat
+        // 3: press on
+        // 4: last hit
+        // 5: jungle
+        // 6: safe farming
+        private Hint[] hints = new Hint[7];
+        
         #endregion
 
         #region public vars
@@ -1190,29 +1200,117 @@ namespace Yato.DirectXOverlay
         }
         #endregion
 
-        public void retreat(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
+
+        // Type:
+        // 0: hero selection
+        // 1: items selection
+        // 2: retreat
+        // 3: press on
+        // 4: last hit
+        // 5: jungle
+        // 6: safe farming
+        public void setupHintSlots()
+        {
+            for (int i = 0; i < hints.Length; i++)
+            {
+                hints[i] = new Hint(i.ToString(),"", i*400, 500);
+                //hints[i].on = false;
+            }
+        }
+
+        public void addMessage(int type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
+        {
+            if (type >= 0 && type <= 7)
+            {
+                hints[type].text = text;
+                if (imgName != null)
+                {
+                    hints[type].imgName = imgName;
+                }
+
+                if (background != null)
+                {
+                    hints[type].background = background;
+                }
+
+                if (color != null)
+                {
+                    hints[type].color = color;
+                }
+
+                if (font != null)
+                {
+                    hints[type].font = font;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Message slot " + type + " not initialized.");
+            }
+        }
+
+        public void deleteMessage(int type)
+        {
+            hints[type].clear();
+        }
+
+        public void draw(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
         {
             IntPtr fg = GetForegroundWindow();
-            if (fg == parentWindowHandle || (GetDesktopWindow() != parentWindowHandle))
+            
+            if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
             {
                 BeginScene();
                 ClearScene();
 
-                DrawTextWithBackground("FPS: " + FPS, 20, 40, font, redBrush, blackBrush);
+                //DrawTextWithBackground("FPS: " + FPS, 20, 40, font, redBrush, blackBrush);
+                //DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
+                //DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height / 8, 2, redBrush);
 
-                DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
+                // Loop through all the messages
+                for (int i = 0; i < hints.Length; i++)
+                {
+                    if (hints[i].on)
+                    {
+                        Direct2DBrush color = CreateBrush(hints[i].color.Item1, hints[i].color.Item2, hints[i].color.Item3, hints[i].color.Item4);
+                        Direct2DBrush background = CreateBrush(hints[i].background.Item1, hints[i].background.Item2, hints[i].background.Item3, hints[i].background.Item4);
+                        Direct2DFont textFont = CreateFont(hints[i].font.Item1, hints[i].font.Item2);
+                        DrawTextWithBackground(hints[i].text, hints[i].x, hints[i].y, textFont, color, background);
 
-                DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height/8, 2, redBrush);
-
-                DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
+                        if (hints[i].imgName != "")
+                        {
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\" + hints[i].imgName + ".png");
+                            DrawBitmap(bmp, 1, hints[i].x - 100, hints[i].y, 88, 64);
+                        }
+                    }
+                }
 
                 EndScene();
             }
             else
             {
+                clear();
+            }
+        }
+
+        public void retreat(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
+        {
+            IntPtr fg = GetForegroundWindow();
+
+            if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
+            {
                 BeginScene();
                 ClearScene();
+
+                DrawTextWithBackground("FPS: " + FPS, 20, 40, font, redBrush, blackBrush);
+                DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
+                DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height / 8, 2, redBrush);
+                DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
                 EndScene();
+            }
+            else
+            {
+                clear();
             }
         }
 
@@ -1224,6 +1322,41 @@ namespace Yato.DirectXOverlay
         }
     }
 
+    public struct Hint
+    {
+        public bool on;
+
+        //// Tuple<red, green, blue, alpha>
+        public Tuple<int,int,int,int> background;
+        public Tuple<int, int, int, int> color;
+
+        //// Tuple<font, size>
+        public Tuple<string, int> font;
+
+        public float x;
+        public float y;
+        public string text;
+        public string imgName;
+
+        public Hint(string _text, string _imgName, float _x, float _y)
+        {
+            text = _text;
+            imgName = _imgName;
+            x = _x;
+            y = _y;
+            on = true;
+            background = new Tuple<int, int, int, int>(0, 0, 0, 255);
+            color = new Tuple<int, int, int, int>(255, 0, 0, 255);
+            font = new Tuple<string, int>("Consolas", 22);
+        }
+
+        public void clear()
+        {
+            on = false;
+        }
+    }
+
+    #region Other attributes
     public enum CrosshairStyle
     {
         Dot,
@@ -1595,4 +1728,5 @@ namespace Yato.DirectXOverlay
             return bmp.SharpDXBitmap;
         }
     }
+    #endregion
 }
