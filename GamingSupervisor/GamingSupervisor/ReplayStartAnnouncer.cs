@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace GamingSupervisor
 {
@@ -22,7 +17,7 @@ namespace GamingSupervisor
         public int GetStartTick()
         {
             string firstLine = "";
-            foreach (string line in File.ReadLines(@"../../Parser/replay.txt"))
+            foreach (string line in File.ReadLines(@"../../../Parser/replay.txt"))
             {
                 firstLine = line;
                 break;

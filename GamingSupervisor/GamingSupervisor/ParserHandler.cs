@@ -1,5 +1,4 @@
-﻿using ICSharpCode.SharpZipLib.BZip2;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -20,11 +19,6 @@ namespace GamingSupervisor
 
         public void ParseReplayFile()
         {
-            if (Path.GetExtension(fileName) == ".bz2")
-            {
-                DecompressFile();
-            }
-
             Console.WriteLine("Starting parsing..." + fileName);
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
@@ -32,10 +26,10 @@ namespace GamingSupervisor
             p.StartInfo.FileName = "java";
             p.StartInfo.Arguments =
                 "-jar "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
+                + Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\parser.jar ")
                 + "\"" + fileName.Replace(@"\", @"\\") + "\""
                 + " "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\"); // Data dump location
+                + Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\"); // Data dump location
             p.Start();
 
             while (!p.HasExited)
@@ -45,28 +39,6 @@ namespace GamingSupervisor
 
             p.WaitForExit();
             Console.WriteLine("Finished parsing!");
-        }
-
-        private void DecompressFile()
-        {
-            Console.WriteLine("Starting decompressing...");
-            FileInfo zipFile = new FileInfo(fileName);
-            using (FileStream fileToDecompressAsStream = zipFile.OpenRead())
-            {
-                fileName = Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\" + Path.GetFileNameWithoutExtension(fileName));
-                using (FileStream decompressedStream = File.Create(fileName))
-                {
-                    try
-                    {
-                        BZip2.Decompress(fileToDecompressAsStream, decompressedStream, true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                }
-            }
-            Console.WriteLine("Finished decompressing!");
         }
     }
 }
