@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,11 +44,24 @@ namespace GamingSupervisor
 
         private void SelectReplay(object sender, RoutedEventArgs e)
         {
-            selection.gameType = GUISelection.GameType.replay;
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.DefaultExt = ".dem";
+            dlg.Filter = "DEM Files (*.dem)|*.dem";
+            Nullable<bool> result = dlg.ShowDialog();
 
-            NavigationService navService = NavigationService.GetNavigationService(this);
-            ConfirmSelection confirmSelection = new ConfirmSelection(selection);
-            navService.Navigate(confirmSelection);
+            if (result == true)
+            {
+                selection.fileName = dlg.FileName;
+                selection.gameType = GUISelection.GameType.replay;
+
+                NavigationService navService = NavigationService.GetNavigationService(this);
+                ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection(selection);
+                navService.Navigate(replayHeroSelection);
+            }
+            else
+            {
+                MessageBox.Show("Failed to open file");
+            }
         }
 
         private void GoBack(object sender, RoutedEventArgs e)

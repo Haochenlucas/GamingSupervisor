@@ -27,6 +27,7 @@ namespace GamingSupervisor
         public Dictionary<Customize, bool> customize;
         public GameType gameType;
         public string fileName;
+        public string heroName;
 
         public GUISelection()
         {

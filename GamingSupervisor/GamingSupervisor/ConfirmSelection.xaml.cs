@@ -35,7 +35,7 @@ namespace GamingSupervisor
         private void Go(object sender, RoutedEventArgs e)
         {
             GamingSupervisorManager manager = new GamingSupervisorManager();
-            manager.start();
+            manager.Start();
         }
 
         private void GoBack(object sender, RoutedEventArgs e)

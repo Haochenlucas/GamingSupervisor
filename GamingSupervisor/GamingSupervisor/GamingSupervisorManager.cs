@@ -11,22 +11,10 @@ namespace GamingSupervisor
 {
     class GamingSupervisorManager
     {
-        public string difficulty;
-
         //private static string parsed_file = @"../../Parser/replay.txt";
         public replay_version01 parsed_replay;
         public int[,,] parsed_info;
-
-        public Boolean hero_selection = false;
-        public Boolean item_helper = false;
-        public Boolean laning = false;
-        public Boolean last_hit = false;
-        public Boolean jungling = false;
-        public Boolean safe_farming_area = false;
-
-        public Boolean replay_selected = false;
-        public bool isReplayRunning = false;
-
+        
         public string hero_selected = "";
         public int hero_id;
 
@@ -58,16 +46,17 @@ namespace GamingSupervisor
         private Direct2DRenderer d2d = null;
         private IntPtr dota_HWND;
 
-        public string filename;
-
         public GamingSupervisorManager()
         {
             tickTimer = new System.Timers.Timer(1000.0 / 30.0);
             tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(tick_timer_Tick);
         }
 
-        public void start()
+        public void Start()
         {
+            parsed_replay = new replay_version01();
+            parsed_info = parsed_replay.getReplayInfo();
+
             startDota();
 
             while (Process.GetProcessesByName("dota2").Length == 0)
@@ -76,45 +65,6 @@ namespace GamingSupervisor
             }
 
             StartAnalyzing();
-        }
-
-        private void replay_button_Click(object sender, EventArgs e)
-        {
-            //openFileDialog1.Filter = "dem files (*.dem)|*.dem|bz2 files (*.bz2)|*.bz2";
-            //openFileDialog1.Title = "Select a replay file";
-            //DialogResult result = openFileDialog1.ShowDialog();
-
-            if (string.IsNullOrEmpty(filename))
-            {
-                return;
-            }
-
-            ParserHandler parser = new ParserHandler(filename);
-            Thread thread = new Thread(parser.ParseReplayFile);
-            thread.Start();
-
-            thread.Join();
-            parsed_replay = new replay_version01();
-            parsed_info = parsed_replay.getReplayInfo();
-            
-            //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
-            string[] info = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, @"..\..\..\Parser\info.txt"));
-            foreach (string test in info)
-            {
-                if (test.Contains("hero_name"))
-                {
-                    String parsed = test.Split(new string[] { "hero_" }, StringSplitOptions.None).Last();
-                    parsed = parsed.Split(new char[] { '\"' }).First();
-                    String[] temp = parsed.Split(new char[] { '_' });
-                    String[] to_upper = new String[temp.Length];
-                    for (int i = 0; i < temp.Length; i++)
-                    {
-                        to_upper[i] = temp[i].First().ToString().ToUpper() + temp[i].Substring(1);
-                    }
-                    parsed = string.Join(" ", to_upper);
-                    //hero_select_box.Items.Add(parsed);
-                }
-            }
         }
 
         private void startDota()

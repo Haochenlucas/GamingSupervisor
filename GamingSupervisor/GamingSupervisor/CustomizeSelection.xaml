@@ -8,7 +8,7 @@
       d:DesignHeight="640" d:DesignWidth="480"
       Title="CustomizeSelection">
     <Grid Margin="50" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-        <ListBox SelectionMode="Multiple" Foreground="{StaticResource Foreground}">
+        <ListBox Name="CustomizeListBox" SelectionMode="Multiple" Foreground="{StaticResource Foreground}" SelectionChanged="ListBoxSelectionChanged">
             <ListBoxItem Name="LastHitListBoxItem" FontSize="16">Last Hit</ListBoxItem>
             <ListBoxItem Name="HeroSelectionListBoxItem" FontSize="16">Hero Selection</ListBoxItem>
             <ListBoxItem Name="ItemHelperListBoxItem" FontSize="16">Item Helper</ListBoxItem>
@@ -16,7 +16,7 @@
             <ListBoxItem Name="JunglingListBoxItem" FontSize="16">Jungling</ListBoxItem>
             <ListBoxItem Name="SafeFarmingAreaListBoxItem" FontSize="16">Safe Farming Area</ListBoxItem>
         </ListBox>
-        <Button Margin="10" Height="50" Click="ConfirmSelection" FontSize="30">Confirm</Button>
+        <Button Margin="10" Name="ConfirmSelectionButton" Height="50" Click="ConfirmSelection" FontSize="30">Confirm</Button>
         <Button Margin="10" VerticalAlignment="Bottom" Height="50" Click="GoBack" FontSize="16">Go Back</Button>
     </Grid>
 </Page>

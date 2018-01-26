@@ -41,8 +41,6 @@ namespace GamingSupervisor
 
         private void ConfirmSelection(object sender, RoutedEventArgs e)
         {
-            NavigationService navService = NavigationService.GetNavigationService(this);
-
             selection.customize[GUISelection.Customize.lastHit] = LastHitListBoxItem.IsSelected;
             selection.customize[GUISelection.Customize.heroSelection] = HeroSelectionListBoxItem.IsSelected;
             selection.customize[GUISelection.Customize.itemHelper] = ItemHelperListBoxItem.IsSelected;
@@ -50,6 +48,7 @@ namespace GamingSupervisor
             selection.customize[GUISelection.Customize.jungling] = JunglingListBoxItem.IsSelected;
             selection.customize[GUISelection.Customize.safeFarming] = SafeFarmingAreaListBoxItem.IsSelected;
 
+            NavigationService navService = NavigationService.GetNavigationService(this);
             GameTypeSelection gameTypeSelection = new GameTypeSelection(selection);
             navService.Navigate(gameTypeSelection);
         }
@@ -59,6 +58,23 @@ namespace GamingSupervisor
             NavigationService navService = NavigationService.GetNavigationService(this);
             DifficultySelection difficultySelection = new DifficultySelection(selection);
             navService.Navigate(difficultySelection);
+        }
+
+        private void ListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!LastHitListBoxItem.IsSelected &&
+                !HeroSelectionListBoxItem.IsSelected &&
+                !ItemHelperListBoxItem.IsSelected &&
+                !LaningListBoxItem.IsSelected &&
+                !JunglingListBoxItem.IsSelected &&
+                !SafeFarmingAreaListBoxItem.IsSelected)
+            {
+                ConfirmSelectionButton.IsEnabled = false;
+            }
+            else
+            {
+                ConfirmSelectionButton.IsEnabled = true;
+            }
         }
     }
 }
