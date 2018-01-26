@@ -25,7 +25,7 @@ namespace GamingSupervisor
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = "java";
+            p.StartInfo.FileName = "javaw";
             p.StartInfo.Arguments =
                 "-jar "
                 + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")

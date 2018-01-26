@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -16,6 +17,8 @@ namespace GamingSupervisor
     public partial class ReplayHeroSelection : Page
     {
         private GUISelection selection;
+        private BackgroundWorker worker;
+        private List<HeroNameItem> heros;
 
         public ReplayHeroSelection()
         {
@@ -26,18 +29,41 @@ namespace GamingSupervisor
         {
             this.selection = selection;
 
+            ConfirmButton.IsEnabled = false;
+
+            ParsingMessageLabel.Visibility = Visibility.Visible;
+            LoadingIcon.Visibility = Visibility.Visible;
+            ConfirmButton.Visibility = Visibility.Hidden;
+            GoBackButton.Visibility = Visibility.Hidden;
+
+            worker = new BackgroundWorker();
+            worker.DoWork += new DoWorkEventHandler(StartParsing);
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(FinishedParsing);
+            worker.WorkerReportsProgress = true;
+
+            worker.RunWorkerAsync();
+        }
+
+        private void StartParsing(object sender, DoWorkEventArgs e)
+        {
             ParserHandler parser = new ParserHandler(selection.fileName);
             List<string> heroNameList = parser.ParseReplayFile();
 
-            List<HeroNameItem> items = new List<HeroNameItem>();
+            heros = new List<HeroNameItem>();
             foreach (string heroName in heroNameList)
             {
-                items.Add(new HeroNameItem() { Title = heroName });
-            }
+                heros.Add(new HeroNameItem() { Title = heroName });
+            }            
+        }
 
-            HeroNameListBox.ItemsSource = items;
+        private void FinishedParsing(object sender, RunWorkerCompletedEventArgs e)
+        {
+            HeroNameListBox.ItemsSource = heros;
 
-            ConfirmButton.IsEnabled = false;
+            ParsingMessageLabel.Visibility = Visibility.Hidden;
+            LoadingIcon.Visibility = Visibility.Hidden;
+            ConfirmButton.Visibility = Visibility.Visible;
+            GoBackButton.Visibility = Visibility.Visible;
         }
 
         private void ListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
