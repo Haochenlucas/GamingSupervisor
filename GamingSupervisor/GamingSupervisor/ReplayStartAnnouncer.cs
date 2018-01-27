@@ -17,7 +17,7 @@ namespace GamingSupervisor
         public int GetStartTick()
         {
             string firstLine = "";
-            foreach (string line in File.ReadLines(@"../../../Parser/replay.txt"))
+            foreach (string line in File.ReadLines(@"../../Parser/position.txt")) // TODO get game state from replay file
             {
                 firstLine = line;
                 break;

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GamingSupervisor
 {
@@ -27,6 +24,7 @@ namespace GamingSupervisor
         public Dictionary<Customize, bool> customize;
         public GameType gameType;
         public string fileName;
+        public string heroName;
 
         public GUISelection()
         {

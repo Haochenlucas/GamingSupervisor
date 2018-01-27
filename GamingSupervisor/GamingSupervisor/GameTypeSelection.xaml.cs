@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GamingSupervisor
 {
@@ -34,6 +25,7 @@ namespace GamingSupervisor
 
         private void SelectLive(object sender, RoutedEventArgs e)
         {
+            selection.fileName = null;
             selection.gameType = GUISelection.GameType.live;
 
             NavigationService navService = NavigationService.GetNavigationService(this);
@@ -43,11 +35,20 @@ namespace GamingSupervisor
 
         private void SelectReplay(object sender, RoutedEventArgs e)
         {
-            selection.gameType = GUISelection.GameType.replay;
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.DefaultExt = ".dem";
+            dlg.Filter = "DEM Files (*.dem)|*.dem";
+            Nullable<bool> result = dlg.ShowDialog();
 
-            NavigationService navService = NavigationService.GetNavigationService(this);
-            ConfirmSelection confirmSelection = new ConfirmSelection(selection);
-            navService.Navigate(confirmSelection);
+            if (result == true)
+            {
+                selection.fileName = dlg.FileName;
+                selection.gameType = GUISelection.GameType.replay;
+
+                NavigationService navService = NavigationService.GetNavigationService(this);
+                ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection(selection);
+                navService.Navigate(replayHeroSelection);
+            }
         }
 
         private void GoBack(object sender, RoutedEventArgs e)

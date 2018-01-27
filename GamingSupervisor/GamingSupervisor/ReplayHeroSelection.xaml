@@ -1,0 +1,26 @@
+﻿<Page x:Class="GamingSupervisor.ReplayHeroSelection"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:GamingSupervisor"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      mc:Ignorable="d" 
+      d:DesignHeight="640" d:DesignWidth="480"
+      Title="ReplayHeroSelection">
+    <Grid Margin="50" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <Label Name="ParsingMessageLabel" FontSize="16" HorizontalAlignment="Center" Foreground="{StaticResource Foreground}">Parsing replay, please wait...</Label>
+        <fa:ImageAwesome Name="LoadingIcon" Height="50" Icon="Spinner" Spin="True" SpinDuration="2" Foreground="{StaticResource Foreground}"/>
+        <StackPanel>
+            <ListBox Name="HeroNameListBox" SelectionMode="Single"  FontSize="16" Foreground="{StaticResource Foreground}" SelectionChanged="ListBoxSelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Name="ConfirmButton" Margin="10" Height="50" Click="ConfirmSelection" FontSize="30">Confirm</Button>
+        </StackPanel>
+        <Button Name="GoBackButton" Margin="10" VerticalAlignment="Bottom" Height="50" Click="GoBack" FontSize="16">Go Back</Button>
+    </Grid>
+</Page>

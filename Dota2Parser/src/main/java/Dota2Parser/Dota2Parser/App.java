@@ -27,10 +27,12 @@ public class App
     private PrintWriter healthWriter;
     private PrintWriter heroSelectionWriter;
     private PrintWriter cameraWriter;
+    private PrintWriter stateWriter;
     
     private Hero hero;
     private Camera camera;
     private Selection selection;
+    private GameState state;
     
     private boolean isHero(Entity e)
     {
@@ -71,6 +73,14 @@ public class App
         }
     }
     
+    private void initializeState(Entity e)
+    {
+        if (state == null)
+        {
+        	state = new GameState(e);
+        }
+    }
+    
     @OnEntityCreated
     public void onCreated(Context ctx, Entity e)
     {
@@ -93,6 +103,7 @@ public class App
         else if (isGameRules(e))
         {
         	handleHeroSelection(ctx, e, updatedPaths, updateCount);
+        	handleGameState(ctx, e, updatedPaths, updateCount);
         }
         else if (isPlayer(e))
         {
@@ -122,6 +133,28 @@ public class App
                     e.getPropertyForFieldPath(camera.y),
                     e.getPropertyForFieldPath(camera.z));
         	cameraWriter.flush();
+        }
+    }
+    
+    private void handleGameState(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
+    {
+    	initializeState(e);
+    	
+    	boolean updateState = false;
+        for (int i = 0; i < updateCount; i++)
+        {
+            if (state.isState(updatedPaths[i]))
+            {
+            	updateState = true;
+                break;
+            }
+        }
+        
+        if (updateState)
+        {
+        	stateWriter.format("%d [STATE] %s\n", ctx.getTick(),
+                    e.getPropertyForFieldPath(camera.playerID));
+        	stateWriter.flush();
         }
     }
     
@@ -219,11 +252,13 @@ public class App
         File healthFile = new File(args[1] + "/health.txt");
         File selectionFile = new File(args[1] + "/selection.txt");
         File cameraFile = new File(args[1] + "/camera.txt");
+        File stateFile = new File(args[1] + "/state.txt");
         
         heroPositionWriter = new PrintWriter(positionFile);
         healthWriter = new PrintWriter(healthFile);
         heroSelectionWriter = new PrintWriter(selectionFile);
         cameraWriter = new PrintWriter(cameraFile);
+        stateWriter = new PrintWriter(stateFile);
         
         Source source = new MappedFileSource(args[0]);
         new SimpleRunner(source).runWith(this);
@@ -232,6 +267,7 @@ public class App
         healthWriter.close();
         heroSelectionWriter.close();
         cameraWriter.close();
+        stateWriter.close();
     }
 
     public static void main(String[] args) throws Exception
