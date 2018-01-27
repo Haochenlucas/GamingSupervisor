@@ -148,6 +148,7 @@ namespace GamingSupervisor
             {
                 dota_HWND = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
                 overlayManager = new OverlayManager(dota_HWND, out window, out d2d);
+                d2d.setupHintSlots();
             }
 
             announcer.waitForHeroShowcaseToComplete();
@@ -181,17 +182,22 @@ namespace GamingSupervisor
 
                 int health = parsed_info[CurrentTick - parsed_replay.getOffSet(), hero_id, 0];
 
-
-                //if (health < 470)
-                if (true)
+                #region Hints call logic
+                bool inHeroSelect = true;
+                if (inHeroSelect)
                 {
-                    //d2d.retreat(dota_HWND, window, "Health is low, retreat");
-                    d2d.retreat(dota_HWND, window, "Health: " + health);
+                    // Function call that produce suggestions as output
+                    // Each hero suggestion seperated by new line
+                    // An hero collection entity that can access image name with its ID
+                    string message = "Hero A \n Hero B \n Hero C";
+                    string img = "";
+                    d2d.heroSelectionHints(message, img);
                 }
                 else
                 {
                     d2d.clear();
                 }
+                #endregion
 
                 Thread.Sleep(10);
             }

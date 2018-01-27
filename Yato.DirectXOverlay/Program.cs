@@ -40,12 +40,12 @@ namespace Yato.DirectXOverlay
                 // Low health
                 if (true)
                 {
-                    d2d.addMessage(2, "Ues Slave to heal yourself", "Healing_Salve_icon");
-                    d2d.addMessage(3, "green text", "", new Tuple<int, int, int, int>(0, 255, 0, 255));
-                    d2d.addMessage(4, "blue text with white back", "", new Tuple<int, int, int, int>(0, 0, 255, 255), new Tuple<int, int, int, int>(0xF5, 0xF5, 0xF5, 100));
+                    string message = "Choose this salve as your hero :) \n and this \n new line";
+                    string imgName = "Healing_Salve_icon";
+                    d2d.heroSelectionHints(message, imgName);
                 }
                 if (Control.ModifierKeys == Keys.Alt)
-                    d2d.deleteMessage(1);
+                    d2d.deleteMessage(0);
 
                 d2d.draw(VS_HWND, overlay, "Run");
 

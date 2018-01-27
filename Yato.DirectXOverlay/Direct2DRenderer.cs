@@ -1213,9 +1213,58 @@ namespace Yato.DirectXOverlay
         {
             for (int i = 0; i < hints.Length; i++)
             {
-                hints[i] = new Hint(i.ToString(),"", i*400, 500);
-                //hints[i].on = false;
+                switch (i)
+                {
+                    // Hero selection slot
+                    case 0:
+                        hints[i] = new Hint("Hero selection slot", "", Screen.PrimaryScreen.Bounds.Width / 6 * 5, Screen.PrimaryScreen.Bounds.Height / 5);
+                        break;
+
+                    // 1: items selection
+                    case 1:
+                        hints[i] = new Hint("Items selection slot", "", Screen.PrimaryScreen.Bounds.Width / 6 * 5, Screen.PrimaryScreen.Bounds.Height / 5);
+                        break;
+
+                    // 2: retreat
+                    // 3: press on
+                    case 2:
+                        hints[i] = new Hint("Laning message slot", "", Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 4 * 3);
+                        break;
+                    case 3:
+                        hints[i] = new Hint("Laning message slot", "", Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 4 * 3);
+                        break;
+
+                     // Message position dynamic
+
+                    // 4: last hit
+                    case 4:
+                        hints[i] = new Hint("Last hit message slot", "", i * 200, 0);
+                        break;
+
+                    // 5: jungle
+                    case 5:
+                        hints[i] = new Hint("Jungle message slot", "", i * 200, 0);
+                        break;
+
+
+                    // Message position dynamic and within the minimap
+
+                    // 6: safe farming
+                    case 6:
+                        hints[i] = new Hint("Safe farming message slot", "", 0, Screen.PrimaryScreen.Bounds.Height - 100);
+                        break;
+
+                    default:
+                        Console.WriteLine("Unknown message type detected. (other than 0-6)");
+                        break;
+                }
+                hints[i].on = true;
             }
+        }
+
+        public void heroSelectionHints(string hint, string img)
+        {
+            addMessage(0, hint, img);
         }
 
         public void addMessage(int type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
@@ -1242,6 +1291,7 @@ namespace Yato.DirectXOverlay
                 {
                     hints[type].font = font;
                 }
+                hints[type].on = true;
             }
             else
             {
