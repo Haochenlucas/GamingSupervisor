@@ -1,115 +1,115 @@
-102    Abaddon
-73    Alchemist
-68    Ancient Apparition
-1    Anti-Mage
-113    Arc Warden
-2    Axe
-3    Bane
-65    Batrider
-38    Beastmaster
-4    Bloodseeker
-62    Bounty Hunter
-78    Brewmaster
-99    Bristleback
-61    Broodmother
-96    Centaur Warrunner
-81    Chaos Knight
-66    Chen
-56    Clinkz
-51    Clockwerk
-5    Crystal Maiden
-55    Dark Seer
-119    Dark Willow
-50    Dazzle
-43    Death Prophet
-87    Disruptor
-69    Doom
-49    Dragon Knight
-6    Drow Ranger
-107    Earth Spirit
-7    Earthshaker
-103    Elder Titan
-106    Ember Spirit
-58    Enchantress
-33    Enigma
-41    Faceless Void
-72    Gyrocopter
-59    Huskar
-74    Invoker
-91    Io
-64    Jakiro
-8    Juggernaut
-90    Keeper of the Light
-23    Kunkka
-104    Legion Commander
-52    Leshrac
-31    Lich
-54    Lifestealer
-25    Lina
-26    Lion
-80    Lone Druid
-48    Luna
-77    Lycan
-97    Magnus
-94    Medusa
-82    Meepo
-9    Mirana
-114    Monkey King
-10    Morphling
-89    Naga Siren
-53    Nature's Prophet
-36    Necrophos
-60    Night Stalker
-88    Nyx Assassin
-84    Ogre Magi
-57    Omniknight
-111    Oracle
-76    Outworld Devourer
-120    Pangolier
-44    Phantom Assassin
-12    Phantom Lancer
-110    Phoenix
-13    Puck
-14    Pudge
-45    Pugna
-39    Queen of Pain
-15    Razor
-32    Riki
-86    Rubick
-16    Sand King
-79    Shadow Demon
-11    Shadow Fiend
-27    Shadow Shaman
-75    Silencer
-101    Skywrath Mage
-28    Slardar
-93    Slark
-35    Sniper
-67    Spectre
-71    Spirit Breaker
-17    Storm Spirit
-18    Sven
-105    Techies
-46    Templar Assassin
-109    Terrorblade
-29    Tidehunter
-98    Timbersaw
-34    Tinker
-19    Tiny
-83    Treant Protector
-95    Troll Warlord
-100    Tusk
-108    Underlord
-85    Undying
-70    Ursa
-20    Vengeful Spirit
-40    Venomancer
-47    Viper
-92    Visage
-37    Warlock
-63    Weaver
-21    Windranger
-112    Winter Wyvern
-30    Witch Doctor
-42    Wraith King
-22    Zeus
+1     Abaddon
+2     Alchemist
+3     Ancient Apparition
+4     Anti-Mage
+5     Arc Warden
+6     Axe
+7     Bane
+8     Batrider
+9     Beastmaster
+10     Bloodseeker
+11     Bounty Hunter
+12     Brewmaster
+13     Bristleback
+14     Broodmother
+15     Centaur Warrunner
+16     Chaos Knight
+17     Chen
+18     Clinkz
+19     Clockwerk
+20     Crystal Maiden
+21     Dark Seer
+22     Dark Willow
+23     Dazzle
+24     Death Prophet
+25     Disruptor
+26     Doom
+27     Dragon Knight
+28     Drow Ranger
+29     Earth Spirit
+30     Earthshaker
+31     Elder Titan
+32     Ember Spirit
+33     Enchantress
+34     Enigma
+35     Faceless Void
+36     Gyrocopter
+37     Huskar
+38     Invoker
+39     Io
+40     Jakiro
+41     Juggernaut
+42     Keeper of the Light
+43     Kunkka
+44     Legion Commander
+45     Leshrac
+46     Lich
+47     Lifestealer
+48     Lina
+49     Lion
+50     Lone Druid
+51     Luna
+52     Lycan
+53     Magnus
+54     Medusa
+55     Meepo
+56     Mirana
+57     Monkey King
+58     Morphling
+59     Naga Siren
+60     Nature's Prophet
+61     Necrophos
+62     Night Stalker
+63     Nyx Assassin
+64     Ogre Magi
+65     Omniknight
+66     Oracle
+67     Outworld Devourer
+68     Pangolier
+69     Phantom Assassin
+70     Phantom Lancer
+71     Phoenix
+72     Puck
+73     Pudge
+74     Pugna
+75     Queen of Pain
+76     Razor
+77     Riki
+78     Rubick
+79     Sand King
+80     Shadow Demon
+81     Shadow Fiend
+82     Shadow Shaman
+83     Silencer
+84     Skywrath Mage
+85     Slardar
+86     Slark
+87     Sniper
+88     Spectre
+89     Spirit Breaker
+90     Storm Spirit
+91     Sven
+92     Techies
+93     Templar Assassin
+94     Terrorblade
+95     Tidehunter
+96     Timbersaw
+97     Tinker
+98     Tiny
+99     Treant Protector
+100     Troll Warlord
+101     Tusk
+102     Underlord
+103     Undying
+104     Ursa
+105     Vengeful Spirit
+106     Venomancer
+107     Viper
+108     Visage
+109     Warlock
+110     Weaver
+111     Windranger
+112     Winter Wyvern
+113     Witch Doctor
+114     Wraith King
+115     Zeus

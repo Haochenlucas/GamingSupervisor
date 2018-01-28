@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace replayParse
 {
-    public class heroID
+    class heroIDClient
     {
-        public static Dictionary<int, string> hero_IDDictionary = new Dictionary<int, string>();
-        public static Dictionary<string, int> ID_heroDictionary = new Dictionary<string, int>();
+        public static Dictionary<int, string> hero_IDClientDictionary = new Dictionary<int, string>();
+        public static Dictionary<string, int> ID_heroClientDictionary = new Dictionary<string, int>();
         public static string[] heroName = new string[116]; // make the index be the ID value, so the first string is empty
-        public heroID()
+        public heroIDClient()
         {
-            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\dota_hero_info_1.txt");
+            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable1.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
             string[] second_lines = lines;
             int key = 0;
@@ -25,26 +25,31 @@ namespace replayParse
                 string second_string = string.Empty;
                 string[] words = line.Split('\t');
                 string[] name = words[0].Split(' ');
-                length_name = name.Length / 2;
+                length_name = name.Length;
                 string hero_name = "";
-                for (int i = 0; i < length_name; i++)
+                for (int i = 1; i < length_name; i++)
                 {
-                    if (i == 0)
-                        hero_name = name[0];
-                    else
-                        hero_name = hero_name + " " + name[i];
+                    if (name[i] != "")
+                    {
+                        if (hero_name == "")
+                        {
+                            hero_name = name[i];
+                        }
+                        else
+                        {
+                            hero_name = hero_name + " " + name[i];
+                        }
+                    }   
                 }
+                key= Convert.ToInt32(name[0]);
                 second_string = (key + 1) + "     " + hero_name;
                 second_lines[key] = second_string;
-                key++;
-                if (hero_IDDictionary.Count == 115)
-                    break;
-                hero_IDDictionary.Add(key, hero_name);
-                ID_heroDictionary.Add(hero_name, key);
+                hero_IDClientDictionary.Add(key, hero_name);
+                ID_heroClientDictionary.Add(hero_name, key);
                 heroName[key] = hero_name;
 
             }
-            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable.txt");
+            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable1.txt");
             if (!File.Exists(path))
             {
                 // Create a file to write to.
@@ -59,7 +64,7 @@ namespace replayParse
             }
         }
 
-        public heroID(string filePath)
+        public heroIDClient(string filePath)
         {
             string[] lines = System.IO.File.ReadAllLines(filePath);
             string[] second_lines = lines;
@@ -73,22 +78,30 @@ namespace replayParse
                 string second_string = string.Empty;
                 string[] words = line.Split('\t');
                 string[] name = words[0].Split(' ');
-                length_name = name.Length / 2;
+                length_name = name.Length;
                 string hero_name = "";
-                for (int i = 0; i < length_name; i++)
+                for (int i = 1; i < length_name; i++)
                 {
-                    if (i == 0)
-                        hero_name = name[0];
-                    else
-                        hero_name = hero_name + " " + name[i];
+                    if (name[i] != "")
+                    {
+                        if (hero_name == "")
+                        {
+                            hero_name = name[i];
+                        }
+                        else
+                        {
+                            hero_name = hero_name + " " + name[i];
+                        }
+                    }
                 }
+                key = Convert.ToInt32(name[0]);
                 second_string = (key + 1) + "     " + hero_name;
                 second_lines[key] = second_string;
-                key++;
-                hero_IDDictionary.Add(key, words[0]);
-                ID_heroDictionary.Add(words[0], key);
+                hero_IDClientDictionary.Add(key, hero_name);
+                ID_heroClientDictionary.Add(hero_name, key);
+                heroName[key] = hero_name;
             }
-            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable.txt");
+            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable1.txt");
             if (!File.Exists(path))
             {
                 // Create a file to write to.
@@ -105,11 +118,11 @@ namespace replayParse
 
         public Dictionary<int, string> getHeroID()
         {
-            return hero_IDDictionary;
+            return hero_IDClientDictionary;
         }
         public Dictionary<string, int> getIDHero()
         {
-            return ID_heroDictionary;
+            return ID_heroClientDictionary;
         }
 
         public string[] getHeroName()

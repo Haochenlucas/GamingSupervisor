@@ -1,0 +1,218 @@
+Necrophos	4.05%
+58.39%
+	Keeper of the Light	3.16%
+47.60%
+	Outworld Devourer	3.02%
+51.92%
+	Silencer	2.95%
+52.01%
+	Ancient Apparition	2.68%
+48.95%
+	Timbersaw	2.06%
+44.88%
+	Legion Commander	1.96%
+49.83%
+	Dazzle	1.77%
+53.00%
+	Venomancer	1.51%
+52.47%
+	Slardar	1.31%
+53.09%
+	Gyrocopter	1.2%
+46.98%
+	Dragon Knight	1.12%
+52.20%
+	Death Prophet	1.11%
+48.22%
+	Ember Spirit	1.01%
+43.88%
+	Phoenix	0.94%
+51.79%
+	Faceless Void	0.93%
+47.25%
+	Morphling	0.83%
+46.00%
+	Razor	0.82%
+46.67%
+	Doom	0.81%
+45.54%
+	Slark	0.8%
+50.15%
+	Lina	0.78%
+45.00%
+	Clockwerk	0.77%
+48.86%
+	Shadow Demon	0.72%
+43.41%
+	Queen of Pain	0.71%
+43.44%
+	Batrider	0.68%
+44.41%
+	Techies	0.67%
+46.79%
+	Mirana	0.6%
+52.32%
+	Invoker	0.49%
+49.76%
+	Shadow Fiend	0.48%
+47.22%
+	Disruptor	0.46%
+51.93%
+	Undying	0.45%
+53.14%
+	Omniknight	0.41%
+60.75%
+	Witch Doctor	0.37%
+52.47%
+	Magnus	0.37%
+44.44%
+	Ogre Magi	0.33%
+52.63%
+	Anti-Mage	0.32%
+45.44%
+	Dark Seer	0.27%
+48.60%
+	Io	0.26%
+37.49%
+	Viper	0.26%
+50.05%
+	Nyx Assassin	0.21%
+48.35%
+	Jakiro	0.19%
+52.46%
+	Storm Spirit	0.18%
+42.86%
+	Sniper	0.15%
+47.51%
+	Bane	0.09%
+45.11%
+	Drow Ranger	0.06%
+51.03%
+	Bloodseeker	0.03%
+47.15%
+	Lion	0.02%
+48.45%
+	Puck	0%
+43.65%
+	Naga Siren	0%
+43.74%
+	Lich	-0.03%
+54.80%
+	Sven	-0.07%
+53.44%
+	Axe	-0.13%
+45.41%
+	Juggernaut	-0.16%
+51.62%
+	Earth Spirit	-0.17%
+45.13%
+	Riki	-3.95%
+52.06%
+	Lycan	-3.21%
+51.01%
+	Broodmother	-2.82%
+42.03%
+	Ursa	-2.39%
+57.59%
+	Phantom Assassin	-2.36%
+49.51%
+	Beastmaster	-2.33%
+49.81%
+	Tidehunter	-2.06%
+52.01%
+	Warlock	-1.96%
+55.44%
+	Tiny	-1.94%
+44.94%
+	Chaos Knight	-1.83%
+52.56%
+	Arc Warden	-1.8%
+42.40%
+	Troll Warlord	-1.74%
+49.21%
+	Night Stalker	-1.67%
+50.93%
+	Luna	-1.6%
+52.40%
+	Abaddon	-1.56%
+58.13%
+	Huskar	-1.48%
+45.29%
+	Spectre	-1.46%
+59.48%
+	Weaver	-1.4%
+51.54%
+	Lone Druid	-1.36%
+44.87%
+	Pudge	-1.24%
+51.53%
+	Brewmaster	-1.18%
+48.98%
+	Centaur Warrunner	-1.17%
+52.74%
+	Rubick	-1.16%
+44.44%
+	Phantom Lancer	-1.16%
+47.23%
+	Shadow Shaman	-1.16%
+52.72%
+	Enchantress	-1.14%
+45.45%
+	Templar Assassin	-1.13%
+46.74%
+	Visage	-1.12%
+43.89%
+	Winter Wyvern	-1.1%
+45.37%
+	Sand King	-1.06%
+50.90%
+	Clinkz	-0.97%
+46.76%
+	Lifestealer	-0.96%
+49.80%
+	Spirit Breaker	-0.88%
+52.56%
+	Wraith King	-0.87%
+55.68%
+	Oracle	-0.86%
+41.85%
+	Meepo	-0.83%
+42.14%
+	Enigma	-0.79%
+51.63%
+	Terrorblade	-0.75%
+47.83%
+	Chen	-0.74%
+45.86%
+	Treant Protector	-0.65%
+52.57%
+	Vengeful Spirit	-0.6%
+54.12%
+	Tusk	-0.53%
+44.94%
+	Skywrath Mage	-0.48%
+45.08%
+	Bounty Hunter	-0.43%
+48.14%
+	Windranger	-0.41%
+47.87%
+	Elder Titan	-0.39%
+52.68%
+	Natures Prophet	-0.37%
+45.57%
+	Earthshaker	-0.34%
+51.12%
+	Kunkka	-0.31%
+45.78%
+	Pugna	-0.29%
+47.08%
+	Zeus	-0.29%
+57.63%
+	Tinker	-0.27%
+43.60%
+	Alchemist	-0.27%
+48.94%
+	Crystal Maiden	-0.24%
+54.70%
+	Medusa	-0.19%
+55.18%

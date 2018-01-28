@@ -21,7 +21,7 @@ namespace replayParse
             string path = "";
             while (i < 116)
             {
-                path = s + 1 + s_end;
+                path = s + i + s_end;
                 string[] lines = System.IO.File.ReadAllLines(path);
                 string[] second_lines = lines;
                 int counter = 0;

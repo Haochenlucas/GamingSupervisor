@@ -67,6 +67,7 @@
     <Compile Include="counter_pick_logic.cs" />
     <Compile Include="demo.cs" />
     <Compile Include="heroID.cs" />
+    <Compile Include="heroIDClient.cs" />
     <Compile Include="replayParse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
