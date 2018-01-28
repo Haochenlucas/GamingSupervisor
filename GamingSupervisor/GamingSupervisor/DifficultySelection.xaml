@@ -8,8 +8,14 @@
       d:DesignHeight="640" d:DesignWidth="480"
       Title="DifficultySelection">
     <StackPanel Margin="50" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-        <Button Height="120" Margin="10" Click="SelectNovice" FontSize="30">Novice</Button>
-        <Button Height="120" Margin="10" Click="SelectLearning" FontSize="30">Learning</Button>
-        <Button Height="120" Margin="10" Click="SelectAlmostGotIt" FontSize="30">Almost Got It</Button>
+        <Button ToolTipService.ToolTip="Select this if you are just starting to learn to play DotA2"
+                ToolTipService.InitialShowDelay="2000"
+                Height="120" Margin="10" Click="SelectNovice" FontSize="30">Novice</Button>
+        <Button ToolTipService.ToolTip="Select this if you have a few games under your belt"
+                ToolTipService.InitialShowDelay="2000"
+                Height="120" Margin="10" Click="SelectLearning" FontSize="30">Learning</Button>
+        <Button ToolTipService.ToolTip="Select this if you are experienced but want a little more help"
+                ToolTipService.InitialShowDelay="2000"
+                Height="120" Margin="10" Click="SelectAlmostGotIt" FontSize="30">Almost Got It</Button>
     </StackPanel>
 </Page>

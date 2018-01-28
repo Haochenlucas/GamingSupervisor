@@ -9,10 +9,16 @@
       d:DesignHeight="640" d:DesignWidth="480"
       Title="ReplayHeroSelection">
     <Grid Margin="50" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-        <Label Name="ParsingMessageLabel" FontSize="16" HorizontalAlignment="Center" Foreground="{StaticResource Foreground}">Parsing replay, please wait...</Label>
-        <fa:ImageAwesome Name="LoadingIcon" Height="50" Icon="Spinner" Spin="True" SpinDuration="2" Foreground="{StaticResource Foreground}"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label Name="ParsingMessageLabel" FontSize="30" Foreground="{StaticResource Foreground}">Parsing...</Label>
+            <fa:ImageAwesome Margin="30" Name="LoadingIcon" Height="50" Icon="Spinner" Spin="True" SpinDuration="2"
+                         Foreground="{StaticResource Foreground}"/>
+        </StackPanel>
         <StackPanel>
-            <ListBox Name="HeroNameListBox" SelectionMode="Single"  FontSize="16" Foreground="{StaticResource Foreground}" SelectionChanged="ListBoxSelectionChanged">
+            <ListBox ToolTipService.ToolTip="Select which hero to analyze"
+                     ToolTipService.InitialShowDelay="2000"
+                     Name="HeroNameListBox" SelectionMode="Single" FontSize="16" Foreground="{StaticResource Foreground}"
+                     SelectionChanged="ListBoxSelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Title}" />

@@ -9,12 +9,24 @@
       Title="CustomizeSelection">
     <Grid Margin="50" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <ListBox Name="CustomizeListBox" SelectionMode="Multiple" Foreground="{StaticResource Foreground}" SelectionChanged="ListBoxSelectionChanged">
-            <ListBoxItem Name="LastHitListBoxItem" FontSize="16">Last Hit</ListBoxItem>
-            <ListBoxItem Name="HeroSelectionListBoxItem" FontSize="16">Hero Selection</ListBoxItem>
-            <ListBoxItem Name="ItemHelperListBoxItem" FontSize="16">Item Helper</ListBoxItem>
-            <ListBoxItem Name="LaningListBoxItem" FontSize="16">Laning</ListBoxItem>
-            <ListBoxItem Name="JunglingListBoxItem" FontSize="16">Jungling</ListBoxItem>
-            <ListBoxItem Name="SafeFarmingAreaListBoxItem" FontSize="16">Safe Farming Area</ListBoxItem>
+            <ListBoxItem ToolTipService.ToolTip="When to hit enemies for bonuses"
+                         ToolTipService.InitialShowDelay="2000"
+                         Name="LastHitListBoxItem" FontSize="16">Last Hit</ListBoxItem>
+            <ListBoxItem ToolTipService.ToolTip="Which heroes to select and which heroes to ban for the enemy team"
+                         ToolTipService.InitialShowDelay="2000"
+                         Name="HeroSelectionListBoxItem" FontSize="16">Hero Selection</ListBoxItem>
+            <ListBoxItem ToolTipService.ToolTip="When to use items"
+                         ToolTipService.InitialShowDelay="2000"
+                         Name="ItemHelperListBoxItem" FontSize="16">Item Helper</ListBoxItem>
+            <ListBoxItem ToolTipService.ToolTip="When to attack and retreat"
+                         ToolTipService.InitialShowDelay="2000"
+                         Name="LaningListBoxItem" FontSize="16">Laning</ListBoxItem>
+            <ListBoxItem ToolTipService.ToolTip="Areas to find weak enemies to get more resources"
+                         ToolTipService.InitialShowDelay="2000"
+                         Name="JunglingListBoxItem" FontSize="16">Jungling</ListBoxItem>
+            <ListBoxItem ToolTipService.ToolTip="Areas likely to be safe to obtain resources"
+                         ToolTipService.InitialShowDelay="2000"
+                         Name="SafeFarmingAreaListBoxItem" FontSize="16">Safe Farming Area</ListBoxItem>
         </ListBox>
         <Button Margin="10" Name="ConfirmSelectionButton" Height="50" Click="ConfirmSelection" FontSize="30">Confirm</Button>
         <Button Margin="10" VerticalAlignment="Bottom" Height="50" Click="GoBack" FontSize="16">Go Back</Button>

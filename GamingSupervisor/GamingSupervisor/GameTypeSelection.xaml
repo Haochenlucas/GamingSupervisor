@@ -9,8 +9,12 @@
       Title="GameTypeSelection">
     <Grid Margin="50">
         <StackPanel>
-            <Button Margin="10" Height="50" Click="SelectLive" FontSize="30">Live</Button>
-            <Button Margin="10" Height="50" Click="SelectReplay" FontSize="30">Replay</Button>
+            <Button ToolTipService.ToolTip="Play a live game"
+                    ToolTipService.InitialShowDelay="2000"
+                    Margin="10" Height="50" Click="SelectLive" FontSize="30">Live</Button>
+            <Button ToolTipService.ToolTip="Select a replay file to analyze. You must already have a replay file."
+                    ToolTipService.InitialShowDelay="2000"
+                    Margin="10" Height="50" Click="SelectReplay" FontSize="30">Replay</Button>
         </StackPanel>
         <Button Margin="10" VerticalAlignment="Bottom" Height="50" Click="GoBack" FontSize="16">Go Back</Button>
     </Grid>
