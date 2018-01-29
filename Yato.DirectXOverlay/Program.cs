@@ -28,7 +28,7 @@ namespace Yato.DirectXOverlay
             //Thread.Sleep(2000);
             // Control FPS
             Stopwatch watch = new Stopwatch();
-            d2d.setupHintSlots();
+            d2d.SetupHintSlots();
             watch.Start();
             while (true)
             {
@@ -40,14 +40,24 @@ namespace Yato.DirectXOverlay
                 // Low health
                 if (true)
                 {
-                    string message = "Choose this salve as your hero :) \n and this \n new line";
-                    string imgName = "Healing_Salve_icon";
-                    d2d.heroSelectionHints(message, imgName);
+                    string[] messages = new string[5];
+                    messages[0] = "Trump";
+                    messages[1] = "Abaddon";
+                    messages[2] = "Alchemist";
+                    messages[3] = "Ancient Apparition";
+                    messages[4] = "Anti-mage";
+                    string[] imgName = new string[5];
+                    imgName[0] = "trump";
+                    imgName[1] = "1";
+                    imgName[2] = "2";
+                    imgName[3] = "3";
+                    imgName[4] = "4";
+                    d2d.HeroSelectionHints(messages, imgName);
                 }
                 if (Control.ModifierKeys == Keys.Alt)
-                    d2d.deleteMessage(0);
+                    d2d.DeleteMessage(0);
 
-                d2d.draw(VS_HWND, overlay, "Run");
+                d2d.Draw(VS_HWND, overlay, "Run");
 
                 watch.Restart();
             }

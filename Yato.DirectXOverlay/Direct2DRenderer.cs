@@ -1140,6 +1140,19 @@ namespace Yato.DirectXOverlay
             layout.Dispose();
         }
 
+        public void DrawTextWithBackground(string text, float x, float y, float maxWidth, float maxHeight, Direct2DFont font, Direct2DBrush brush, Direct2DBrush backgroundBrush)
+        {
+            var layout = new TextLayout(fontFactory, text, font, maxWidth, maxHeight);
+
+            float modifier = layout.FontSize / 4.0f;
+
+            device.FillRectangle(new RawRectangleF(x - modifier, y - modifier, x + layout.Metrics.Width + modifier, y + layout.Metrics.Height + modifier), backgroundBrush);
+
+            device.DrawTextLayout(new RawVector2(x, y), layout, brush, DrawTextOptions.NoSnap);
+
+            layout.Dispose();
+        }
+
         public void DrawTextWithBackground(string text, float x, float y, float fontSize, Direct2DFont font, Direct2DColor color, Direct2DColor backgroundColor)
         {
             var layout = new TextLayout(fontFactory, text, font, float.MaxValue, float.MaxValue);
@@ -1203,73 +1216,117 @@ namespace Yato.DirectXOverlay
 
         // Type:
         // 0: hero selection
-        // 1: items selection
-        // 2: retreat
-        // 3: press on
-        // 4: last hit
-        // 5: jungle
-        // 6: safe farming
-        public void setupHintSlots()
+        // 1: hero selection
+        // 2: hero selection
+        // 3: hero selection
+        // 4: hero selection
+
+        // 5: items selection
+        // 6: retreat
+        // 7: press on
+        // 8: last hit
+        // 9: jungle
+        // 10: safe farming
+        public void SetupHintSlots()
         {
             for (int i = 0; i < hints.Length; i++)
             {
                 switch (i)
                 {
-                    // Hero selection slot
+                    // Hero selection slot1
                     case 0:
-                        hints[i] = new Hint("Hero selection slot", "", Screen.PrimaryScreen.Bounds.Width / 6 * 5, Screen.PrimaryScreen.Bounds.Height / 5);
+                        string Hero_selection1 = "Hero selection slot1";
+                        hints[i] = new Hint(Hero_selection1, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection1.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5);
                         break;
 
-                    // 1: items selection
+                    // Hero selection slot2
                     case 1:
-                        hints[i] = new Hint("Items selection slot", "", Screen.PrimaryScreen.Bounds.Width / 6 * 5, Screen.PrimaryScreen.Bounds.Height / 5);
+                        string Hero_selection2 = "Hero selection slot2";
+                        hints[i] = new Hint(Hero_selection2, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection2.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5 + i * 100);
                         break;
 
-                    // 2: retreat
-                    // 3: press on
+                    // Hero selection slot3
                     case 2:
-                        hints[i] = new Hint("Laning message slot", "", Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 4 * 3);
+                        string Hero_selection3 = "Hero selection slot3";
+                        hints[i] = new Hint(Hero_selection3, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection3.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5 + i * 100);
                         break;
+
+                    // Hero selection slot4
                     case 3:
-                        hints[i] = new Hint("Laning message slot", "", Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 4 * 3);
+                        string Hero_selection4 = "Hero selection slot4";
+                        hints[i] = new Hint(Hero_selection4, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection4.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5 + i * 100);
+                        break;
+                        
+                    // Hero selection slot5
+                    case 4:
+                        string Hero_selection5 = "Hero selection slot5";
+                        hints[i] = new Hint(Hero_selection5, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection5.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5 + i * 100);
+                        break;
+
+                    // 5: items selection
+                    case 5:
+                        string item = "Items selection slot";
+                        hints[i] = new Hint(item, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (item.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5);
+                        break;
+
+                    // 6: retreat
+                    // 7: press on
+                    case 6:
+                        string retreat = "Laning message slot";
+                        hints[i] = new Hint(retreat, "", Screen.PrimaryScreen.Bounds.Width / 2 - (retreat.Length / 2), Screen.PrimaryScreen.Bounds.Height / 4 * 3);
+                        break;
+                    case 7:
+                        string press_on = "Laning message slot";
+                        hints[i] = new Hint(press_on, "", Screen.PrimaryScreen.Bounds.Width / 2 - (press_on.Length / 2), Screen.PrimaryScreen.Bounds.Height / 4 * 3);
                         break;
 
                      // Message position dynamic
 
-                    // 4: last hit
-                    case 4:
-                        hints[i] = new Hint("Last hit message slot", "", i * 200, 0);
+                    // 8: last hit
+                    case 8:
+                        string last_hit = "Last hit message slot";
+                        hints[i] = new Hint(last_hit, "", i * 200, 0);
                         break;
 
-                    // 5: jungle
-                    case 5:
-                        hints[i] = new Hint("Jungle message slot", "", i * 200, 0);
+                    // 9: jungle
+                    case 9:
+                        string jungle = "Jungle message slot";
+                        hints[i] = new Hint(jungle, "", i * 200, 0);
                         break;
 
 
                     // Message position dynamic and within the minimap
 
-                    // 6: safe farming
-                    case 6:
-                        hints[i] = new Hint("Safe farming message slot", "", 0, Screen.PrimaryScreen.Bounds.Height - 100);
+                    // 10: safe farming
+                    case 10:
+                        string safe_farming = "Safe farming message slot";
+                        hints[i] = new Hint(safe_farming, "", 0, Screen.PrimaryScreen.Bounds.Height - 100);
                         break;
 
                     default:
-                        Console.WriteLine("Unknown message type detected. (other than 0-6)");
+                        Console.WriteLine("Unknown message type detected. (other than 0-10)");
                         break;
                 }
-                hints[i].on = true;
+                hints[i].on = false;
             }
         }
 
-        public void heroSelectionHints(string hint, string img)
+        public void HeroSelectionHints(string[] heros, string[] img)
         {
-            addMessage(0, hint, img);
+            if (heros.Length != 5 || img.Length != 5)
+            {
+                throw new System.ArgumentException("Number of suggested Heroes exceed 5.");
+            }
+
+            for (int i = 0; i < heros.Length; i++)
+            {
+                AddMessage(i, heros[i], img[i]);
+            }
         }
 
-        public void addMessage(int type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
+        public void AddMessage(int type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
         {
-            if (type >= 0 && type <= 7)
+            if (type >= 0 && type <= 10)
             {
                 hints[type].text = text;
                 if (imgName != null)
@@ -1299,12 +1356,12 @@ namespace Yato.DirectXOverlay
             }
         }
 
-        public void deleteMessage(int type)
+        public void DeleteMessage(int type)
         {
             hints[type].clear();
         }
 
-        public void draw(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
+        public void Draw(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
         {
             IntPtr fg = GetForegroundWindow();
             
@@ -1325,12 +1382,14 @@ namespace Yato.DirectXOverlay
                         Direct2DBrush color = CreateBrush(hints[i].color.Item1, hints[i].color.Item2, hints[i].color.Item3, hints[i].color.Item4);
                         Direct2DBrush background = CreateBrush(hints[i].background.Item1, hints[i].background.Item2, hints[i].background.Item3, hints[i].background.Item4);
                         Direct2DFont textFont = CreateFont(hints[i].font.Item1, hints[i].font.Item2);
-                        DrawTextWithBackground(hints[i].text, hints[i].x, hints[i].y, textFont, color, background);
+                        DrawTextWithBackground(hints[i].text, hints[i].x, hints[i].y, 100, 100, textFont, color, background);
 
                         if (hints[i].imgName != "")
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\" + hints[i].imgName + ".png");
-                            DrawBitmap(bmp, 1, hints[i].x - 100, hints[i].y, 88, 64);
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + hints[i].imgName + ".png");
+                            DrawBitmap(bmp, 1, hints[i].x - 100, hints[i].y, 254/4, 144/4);
+                            //DrawBitmap(bmp, 1, hints[i].x - 350, hints[i].y, 600 / 2, 458 / 2);
+                            bmp.SharpDXBitmap.Dispose();
                         }
                     }
                 }
