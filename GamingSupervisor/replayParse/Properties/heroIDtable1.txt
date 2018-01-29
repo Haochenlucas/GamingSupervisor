@@ -113,6 +113,3 @@
 30    Witch Doctor
 42    Wraith King
 22    Zeus
-114  Monkey King
-115  Pangolier
-116  Dark Willow

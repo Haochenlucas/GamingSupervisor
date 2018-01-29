@@ -34,6 +34,8 @@ namespace GamingSupervisor
             //}
 
             counter_pick_logic cp = new counter_pick_logic();
+            cp.readTeam();
+            int[,] table = cp.selectTable();
             int[] hero_pick = { 1, 2, 3, 7, 115 };
             int[] ban = { 10, 20, 30, 70, 114 };
             int[] suggestion = cp.logic_counter(hero_pick, ban);
