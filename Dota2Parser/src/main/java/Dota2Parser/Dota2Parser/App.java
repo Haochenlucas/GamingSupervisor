@@ -153,7 +153,7 @@ public class App
         if (updateState)
         {
         	stateWriter.format("%d [STATE] %s\n", ctx.getTick(),
-                    e.getPropertyForFieldPath(camera.playerID));
+                    e.getPropertyForFieldPath(state.state));
         	stateWriter.flush();
         }
     }
