@@ -17,7 +17,7 @@ namespace GamingSupervisor
         public int GetStartTick()
         {
             string firstLine = "";
-            foreach (string line in File.ReadLines(@"../../Parser/position.txt")) // TODO get game state from replay file
+            foreach (string line in File.ReadLines(@"../../Parser/state.txt"))
             {
                 firstLine = line;
                 break;
@@ -40,7 +40,6 @@ namespace GamingSupervisor
         public void waitForReplayToStart()
         {
             Console.WriteLine("Waiting for replay to start...");
-            gameStateIntegration.StartListener();
             if (!listenerStarted)
             {
                 gameStateIntegration.StartListener();

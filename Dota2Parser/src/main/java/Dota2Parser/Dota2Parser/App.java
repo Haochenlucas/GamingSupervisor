@@ -23,8 +23,7 @@ import skadistats.clarity.wire.common.proto.Demo.CDemoFileInfo;
 @UsesEntities
 public class App
 {    
-    private PrintWriter heroPositionWriter;
-    private PrintWriter healthWriter;
+    private PrintWriter heroWriter;
     private PrintWriter heroSelectionWriter;
     private PrintWriter cameraWriter;
     private PrintWriter stateWriter;
@@ -174,7 +173,7 @@ public class App
                 }
         	}
             
-        	for (int j = 0; j < 10; j++)
+        	for (int j = 0; j < 12; j++)
         	{
         		if (updatedPaths[i].equals(selection.bans[j]))
                 {
@@ -194,7 +193,7 @@ public class App
         	}
         }
     	
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 12; i++)
         {
         	if (updateBan[i])
         	{
@@ -224,19 +223,19 @@ public class App
         
         if (updatePosition || forceUpdate)
         {
-        	heroPositionWriter.format("%d [POSITION] %s %s %s %s\n", ctx.getTick(),
+        	heroWriter.format("%d [POSITION] %s %s %s %s\n", ctx.getTick(),
                     e.getDtClass().getDtName(),
                     e.getPropertyForFieldPath(hero.x),
                     e.getPropertyForFieldPath(hero.y),
                     e.getPropertyForFieldPath(hero.z));
-        	heroPositionWriter.flush();
+        	heroWriter.flush();
         }
         if (updateHealth || forceUpdate)
         {
-            healthWriter.format("%d [HEALTH] %s %s\n", ctx.getTick(),
+        	heroWriter.format("%d [HEALTH] %s %s\n", ctx.getTick(),
             		e.getDtClass().getDtName(),
             		e.getPropertyForFieldPath(hero.health));
-            healthWriter.flush();
+        	heroWriter.flush();
         }
     }
     
@@ -248,14 +247,12 @@ public class App
         w.write(info.toString());
         w.close();
         
-        File positionFile = new File(args[1] + "/position.txt");
-        File healthFile = new File(args[1] + "/health.txt");
+        File heroFile = new File(args[1] + "/hero.txt");
         File selectionFile = new File(args[1] + "/selection.txt");
         File cameraFile = new File(args[1] + "/camera.txt");
         File stateFile = new File(args[1] + "/state.txt");
         
-        heroPositionWriter = new PrintWriter(positionFile);
-        healthWriter = new PrintWriter(healthFile);
+        heroWriter = new PrintWriter(heroFile);
         heroSelectionWriter = new PrintWriter(selectionFile);
         cameraWriter = new PrintWriter(cameraFile);
         stateWriter = new PrintWriter(stateFile);
@@ -263,8 +260,7 @@ public class App
         Source source = new MappedFileSource(args[0]);
         new SimpleRunner(source).runWith(this);
         
-        heroPositionWriter.close();
-        healthWriter.close();
+        heroWriter.close();
         heroSelectionWriter.close();
         cameraWriter.close();
         stateWriter.close();

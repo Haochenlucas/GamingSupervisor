@@ -98,6 +98,7 @@
     <Compile Include="GameStateIntegration.cs" />
     <Compile Include="Overlay.cs" />
     <Compile Include="ParserHandler.cs" />
+    <Compile Include="ReplayAnalyzer.cs" />
     <Compile Include="ReplayHeroSelection.xaml.cs">
       <DependentUpon>ReplayHeroSelection.xaml</DependentUpon>
     </Compile>
