@@ -11,7 +11,7 @@ namespace replayParse
     {
         public static Dictionary<int, string> hero_IDClientDictionary = new Dictionary<int, string>();
         public static Dictionary<string, int> ID_heroClientDictionary = new Dictionary<string, int>();
-        public static string[] heroName = new string[116]; // make the index be the ID value, so the first string is empty
+        public static string[] heroName = new string[121]; // make the index be the ID value, so the first string is empty
         public heroIDClient()
         {
             string s = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable1.txt");
@@ -42,26 +42,13 @@ namespace replayParse
                     }   
                 }
                 key= Convert.ToInt32(name[0]);
-                second_string = (key + 1) + "     " + hero_name;
-                second_lines[key] = second_string;
+                if (hero_IDClientDictionary.Count == 115)
+                    break;
                 hero_IDClientDictionary.Add(key, hero_name);
                 ID_heroClientDictionary.Add(hero_name, key);
                 heroName[key] = hero_name;
-
             }
-            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable1.txt");
-            if (!File.Exists(path))
-            {
-                // Create a file to write to.
-                using (StreamWriter sw = File.CreateText(path))
-                {
-                    foreach (string line in second_lines)
-                    {
-                        sw.WriteLine(line);
-                    }
 
-                }
-            }
         }
 
         public heroIDClient(string filePath)
@@ -95,24 +82,11 @@ namespace replayParse
                     }
                 }
                 key = Convert.ToInt32(name[0]);
-                second_string = (key + 1) + "     " + hero_name;
-                second_lines[key] = second_string;
+                if (hero_IDClientDictionary.Count == 115)
+                    break;
                 hero_IDClientDictionary.Add(key, hero_name);
                 ID_heroClientDictionary.Add(hero_name, key);
                 heroName[key] = hero_name;
-            }
-            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\heroIDtable1.txt");
-            if (!File.Exists(path))
-            {
-                // Create a file to write to.
-                using (StreamWriter sw = File.CreateText(path))
-                {
-                    foreach (string line in second_lines)
-                    {
-                        sw.WriteLine(line);
-                    }
-
-                }
             }
         }
 
@@ -129,5 +103,6 @@ namespace replayParse
         {
             return heroName;
         }
+
     }
 }
