@@ -266,3 +266,4 @@ __pycache__/
 /GamingSupervisor/GamingSupervisor/Parser/position.txt
 /GamingSupervisor/GamingSupervisor/Parser/selection.txt
 /GamingSupervisor/GamingSupervisor/Parser/state.txt
+*.dem
