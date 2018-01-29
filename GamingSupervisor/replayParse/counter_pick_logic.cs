@@ -13,7 +13,7 @@ namespace replayParse
         public static double[,] matrix_info = new double[116, 116];
         // the hero_ID_Client_Team is all pick and ban hero, 
         // the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
-        // team side(1: ban , 2: team 1; 3 :team 2;).
+        // team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
         public static int[,] hero_ID_Client_Team = new int[30,4];
 
         public counter_pick_logic()
@@ -102,48 +102,80 @@ namespace replayParse
                     caseInsensitiveDictionary.Add(key, value1);
                 }
             }
+            int mode = 0;
+            int ban = 0;
             foreach (string line in lines)
             {
-                if (line.Contains("hero_name:"))
+                if(mode == 1)
                 {
-                    string[] words = line.Split(' ');
-                    if (words[words.Length-1].Contains("npc_dota_hero"))
+                    if (ban ==1)
                     {
-                        string[] substrings = Regex.Split(words[words.Length - 1], "hero_");
-                        var r = new Regex(@"
-                            (?<=[A-Z])(?=[A-Z][a-z]) |
-                             (?<=[^A-Z])(?=[A-Z]) |
-                             (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
-                        string name = r.Replace(substrings[1], " ");
-                        name = string.Join("", name.Split(new string[] { "_" }, StringSplitOptions.None));
-                        name = name.TrimEnd( new Char[] { '"', ' '});
-                        int value_cur = 0;
-                        string hero_name = "";
-                        var comparer = StringComparer.OrdinalIgnoreCase;
-                        foreach (KeyValuePair<string, int> entry in caseInsensitiveDictionary)
+                        if (line.Contains("team"))
                         {
-                            string name1 = entry.Key.ToLower();
-                            if (String.Equals(name1, name))
+                            mode = 2;
+                            string[] words = line.Split(' ');
+                            int team_number = -1;
+                            if (int.TryParse(words[words.Length - 1], out team_number))
                             {
-                                value_cur = caseInsensitiveDictionary[name];
-                                hero_name = clientHero_Dic[value_cur];
-                                int table_0 = 0;
-                                ID_Dic.TryGetValue(hero_name, out table_0);
-                                hero_ID_Client_Team[count, 0] = table_0;
-                                hero_ID_Client_Team[count, 1] = value_cur;
-                                count++;
+                                if(team_number == 2)
+                                {
+                                    hero_ID_Client_Team[count, 2] = 0;
+                                }
+                                else
+                                {
+                                    hero_ID_Client_Team[count, 2] = 1;                  
+                                }
                             }
+
+                        }
+                    }
+                    else
+                    {
+                        if (line.Contains("team"))
+                        {
+                            mode = 2;
+                            string[] words = line.Split(' ');
+                            int team_number = -1;
+                            if (int.TryParse(words[words.Length - 1], out team_number))
+                            {
+                                if (team_number == 2)
+                                {
+                                    hero_ID_Client_Team[count, 2] = 2;
+                                }
+                                else
+                                {
+                                    hero_ID_Client_Team[count, 2] = 3;
+                                }
+                            }
+
                         }
                     }
                 }
-                if (line.Contains("game_team:"))
+                else if (line.Contains("is_pick:"))
                 {
+                    mode = 1;
                     string[] words = line.Split(' ');
-                    int number = 0;
-                    if (Int32.TryParse(words[words.Length - 1], out number))
+                    if (words[words.Length-1].Contains("false"))
                     {
-                        hero_ID_Client_Team[count1, 2] = number;
-                        count1++;
+                        ban = 1;
+                    }
+                }
+                else if( mode == 2)
+                {
+                    if (line.Contains("hero_id:"))
+                    {
+                        mode = 0;
+                        string[] words = line.Split(' ');
+                        int hero_number = -1;
+                        if (int.TryParse(words[words.Length - 1], out hero_number))
+                        {
+                            hero_ID_Client_Team[count, 1] = hero_number;
+                            string hero_name = clientHero_Dic[hero_number];
+                            int hero_id_cur = ID_Dic[hero_name];
+                            hero_ID_Client_Team[count, 0] = hero_id_cur;
+                            count++;
+                            ban = 0;
+                        }
                     }
                 }
             }
@@ -157,35 +189,46 @@ namespace replayParse
                 int tic = Int32.Parse(words[0]);
                 int team = 0;
                 int heroID = 0;
-                if (words[1].Contains('B'))
+                heroID = Int32.Parse(words[2]);
+                string hero_name = "";
+                clientHero_Dic.TryGetValue(heroID, out hero_name);
+                int cur_ID = 0;
+                ID_Dic.TryGetValue(hero_name, out cur_ID);
+                for (int i = 0; i < count; i++)
                 {
-                    heroID = Int32.Parse(words[2]);
-                    string hero_name = "";
-                    clientHero_Dic.TryGetValue(heroID, out hero_name);
-                    int cur_ID = 0;
-                    ID_Dic.TryGetValue(hero_name, out cur_ID);
-                    team = 1;
-                    hero_ID_Client_Team[count, 1] = heroID;
-                    hero_ID_Client_Team[count, 2] = team;
-                    hero_ID_Client_Team[count, 0] = cur_ID;
-                    hero_ID_Client_Team[count, 3] = tic;
-                    count++;
-                }
-                else
-                {
-                    heroID = Int32.Parse(words[2]);
-                    string hero_name = "";
-                    clientHero_Dic.TryGetValue(heroID, out hero_name);
-                    int cur_ID = 0;
-                    ID_Dic.TryGetValue(hero_name, out cur_ID);
-                    for(int i = 0; i < count; i++)
+                    if (hero_ID_Client_Team[i, 0] == cur_ID)
                     {
-                        if(hero_ID_Client_Team[i,0] == cur_ID)
-                        {
-                            hero_ID_Client_Team[i, 3] = tic; 
-                        }
+                        hero_ID_Client_Team[i, 3] = tic;
                     }
                 }
+                //if (words[1].Contains('B'))
+                //{
+                //    heroID = Int32.Parse(words[2]);
+                //    string hero_name = "";
+                //    clientHero_Dic.TryGetValue(heroID, out hero_name);
+                //    int cur_ID = 0;
+                //    ID_Dic.TryGetValue(hero_name, out cur_ID);
+                //    team = 1;
+                //    hero_ID_Client_Team[count, 1] = heroID;
+                //    hero_ID_Client_Team[count, 2] = team;
+                //    hero_ID_Client_Team[count, 0] = cur_ID;
+                //    hero_ID_Client_Team[count, 3] = tic;
+                //}
+                //else
+                //{
+                //    heroID = Int32.Parse(words[2]);
+                //    string hero_name = "";
+                //    clientHero_Dic.TryGetValue(heroID, out hero_name);
+                //    int cur_ID = 0;
+                //    ID_Dic.TryGetValue(hero_name, out cur_ID);
+                //    for(int i = 0; i < count; i++)
+                //    {
+                //        if(hero_ID_Client_Team[i,0] == cur_ID)
+                //        {
+                //            hero_ID_Client_Team[i, 3] = tic; 
+                //        }
+                //    }
+                //}
 
             }
         }
