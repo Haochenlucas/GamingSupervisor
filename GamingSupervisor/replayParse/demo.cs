@@ -15,7 +15,7 @@ namespace GamingSupervisor
             //replay_version01 r = new replay_version01();
             //Dictionary<string, int> h = r.getHeros();
             //int[,,] info = r.getReplayInfo();
-            heroID h_ID = new heroID();
+            //heroID h_ID = new heroID();
             //Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
             //Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
             //string[] heroName = h_ID.getHeroName();
@@ -38,7 +38,7 @@ namespace GamingSupervisor
             int[,] table = cp.selectTable();
             int[] hero_pick = { 1, 2, 3, 7, 115 };
             int[] ban = { 10, 20, 30, 70, 114 };
-            int[] suggestion = cp.logic_counter(hero_pick, ban);
+            int[,] suggestiontable = cp.suggestionTable(2);
             Console.Read();
         }
     }
