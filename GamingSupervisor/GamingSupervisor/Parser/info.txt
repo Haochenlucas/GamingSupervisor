@@ -1,0 +1,196 @@
+playback_time: 3708.9336
+playback_ticks: 111268
+playback_frames: 55619
+game_info {
+  dota {
+    match_id: 3552460526
+    game_mode: 2
+    game_winner: 2
+    player_info {
+      hero_name: "npc_dota_hero_bounty_hunter"
+      player_name: "Puppey"
+      is_fake_client: false
+      steamid: 76561198047544485
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_lion"
+      player_name: "YapzOr"
+      is_fake_client: false
+      steamid: 76561198049382766
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_antimage"
+      player_name: "Ace"
+      is_fake_client: false
+      steamid: 76561198057856286
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_centaur"
+      player_name: "Fata"
+      is_fake_client: false
+      steamid: 76561198047065028
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_juggernaut"
+      player_name: "MidOne"
+      is_fake_client: false
+      steamid: 76561198076851106
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_disruptor"
+      player_name: "Fly"
+      is_fake_client: false
+      steamid: 76561198054420884
+      game_team: 3
+    }
+    player_info {
+      hero_name: "npc_dota_hero_life_stealer"
+      player_name: "Resolut1on"
+      is_fake_client: false
+      steamid: 76561198046990903
+      game_team: 3
+    }
+    player_info {
+      hero_name: "npc_dota_hero_night_stalker"
+      player_name: "JerAx"
+      is_fake_client: false
+      steamid: 76561197987037722
+      game_team: 3
+    }
+    player_info {
+      hero_name: "npc_dota_hero_brewmaster"
+      player_name: "s4"
+      is_fake_client: false
+      steamid: 76561198001497299
+      game_team: 3
+    }
+    player_info {
+      hero_name: "npc_dota_hero_tinker"
+      player_name: "N0tail"
+      is_fake_client: false
+      steamid: 76561197979938082
+      game_team: 3
+    }
+    leagueid: 5627
+    picks_bans {
+      is_pick: false
+      team: 3
+      hero_id: 86
+    }
+    picks_bans {
+      is_pick: false
+      team: 2
+      hero_id: 112
+    }
+    picks_bans {
+      is_pick: false
+      team: 3
+      hero_id: 7
+    }
+    picks_bans {
+      is_pick: false
+      team: 2
+      hero_id: 107
+    }
+    picks_bans {
+      is_pick: false
+      team: 3
+      hero_id: 71
+    }
+    picks_bans {
+      is_pick: false
+      team: 2
+      hero_id: 85
+    }
+    picks_bans {
+      is_pick: true
+      team: 3
+      hero_id: 60
+    }
+    picks_bans {
+      is_pick: true
+      team: 2
+      hero_id: 26
+    }
+    picks_bans {
+      is_pick: true
+      team: 2
+      hero_id: 62
+    }
+    picks_bans {
+      is_pick: true
+      team: 3
+      hero_id: 78
+    }
+    picks_bans {
+      is_pick: false
+      team: 2
+      hero_id: 50
+    }
+    picks_bans {
+      is_pick: false
+      team: 3
+      hero_id: 13
+    }
+    picks_bans {
+      is_pick: false
+      team: 2
+      hero_id: 68
+    }
+    picks_bans {
+      is_pick: false
+      team: 3
+      hero_id: 17
+    }
+    picks_bans {
+      is_pick: true
+      team: 2
+      hero_id: 96
+    }
+    picks_bans {
+      is_pick: true
+      team: 3
+      hero_id: 87
+    }
+    picks_bans {
+      is_pick: true
+      team: 2
+      hero_id: 8
+    }
+    picks_bans {
+      is_pick: true
+      team: 3
+      hero_id: 54
+    }
+    picks_bans {
+      is_pick: false
+      team: 2
+      hero_id: 39
+    }
+    picks_bans {
+      is_pick: false
+      team: 3
+      hero_id: 74
+    }
+    picks_bans {
+      is_pick: true
+      team: 3
+      hero_id: 34
+    }
+    picks_bans {
+      is_pick: true
+      team: 2
+      hero_id: 1
+    }
+    radiant_team_id: 1838315
+    dire_team_id: 2586976
+    radiant_team_tag: "Secret"
+    dire_team_tag: "OG"
+    end_time: 1510255407
+  }
+}
