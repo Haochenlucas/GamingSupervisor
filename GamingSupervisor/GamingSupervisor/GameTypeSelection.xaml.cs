@@ -35,14 +35,21 @@ namespace GamingSupervisor
 
         private void SelectReplay(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.DefaultExt = ".dem";
-            dlg.Filter = "DEM Files (*.dem)|*.dem";
-            Nullable<bool> result = dlg.ShowDialog();
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.DefaultExt = ".dem";
+            dialog.Filter = "DEM Files (*.dem)|*.dem";
+
+            RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
+            if (regKey != null)
+            {
+                dialog.InitialDirectory = regKey.GetValue("SteamPath") + @"\steamapps\common\dota 2 beta\game\dota\replays\";                
+            }
+
+            Nullable<bool> result = dialog.ShowDialog();
 
             if (result == true)
             {
-                selection.fileName = dlg.FileName;
+                selection.fileName = dialog.FileName;
                 selection.gameType = GUISelection.GameType.replay;
 
                 NavigationService navService = NavigationService.GetNavigationService(this);
