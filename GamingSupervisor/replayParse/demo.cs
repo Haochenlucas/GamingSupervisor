@@ -33,12 +33,13 @@ namespace GamingSupervisor
             //    Console.WriteLine(s);
             //}
 
-            counter_pick_logic cp = new counter_pick_logic();
-            cp.readTeam();
-            int[,] table = cp.selectTable();
-            int[] hero_pick = { 1, 2, 3, 7, 115 };
-            int[] ban = { 10, 20, 30, 70, 114 };
-            int[,] suggestiontable = cp.suggestionTable(2);
+            //counter_pick_logic cp = new counter_pick_logic();
+            //cp.readTeam();
+            //int[,] table = cp.selectTable();
+            //int[] hero_pick = { 1, 2, 3, 7, 115 };
+            //int[] ban = { 10, 20, 30, 70, 114 };
+            //int[,] suggestiontable = cp.suggestionTable(2);
+            makeup_difficulty_talbe dt = new makeup_difficulty_talbe();
             Console.Read();
         }
     }

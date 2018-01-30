@@ -1,0 +1,115 @@
+Abaddon icon.png	Abaddon	4	2	1	2	2	3	14
+Alchemist icon.png	Alchemist	4	3	2	4	2	5	20
+Ancient Apparition icon.png	Ancient Apparition	4	5	5	1	3	2	20
+Anti-Mage icon.png	Anti-Mage	3	3	4	5	3	5	23
+Arc Warden icon.png	Arc Warden	5	2	4	5	5	5	26
+Axe icon.png	Axe	2	2	3	4	2	2	15
+Bane icon.png	Bane	2	3	2	1	1	2	11
+Batrider icon.png	Batrider	2	3	3	4	3	2	17
+Beastmaster icon.png	Beastmaster	4	4	4	2	5	2	21
+Bloodseeker icon.png	Bloodseeker	4	4	1	3	2	3	17
+Bounty Hunter icon.png	Bounty Hunter	1	3	1	3	2	3	13
+Brewmaster icon.png	Brewmaster	3	2	2	3	4	4	18
+Bristleback icon.png	Bristleback	1	2	2	3	2	3	13
+Broodmother icon.png	Broodmother	2	4	1	3	4	4	18
+Centaur Warrunner icon.png	Centaur Warrunner	1	2	2	4	1	1	11
+Chaos Knight icon.png	Chaos Knight	2	3	1	5	3	5	19
+Chen icon.png	Chen	3	5	5	2	5	4	24
+Clinkz icon.png	Clinkz	2	3	2	3	2	3	15
+Clockwerk icon.png	Clockwerk	3	5	4	2	2	1	17
+Crystal Maiden icon.png	Crystal Maiden	1	3	2	1	2	2	11
+Dark Seer icon.png	Dark Seer	3	1	4	1	2	2	13
+Dark Willow icon.png	Dark Willow	4	3	3	1	4	4	19
+Dazzle icon.png	Dazzle	3	1	3	1	2	4	14
+Death Prophet icon.png	Death Prophet	1	4	2	5	2	4	18
+Disruptor icon.png	Disruptor	3	4	3	1	1	2	14
+Doom icon.png	Doom	5	3	1	2	2	2	15
+Dragon Knight icon.png	Dragon Knight	2	3	2	3	2	4	16
+Drow Ranger icon.png	Drow Ranger	2	2	2	5	2	5	18
+Earthshaker icon.png	Earthshaker	3	3	5	4	2	2	19
+Earth Spirit icon.png	Earth Spirit	4	4	5	3	4	3	23
+Elder Titan icon.png	Elder Titan	3	3	5	2	3	3	19
+Ember Spirit icon.png	Ember Spirit	3	4	4	5	3	5	24
+Enchantress icon.png	Enchantress	3	3	4	3	3	3	19
+Enigma icon.png	Enigma	4	4	5	4	3	2	22
+Faceless Void icon.png	Faceless Void	4	3	5	5	1	5	23
+Techies icon.png	Techies	3	5	4	2	4	4	22
+Gyrocopter icon.png	Gyrocopter	3	5	4	3	2	2	19
+Huskar icon.png	Huskar	2	3	2	3	2	3	15
+Invoker icon.png	Invoker	5	5	5	5	3	5	28
+Io icon.png	Io	5	5	4	2	3	4	23
+Jakiro icon.png	Jakiro	1	3	3	1	2	4	14
+Juggernaut icon.png	Juggernaut	1	2	3	3	1	3	13
+Keeper of the Light icon.png	Keeper of the Light	3	5	4	1	3	4	20
+Kunkka icon.png	Kunkka	3	3	5	2	2	2	17
+Legion Commander icon.png	Legion Commander	4	2	5	4	2	3	20
+Leshrac icon.png	Leshrac	3	3	4	3	3	4	20
+Lich icon.png	Lich	1	3	3	1	2	2	12
+Lifestealer icon.png	Lifestealer	3	3	3	3	2	3	17
+Lina icon.png	Lina	1	3	4	1	2	2	13
+Lion icon.png	Lion	1	3	3	1	2	2	12
+Lone Druid icon.png	Lone Druid	3	3	2	3	3	3	17
+Luna icon.png	Luna	2	3	4	5	3	5	22
+Lycan icon.png	Lycan	1	3	1	4	3	3	15
+Magnus icon.png	Magnus	4	3	5	4	3	2	21
+Medusa icon.png	Medusa	4	2	3	5	2	5	21
+Meepo icon.png	Meepo	5	5	4	5	5	5	29
+Mirana icon.png	Mirana	3	5	4	3	2	3	20
+Monkey King icon.png	Monkey King	3	4	4	3	1	3	18
+Morphling icon.png	Morphling	4	4	3	5	3	5	24
+Naga Siren icon.png	Naga Siren	2	3	2	5	3	2	17
+Nature's Prophet icon.png	Nature's Prophet	4	5	4	2	3	4	22
+Necrophos icon.png	Necrophos	3	3	3	3	2	4	18
+Night Stalker icon.png	Night Stalker	3	3	1	3	1	3	14
+Nyx Assassin icon.png	Nyx Assassin	4	5	5	5	2	2	23
+Ogre Magi icon.png	Ogre Magi	1	3	1	1	2	4	12
+Omniknight icon.png	Omniknight	3	1	3	1	2	4	14
+Oracle icon.png	Oracle	4	3	4	1	2	2	16
+Outworld Devourer icon.png	Outworld Devourer	4	3	4	5	3	3	22
+Pangolier icon.png	Pangolier	4	3	4	2	4	3	20
+Phantom Assassin icon.png	Phantom Assassin	1	3	1	5	1	5	16
+Phantom Lancer icon.png	Phantom Lancer	2	3	1	5	3	4	18
+Phoenix icon.png	Phoenix	3	3	3	2	3	4	18
+Puck icon.png	Puck	4	4	5	1	2	3	19
+Pudge icon.png	Pudge	4	4	4	2	2	4	20
+Pugna icon.png	Pugna	4	2	4	2	2	4	18
+Queen of Pain icon.png	Queen of Pain	1	3	4	2	2	2	14
+Razor icon.png	Razor	3	3	3	3	2	3	17
+Riki icon.png	Riki	1	3	3	3	2	3	15
+Rubick icon.png	Rubick	5	3	5	2	2	4	21
+Sand King icon.png	Sand King	3	5	5	1	2	2	18
+Shadow Demon icon.png	Shadow Demon	1	3	3	2	3	4	16
+Shadow Fiend icon.png	Shadow Fiend	3	3	5	1	3	3	18
+Shadow Shaman icon.png	Shadow Shaman	1	3	4	2	3	2	15
+Silencer icon.png	Silencer	2	5	3	3	2	4	19
+Skywrath Mage icon.png	Skywrath Mage	3	4	4	3	2	3	19
+Slardar icon.png	Slardar	1	3	2	4	2	3	15
+Slark icon.png	Slark	3	3	3	3	2	3	17
+Sniper icon.png	Sniper	2	3	2	3	2	3	15
+Spectre icon.png	Spectre	4	5	4	5	1	5	24
+Spirit Breaker icon.png	Spirit Breaker	2	4	1	4	1	3	15
+Storm Spirit icon.png	Storm Spirit	3	4	4	5	2	5	23
+Sven icon.png	Sven	1	3	2	3	2	3	14
+Templar Assassin icon.png	Templar Assassin	3	5	4	5	4	3	24
+Terrorblade icon.png	Terrorblade	2	2	4	5	3	5	21
+Tidehunter icon.png	Tidehunter	1	3	5	4	3	2	18
+Timbersaw icon.png	Timbersaw	2	3	4	3	3	3	18
+Tinker icon.png	Tinker	4	5	4	4	4	4	25
+Tiny icon.png	Tiny	3	3	4	4	3	3	20
+Treant Protector icon.png	Treant Protector	1	3	5	1	1	1	12
+Troll Warlord icon.png	Troll Warlord	2	5	1	5	2	5	20
+Tusk icon.png	Tusk	1	4	4	3	3	2	17
+Underlord icon.png	Underlord	3	5	3	1	3	4	19
+Undying icon.png	Undying	1	1	3	3	2	4	14
+Ursa icon.png	Ursa	2	3	4	4	2	5	20
+Vengeful Spirit icon.png	Vengeful Spirit	1	4	4	1	2	1	13
+Venomancer icon.png	Venomancer	2	3	5	1	4	4	19
+Viper icon.png	Viper	2	3	2	3	3	5	18
+Visage icon.png	Visage	4	4	4	3	5	4	24
+Warlock icon.png	Warlock	1	1	3	2	3	2	12
+Weaver icon.png	Weaver	3	3	3	5	3	5	22
+Windranger icon.png	Windranger	3	4	4	3	2	4	20
+Winter Wyvern icon.png	Winter Wyvern	3	3	4	1	2	2	15
+Witch Doctor icon.png	Witch Doctor	1	3	4	2	2	4	16
+Wraith King icon.png	Wraith King	2	3	1	3	1	3	13
+Zeus icon.png	Zeus	1	5	2	1	3	3	15
