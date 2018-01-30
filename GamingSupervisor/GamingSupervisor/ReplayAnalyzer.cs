@@ -75,8 +75,8 @@ namespace GamingSupervisor
                 switch (announcer.GetCurrentGameState())
                 {
                     case "Undefined":
-                        tickTimer.Stop();
-                        keepLooping = false;
+                        //tickTimer.Stop();
+                        //keepLooping = false;
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
                         HandleHeroSelection();
@@ -134,6 +134,10 @@ namespace GamingSupervisor
             int shuangla = 0;
             while (mark_index < 25 && suggestiontable[mark_index, 0] < CurrentTick)
             {
+                if (suggestiontable[mark_index, 0] == 0 && suggestiontable[mark_index, 1] == 0)
+                {
+                    break;
+                }
                 mark_index++;
             }
 

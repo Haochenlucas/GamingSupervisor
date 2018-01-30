@@ -1236,31 +1236,31 @@ namespace Yato.DirectXOverlay
                     // Hero selection slot1
                     case 0:
                         string Hero_selection1 = "Hero selection slot1";
-                        hints[i] = new Hint(Hero_selection1, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5);
+                        hints[i] = new Hint(Hero_selection1, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
 
                     // Hero selection slot2
                     case 1:
                         string Hero_selection2 = "Hero selection slot2";
-                        hints[i] = new Hint(Hero_selection2, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + i * 50);
+                        hints[i] = new Hint(Hero_selection2, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
 
                     // Hero selection slot3
                     case 2:
                         string Hero_selection3 = "Hero selection slot3";
-                        hints[i] = new Hint(Hero_selection3, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + i * 50);
+                        hints[i] = new Hint(Hero_selection3, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
 
                     // Hero selection slot4
                     case 3:
                         string Hero_selection4 = "Hero selection slot4";
-                        hints[i] = new Hint(Hero_selection4, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + i * 50);
+                        hints[i] = new Hint(Hero_selection4, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
                         
                     // Hero selection slot5
                     case 4:
                         string Hero_selection5 = "Hero selection slot5";
-                        hints[i] = new Hint(Hero_selection5, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + i * 50);
+                        hints[i] = new Hint(Hero_selection5, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
 
                     // 5: items selection
