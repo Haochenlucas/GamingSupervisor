@@ -39,11 +39,11 @@ namespace GamingSupervisor
             dialog.DefaultExt = ".dem";
             dialog.Filter = "DEM Files (*.dem)|*.dem";
 
-            RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
-            if (regKey != null)
-            {
-                dialog.InitialDirectory = regKey.GetValue("SteamPath") + @"\steamapps\common\dota 2 beta\game\dota\replays\";                
-            }
+            //RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
+            //if (regKey != null)
+            //{
+            //    dialog.InitialDirectory = regKey.GetValue("SteamPath") + @"\steamapps\common\dota 2 beta\game\dota\replays\";                
+            //}
 
             Nullable<bool> result = dialog.ShowDialog();
 

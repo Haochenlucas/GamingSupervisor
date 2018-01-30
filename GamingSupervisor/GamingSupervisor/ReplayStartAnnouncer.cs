@@ -45,7 +45,7 @@ namespace GamingSupervisor
                 gameStateIntegration.StartListener();
                 listenerStarted = true;
             }
-            SpinWait.SpinUntil(() => gameStateIntegration.GameState == "DOTA_GAMERULES_STATE_HERO_SELECTION");
+            SpinWait.SpinUntil(() => gameStateIntegration.GameState != "Undefined");
             Console.WriteLine("Replay started!");
         }
 
