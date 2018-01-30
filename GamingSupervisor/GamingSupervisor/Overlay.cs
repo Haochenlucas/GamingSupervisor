@@ -15,6 +15,7 @@ namespace GamingSupervisor
         {
             dotaProcessHandle = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
             overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
+            renderer.SetupHintSlots();
         }
 
         public void Clear()
@@ -22,9 +23,24 @@ namespace GamingSupervisor
             renderer.clear();
         }
 
-        public void ShowMessage(string message)
+        public void AddRetreatMessage(string message, string img)
         {
-            renderer.retreat(dotaProcessHandle, window, message);
+            renderer.Retreat(message, img);
+        }
+
+        public void AddHeroesSuggestionMessage(string[] heroes, string[] imgs)
+        {
+            renderer.HeroSelectionHints(heroes, imgs);
+        }
+
+        public void ShowMessage()
+        {
+            renderer.Draw(dotaProcessHandle, window);
+        }
+
+        public void ClearMessage(int MessageNum)
+        {
+            renderer.DeleteMessage(MessageNum);
         }
     }
 }

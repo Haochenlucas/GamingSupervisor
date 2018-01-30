@@ -15,7 +15,7 @@ namespace replayParse
             heroID h_ID = new heroID();
             Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
             Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
-            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\c");
+            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\c");
             string s_end = ".txt";
             int i = 1;
             string path = "";
@@ -59,7 +59,7 @@ namespace replayParse
                 i++;
             }
 
-            string path1 = Path.Combine(Environment.CurrentDirectory, @"..\..\Properties\countertable.txt");
+            string path1 = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\countertable.txt");
             if (!File.Exists(path1))
             {
                 // Create a file to write to.

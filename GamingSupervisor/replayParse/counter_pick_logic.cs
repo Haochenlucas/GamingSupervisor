@@ -189,6 +189,7 @@ namespace replayParse
 
         /*
          * team_name is come from the selectionTable. So proper input is 2 and 3.
+         * suggestionTable: second dim: first column : tic, second to six column is hero_id.
          */
         public int[,] suggestionTable(int team_name)
         {
@@ -318,6 +319,10 @@ namespace replayParse
                     }
                     if (flag < 5)
                     {
+                        if (five_picks.ContainsKey(sum1))
+                        {
+                            sum1 = sum1 + 0.001;
+                        }
                         five_picks.Add(sum1, count);
                         if (sum1 < lowest_fact)
                             lowest_fact = sum1;

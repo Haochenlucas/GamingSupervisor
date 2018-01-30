@@ -1236,31 +1236,31 @@ namespace Yato.DirectXOverlay
                     // Hero selection slot1
                     case 0:
                         string Hero_selection1 = "Hero selection slot1";
-                        hints[i] = new Hint(Hero_selection1, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection1.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5);
+                        hints[i] = new Hint(Hero_selection1, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5);
                         break;
 
                     // Hero selection slot2
                     case 1:
                         string Hero_selection2 = "Hero selection slot2";
-                        hints[i] = new Hint(Hero_selection2, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection2.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5 + i * 100);
+                        hints[i] = new Hint(Hero_selection2, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + i * 50);
                         break;
 
                     // Hero selection slot3
                     case 2:
                         string Hero_selection3 = "Hero selection slot3";
-                        hints[i] = new Hint(Hero_selection3, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection3.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5 + i * 100);
+                        hints[i] = new Hint(Hero_selection3, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + i * 50);
                         break;
 
                     // Hero selection slot4
                     case 3:
                         string Hero_selection4 = "Hero selection slot4";
-                        hints[i] = new Hint(Hero_selection4, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection4.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5 + i * 100);
+                        hints[i] = new Hint(Hero_selection4, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + i * 50);
                         break;
                         
                     // Hero selection slot5
                     case 4:
                         string Hero_selection5 = "Hero selection slot5";
-                        hints[i] = new Hint(Hero_selection5, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (Hero_selection5.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5 + i * 100);
+                        hints[i] = new Hint(Hero_selection5, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + i * 50);
                         break;
 
                     // 5: items selection
@@ -1311,6 +1311,11 @@ namespace Yato.DirectXOverlay
             }
         }
 
+        // 0: hero selection
+        // 1: hero selection
+        // 2: hero selection
+        // 3: hero selection
+        // 4: hero selection
         public void HeroSelectionHints(string[] heros, string[] img)
         {
             if (heros.Length != 5 || img.Length != 5)
@@ -1361,7 +1366,7 @@ namespace Yato.DirectXOverlay
             hints[type].clear();
         }
 
-        public void Draw(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
+        public void Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
         {
             IntPtr fg = GetForegroundWindow();
             
@@ -1402,25 +1407,10 @@ namespace Yato.DirectXOverlay
             }
         }
 
-        public void retreat(IntPtr parentWindowHandle, OverlayWindow overlay, string text)
+        // 6: retreat
+        public void Retreat(string text, string imgName)
         {
-            IntPtr fg = GetForegroundWindow();
-
-            if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
-            {
-                BeginScene();
-                ClearScene();
-
-                DrawTextWithBackground("FPS: " + FPS, 20, 40, font, redBrush, blackBrush);
-                DrawTextWithBackground(text, 30, overlay.Height / 5 * 3, font, redBrush, blackBrush);
-                DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height / 8, 2, redBrush);
-                DrawCrosshair(CrosshairStyle.Gap, Cursor.Position.X, Cursor.Position.Y, 25, 4, redBrush);
-                EndScene();
-            }
-            else
-            {
-                clear();
-            }
+            AddMessage(6, text, imgName);
         }
 
         public void clear()
@@ -1454,8 +1444,8 @@ namespace Yato.DirectXOverlay
             x = _x;
             y = _y;
             on = true;
-            background = new Tuple<int, int, int, int>(0, 0, 0, 255);
-            color = new Tuple<int, int, int, int>(255, 0, 0, 255);
+            background = new Tuple<int, int, int, int>(109, 109, 109, 255);
+            color = new Tuple<int, int, int, int>(255, 255, 255, 255);
             font = new Tuple<string, int>("Consolas", 22);
         }
 

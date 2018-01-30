@@ -60,13 +60,13 @@
       <HintPath>..\packages\Selen.Wpf.1.0.0\lib\net45\Selen.Wpf.SystemStyles.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\Yato.DirectXOverlay\bin\Release\SharpDX.dll</HintPath>
+      <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct2D1">
-      <HintPath>..\..\Yato.DirectXOverlay\bin\Release\SharpDX.Direct2D1.dll</HintPath>
+      <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
-      <HintPath>..\..\Yato.DirectXOverlay\bin\Release\SharpDX.DXGI.dll</HintPath>
+      <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -87,7 +87,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Yato.DirectXOverlay">
-      <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll</HintPath>
+      <HintPath>..\..\Yato.DirectXOverlay\bin\Release\Yato.DirectXOverlay.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

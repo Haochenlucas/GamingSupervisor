@@ -1,6 +1,7 @@
 ﻿using System;
 using replayParse;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace GamingSupervisor
 {
@@ -42,8 +43,8 @@ namespace GamingSupervisor
             {
                 announcer = new ReplayStartAnnouncer();
             }
-
-            CurrentTick = announcer.GetStartTick();
+            //CurrentTick = announcer.GetStartTick();
+            CurrentTick = 0;
             announcer.waitForReplayToStart();
             tickTimer.Start();
 
@@ -63,7 +64,14 @@ namespace GamingSupervisor
                     tickTimer.Stop();
                     break;
                 }
-
+                currentGameTime = announcer.GetCurrentGameTime();
+                if (currentGameTime != lastGameTime)
+                {
+                    int gameTimeChange = currentGameTime - lastGameTime;
+                    lastGameTime = currentGameTime;
+                    lastTickSynced += 30 * gameTimeChange;
+                    CurrentTick = lastTickSynced;
+                }
                 switch (announcer.GetCurrentGameState())
                 {
                     case "Undefined":
@@ -75,6 +83,10 @@ namespace GamingSupervisor
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        for (int i = 0; i < 5; i++)
+                        {
+                            overlay.ClearMessage(i);
+                        }
                         HandleGamePlay();
                         break;
                     default:
@@ -82,14 +94,7 @@ namespace GamingSupervisor
                         break;
                 }
 
-                currentGameTime = announcer.GetCurrentGameTime();
-                if (currentGameTime != lastGameTime)
-                {
-                    int gameTimeChange = currentGameTime - lastGameTime;
-                    lastGameTime = currentGameTime;
-                    lastTickSynced += 30 * gameTimeChange;
-                    CurrentTick = lastTickSynced;
-                }
+                ShowHints();
 
                 Thread.Sleep(10);
             }
@@ -99,19 +104,87 @@ namespace GamingSupervisor
             Console.WriteLine("Replay stopped!");
         }
 
+        private void ShowHints()
+        {
+            overlay.ShowMessage();
+        }
+
         private void HandleHeroSelection()
         {
-            //Console.WriteLine("Should be selecting");
+
+            counter_pick_logic cp = new counter_pick_logic();
+            cp.readTeam();
+            int[,] table = cp.selectTable();
+            string heroname = selection.heroName;
+            heroID h_ID = new heroID();
+            Dictionary<string, int> hero_table = h_ID.getIDHero();
+            Dictionary<int, string> ID_table = h_ID.getHeroID();
+            int team_side = 0;
+            for (int i = 0; i < table.Length / 4; i++)
+            {
+                if (table[i, 0] == hero_table[heroname])
+                {
+                    team_side = table[i, 2];
+                }
+            }
+            int[,] suggestiontable = cp.suggestionTable(team_side);
+            int ticLast = 0;
+            int ticNext = Int32.MaxValue;
+            int mark_index = 0;
+            int shuangla = 0;
+            while (mark_index < 25 && suggestiontable[mark_index, 0] < CurrentTick)
+            {
+                mark_index++;
+            }
+
+            if (mark_index > 0 && mark_index < 25)
+            {
+                ticNext = suggestiontable[mark_index, 0];
+                ticLast = suggestiontable[mark_index - 1, 0];
+                shuangla = mark_index - 1;
+            }
+            else if (mark_index == 0)
+            {
+                ticNext = suggestiontable[mark_index, 0];
+                ticLast = ticNext;
+                shuangla = mark_index;
+            }
+            else
+            {
+                ticNext = suggestiontable[mark_index-1, 0];
+                ticLast = ticNext;
+                shuangla = mark_index-1;
+            }
+            
+            string[] heroes = new string[5];
+            string[] heroesimg = new string[5];
+
+            for (int j = 1; j<6; j++)
+            {
+                heroesimg[j - 1] = suggestiontable[shuangla, j].ToString();
+                heroes[j - 1] = ID_table[suggestiontable[shuangla, j]];
+            }
+            
+             
+
+            overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
         }
 
         private void HandleGamePlay()
         {
-            int health = parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
+            int health = 0;
+            if (CurrentTick - parsedReplay.getOffSet()< 0)
+            {
+                int cur_tic_fake = 0;
+                health = parsedData[cur_tic_fake, heroId, 0];
+
+            }
+            health = parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
             //if (health < 470)
             if (true)
             {
                 //overlay.ShowMessage("Health is low, retreat");
-                overlay.ShowMessage("Health: " + health);
+                overlay.AddRetreatMessage("Health: " + health, "");
             }
             else
             {
