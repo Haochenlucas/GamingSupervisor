@@ -39,7 +39,12 @@ namespace GamingSupervisor
             //int[] hero_pick = { 1, 2, 3, 7, 115 };
             //int[] ban = { 10, 20, 30, 70, 114 };
             //int[,] suggestiontable = cp.suggestionTable(2);
-            makeup_difficulty_talbe dt = new makeup_difficulty_talbe();
+            makeup_difficulty_talbe mdt = new makeup_difficulty_talbe();
+            hero_difficulty dt = new hero_difficulty();
+            string nimabi = dt.mainDiff(38);
+            Console.WriteLine(nimabi);
+            Console.WriteLine(dt.getFinalRating(38));
+            Console.WriteLine(dt.getFinalLevel(38)[0]+ " "+ dt.getFinalLevel(38)[1]);
             Console.Read();
         }
     }
