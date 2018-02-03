@@ -1320,7 +1320,8 @@ namespace Yato.DirectXOverlay
         {
             if (heros.Length != 5 || img.Length != 5)
             {
-                throw new System.ArgumentException("Number of suggested Heroes exceed 5.");
+                AddMessage(0, heros[0], img[0]);
+                //throw new System.ArgumentException("Number of suggested Heroes exceed 5.");
             }
 
             for (int i = 0; i < heros.Length; i++)
@@ -1391,7 +1392,8 @@ namespace Yato.DirectXOverlay
 
                         if (hints[i].imgName != "")
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + hints[i].imgName + ".png");
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + hints[i].imgName);
+                            //Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + hints[i].imgName + ".png");
                             DrawBitmap(bmp, 1, hints[i].x - 100, hints[i].y, 254/4, 144/4);
                             //DrawBitmap(bmp, 1, hints[i].x - 350, hints[i].y, 600 / 2, 458 / 2);
                             bmp.SharpDXBitmap.Dispose();
@@ -1421,6 +1423,8 @@ namespace Yato.DirectXOverlay
         }
     }
 
+
+    #region Hint struct
     public struct Hint
     {
         public bool on;
@@ -1454,8 +1458,9 @@ namespace Yato.DirectXOverlay
             on = false;
         }
     }
+    #endregion
 
-    #region Other attributes
+    #region CrosshairStyle enum
     public enum CrosshairStyle
     {
         Dot,
@@ -1465,7 +1470,9 @@ namespace Yato.DirectXOverlay
         Diagonal,
         Swastika
     }
+    #endregion
 
+    #region Direct2DRendererOptions
     public struct Direct2DRendererOptions
     {
         public IntPtr Hwnd;
@@ -1473,7 +1480,9 @@ namespace Yato.DirectXOverlay
         public bool MeasureFps;
         public bool AntiAliasing;
     }
+    #endregion
 
+    #region Direct2DFontCreationOptions
     public class Direct2DFontCreationOptions
     {
         public string FontFamilyName;
@@ -1492,7 +1501,9 @@ namespace Yato.DirectXOverlay
             return FontStyle.Normal;
         }
     }
+    #endregion
 
+    #region Direct2DColor
     public struct Direct2DColor
     {
         public float Red;
@@ -1542,7 +1553,9 @@ namespace Yato.DirectXOverlay
             return new Direct2DColor(color.R, color.G, color.B, color.A);
         }
     }
+    #endregion
 
+    #region Direct2DBrush
     public class Direct2DBrush
     {
         public Direct2DColor Color
@@ -1594,7 +1607,9 @@ namespace Yato.DirectXOverlay
             return brush.Color;
         }
     }
+    #endregion
 
+    #region Direct2DFont
     public class Direct2DFont
     {
         private FontFactory factory;
@@ -1720,7 +1735,9 @@ namespace Yato.DirectXOverlay
             return font.Font;
         }
     }
+    #endregion
 
+    #region Direct2DScene
     public class Direct2DScene : IDisposable
     {
         public Direct2DRenderer Renderer { get; private set; }
@@ -1771,7 +1788,9 @@ namespace Yato.DirectXOverlay
         }
         #endregion
     }
+    #endregion
 
+    #region Direct2DBitmap
     public class Direct2DBitmap
     {
         private static SharpDX.WIC.ImagingFactory factory = new SharpDX.WIC.ImagingFactory();
