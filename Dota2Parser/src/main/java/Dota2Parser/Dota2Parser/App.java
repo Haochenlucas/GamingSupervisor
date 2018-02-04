@@ -33,7 +33,7 @@ public class App
     private Selection selection;
     private GameState state;
     
-    private HashMap<Integer, String> heroIds;
+    private HashMap<Object, String> heroIds;
     
     private void writeToFile(PrintWriter writer, Context ctx, Entity e, String type, FieldPath ...fieldPaths)
     {
@@ -315,12 +315,12 @@ public class App
         stateWriter = new PrintWriter(stateFile);
         heroIdWriter = new PrintWriter(heroIdFile);
         
-        heroIds = new HashMap<Integer, String>();
+        heroIds = new HashMap<Object, String>();
         
         Source source = new MappedFileSource(args[0]);
         new SimpleRunner(source).runWith(this);
         
-        for (Map.Entry<Integer, String> heroId : heroIds.entrySet())
+        for (Map.Entry<Object, String> heroId : heroIds.entrySet())
         {
             heroIdWriter.write(heroId.getKey() + " " + heroId.getValue() + "\n");
             heroIdWriter.flush();
