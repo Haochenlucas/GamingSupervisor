@@ -1847,4 +1847,5 @@ namespace Yato.DirectXOverlay
         }
     }
     #endregion
+
 }
