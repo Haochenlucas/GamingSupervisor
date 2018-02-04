@@ -16,18 +16,12 @@ namespace GamingSupervisor
     /// </summary>
     public partial class ReplayHeroSelection : Page
     {
-        private GUISelection selection;
         private BackgroundWorker worker;
         private List<HeroNameItem> heros;
 
         public ReplayHeroSelection()
         {
             InitializeComponent();
-        }
-
-        public ReplayHeroSelection(GUISelection selection) : this()
-        {
-            this.selection = selection;
 
             ConfirmButton.IsEnabled = false;
 
@@ -46,7 +40,7 @@ namespace GamingSupervisor
 
         private void StartParsing(object sender, DoWorkEventArgs e)
         {
-            ParserHandler parser = new ParserHandler(selection.fileName);
+            ParserHandler parser = new ParserHandler(GUISelection.fileName);
             List<string> heroNameList = parser.ParseReplayFile();
 
             heros = new List<HeroNameItem>();
@@ -71,7 +65,7 @@ namespace GamingSupervisor
             if (HeroNameListBox.SelectedItem != null)
             {
                 ConfirmButton.IsEnabled = true;
-                selection.heroName = (HeroNameListBox.SelectedItem as HeroNameItem).Title;
+                GUISelection.heroName = (HeroNameListBox.SelectedItem as HeroNameItem).Title;
             }
             else
             {
@@ -82,14 +76,14 @@ namespace GamingSupervisor
         private void ConfirmSelection(object sender, RoutedEventArgs e)
         {
             NavigationService navService = NavigationService.GetNavigationService(this);
-            ConfirmSelection confirmSelection = new ConfirmSelection(selection);
+            ConfirmSelection confirmSelection = new ConfirmSelection();
             navService.Navigate(confirmSelection);
         }
 
         private void GoBack(object sender, RoutedEventArgs e)
         {
             NavigationService navService = NavigationService.GetNavigationService(this);
-            GameTypeSelection gameTypeSelection = new GameTypeSelection(selection);
+            GameTypeSelection gameTypeSelection = new GameTypeSelection();
             navService.Navigate(gameTypeSelection);
         }
     }

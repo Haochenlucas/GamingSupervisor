@@ -7,8 +7,6 @@ namespace GamingSupervisor
 {
     class ReplayAnalyzer
     {
-        private GUISelection selection;
-
         replay_version01 parsedReplay;
         int[,,] parsedData;
         int heroId;
@@ -25,16 +23,14 @@ namespace GamingSupervisor
             set { lock (tickLock) { currentTick = value; } }
         }
 
-        public ReplayAnalyzer(GUISelection selection)
+        public ReplayAnalyzer()
         {
-            this.selection = selection;
-
             tickTimer = new System.Timers.Timer(1000.0 / 30.0);
             tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(tickCallback);
 
             parsedReplay = new replay_version01();
             parsedData = parsedReplay.getReplayInfo();
-            heroId = parsedReplay.getHeros()[selection.heroName];
+            heroId = parsedReplay.getHeros()[GUISelection.heroName];
         }
 
         public void Start()
@@ -115,7 +111,7 @@ namespace GamingSupervisor
             counter_pick_logic cp = new counter_pick_logic();
             cp.readTeam();
             int[,] table = cp.selectTable();
-            string heroname = selection.heroName;
+            string heroname = GUISelection.heroName;
             heroID h_ID = new heroID();
             Dictionary<string, int> hero_table = h_ID.getIDHero();
             Dictionary<int, string> ID_table = h_ID.getHeroID();

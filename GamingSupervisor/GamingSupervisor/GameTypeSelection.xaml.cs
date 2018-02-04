@@ -11,25 +11,18 @@ namespace GamingSupervisor
     /// </summary>
     public partial class GameTypeSelection : Page
     {
-        private GUISelection selection;
-
         public GameTypeSelection()
         {
             InitializeComponent();
         }
 
-        public GameTypeSelection(GUISelection selection) : this()
-        {
-            this.selection = selection;
-        }
-
         private void SelectLive(object sender, RoutedEventArgs e)
         {
-            selection.fileName = null;
-            selection.gameType = GUISelection.GameType.live;
+            GUISelection.fileName = null;
+            GUISelection.gameType = GUISelection.GameType.live;
 
             NavigationService navService = NavigationService.GetNavigationService(this);
-            ConfirmSelection confirmSelection = new ConfirmSelection(selection);
+            ConfirmSelection confirmSelection = new ConfirmSelection();
             navService.Navigate(confirmSelection);
         }
 
@@ -49,11 +42,11 @@ namespace GamingSupervisor
 
             if (result == true)
             {
-                selection.fileName = dialog.FileName;
-                selection.gameType = GUISelection.GameType.replay;
+                GUISelection.fileName = dialog.FileName;
+                GUISelection.gameType = GUISelection.GameType.replay;
 
                 NavigationService navService = NavigationService.GetNavigationService(this);
-                ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection(selection);
+                ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection();
                 navService.Navigate(replayHeroSelection);
             }
         }
@@ -61,7 +54,7 @@ namespace GamingSupervisor
         private void GoBack(object sender, RoutedEventArgs e)
         {
             NavigationService navService = NavigationService.GetNavigationService(this);
-            CustomizeSelection customizeSelection = new CustomizeSelection(selection);
+            CustomizeSelection customizeSelection = new CustomizeSelection();
             navService.Navigate(customizeSelection);
         }
     }
