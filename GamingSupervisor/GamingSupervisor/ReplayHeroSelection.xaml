@@ -21,7 +21,10 @@
                      SelectionChanged="ListBoxSelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Title}" />
+                        <DockPanel>
+                            <Image Stretch="UniformToFill" Source="{Binding Picture}"/>
+                            <TextBlock Text="{Binding Title}" />
+                        </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

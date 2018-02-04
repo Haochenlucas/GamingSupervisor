@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
 namespace GamingSupervisor
 {
     public class HeroNameItem
     {
+        public Image Picture { get; set; }
         public string Title { get; set; }
     }
 
@@ -43,10 +46,22 @@ namespace GamingSupervisor
             ParserHandler parser = new ParserHandler(GUISelection.fileName);
             List<string> heroNameList = parser.ParseReplayFile();
 
+            replayParse.heroID heroId = new replayParse.heroID();
             heros = new List<HeroNameItem>();
             foreach (string heroName in heroNameList)
             {
-                heros.Add(new HeroNameItem() { Title = heroName });
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri("pack://application:,,,/hero_icon_images/" + replayParse.heroID.ID_heroDictionary[heroName] + ".png");
+                image.EndInit();
+                Image image2 = new Image();
+                image2.Source = image;
+                Console.WriteLine(replayParse.heroID.ID_heroDictionary[heroName]);
+                heros.Add(new HeroNameItem()
+                {
+                    Picture = image2,
+                    Title = heroName
+                });
             }            
         }
 
