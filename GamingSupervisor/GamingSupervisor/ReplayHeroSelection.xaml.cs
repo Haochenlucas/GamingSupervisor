@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -8,9 +9,9 @@ using System.Windows.Navigation;
 
 namespace GamingSupervisor
 {
-    public class HeroNameItem
+    public class HeroListItem
     {
-        public Image Picture { get; set; }
+        public string ImagePath { get; set; }
         public string Title { get; set; }
     }
 
@@ -20,7 +21,7 @@ namespace GamingSupervisor
     public partial class ReplayHeroSelection : Page
     {
         private BackgroundWorker worker;
-        private List<HeroNameItem> heros;
+        private List<HeroListItem> heros;
 
         public ReplayHeroSelection()
         {
@@ -47,19 +48,12 @@ namespace GamingSupervisor
             List<string> heroNameList = parser.ParseReplayFile();
 
             replayParse.heroID heroId = new replayParse.heroID();
-            heros = new List<HeroNameItem>();
+            heros = new List<HeroListItem>();
             foreach (string heroName in heroNameList)
             {
-                BitmapImage image = new BitmapImage();
-                image.BeginInit();
-                image.UriSource = new Uri("pack://application:,,,/hero_icon_images/" + replayParse.heroID.ID_heroDictionary[heroName] + ".png");
-                image.EndInit();
-                Image image2 = new Image();
-                image2.Source = image;
-                Console.WriteLine(replayParse.heroID.ID_heroDictionary[heroName]);
-                heros.Add(new HeroNameItem()
+                heros.Add(new HeroListItem()
                 {
-                    Picture = image2,
+                    ImagePath = Path.Combine(Environment.CurrentDirectory, @"..\..\hero_icon_images\" + replayParse.heroID.ID_heroDictionary[heroName].ToString() + ".png"),
                     Title = heroName
                 });
             }            
@@ -80,7 +74,7 @@ namespace GamingSupervisor
             if (HeroNameListBox.SelectedItem != null)
             {
                 ConfirmButton.IsEnabled = true;
-                GUISelection.heroName = (HeroNameListBox.SelectedItem as HeroNameItem).Title;
+                GUISelection.heroName = (HeroNameListBox.SelectedItem as HeroListItem).Title;
             }
             else
             {
