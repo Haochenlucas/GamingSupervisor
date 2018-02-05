@@ -44,7 +44,7 @@ namespace GamingSupervisor
 
         private void StartParsing(object sender, DoWorkEventArgs e)
         {
-            ParserHandler parser = new ParserHandler(GUISelection.fileName);
+            ParserHandler parser = new ParserHandler();
             List<string> heroNameList = parser.ParseReplayFile();
 
             replayParse.heroID heroId = new replayParse.heroID();

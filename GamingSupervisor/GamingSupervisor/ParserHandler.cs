@@ -8,43 +8,44 @@ namespace GamingSupervisor
 {
     class ParserHandler
     {
-        private string fileName;
-
-        public ParserHandler(string fileName)
+        public ParserHandler()
         {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                throw new ArgumentNullException("File name cannot be null");
-            }
-            this.fileName = fileName;
         }
 
         public List<string> ParseReplayFile()
         {
-            Console.WriteLine("Starting parsing..." + fileName);
-            Process p = new Process();
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = "javaw";
-            p.StartInfo.Arguments =
-                "-jar "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
-                + "\"" + fileName.Replace(@"\", @"\\") + "\""
-                + " "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\"); // Data dump location
-            p.Start();
+            string replayFileLocation = Path.Combine(Environment.CurrentDirectory,
+                @"..\..\Parser\" + Path.GetFileNameWithoutExtension(GUISelection.fileName) + @"\");
 
-            while (!p.HasExited)
+            if (!Directory.Exists(replayFileLocation))
             {
-                Console.WriteLine(p.StandardOutput.ReadLine());
-            }
+                Directory.CreateDirectory(replayFileLocation);
 
-            p.WaitForExit();
-            Console.WriteLine("Finished parsing!");
+                Console.WriteLine("Starting parsing..." + GUISelection.fileName);
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.FileName = "javaw";
+                p.StartInfo.Arguments =
+                    "-jar "
+                    + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
+                    + "\"" + GUISelection.fileName.Replace(@"\", @"\\") + "\""
+                    + " "
+                    + replayFileLocation; // Data dump location
+                p.Start();
+
+                while (!p.HasExited)
+                {
+                    Console.WriteLine(p.StandardOutput.ReadLine());
+                }
+
+                p.WaitForExit();
+                Console.WriteLine("Finished parsing!");
+            }
 
             List<string> heroNameList = new List<string>();
 
-            string[] infoFile = File.ReadAllLines(System.IO.Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\info.txt"));
+            string[] infoFile = File.ReadAllLines(replayFileLocation + "info.txt");
             foreach (string line in infoFile)
             {
                 if (line.Contains("hero_name"))
