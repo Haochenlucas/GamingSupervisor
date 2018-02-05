@@ -14,12 +14,9 @@ namespace GamingSupervisor
 
         public List<string> ParseReplayFile()
         {
-            string replayFileLocation = Path.Combine(Environment.CurrentDirectory,
-                @"..\..\Parser\" + Path.GetFileNameWithoutExtension(GUISelection.fileName) + @"\");
-
-            if (!Directory.Exists(replayFileLocation))
+            if (!Directory.Exists(GUISelection.replayDataFolderLocation))
             {
-                Directory.CreateDirectory(replayFileLocation);
+                Directory.CreateDirectory(GUISelection.replayDataFolderLocation);
 
                 Console.WriteLine("Starting parsing..." + GUISelection.fileName);
                 Process p = new Process();
@@ -31,7 +28,7 @@ namespace GamingSupervisor
                     + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
                     + "\"" + GUISelection.fileName.Replace(@"\", @"\\") + "\""
                     + " "
-                    + replayFileLocation; // Data dump location
+                    + GUISelection.replayDataFolderLocation; // Data dump location
                 p.Start();
 
                 while (!p.HasExited)
@@ -45,7 +42,7 @@ namespace GamingSupervisor
 
             List<string> heroNameList = new List<string>();
 
-            string[] infoFile = File.ReadAllLines(replayFileLocation + "info.txt");
+            string[] infoFile = File.ReadAllLines(GUISelection.replayDataFolderLocation + "info.txt");
             foreach (string line in infoFile)
             {
                 if (line.Contains("hero_name"))

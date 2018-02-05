@@ -25,6 +25,7 @@ namespace GamingSupervisor
         public static GameType gameType;
         public static string fileName;
         public static string heroName;
+        public static string replayDataFolderLocation;
 
         static GUISelection()
         {

@@ -28,7 +28,7 @@ namespace GamingSupervisor
             tickTimer = new System.Timers.Timer(1000.0 / 30.0);
             tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(tickCallback);
 
-            parsedReplay = new replay_version01();
+            parsedReplay = new replay_version01(GUISelection.replayDataFolderLocation);
             parsedData = parsedReplay.getReplayInfo();
             heroId = parsedReplay.getHeros()[GUISelection.heroName];
         }
@@ -114,8 +114,7 @@ namespace GamingSupervisor
 
         private void HandleHeroSelection()
         {
-
-            counter_pick_logic cp = new counter_pick_logic();
+            counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
             cp.readTeam();
             int[,] table = cp.selectTable();
             string heroname = GUISelection.heroName;

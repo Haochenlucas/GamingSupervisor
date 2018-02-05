@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -44,6 +45,8 @@ namespace GamingSupervisor
             {
                 GUISelection.fileName = dialog.FileName;
                 GUISelection.gameType = GUISelection.GameType.replay;
+                GUISelection.replayDataFolderLocation = Path.Combine(Environment.CurrentDirectory,
+                    @"..\..\Parser\" + Path.GetFileNameWithoutExtension(GUISelection.fileName) + @"\");
 
                 NavigationService navService = NavigationService.GetNavigationService(this);
                 ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection();

@@ -18,7 +18,7 @@ namespace GamingSupervisor
         {
             string firstLine = "";
             foreach (string line in
-                File.ReadLines(@"..\..\Parser\" + Path.GetFileNameWithoutExtension(GUISelection.fileName) + @"\state.txt"))
+                File.ReadLines(GUISelection.replayDataFolderLocation + "state.txt"))
             {
                 firstLine = line;
                 break;
