@@ -52,6 +52,7 @@ namespace GamingSupervisor
             int lastGameTime = announcer.GetCurrentGameTime();
             int currentGameTime = 0;
             int lastTickSynced = CurrentTick;
+            bool replayStarted = false;
             bool keepLooping = true;
             while (keepLooping)
             {
@@ -71,14 +72,19 @@ namespace GamingSupervisor
                 switch (announcer.GetCurrentGameState())
                 {
                     case "Undefined":
-                        //tickTimer.Stop();
-                        //keepLooping = false;
+                        if (replayStarted)
+                        {
+                            tickTimer.Stop();
+                            keepLooping = false;
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
+                        replayStarted = true;
                         HandleHeroSelection();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        replayStarted = true;
                         for (int i = 0; i < 5; i++)
                         {
                             overlay.ClearMessage(i);
@@ -86,6 +92,7 @@ namespace GamingSupervisor
                         HandleGamePlay();
                         break;
                     default:
+                        replayStarted = true;
                         //Console.WriteLine(announcer.GetCurrentGameState());
                         break;
                 }
@@ -173,7 +180,7 @@ namespace GamingSupervisor
         private void HandleGamePlay()
         {
             int health = 0;
-            if (CurrentTick - parsedReplay.getOffSet()< 0)
+            if (CurrentTick - parsedReplay.getOffSet() < 0)
             {
                 int cur_tic_fake = 0;
                 health = parsedData[cur_tic_fake, heroId, 0];
@@ -185,6 +192,7 @@ namespace GamingSupervisor
             {
                 //overlay.ShowMessage("Health is low, retreat");
                 overlay.AddRetreatMessage("Health: " + health, "");
+                Console.WriteLine("Tick " + CurrentTick + " Health " + health);
             }
             else
             {
