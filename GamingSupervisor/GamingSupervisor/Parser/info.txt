@@ -1,111 +1,121 @@
-playback_time: 3972.6335
-playback_ticks: 119179
-playback_frames: 59558
+playback_time: 4395.4336
+playback_ticks: 131863
+playback_frames: 65925
 game_info {
   dota {
-    match_id: 0
+    match_id: 3716503818
     game_mode: 2
-    game_winner: 3
+    game_winner: 2
+    player_info {
+      hero_name: "npc_dota_hero_storm_spirit"
+      player_name: "ANGEL ARENA PLAYER"
+      is_fake_client: false
+      steamid: 76561198065514372
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_dragon_knight"
+      player_name: "M C"
+      is_fake_client: false
+      steamid: 76561197994770931
+      game_team: 2
+    }
     player_info {
       hero_name: "npc_dota_hero_disruptor"
-      player_name: "Solo"
+      player_name: "ghn"
       is_fake_client: false
-      steamid: 76561198094822422
+      steamid: 76561198042528392
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_night_stalker"
+      player_name: "not Matumbaman"
+      is_fake_client: false
+      steamid: 76561198061622614
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_razor"
+      player_name: "absoluthalal"
+      is_fake_client: false
+      steamid: 76561198032578355
       game_team: 2
     }
     player_info {
       hero_name: "npc_dota_hero_lycan"
-      player_name: "RAMZES666"
+      player_name: "\345\217\270\346\263\242\346\211\223\351\207\216 \344\270\215\347\273\231\345\260\261\351\200\201"
       is_fake_client: false
-      steamid: 76561198093117099
-      game_team: 2
-    }
-    player_info {
-      hero_name: "npc_dota_hero_viper"
-      player_name: "No[o]ne"
-      is_fake_client: false
-      steamid: 76561198066839629
-      game_team: 2
-    }
-    player_info {
-      hero_name: "npc_dota_hero_necrolyte"
-      player_name: "9Pasha"
-      is_fake_client: false
-      steamid: 76561198052689179
-      game_team: 2
-    }
-    player_info {
-      hero_name: "npc_dota_hero_sand_king"
-      player_name: "lil"
-      is_fake_client: false
-      steamid: 76561198067074829
-      game_team: 2
-    }
-    player_info {
-      hero_name: "npc_dota_hero_ancient_apparition"
-      player_name: "ddc"
-      is_fake_client: false
-      steamid: 76561198074505099
+      steamid: 76561198085846975
       game_team: 3
     }
     player_info {
-      hero_name: "npc_dota_hero_earth_spirit"
-      player_name: "- ah fu -"
+      hero_name: "npc_dota_hero_nevermore"
+      player_name: "sqm"
       is_fake_client: false
-      steamid: 76561198079842570
+      steamid: 76561198067128891
       game_team: 3
     }
     player_info {
-      hero_name: "npc_dota_hero_pugna"
-      player_name: "Super"
+      hero_name: "npc_dota_hero_witch_doctor"
+      player_name: "vivi"
       is_fake_client: false
-      steamid: 76561198051147887
+      steamid: 76561198054561825
       game_team: 3
     }
     player_info {
-      hero_name: "npc_dota_hero_faceless_void"
-      player_name: "Monet"
+      hero_name: "npc_dota_hero_elder_titan"
+      player_name: "godog"
       is_fake_client: false
-      steamid: 76561198108481367
+      steamid: 76561198061960890
       game_team: 3
     }
     player_info {
-      hero_name: "npc_dota_hero_furion"
-      player_name: "\345\211\221\346\235\245\357\274\201"
+      hero_name: "npc_dota_hero_enchantress"
+      player_name: "\347\213\227\345\244\264\344\272\272"
       is_fake_client: false
-      steamid: 76561198071455445
+      steamid: 76561198055004575
       game_team: 3
     }
-    leagueid: 0
+    leagueid: 9579
     picks_bans {
       is_pick: false
       team: 3
-      hero_id: 91
+      hero_id: 80
     }
     picks_bans {
       is_pick: false
       team: 2
-      hero_id: 31
+      hero_id: 62
     }
     picks_bans {
       is_pick: false
       team: 3
-      hero_id: 84
+      hero_id: 66
     }
     picks_bans {
       is_pick: false
       team: 2
-      hero_id: 60
+      hero_id: 89
+    }
+    picks_bans {
+      is_pick: false
+      team: 3
+      hero_id: 90
+    }
+    picks_bans {
+      is_pick: false
+      team: 2
+      hero_id: 19
     }
     picks_bans {
       is_pick: true
       team: 3
-      hero_id: 107
+      hero_id: 103
     }
     picks_bans {
       is_pick: true
       team: 2
-      hero_id: 16
+      hero_id: 15
     }
     picks_bans {
       is_pick: true
@@ -115,72 +125,72 @@ game_info {
     picks_bans {
       is_pick: true
       team: 3
-      hero_id: 53
+      hero_id: 30
     }
     picks_bans {
       is_pick: false
       team: 2
-      hero_id: 50
+      hero_id: 39
     }
     picks_bans {
       is_pick: false
       team: 3
-      hero_id: 65
-    }
-    picks_bans {
-      is_pick: false
-      team: 2
-      hero_id: 43
-    }
-    picks_bans {
-      is_pick: false
-      team: 3
-      hero_id: 55
-    }
-    picks_bans {
-      is_pick: true
-      team: 2
-      hero_id: 36
-    }
-    picks_bans {
-      is_pick: true
-      team: 3
-      hero_id: 68
-    }
-    picks_bans {
-      is_pick: true
-      team: 2
-      hero_id: 77
-    }
-    picks_bans {
-      is_pick: true
-      team: 3
-      hero_id: 41
+      hero_id: 107
     }
     picks_bans {
       is_pick: false
       team: 2
-      hero_id: 94
+      hero_id: 12
     }
     picks_bans {
       is_pick: false
-      team: 3
-      hero_id: 61
-    }
-    picks_bans {
-      is_pick: true
       team: 3
       hero_id: 45
     }
     picks_bans {
       is_pick: true
       team: 2
-      hero_id: 47
+      hero_id: 60
     }
-    radiant_team_id: 1883502
-    dire_team_id: 3331948
-    radiant_team_tag: "VP"
-    dire_team_tag: "LFY"
-    end_time: 1502338231
+    picks_bans {
+      is_pick: true
+      team: 3
+      hero_id: 58
+    }
+    picks_bans {
+      is_pick: true
+      team: 2
+      hero_id: 49
+    }
+    picks_bans {
+      is_pick: true
+      team: 3
+      hero_id: 77
+    }
+    picks_bans {
+      is_pick: false
+      team: 2
+      hero_id: 76
+    }
+    picks_bans {
+      is_pick: false
+      team: 3
+      hero_id: 57
+    }
+    picks_bans {
+      is_pick: true
+      team: 3
+      hero_id: 11
+    }
+    picks_bans {
+      is_pick: true
+      team: 2
+      hero_id: 17
+    }
+    radiant_team_id: 2163
+    dire_team_id: 15
+    radiant_team_tag: "Liquid"
+    dire_team_tag: "LGD"
+    end_time: 1517738558
   }
 }

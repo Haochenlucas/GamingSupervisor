@@ -333,6 +333,10 @@ namespace replayParse
                         if (sum1 > lowest_fact)
                         {
                             five_picks.Remove(lowest_fact);
+                            if (five_picks.ContainsKey(sum1))
+                            {
+                                sum1 = sum1 + 0.001;
+                            }
                             five_picks.Add(sum1, count);
                             lowest_fact = five_picks.Min(i => i.Key);
                         }
