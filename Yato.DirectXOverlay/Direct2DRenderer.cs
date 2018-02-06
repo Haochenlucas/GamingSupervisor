@@ -13,6 +13,8 @@ using FontFactory = SharpDX.DirectWrite.Factory;
 using Factory = SharpDX.Direct2D1.Factory;
 using System.Windows.Forms;
 using System.Threading;
+using replayParse;
+using System.Text.RegularExpressions;
 
 namespace Yato.DirectXOverlay
 {
@@ -49,13 +51,18 @@ namespace Yato.DirectXOverlay
 
         // Type:
         // 0: hero selection
-        // 1: items selection
-        // 2: retreat
-        // 3: press on
-        // 4: last hit
-        // 5: jungle
-        // 6: safe farming
-        private Hint[] hints = new Hint[7];
+        // 1: hero selection
+        // 2: hero selection
+        // 3: hero selection
+        // 4: hero selection
+        // 5: items selection
+        // 6: retreat
+        // 7: press on
+        // 8: last hit
+        // 9: jungle
+        // 10: safe farming
+        // 11: hero info
+        private Hint[] hints = new Hint[12];
         
         #endregion
 
@@ -1227,6 +1234,7 @@ namespace Yato.DirectXOverlay
         // 8: last hit
         // 9: jungle
         // 10: safe farming
+        // 11: hero info
         public void SetupHintSlots()
         {
             for (int i = 0; i < hints.Length; i++)
@@ -1303,11 +1311,17 @@ namespace Yato.DirectXOverlay
                         hints[i] = new Hint(safe_farming, "", 0, Screen.PrimaryScreen.Bounds.Height - 100);
                         break;
 
+                    // 11: hero info
+                    case 11:
+                        string hero_info = "Hero info message slot";
+                        hints[i] = new Hint(hero_info, "", Screen.PrimaryScreen.Bounds.Width - 500, Screen.PrimaryScreen.Bounds.Height - 500);
+                        break;
+
                     default:
                         Console.WriteLine("Unknown message type detected. (other than 0-10)");
                         break;
                 }
-                hints[i].on = false;
+                //hints[i].on = false;
             }
         }
 
@@ -1318,7 +1332,7 @@ namespace Yato.DirectXOverlay
         // 4: hero selection
         public void HeroSelectionHints(string[] heros, string[] img)
         {
-            if (heros.Length != 5 || img.Length != 5)
+            if (heros.Length > 5 || img.Length > 5)
             {
                 AddMessage(0, heros[0], img[0]);
                 //throw new System.ArgumentException("Number of suggested Heroes exceed 5.");
@@ -1330,9 +1344,26 @@ namespace Yato.DirectXOverlay
             }
         }
 
+        public void SelectedHeroSuggestion(int HeroID)
+        {
+            //makeup_difficulty_talbe mdt = new makeup_difficulty_talbe();
+            //hero_difficulty dt = new hero_difficulty();
+            //string suggestion = dt.mainDiff(HeroID);
+            string suggestion = "123456781234567812345678";
+
+            // add a newline every 8 chars
+            suggestion = Regex.Replace(suggestion, ".{8}", "$0\n");
+
+            AddMessage(11, suggestion, "");
+
+            //Console.WriteLine(dt.getFinalRating(HeroID));
+
+            //Console.WriteLine(dt.getFinalLevel(HeroID)[0] + " " + dt.getFinalLevel(HeroID)[1]);
+        }
+
         public void AddMessage(int type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
         {
-            if (type >= 0 && type <= 10)
+            if (type >= 0 && type <= 11)
             {
                 hints[type].text = text;
                 if (imgName != null)
@@ -1399,6 +1430,11 @@ namespace Yato.DirectXOverlay
                             bmp.SharpDXBitmap.Dispose();
                         }
                     }
+                }
+                if (hints[0].on)
+                {
+                    DrawTextWithBackground("Hero Suggestion:", 200, 200, 100, 100, font, redBrush, blackBrush);
+                    device.FillRectangle(new RawRectangleF(200, 200, 500, 500), whiteSmoke);
                 }
 
                 EndScene();

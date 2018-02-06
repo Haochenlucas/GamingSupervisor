@@ -22,3 +22,5 @@ D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe.c
 D:\College\SeniorProject\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe
 D:\College\SeniorProject\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
+D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\replayParse.exe
+D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\replayParse.pdb
