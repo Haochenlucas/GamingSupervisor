@@ -8,7 +8,7 @@ namespace GamingSupervisor
     class ReplayAnalyzer
     {
         replay_version01 parsedReplay;
-        int[,,] parsedData;
+        double[,,] parsedData;
         int heroId;
 
         private ReplayStartAnnouncer announcer = null;
@@ -182,10 +182,10 @@ namespace GamingSupervisor
             if (CurrentTick - parsedReplay.getOffSet() < 0)
             {
                 int cur_tic_fake = 0;
-                health = parsedData[cur_tic_fake, heroId, 0];
+                health = (int)parsedData[cur_tic_fake, heroId, 0];
 
             }
-            health = parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
+            health = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
             //if (health < 470)
             if (true)
             {
