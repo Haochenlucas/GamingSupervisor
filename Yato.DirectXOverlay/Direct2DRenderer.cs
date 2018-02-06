@@ -1433,8 +1433,15 @@ namespace Yato.DirectXOverlay
                 }
                 if (hints[0].on)
                 {
-                    DrawTextWithBackground("Hero Suggestion:", 200, 200, 100, 100, font, redBrush, blackBrush);
-                    device.FillRectangle(new RawRectangleF(200, 200, 500, 500), whiteSmoke);
+                    Direct2DBrush color = CreateBrush(hints[0].color.Item1, hints[0].color.Item2, hints[0].color.Item3, hints[0].color.Item4);
+                    Direct2DBrush background = CreateBrush(hints[0].background.Item1, hints[0].background.Item2, hints[0].background.Item3, hints[0].background.Item4);
+                    Direct2DFont textFont = CreateFont(hints[0].font.Item1, hints[0].font.Item2);
+                    float left = hints[0].x - 254 / 4 - 100;
+                    float top = hints[0].y - 144 / 4 - 100;
+                    float right = left + 500;
+                    float bottem = top + 500;
+                    DrawTextWithBackground("Hero Suggestion:", hints[0].x - 254 / 4, hints[0].y - 144/4 - 50, 300, 100, textFont, color, background);
+                    device.FillRectangle(new RawRectangleF(left, top, right, bottem), whiteSmoke);
                 }
 
                 EndScene();
