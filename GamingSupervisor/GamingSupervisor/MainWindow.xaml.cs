@@ -8,9 +8,8 @@
         public MainWindow()
         {
             InitializeComponent();
-
-            GUISelection selection = new GUISelection();
-            DifficultySelection difficultySelection = new DifficultySelection(selection);
+            
+            DifficultySelection difficultySelection = new DifficultySelection();
             MainFrame.Navigate(difficultySelection);
         }
     }

@@ -8,18 +8,16 @@ namespace GamingSupervisor
 {
     class GamingSupervisorManager
     {
-        private GUISelection selection;
         
-        public GamingSupervisorManager(GUISelection selection)
-        {
-            this.selection = selection;            
+        public GamingSupervisorManager()
+        {           
         }
 
         public void Start()
         {
             StartDota();
 
-            ReplayAnalyzer analyzer = new ReplayAnalyzer(selection);
+            ReplayAnalyzer analyzer = new ReplayAnalyzer();
 
             while (Process.GetProcessesByName("dota2").Length == 0)
             {

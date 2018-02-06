@@ -18,10 +18,14 @@
             <ListBox ToolTipService.ToolTip="Select which hero to analyze"
                      ToolTipService.InitialShowDelay="2000"
                      Name="HeroNameListBox" SelectionMode="Single" FontSize="16" Foreground="{StaticResource Foreground}"
-                     SelectionChanged="ListBoxSelectionChanged">
+                     SelectionChanged="ListBoxSelectionChanged" Padding="0" BorderThickness="0">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Title}" />
+                        <DockPanel>
+                            <Image Margin="-8" Stretch="Fill" Height="32" Source="{Binding ImagePath}"/>
+                            <Separator Margin="0" Width="20" Background="Transparent"/>
+                            <TextBlock Text="{Binding Title}"/>
+                        </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
