@@ -62,7 +62,7 @@ namespace Yato.DirectXOverlay
         // 9: jungle
         // 10: safe farming
         // 11: hero info
-        private Hint[] hints = new Hint[12];
+        private Message[] messages = new Message[12];
         
         #endregion
 
@@ -1237,55 +1237,55 @@ namespace Yato.DirectXOverlay
         // 11: hero info
         public void SetupHintSlots()
         {
-            for (int i = 0; i < hints.Length; i++)
+            for (int i = 0; i < messages.Length; i++)
             {
                 switch (i)
                 {
                     // Hero selection slot1
                     case 0:
                         string Hero_selection1 = "Hero selection slot1";
-                        hints[i] = new Hint(Hero_selection1, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
+                        messages[i] = new Message(Hero_selection1, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
 
                     // Hero selection slot2
                     case 1:
                         string Hero_selection2 = "Hero selection slot2";
-                        hints[i] = new Hint(Hero_selection2, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
+                        messages[i] = new Message(Hero_selection2, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
 
                     // Hero selection slot3
                     case 2:
                         string Hero_selection3 = "Hero selection slot3";
-                        hints[i] = new Hint(Hero_selection3, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
+                        messages[i] = new Message(Hero_selection3, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
 
                     // Hero selection slot4
                     case 3:
                         string Hero_selection4 = "Hero selection slot4";
-                        hints[i] = new Hint(Hero_selection4, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
+                        messages[i] = new Message(Hero_selection4, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
                         
                     // Hero selection slot5
                     case 4:
                         string Hero_selection5 = "Hero selection slot5";
-                        hints[i] = new Hint(Hero_selection5, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
+                        messages[i] = new Message(Hero_selection5, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 + 30, Screen.PrimaryScreen.Bounds.Height / 5 + (i + 1) * 50 + 100);
                         break;
 
                     // 5: items selection
                     case 5:
                         string item = "Items selection slot";
-                        hints[i] = new Hint(item, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (item.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5);
+                        messages[i] = new Message(item, "", Screen.PrimaryScreen.Bounds.Width / 6 * 5 - (item.Length / 2), Screen.PrimaryScreen.Bounds.Height / 5);
                         break;
 
                     // 6: retreat
                     // 7: press on
                     case 6:
                         string retreat = "Laning message slot";
-                        hints[i] = new Hint(retreat, "", Screen.PrimaryScreen.Bounds.Width / 2 - (retreat.Length / 2), Screen.PrimaryScreen.Bounds.Height / 4 * 3);
+                        messages[i] = new Message(retreat, "", Screen.PrimaryScreen.Bounds.Width / 2 - (retreat.Length / 2), Screen.PrimaryScreen.Bounds.Height / 4 * 3);
                         break;
                     case 7:
                         string press_on = "Laning message slot";
-                        hints[i] = new Hint(press_on, "", Screen.PrimaryScreen.Bounds.Width / 2 - (press_on.Length / 2), Screen.PrimaryScreen.Bounds.Height / 4 * 3);
+                        messages[i] = new Message(press_on, "", Screen.PrimaryScreen.Bounds.Width / 2 - (press_on.Length / 2), Screen.PrimaryScreen.Bounds.Height / 4 * 3);
                         break;
 
                      // Message position dynamic
@@ -1293,13 +1293,13 @@ namespace Yato.DirectXOverlay
                     // 8: last hit
                     case 8:
                         string last_hit = "Last hit message slot";
-                        hints[i] = new Hint(last_hit, "", i * 200, 0);
+                        messages[i] = new Message(last_hit, "", i * 200, 0);
                         break;
 
                     // 9: jungle
                     case 9:
                         string jungle = "Jungle message slot";
-                        hints[i] = new Hint(jungle, "", i * 200, 0);
+                        messages[i] = new Message(jungle, "", i * 200, 0);
                         break;
 
 
@@ -1308,20 +1308,20 @@ namespace Yato.DirectXOverlay
                     // 10: safe farming
                     case 10:
                         string safe_farming = "Safe farming message slot";
-                        hints[i] = new Hint(safe_farming, "", 0, Screen.PrimaryScreen.Bounds.Height - 100);
+                        messages[i] = new Message(safe_farming, "", 0, Screen.PrimaryScreen.Bounds.Height - 100);
                         break;
 
                     // 11: hero info
                     case 11:
                         string hero_info = "Hero info message slot";
-                        hints[i] = new Hint(hero_info, "", Screen.PrimaryScreen.Bounds.Width - 500, Screen.PrimaryScreen.Bounds.Height - 500);
+                        messages[i] = new Message(hero_info, "", Screen.PrimaryScreen.Bounds.Width - 500, Screen.PrimaryScreen.Bounds.Height - 500);
                         break;
 
                     default:
                         Console.WriteLine("Unknown message type detected. (other than 0-10)");
                         break;
                 }
-                //hints[i].on = false;
+                //messages[i].on = false;
             }
         }
 
@@ -1365,27 +1365,27 @@ namespace Yato.DirectXOverlay
         {
             if (type >= 0 && type <= 11)
             {
-                hints[type].text = text;
+                messages[type].text = text;
                 if (imgName != null)
                 {
-                    hints[type].imgName = imgName;
+                    messages[type].imgName = imgName;
                 }
 
                 if (background != null)
                 {
-                    hints[type].background = background;
+                    messages[type].background = background;
                 }
 
                 if (color != null)
                 {
-                    hints[type].color = color;
+                    messages[type].color = color;
                 }
 
                 if (font != null)
                 {
-                    hints[type].font = font;
+                    messages[type].font = font;
                 }
-                hints[type].on = true;
+                messages[type].on = true;
             }
             else
             {
@@ -1395,7 +1395,7 @@ namespace Yato.DirectXOverlay
 
         public void DeleteMessage(int type)
         {
-            hints[type].clear();
+            messages[type].clear();
         }
 
         public void Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
@@ -1412,36 +1412,38 @@ namespace Yato.DirectXOverlay
                 //DrawCircle(overlay.Width / 2, overlay.Height / 2, overlay.Height / 8, 2, redBrush);
 
                 // Loop through all the messages
-                for (int i = 0; i < hints.Length; i++)
+                for (int i = 0; i < messages.Length; i++)
                 {
-                    if (hints[i].on)
+                    if (messages[i].on)
                     {
-                        Direct2DBrush color = CreateBrush(hints[i].color.Item1, hints[i].color.Item2, hints[i].color.Item3, hints[i].color.Item4);
-                        Direct2DBrush background = CreateBrush(hints[i].background.Item1, hints[i].background.Item2, hints[i].background.Item3, hints[i].background.Item4);
-                        Direct2DFont textFont = CreateFont(hints[i].font.Item1, hints[i].font.Item2);
-                        DrawTextWithBackground(hints[i].text, hints[i].x, hints[i].y, 100, 100, textFont, color, background);
+                        Direct2DBrush color = CreateBrush(messages[i].color.Item1, messages[i].color.Item2, messages[i].color.Item3, messages[i].color.Item4);
+                        Direct2DBrush background = CreateBrush(messages[i].background.Item1, messages[i].background.Item2, messages[i].background.Item3, messages[i].background.Item4);
+                        Direct2DFont textFont = CreateFont(messages[i].font.Item1, messages[i].font.Item2);
 
-                        if (hints[i].imgName != "")
+                        //if (messages[i].on && i == 1)
+                        //{
+                        //    float left = messages[0].x - 254 / 4 - 100;
+                        //    float top = messages[0].y - 144 / 4 - 100;
+                        //    float right = left + 500;
+                        //    float bottem = top + 500;
+                        //    DrawTextWithBackground("Hero Suggestion:", messages[0].x - 254 / 4, messages[0].y - 144 / 4 - 50, 300, 100, textFont, color, background);
+                        //    device.FillRectangle(new RawRectangleF(left, top, right, bottem), whiteSmoke);
+                        //}
+
+                        DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, 100, 100, textFont, color, background);
+
+                        if (messages[i].imgName != "")
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + hints[i].imgName);
-                            //Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + hints[i].imgName + ".png");
-                            DrawBitmap(bmp, 1, hints[i].x - 100, hints[i].y, 254/4, 144/4);
-                            //DrawBitmap(bmp, 1, hints[i].x - 350, hints[i].y, 600 / 2, 458 / 2);
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName);
+                            Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
+                            //Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
+                            DrawBitmap(bmp, 1, messages[i].x - 100, messages[i].y, 254 / 4, 144 / 4);
+                            DrawBitmap(cross, 1, messages[i].x - 100, messages[i].y, 254 / 4, 144 / 4);
+                            //DrawBitmap(bmp, 1, messages[i].x - 350, messages[i].y, 600 / 2, 458 / 2);
+                            cross.SharpDXBitmap.Dispose();
                             bmp.SharpDXBitmap.Dispose();
                         }
                     }
-                }
-                if (hints[0].on)
-                {
-                    Direct2DBrush color = CreateBrush(hints[0].color.Item1, hints[0].color.Item2, hints[0].color.Item3, hints[0].color.Item4);
-                    Direct2DBrush background = CreateBrush(hints[0].background.Item1, hints[0].background.Item2, hints[0].background.Item3, hints[0].background.Item4);
-                    Direct2DFont textFont = CreateFont(hints[0].font.Item1, hints[0].font.Item2);
-                    float left = hints[0].x - 254 / 4 - 100;
-                    float top = hints[0].y - 144 / 4 - 100;
-                    float right = left + 500;
-                    float bottem = top + 500;
-                    DrawTextWithBackground("Hero Suggestion:", hints[0].x - 254 / 4, hints[0].y - 144/4 - 50, 300, 100, textFont, color, background);
-                    device.FillRectangle(new RawRectangleF(left, top, right, bottem), whiteSmoke);
                 }
 
                 EndScene();
@@ -1466,9 +1468,27 @@ namespace Yato.DirectXOverlay
         }
     }
 
+    //public class HeroSuggestion
+    //{
+    //    Message[] heroes = new Message[5];
+    //    Message title;
+    //    bool on;
+
+    //    public HeroSuggestion(Message[] _heroes)
+    //    {
+    //        heroes = _heroes;
+    //        title = new Message("Hero Suggestion", "",heroes[0].x, heroes[0].y);
+    //        on = true;
+    //    }
+
+    //    public void TurnOff()
+    //    {
+    //        on = false;
+    //    }
+    //}
 
     #region Hint struct
-    public struct Hint
+    public struct Message
     {
         public bool on;
 
@@ -1484,7 +1504,7 @@ namespace Yato.DirectXOverlay
         public string text;
         public string imgName;
 
-        public Hint(string _text, string _imgName, float _x, float _y)
+        public Message(string _text, string _imgName, float _x, float _y)
         {
             text = _text;
             imgName = _imgName;

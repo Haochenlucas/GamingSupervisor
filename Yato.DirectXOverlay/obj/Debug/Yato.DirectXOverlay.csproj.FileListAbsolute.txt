@@ -1,5 +1,3 @@
-C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll.config
-C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.pdb
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.dll
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.dll
@@ -8,7 +6,6 @@ C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\S
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csproj.CoreCompileInputs.cache
-C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.dll
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.pdb
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.dll
@@ -24,3 +21,9 @@ D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe
 D:\College\SeniorProject\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\replayParse.exe
 D:\College\SeniorProject\Yato.DirectXOverlay\bin\Debug\replayParse.pdb
+C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe.config
+C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe
+C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\replayParse.exe
+C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\replayParse.pdb
+C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
+C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
