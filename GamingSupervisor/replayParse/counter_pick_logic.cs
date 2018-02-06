@@ -10,14 +10,18 @@ namespace replayParse
 {
     public class counter_pick_logic
     {
+        private string dataFolderLocation;
+
         public static double[,] matrix_info = new double[116, 116];
         // the hero_ID_Client_Team is all pick and ban hero, 
         // the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
         // team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
         public static int[,] hero_ID_Client_Team = new int[30,4];
 
-        public counter_pick_logic()
+        public counter_pick_logic(string dataFolderLocation)
         {
+            this.dataFolderLocation = dataFolderLocation;
+
             counterpick_info cp_info = new counterpick_info();
             matrix_info = cp_info.getCounterTable();
         }
@@ -30,8 +34,8 @@ namespace replayParse
             int count = 0;
             //count the hero team
             int count1 = 0;
-            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\GamingSupervisor\Parser\info.txt");
-            //s = @"C: \Users\dominate\Desktop\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\replay.txt";
+            string s = dataFolderLocation + "info.txt";
+
             string[] lines = System.IO.File.ReadAllLines(s);
             heroIDClient ID_client = new heroIDClient();
             Dictionary<string, int> clientID_Dic = ID_client.getIDHero();
@@ -129,8 +133,8 @@ namespace replayParse
                 }
             }
 
-            s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\GamingSupervisor\Parser\selection.txt");
-            //s = @"C: \Users\dominate\Desktop\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\replay.txt";
+            s = dataFolderLocation + "selection.txt";
+
             lines = System.IO.File.ReadAllLines(s);
             foreach (string line in lines)
             {

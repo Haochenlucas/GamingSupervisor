@@ -18,11 +18,11 @@ namespace replayParse
         public static Dictionary<string, int> heros = new Dictionary<string, int>();
         public int[] sideOfHero = new int[10];  // the index is the heroID: the sort of ID show the sequence of picking , the number in string shows the side of heros. 0: for one side, 1 : for another side.
         public int offsetTic = 0;    // offset is the first tic in the replay file.
-        public replay_version01()
+
+        public replay_version01(string dataFolderLocation)
         {
-            //Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\")
-            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\hero.txt");
-            //s = @"C: \Users\dominate\Desktop\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\replay.txt";
+            string s = dataFolderLocation + "hero.txt";
+
             string[] lines = System.IO.File.ReadAllLines(s);
             int tic = 0;
             int value = 0;

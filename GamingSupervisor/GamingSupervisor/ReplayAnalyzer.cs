@@ -7,8 +7,6 @@ namespace GamingSupervisor
 {
     class ReplayAnalyzer
     {
-        private GUISelection selection;
-
         replay_version01 parsedReplay;
         double[,,] parsedData;
         int heroId;
@@ -25,16 +23,14 @@ namespace GamingSupervisor
             set { lock (tickLock) { currentTick = value; } }
         }
 
-        public ReplayAnalyzer(GUISelection selection)
+        public ReplayAnalyzer()
         {
-            this.selection = selection;
-
             tickTimer = new System.Timers.Timer(1000.0 / 30.0);
             tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(tickCallback);
 
-            parsedReplay = new replay_version01();
+            parsedReplay = new replay_version01(GUISelection.replayDataFolderLocation);
             parsedData = parsedReplay.getReplayInfo();
-            heroId = parsedReplay.getHeros()[selection.heroName];
+            heroId = parsedReplay.getHeros()[GUISelection.heroName];
         }
 
         public void Start()
@@ -56,6 +52,7 @@ namespace GamingSupervisor
             int lastGameTime = announcer.GetCurrentGameTime();
             int currentGameTime = 0;
             int lastTickSynced = CurrentTick;
+            bool replayStarted = false;
             bool keepLooping = true;
             while (keepLooping)
             {
@@ -75,14 +72,19 @@ namespace GamingSupervisor
                 switch (announcer.GetCurrentGameState())
                 {
                     case "Undefined":
-                        //tickTimer.Stop();
-                        //keepLooping = false;
+                        if (replayStarted)
+                        {
+                            tickTimer.Stop();
+                            keepLooping = false;
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
+                        replayStarted = true;
                         HandleHeroSelection();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        replayStarted = true;
                         for (int i = 0; i < 5; i++)
                         {
                             overlay.ClearMessage(i);
@@ -90,6 +92,7 @@ namespace GamingSupervisor
                         HandleGamePlay();
                         break;
                     default:
+                        replayStarted = true;
                         //Console.WriteLine(announcer.GetCurrentGameState());
                         break;
                 }
@@ -111,11 +114,10 @@ namespace GamingSupervisor
 
         private void HandleHeroSelection()
         {
-
-            counter_pick_logic cp = new counter_pick_logic();
+            counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
             cp.readTeam();
             int[,] table = cp.selectTable();
-            string heroname = selection.heroName;
+            string heroname = GUISelection.heroName;
             heroID h_ID = new heroID();
             Dictionary<string, int> hero_table = h_ID.getIDHero();
             Dictionary<int, string> ID_table = h_ID.getHeroID();
@@ -177,7 +179,7 @@ namespace GamingSupervisor
         private void HandleGamePlay()
         {
             int health = 0;
-            if (CurrentTick - parsedReplay.getOffSet()< 0)
+            if (CurrentTick - parsedReplay.getOffSet() < 0)
             {
                 int cur_tic_fake = 0;
                 health = (int)parsedData[cur_tic_fake, heroId, 0];
@@ -189,6 +191,7 @@ namespace GamingSupervisor
             {
                 //overlay.ShowMessage("Health is low, retreat");
                 overlay.AddRetreatMessage("Health: " + health, "");
+                Console.WriteLine("Tick " + CurrentTick + " Health " + health);
             }
             else
             {

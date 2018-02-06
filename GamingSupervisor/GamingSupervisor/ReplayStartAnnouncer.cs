@@ -17,7 +17,8 @@ namespace GamingSupervisor
         public int GetStartTick()
         {
             string firstLine = "";
-            foreach (string line in File.ReadLines(@"../../Parser/state.txt"))
+            foreach (string line in
+                File.ReadLines(GUISelection.replayDataFolderLocation + "state.txt"))
             {
                 firstLine = line;
                 break;

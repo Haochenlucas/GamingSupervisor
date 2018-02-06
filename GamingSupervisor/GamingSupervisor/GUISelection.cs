@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GamingSupervisor
 {
-    public class GUISelection
+    public static class GUISelection
     {
         public enum Customize
         {
@@ -21,12 +21,13 @@ namespace GamingSupervisor
             live
         }
         
-        public Dictionary<Customize, bool> customize;
-        public GameType gameType;
-        public string fileName;
-        public string heroName;
+        public static Dictionary<Customize, bool> customize;
+        public static GameType gameType;
+        public static string fileName;
+        public static string heroName;
+        public static string replayDataFolderLocation;
 
-        public GUISelection()
+        static GUISelection()
         {
             customize = new Dictionary<Customize, bool>();
             foreach (Customize c in Enum.GetValues(typeof(Customize)))

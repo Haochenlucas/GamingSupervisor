@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
 namespace GamingSupervisor
 {
-    public class HeroNameItem
+    public class HeroListItem
     {
+        public string ImagePath { get; set; }
         public string Title { get; set; }
     }
 
@@ -16,18 +20,12 @@ namespace GamingSupervisor
     /// </summary>
     public partial class ReplayHeroSelection : Page
     {
-        private GUISelection selection;
         private BackgroundWorker worker;
-        private List<HeroNameItem> heros;
+        private List<HeroListItem> heros;
 
         public ReplayHeroSelection()
         {
             InitializeComponent();
-        }
-
-        public ReplayHeroSelection(GUISelection selection) : this()
-        {
-            this.selection = selection;
 
             ConfirmButton.IsEnabled = false;
 
@@ -46,13 +44,18 @@ namespace GamingSupervisor
 
         private void StartParsing(object sender, DoWorkEventArgs e)
         {
-            ParserHandler parser = new ParserHandler(selection.fileName);
+            ParserHandler parser = new ParserHandler();
             List<string> heroNameList = parser.ParseReplayFile();
 
-            heros = new List<HeroNameItem>();
+            replayParse.heroID heroId = new replayParse.heroID();
+            heros = new List<HeroListItem>();
             foreach (string heroName in heroNameList)
             {
-                heros.Add(new HeroNameItem() { Title = heroName });
+                heros.Add(new HeroListItem()
+                {
+                    ImagePath = Path.Combine(Environment.CurrentDirectory, @"..\..\hero_icon_images\" + replayParse.heroID.ID_heroDictionary[heroName].ToString() + ".png"),
+                    Title = heroName
+                });
             }            
         }
 
@@ -71,7 +74,7 @@ namespace GamingSupervisor
             if (HeroNameListBox.SelectedItem != null)
             {
                 ConfirmButton.IsEnabled = true;
-                selection.heroName = (HeroNameListBox.SelectedItem as HeroNameItem).Title;
+                GUISelection.heroName = (HeroNameListBox.SelectedItem as HeroListItem).Title;
             }
             else
             {
@@ -82,14 +85,14 @@ namespace GamingSupervisor
         private void ConfirmSelection(object sender, RoutedEventArgs e)
         {
             NavigationService navService = NavigationService.GetNavigationService(this);
-            ConfirmSelection confirmSelection = new ConfirmSelection(selection);
+            ConfirmSelection confirmSelection = new ConfirmSelection();
             navService.Navigate(confirmSelection);
         }
 
         private void GoBack(object sender, RoutedEventArgs e)
         {
             NavigationService navService = NavigationService.GetNavigationService(this);
-            GameTypeSelection gameTypeSelection = new GameTypeSelection(selection);
+            GameTypeSelection gameTypeSelection = new GameTypeSelection();
             navService.Navigate(gameTypeSelection);
         }
     }

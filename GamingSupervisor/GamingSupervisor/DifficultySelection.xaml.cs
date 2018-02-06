@@ -9,50 +9,43 @@ namespace GamingSupervisor
     /// </summary>
     public partial class DifficultySelection : Page
     {
-        private GUISelection selection;
-
         public DifficultySelection()
         {
             InitializeComponent();
         }
 
-        public DifficultySelection(GUISelection selection) : this()
-        {
-            this.selection = selection;
-        }
-
         private void SelectNovice(object sender, RoutedEventArgs e)
         {
-            selection.customize[GUISelection.Customize.lastHit] = true;
-            selection.customize[GUISelection.Customize.heroSelection] = true;
-            selection.customize[GUISelection.Customize.itemHelper] = true;
-            selection.customize[GUISelection.Customize.laning] = true;
-            selection.customize[GUISelection.Customize.jungling] = true;
-            selection.customize[GUISelection.Customize.safeFarming] = true;
+            GUISelection.customize[GUISelection.Customize.lastHit] = true;
+            GUISelection.customize[GUISelection.Customize.heroSelection] = true;
+            GUISelection.customize[GUISelection.Customize.itemHelper] = true;
+            GUISelection.customize[GUISelection.Customize.laning] = true;
+            GUISelection.customize[GUISelection.Customize.jungling] = true;
+            GUISelection.customize[GUISelection.Customize.safeFarming] = true;
 
             gotoCustomizeSelection();
         }
 
         private void SelectLearning(object sender, RoutedEventArgs e)
         {
-            selection.customize[GUISelection.Customize.lastHit] = true;
-            selection.customize[GUISelection.Customize.heroSelection] = false;
-            selection.customize[GUISelection.Customize.itemHelper] = false;
-            selection.customize[GUISelection.Customize.laning] = true;
-            selection.customize[GUISelection.Customize.jungling] = true;
-            selection.customize[GUISelection.Customize.safeFarming] = true;
+            GUISelection.customize[GUISelection.Customize.lastHit] = true;
+            GUISelection.customize[GUISelection.Customize.heroSelection] = false;
+            GUISelection.customize[GUISelection.Customize.itemHelper] = false;
+            GUISelection.customize[GUISelection.Customize.laning] = true;
+            GUISelection.customize[GUISelection.Customize.jungling] = true;
+            GUISelection.customize[GUISelection.Customize.safeFarming] = true;
 
             gotoCustomizeSelection();
         }
 
         private void SelectAlmostGotIt(object sender, RoutedEventArgs e)
         {
-            selection.customize[GUISelection.Customize.lastHit] = false;
-            selection.customize[GUISelection.Customize.heroSelection] = false;
-            selection.customize[GUISelection.Customize.itemHelper] = false;
-            selection.customize[GUISelection.Customize.laning] = false;
-            selection.customize[GUISelection.Customize.jungling] = true;
-            selection.customize[GUISelection.Customize.safeFarming] = true;
+            GUISelection.customize[GUISelection.Customize.lastHit] = false;
+            GUISelection.customize[GUISelection.Customize.heroSelection] = false;
+            GUISelection.customize[GUISelection.Customize.itemHelper] = false;
+            GUISelection.customize[GUISelection.Customize.laning] = false;
+            GUISelection.customize[GUISelection.Customize.jungling] = true;
+            GUISelection.customize[GUISelection.Customize.safeFarming] = true;
 
             gotoCustomizeSelection();
         }
@@ -60,7 +53,7 @@ namespace GamingSupervisor
         private void gotoCustomizeSelection()
         {
             NavigationService navService = NavigationService.GetNavigationService(this);
-            CustomizeSelection customizeSelection = new CustomizeSelection(selection);
+            CustomizeSelection customizeSelection = new CustomizeSelection();
             navService.Navigate(customizeSelection);
         }
     }
