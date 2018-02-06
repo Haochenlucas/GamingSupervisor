@@ -10,3 +10,15 @@ C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\S
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csproj.CoreCompileInputs.cache
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.dll
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll.config
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.pdb
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.dll
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.dll
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.dll
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.xml
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csproj.CoreCompileInputs.cache
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.dll
+C:\Users\yuchengy\Source\Repos\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb

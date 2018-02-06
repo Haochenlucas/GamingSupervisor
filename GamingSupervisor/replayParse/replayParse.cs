@@ -110,8 +110,9 @@ namespace replayParse
                 (?<=[A-Z])(?=[A-Z][a-z]) |
                  (?<=[^A-Z])(?=[A-Z]) |
                  (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
-                string name = r.Replace(substrings[1], " ");
+                string name = r.Replace(substrings[1], "");
                 name = string.Join(" ", name.Split(new string[] { " _ " }, StringSplitOptions.None));
+                name = name.ToLower();
                 if (!heros.Keys.Contains(name))
                 {
                     heros.Add(name, value);
@@ -148,7 +149,7 @@ namespace replayParse
             }
         }
 
-        public Dictionary<string, int> getHeros()
+        public Dictionary<string, int> getHerosLowercase()
         {
             return heros;
         }
