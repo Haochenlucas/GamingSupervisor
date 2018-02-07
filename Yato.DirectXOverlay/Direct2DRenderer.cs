@@ -12,8 +12,6 @@ using SharpDX.Mathematics.Interop;
 using FontFactory = SharpDX.DirectWrite.Factory;
 using Factory = SharpDX.Direct2D1.Factory;
 using System.Windows.Forms;
-using System.Threading;
-using replayParse;
 using System.Text.RegularExpressions;
 
 namespace Yato.DirectXOverlay
@@ -1434,7 +1432,7 @@ namespace Yato.DirectXOverlay
 
                         if (messages[i].imgName != "")
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName);
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
                             Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
                             //Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
                             DrawBitmap(bmp, 1, messages[i].x - 100, messages[i].y, 254 / 4, 144 / 4);
