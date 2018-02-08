@@ -47,7 +47,7 @@ namespace replayParse
                             counter_info_table[i, index] = d_temp;
                         if (index == 0)
                         {
-                            Console.WriteLine(name);
+                            //Console.WriteLine(name);
                         }
                         counter++;
                     }
