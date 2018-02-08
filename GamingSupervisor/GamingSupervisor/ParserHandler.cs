@@ -1,4 +1,5 @@
-﻿using System;
+﻿using replayParse;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -41,7 +42,9 @@ namespace GamingSupervisor
             }
 
             List<string> heroNameList = new List<string>();
-
+            heroID h_ID = new heroID();
+            Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
+            Dictionary<string, int> hero_table = h_ID.getIDfromLowercaseHeroname(); // key is hero_name, value is ID;
             string[] infoFile = File.ReadAllLines(GUISelection.replayDataFolderLocation + "info.txt");
             foreach (string line in infoFile)
             {
@@ -55,9 +58,10 @@ namespace GamingSupervisor
                     {
                         upperCase[i] = temp[i].First().ToString().ToUpper() + temp[i].Substring(1);
                     }
-                    parsedHeroName = string.Join(" ", upperCase);
+                    parsedHeroName = string.Join("", upperCase);
+                    int key = hero_table[parsedHeroName.ToLower()];
 
-                    heroNameList.Add(parsedHeroName);
+                    heroNameList.Add(ID_table[key]);
                 }
             }
 
