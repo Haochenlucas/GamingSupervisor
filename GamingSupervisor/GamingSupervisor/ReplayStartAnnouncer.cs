@@ -46,7 +46,10 @@ namespace GamingSupervisor
                 gameStateIntegration.StartListener();
                 listenerStarted = true;
             }
-            SpinWait.SpinUntil(() => gameStateIntegration.GameState != "Undefined");
+            SpinWait.SpinUntil(() =>
+                gameStateIntegration.GameState != "Undefined" && 
+                gameStateIntegration.GameState != null &&
+                gameStateIntegration.GameState != "");
             Console.WriteLine("Replay started!");
         }
 

@@ -10,6 +10,7 @@ namespace GamingSupervisor
         replay_version01 parsedReplay;
         double[,,] parsedData;
         int heroId;
+        ReplayTick replayTick;
 
         private ReplayStartAnnouncer announcer = null;
         private Overlay overlay = null;
@@ -31,6 +32,8 @@ namespace GamingSupervisor
             parsedReplay = new replay_version01(GUISelection.replayDataFolderLocation);
             parsedData = parsedReplay.getReplayInfo();
             heroId = parsedReplay.getHerosLowercase()[GUISelection.heroName.ToLower()];
+
+            replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
         }
 
         public void Start()
@@ -51,26 +54,17 @@ namespace GamingSupervisor
 
             int lastGameTime = announcer.GetCurrentGameTime();
             int currentGameTime = 0;
-            int lastTickSynced = CurrentTick;
             bool replayStarted = false;
             bool keepLooping = true;
+
+            CurrentTick = replayTick[announcer.GetCurrentGameTime()];
+
             while (keepLooping)
             {
-                if (CurrentTick < 0)
-                {
-                    tickTimer.Stop();
-                    break;
-                }
-                currentGameTime = announcer.GetCurrentGameTime();
-                if (currentGameTime != lastGameTime)
-                {
-                    int gameTimeChange = currentGameTime - lastGameTime;
-                    lastGameTime = currentGameTime;
-                    lastTickSynced += 30 * gameTimeChange;
-                    CurrentTick = lastTickSynced;
-                }
                 switch (announcer.GetCurrentGameState())
                 {
+                    case null:
+                    case "":
                     case "Undefined":
                         if (replayStarted)
                         {
@@ -93,13 +87,19 @@ namespace GamingSupervisor
                         break;
                     default:
                         replayStarted = true;
-                        //Console.WriteLine(announcer.GetCurrentGameState());
                         break;
                 }
 
                 ShowHints();
 
                 Thread.Sleep(10);
+
+                currentGameTime = announcer.GetCurrentGameTime();
+                if (currentGameTime != lastGameTime)
+                {
+                    lastGameTime = currentGameTime;
+                    CurrentTick = replayTick[announcer.GetCurrentGameTime()];
+                }
             }
 
             overlay.Clear();
@@ -190,8 +190,8 @@ namespace GamingSupervisor
             if (true)
             {
                 //overlay.ShowMessage("Health is low, retreat");
-                overlay.AddRetreatMessage("Health: " + health, "");
-                Console.WriteLine("Tick " + CurrentTick + " Health " + health);
+                overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet(), "");
+                //Console.WriteLine("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet());
             }
             else
             {

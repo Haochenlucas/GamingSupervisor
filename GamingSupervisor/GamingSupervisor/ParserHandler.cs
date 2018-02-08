@@ -26,10 +26,11 @@ namespace GamingSupervisor
                 p.StartInfo.FileName = "javaw";
                 p.StartInfo.Arguments =
                     "-jar "
-                    + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
+                    + "\"" + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar").Replace(@"\", @"\\") + "\""
+                    + " "
                     + "\"" + GUISelection.fileName.Replace(@"\", @"\\") + "\""
                     + " "
-                    + GUISelection.replayDataFolderLocation; // Data dump location
+                    + "\"" + GUISelection.replayDataFolderLocation.Replace(@"\", @"\\") + "\""; // Data dump location
                 p.Start();
 
                 while (!p.HasExited)

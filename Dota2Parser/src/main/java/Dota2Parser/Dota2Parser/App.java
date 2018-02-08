@@ -27,11 +27,13 @@ public class App
     private PrintWriter cameraWriter;
     private PrintWriter stateWriter;
     private PrintWriter heroIdWriter;
+    private PrintWriter timeWriter;
     
     private Hero hero;
     private Camera camera;
     private Selection selection;
     private GameState state;
+    private GameTime time;
     
     private HashMap<Object, String> heroIds;
     
@@ -71,33 +73,31 @@ public class App
     private void initializeSelection(Entity e)
     {
         if (selection == null)
-        {
             selection = new Selection(e);
-        }
     }
     
     private void initializeHero(Entity e)
     {
         if (hero == null)
-        {
-            hero = new Hero(e);            
-        }
+            hero = new Hero(e); 
     }
     
     private void initializeCamera(Entity e)
     {
         if (camera == null)
-        {
             camera = new Camera(e);
-        }
     }
     
     private void initializeState(Entity e)
     {
         if (state == null)
-        {
             state = new GameState(e);
-        }
+    }
+    
+    private void initializeTime(Entity e)
+    {
+        if (time == null)
+            time = new GameTime(e);
     }
     
     @OnEntityCreated
@@ -123,6 +123,7 @@ public class App
         {
             handleHeroSelection(ctx, e, updatedPaths, updateCount);
             handleGameState(ctx, e, updatedPaths, updateCount);
+            handleGameTime(ctx, e, updatedPaths, updateCount);
         }
         else if (isPlayer(e))
         {
@@ -174,6 +175,28 @@ public class App
             stateWriter.format("%d [STATE] %s\n", ctx.getTick(),
                 e.getPropertyForFieldPath(state.state));
             stateWriter.flush();
+        }
+    }
+    
+    private void handleGameTime(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
+    {
+    	initializeTime(e);
+        
+        boolean updateTime = false;
+        for (int i = 0; i < updateCount; i++)
+        {
+            if (time.isTime(updatedPaths[i]))
+            {
+                updateTime = true;
+                break;
+            }
+        }
+        
+        if (updateTime)
+        {
+            timeWriter.format("%d [TIME] %s\n", ctx.getTick(),
+                e.getPropertyForFieldPath(time.time));
+            timeWriter.flush();
         }
     }
     
@@ -308,12 +331,14 @@ public class App
         File cameraFile = new File(args[1] + "/camera.txt");
         File stateFile = new File(args[1] + "/state.txt");
         File heroIdFile = new File(args[1] + "/heroId.txt");
+        File timeFile = new File(args[1] + "/time.txt");
         
         heroWriter = new PrintWriter(heroFile);
         heroSelectionWriter = new PrintWriter(selectionFile);
         cameraWriter = new PrintWriter(cameraFile);
         stateWriter = new PrintWriter(stateFile);
         heroIdWriter = new PrintWriter(heroIdFile);
+        timeWriter = new PrintWriter(timeFile);
         
         heroIds = new HashMap<Object, String>();
         
@@ -331,6 +356,7 @@ public class App
         cameraWriter.close();
         stateWriter.close();
         heroIdWriter.close();
+        timeWriter.close();
     }
 
     public static void main(String[] args) throws Exception
