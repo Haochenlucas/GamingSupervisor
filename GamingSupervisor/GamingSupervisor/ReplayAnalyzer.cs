@@ -31,7 +31,7 @@ namespace GamingSupervisor
 
             parsedReplay = new replay_version01(GUISelection.replayDataFolderLocation);
             parsedData = parsedReplay.getReplayInfo();
-            heroId = parsedReplay.getHerosLowercase()[GUISelection.heroName];
+            heroId = parsedReplay.getHerosLowercase()[GUISelection.heroName.ToLower()];
 
             replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
         }
