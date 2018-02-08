@@ -84,7 +84,13 @@ namespace Yato.DirectXOverlay
         public Direct2DBrush greenBrush { get; set; }
         public Direct2DBrush blueBrush { get; set; }
         public Direct2DFont font { get; set; }
-        
+
+        /* 1 ~ 5 refer to which suggesed hero is picked by own team
+         * -1 ~ -5 refer to which suggesd hero is banned by other team
+         * 0 refer to nothing happened
+         */
+        public int ban_and_pick = 0;
+
         #endregion
 
         #region construct & destruct
@@ -1404,6 +1410,22 @@ namespace Yato.DirectXOverlay
             messages[type].clear();
         }
 
+        // one of the five suggested heroes get banned by the other team
+        public void SuggestedHeroBanned(int heroIndex)
+        {
+            Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\red_cross.png");
+            DrawBitmap(cross, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
+            cross.SharpDXBitmap.Dispose();
+        }
+
+        // one of the five suggested heroes get picked by our team
+        public void SuggestedHeroPicked(int heroIndex)
+        {
+            Direct2DBitmap check = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
+            DrawBitmap(check, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
+            check.SharpDXBitmap.Dispose();
+        }
+
         public void Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
         {
             IntPtr fg = GetForegroundWindow();
@@ -1434,17 +1456,34 @@ namespace Yato.DirectXOverlay
                         {
                             Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName);
                             DrawBitmap(bmp, 1, messages[i].img_x, messages[i].img_y, messages[i].img_width, messages[i].img_height);
-
-                            //Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
-                            //DrawBitmap(cross, 1, messages[i].x - 100, messages[i].y, 254 / 4, 144 / 4);
-                            //cross.SharpDXBitmap.Dispose();
-
                             bmp.SharpDXBitmap.Dispose();
+
+                            if (ban_and_pick != 0)
+                            {
+                                if (ban_and_pick > 0 && ban_and_pick <= 5)
+                                {
+                                    SuggestedHeroPicked(ban_and_pick - 1);
+                                }
+                                else if (ban_and_pick < 0 && ban_and_pick >= -5)
+                                {
+                                    SuggestedHeroBanned(-ban_and_pick - 1);
+                                }
+                                else
+                                {
+                                    throw new Exception("hero index given is not from -5 to 5");
+                                }
+                            }
                         }
                     }
                 }
 
                 EndScene();
+
+                if (ban_and_pick != 0)
+                {
+                    Thread.Sleep(3000);
+                    ban_and_pick = 0;
+                }
             }
             else
             {
