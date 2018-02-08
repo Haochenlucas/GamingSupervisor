@@ -115,6 +115,10 @@ namespace replayParse
                 name = name.ToLower();
                 if (!heros.Keys.Contains(name))
                 {
+                    if (name.Contains("never"))
+                    {
+                        name = "shadowfiend";
+                    }
                     heros.Add(name, value);
                     heroID = heros[name];
                     if (double.Parse(words[3]) > 100)
