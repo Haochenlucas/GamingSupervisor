@@ -54,7 +54,7 @@ namespace Yato.DirectXOverlay
                     imgName[4] = "4.png";
                     d2d.HeroSelectionHints(messages, imgName);
                     //d2d.Retreat("Run", "");
-                    d2d.SelectedHeroSuggestion(38);
+                    //d2d.SelectedHeroSuggestion(38);
                 }
                 if (Control.ModifierKeys == Keys.Alt)
                     d2d.DeleteMessage(0);
