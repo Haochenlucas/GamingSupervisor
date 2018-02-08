@@ -104,6 +104,7 @@
       <DependentUpon>ReplayHeroSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReplayStartAnnouncer.cs" />
+    <Compile Include="ReplayTick.cs" />
     <Page Include="ConfirmSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,11 +184,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Parser\info.txt" />
     <Content Include="Parser\parser.jar" />
-    <Resource Include="Parser\position.txt" />
-    <Resource Include="Parser\replay.txt" />
-    <Resource Include="Parser\selection.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\replayParse\replayParse.csproj">
