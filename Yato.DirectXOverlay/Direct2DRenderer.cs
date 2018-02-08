@@ -13,6 +13,8 @@ using FontFactory = SharpDX.DirectWrite.Factory;
 using Factory = SharpDX.Direct2D1.Factory;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using replayParse;
+using System.Threading;
 
 namespace Yato.DirectXOverlay
 {
@@ -1458,12 +1460,7 @@ namespace Yato.DirectXOverlay
                         if (messages[i].imgName != "")
                         {
                             Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName);
-                            Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
-                            //Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
-                            DrawBitmap(bmp, 1, messages[i].x - 100, messages[i].y, 254 / 4, 144 / 4);
-                            DrawBitmap(cross, 1, messages[i].x - 100, messages[i].y, 254 / 4, 144 / 4);
-                            //DrawBitmap(bmp, 1, messages[i].x - 350, messages[i].y, 600 / 2, 458 / 2);
-                            cross.SharpDXBitmap.Dispose();
+                            DrawBitmap(bmp, 1, messages[i].img_x, messages[i].img_y, messages[i].img_width, messages[i].img_height);
                             bmp.SharpDXBitmap.Dispose();
 
                             if (ban_and_pick != 0)

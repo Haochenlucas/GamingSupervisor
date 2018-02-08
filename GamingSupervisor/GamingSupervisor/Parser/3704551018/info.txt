@@ -1,0 +1,82 @@
+playback_time: 2684.5002
+playback_ticks: 80535
+playback_frames: 40262
+game_info {
+  dota {
+    match_id: 3704551018
+    game_mode: 3
+    game_winner: 2
+    player_info {
+      hero_name: "npc_dota_hero_tiny"
+      player_name: "\347\213\202\346\213\275\343\201\256\346\231\227\345\260\221"
+      is_fake_client: false
+      steamid: 76561198152716410
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_juggernaut"
+      player_name: "Slayer"
+      is_fake_client: false
+      steamid: 76561198105090766
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_wisp"
+      player_name: "\345\205\245\345\234\243"
+      is_fake_client: false
+      steamid: 76561198147342967
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_nevermore"
+      player_name: "HaoWuLi\357\274\201\357\274\201"
+      is_fake_client: false
+      steamid: 76561198355982856
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_sand_king"
+      player_name: "\344\275\240\345\276\210\347\232\256\345\221\200"
+      is_fake_client: false
+      steamid: 76561198096976602
+      game_team: 2
+    }
+    player_info {
+      hero_name: "npc_dota_hero_skywrath_mage"
+      player_name: "\346\235\250\346\234\250\345\274\213\346\234\250\351\233\267"
+      is_fake_client: false
+      steamid: 76561198133080051
+      game_team: 3
+    }
+    player_info {
+      hero_name: "npc_dota_hero_gyrocopter"
+      player_name: "\357\274\237\357\274\237\357\274\237"
+      is_fake_client: false
+      steamid: 76561198089183898
+      game_team: 3
+    }
+    player_info {
+      hero_name: "npc_dota_hero_legion_commander"
+      player_name: "DiveInFate"
+      is_fake_client: false
+      steamid: 76561198130058223
+      game_team: 3
+    }
+    player_info {
+      hero_name: "npc_dota_hero_tinker"
+      player_name: "sycysb"
+      is_fake_client: false
+      steamid: 76561198121613489
+      game_team: 3
+    }
+    player_info {
+      hero_name: "npc_dota_hero_enchantress"
+      player_name: "Finley"
+      is_fake_client: false
+      steamid: 76561198091674007
+      game_team: 3
+    }
+    leagueid: 0
+    end_time: 1517149557
+  }
+}
