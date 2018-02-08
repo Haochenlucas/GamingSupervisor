@@ -1246,8 +1246,8 @@ namespace Yato.DirectXOverlay
         public void SetupHintSlots()
         {
             Message[] heroes_sugg = new Message[5];
-            float width_unit = Screen.PrimaryScreen.Bounds.Width / 16;
-            float height_unit = Screen.PrimaryScreen.Bounds.Height / 16;
+            float width_unit = Screen.PrimaryScreen.Bounds.Width / 32;
+            float height_unit = Screen.PrimaryScreen.Bounds.Height / 32;
             for (int i = 0; i < messages.Length; i++)
             {
                 switch (i)
@@ -1255,35 +1255,35 @@ namespace Yato.DirectXOverlay
                     // Hero selection slot1
                     case 0:
                         string Hero_selection1 = "Hero selection slot1";
-                        messages[i] = new Message(Hero_selection1, "", width_unit * 13, height_unit * (i + 5));
+                        messages[i] = new Message(Hero_selection1, "", width_unit * 24, height_unit * (i * 2 + 3) * 2);
                         heroes_sugg[i] = messages[i];
                         break;
 
                     // Hero selection slot2
                     case 1:
                         string Hero_selection2 = "Hero selection slot2";
-                        messages[i] = new Message(Hero_selection2, "", width_unit * 13, height_unit * (i + 5));
+                        messages[i] = new Message(Hero_selection2, "", width_unit * 24, height_unit * (i * 2 + 3) * 2);
                         heroes_sugg[i] = messages[i];
                         break;
 
                     // Hero selection slot3
                     case 2:
                         string Hero_selection3 = "Hero selection slot3";
-                        messages[i] = new Message(Hero_selection3, "", width_unit * 13, height_unit * (i + 5));
+                        messages[i] = new Message(Hero_selection3, "", width_unit * 24, height_unit * (i * 2 + 3) * 2);
                         heroes_sugg[i] = messages[i];
                         break;
 
                     // Hero selection slot4
                     case 3:
                         string Hero_selection4 = "Hero selection slot4";
-                        messages[i] = new Message(Hero_selection4, "", width_unit * 13, height_unit * (i + 5));
+                        messages[i] = new Message(Hero_selection4, "", width_unit * 24, height_unit * (i * 2 + 3) * 2);
                         heroes_sugg[i] = messages[i];
                         break;
                         
                     // Hero selection slot5
                     case 4:
                         string Hero_selection5 = "Hero selection slot5";
-                        messages[i] = new Message(Hero_selection5, "", width_unit * 13, height_unit * (i + 5));
+                        messages[i] = new Message(Hero_selection5, "", width_unit * 24, height_unit * (i * 2 + 3) * 2);
                         heroes_sugg[i] = messages[i];
                         break;
 
@@ -1368,9 +1368,13 @@ namespace Yato.DirectXOverlay
             string hero_rating = dt.getFinalLevel(HeroID)[0] + " " + dt.getFinalLevel(HeroID)[1] + "\n\n";
             // add a newline every 8 chars
             suggestion = hero_name + hero_rating + suggestion;
-            suggestion = Regex.Replace(suggestion, ".{32}", "$0\n");
+            suggestion = Regex.Replace(suggestion, ".{50}", "$0\n");
 
-            AddMessage(11, suggestion, "");
+            Tuple<int, int, int, int> background = new Tuple<int, int, int, int>(109, 109, 109, 255);
+            Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
+            Tuple<string, int> font = new Tuple<string, int>("Consolas", 18);
+
+            AddMessage(11, suggestion, "", color,background,font);
         }
 
         public void AddMessage(int type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
@@ -1446,7 +1450,8 @@ namespace Yato.DirectXOverlay
 
                         if (i == 0)
                         {
-                            device.FillRectangle(new RawRectangleF(HeroSugg.box_pos.Item1, HeroSugg.box_pos.Item2, HeroSugg.box_pos.Item3, HeroSugg.box_pos.Item4), blackBrush);
+                            Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
+                            device.FillRectangle(new RawRectangleF(HeroSugg.box_pos.Item1, HeroSugg.box_pos.Item2, HeroSugg.box_pos.Item3, HeroSugg.box_pos.Item4), box_background);
                             DrawTextWithBackground(HeroSugg.title.Item1, HeroSugg.title.Item2, HeroSugg.title.Item3, textFont, color, background);
                         }
 
@@ -1475,6 +1480,16 @@ namespace Yato.DirectXOverlay
                             }
                         }
                     }
+                }
+
+                var a = Control.MousePosition;
+                if (a.X > messages[0].img_x && a.X < messages[0].img_x + messages[0].img_width && a.Y > messages[0].img_y && a.Y < messages[0].img_y + messages[0].img_height)
+                {
+                    SelectedHeroSuggestion(38);
+                }
+                else
+                {
+                    messages[11].on = false;
                 }
 
                 EndScene();
@@ -1523,12 +1538,12 @@ namespace Yato.DirectXOverlay
             float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
             heroes = _heroes;
             float box_left = heroes[0].img_x - modifier_x;
-            float box_top = heroes[0].img_y - modifier_y * 3;
-            float box_right = box_left + modifier_x * 8;
-            float box_bottem = box_top + modifier_y * 14;
+            float box_top = heroes[0].img_y - modifier_y * 4;
+            float box_right = box_left + modifier_x * 12;
+            float box_bottem = box_top + modifier_y * 24;
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             float title_left = heroes[0].x - modifier_x;
-            float title_top = heroes[0].y - modifier_y * 2;
+            float title_top = heroes[0].y - modifier_y * 3;
             title = new Tuple<string, float, float> ("Hero Suggestion:", title_left, title_top);
         }
     }
@@ -1563,11 +1578,11 @@ namespace Yato.DirectXOverlay
             on = true;
             background = new Tuple<int, int, int, int>(109, 109, 109, 255);
             color = new Tuple<int, int, int, int>(255, 255, 255, 255);
-            font = new Tuple<string, int>("Consolas", 22);
-            img_x = x - Screen.PrimaryScreen.Bounds.Width / 16;
+            font = new Tuple<string, int>("Consolas", 32);
+            img_x = x - Screen.PrimaryScreen.Bounds.Width / 16 * 2;
             img_y = y;
-            img_width = 254 / 4;
-            img_height = 144 / 4;
+            img_width = 254 / 2;
+            img_height = 144 / 2;
         }
 
         public void clear()
