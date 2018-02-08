@@ -131,6 +131,10 @@ namespace replayParse
                     {
                         name = "magnus";
                     }
+                    if (name.Contains("treant"))
+                    {
+                        name = "treantprotector";
+                    }
                     heros.Add(name, value);
                     heroID = heros[name];
                     if (double.Parse(words[3]) > 100)

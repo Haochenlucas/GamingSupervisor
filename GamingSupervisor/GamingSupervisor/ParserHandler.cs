@@ -59,7 +59,28 @@ namespace GamingSupervisor
                         upperCase[i] = temp[i].First().ToString().ToUpper() + temp[i].Substring(1);
                     }
                     parsedHeroName = string.Join("", upperCase);
-                    int key = hero_table[parsedHeroName.ToLower()];
+                    string name = parsedHeroName.ToLower();
+                    if (name.Contains("never"))
+                    {
+                        name = "shadowfiend";
+                    }
+                    if (name.Contains("obsidian"))
+                    {
+                        name = "outworlddevourer";
+                    }
+                    if (name.Contains("wisp"))
+                    {
+                        name = "io";
+                    }
+                    if (name.Contains("magnataur"))
+                    {
+                        name = "magnus";
+                    }
+                    if (name.Contains("treant"))
+                    {
+                        name = "treantprotector";
+                    }
+                    int key = hero_table[name];
 
                     heroNameList.Add(ID_table[key]);
                 }
