@@ -119,6 +119,18 @@ namespace replayParse
                     {
                         name = "shadowfiend";
                     }
+                    if (name.Contains("obsidian"))
+                    {
+                        name = "outworlddevourer";
+                    }
+                    if (name.Contains("wisp"))
+                    {
+                        name = "io";
+                    }
+                    if (name.Contains("magnataur"))
+                    {
+                        name = "magnus";
+                    }
                     heros.Add(name, value);
                     heroID = heros[name];
                     if (double.Parse(words[3]) > 100)
