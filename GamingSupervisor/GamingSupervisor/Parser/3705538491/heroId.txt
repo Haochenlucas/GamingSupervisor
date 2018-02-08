@@ -1,0 +1,10 @@
+0 CDOTA_Unit_Hero_Riki
+1 CDOTA_Unit_Hero_Magnataur
+2 CDOTA_Unit_Hero_DeathProphet
+3 CDOTA_Unit_Hero_ChaosKnight
+4 CDOTA_Unit_Hero_Life_Stealer
+5 CDOTA_Unit_Hero_NightStalker
+6 CDOTA_Unit_Hero_StormSpirit
+7 CDOTA_Unit_Hero_DoomBringer
+8 CDOTA_Unit_Hero_Venomancer
+9 CDOTA_Unit_Hero_SpiritBreaker

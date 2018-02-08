@@ -53,11 +53,14 @@ namespace Yato.DirectXOverlay
                     imgName[3] = "3.png";
                     imgName[4] = "4.png";
                     d2d.HeroSelectionHints(messages, imgName);
-                    //d2d.Retreat("Run", "");
-                    d2d.SelectedHeroSuggestion(38);
+                    d2d.Retreat("Run", "");
+                    //d2d.SelectedHeroSuggestion(38);
                 }
                 if (Control.ModifierKeys == Keys.Alt)
-                    d2d.DeleteMessage(0);
+                {
+                    //d2d.DeleteMessage(0);
+                    d2d.ban_and_pick = -5;
+                }
 
                 d2d.Draw(VS_HWND, overlay);
 
