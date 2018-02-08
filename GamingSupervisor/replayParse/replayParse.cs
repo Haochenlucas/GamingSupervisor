@@ -113,28 +113,28 @@ namespace replayParse
                 string name = r.Replace(substrings[1], "");
                 name = string.Join(" ", name.Split(new string[] { " _ " }, StringSplitOptions.None));
                 name = name.ToLower();
+                if (name.Contains("never"))
+                {
+                    name = "shadowfiend";
+                }
+                if (name.Contains("obsidian"))
+                {
+                    name = "outworlddevourer";
+                }
+                if (name.Contains("wisp"))
+                {
+                    name = "io";
+                }
+                if (name.Contains("magnataur"))
+                {
+                    name = "magnus";
+                }
+                if (name.Contains("treant"))
+                {
+                    name = "treantprotector";
+                }
                 if (!heros.Keys.Contains(name))
                 {
-                    if (name.Contains("never"))
-                    {
-                        name = "shadowfiend";
-                    }
-                    if (name.Contains("obsidian"))
-                    {
-                        name = "outworlddevourer";
-                    }
-                    if (name.Contains("wisp"))
-                    {
-                        name = "io";
-                    }
-                    if (name.Contains("magnataur"))
-                    {
-                        name = "magnus";
-                    }
-                    if (name.Contains("treant"))
-                    {
-                        name = "treantprotector";
-                    }
                     heros.Add(name, value);
                     heroID = heros[name];
                     if (double.Parse(words[3]) > 100)
