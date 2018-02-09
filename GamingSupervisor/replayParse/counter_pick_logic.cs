@@ -24,11 +24,12 @@ namespace replayParse
 
             counterpick_info cp_info = new counterpick_info();
             matrix_info = cp_info.getCounterTable();
+            this.readTeam();
         }
 
-        
+
         /*
-         *
+         *build up the hero_ID_Client_Team Team
          */
         public void readTeam()
         {
