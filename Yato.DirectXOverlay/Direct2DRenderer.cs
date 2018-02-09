@@ -66,6 +66,12 @@ namespace Yato.DirectXOverlay
 
         private HeroSuggestion HeroSugg = new HeroSuggestion();
 
+        // Contains information about hero health
+        private double[] hps = new double[5];
+
+        // Determins if graphs should be drawn
+        private bool drawGraphs = false;
+
         #endregion
 
         #region public vars
@@ -1409,6 +1415,20 @@ namespace Yato.DirectXOverlay
             }
         }
 
+        // Inverts the graphs boolean
+        // i.e. true becomes false, and vice versa
+        public void ToggleGraph()
+        {
+            drawGraphs ^= true;
+        }
+
+        // Updates (and overwrites the previous) the hero health
+        // Currently holds 5 integers
+        public void UpdateHeroHPGraph(double[] newHps)
+        {
+            hps = newHps;
+        }
+        
         public void DeleteMessage(int type)
         {
             messages[type].clear();
@@ -1492,6 +1512,16 @@ namespace Yato.DirectXOverlay
                     messages[11].on = false;
                 }
 
+                if (drawGraphs)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        int currY = Screen.PrimaryScreen.Bounds.Height / 2;
+
+                        DrawBox2D(50 * i, currY - (float)hps[i], 50, (float)hps[i], 5, redBrush, blackBrush);
+                    }
+                }
+
                 EndScene();
 
                 if (ban_and_pick != 0)
@@ -1499,6 +1529,8 @@ namespace Yato.DirectXOverlay
                     Thread.Sleep(3000);
                     ban_and_pick = 0;
                 }
+
+
             }
             else
             {
