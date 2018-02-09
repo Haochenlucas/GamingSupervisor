@@ -44,6 +44,11 @@ namespace GamingSupervisor
             renderer.UpdateHeroHPGraph(newhps);
         }
 
+        public void AddHp(double newhp)
+        {
+            renderer.UpdateHeroHPQueue(newhp);
+        }
+
         public void ShowMessage()
         {
             renderer.Draw(dotaProcessHandle, window);

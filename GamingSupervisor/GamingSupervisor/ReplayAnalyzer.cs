@@ -141,14 +141,14 @@ namespace GamingSupervisor
                 }
             }
             int[,] suggestiontable = cp.suggestionTable(team_side);
-            for(int i = 0; i< 30; i++)
+            for (int i = 0; i < 30; i++)
             {
                 if (table[i, 2] == team_side)
                 {
                     heroID id = new heroID();
                     Dictionary<int, string> id_string = id.getHeroID();
                     string name = id_string[table[i, 0]];
-                    name = String.Join("", name.Split(new string[] {" "}, StringSplitOptions.None));
+                    name = String.Join("", name.Split(new string[] { " " }, StringSplitOptions.None));
                     int index_id = parsedReplay.getHerosLowercase()[name.ToLower()];
                     if (!teamHeroIds.Contains(index_id))
                         teamHeroIds.Add(index_id);
@@ -181,21 +181,21 @@ namespace GamingSupervisor
             }
             else
             {
-                ticNext = suggestiontable[mark_index-1, 0];
+                ticNext = suggestiontable[mark_index - 1, 0];
                 ticLast = ticNext;
-                shuangla = mark_index-1;
+                shuangla = mark_index - 1;
             }
-            
+
             string[] heroes = new string[5];
             string[] heroesimg = new string[5];
 
-            for (int j = 1; j<6; j++)
+            for (int j = 1; j < 6; j++)
             {
                 heroesimg[j - 1] = suggestiontable[shuangla, j].ToString();
                 heroes[j - 1] = ID_table[suggestiontable[shuangla, j]];
             }
-            
-             
+
+
 
             overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
         }
@@ -207,9 +207,9 @@ namespace GamingSupervisor
             if (CurrentTick - parsedReplay.getOffSet() < 0)
             {
                 int cur_tic_fake = 0;
-                health = (int)parsedData[cur_tic_fake, heroId, 0];                
+                health = (int)parsedData[cur_tic_fake, heroId, 0];
                 hpToSend[0] = health;
-                for (int i = 0; i < 4; i ++)
+                for (int i = 0; i < 4; i++)
                 {
                     hpToSend[i + 1] = parsedData[cur_tic_fake, teamHeroIds[i], 0];
                 }
@@ -225,6 +225,7 @@ namespace GamingSupervisor
             {
                 overlay.ToggleGraphForHeroHP();
                 overlay.AddHPs(hpToSend);
+                overlay.AddHp(hpToSend[0]);
                 //overlay.ShowMessage("Health is low, retreat");
                 overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet(), "");
                 //Console.WriteLine("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet());

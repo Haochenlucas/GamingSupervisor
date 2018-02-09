@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using replayParse;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Yato.DirectXOverlay
 {
@@ -71,6 +72,8 @@ namespace Yato.DirectXOverlay
 
         // Determins if graphs should be drawn
         private bool drawGraphs = false;
+
+        private Queue<double> currHp = new Queue<double>(300);
 
         #endregion
 
@@ -1286,7 +1289,7 @@ namespace Yato.DirectXOverlay
                         messages[i] = new Message(Hero_selection4, "", width_unit * 24, height_unit * (i * 2 + 3) * 2);
                         heroes_sugg[i] = messages[i];
                         break;
-                        
+
                     // Hero selection slot5
                     case 4:
                         string Hero_selection5 = "Hero selection slot5";
@@ -1311,7 +1314,7 @@ namespace Yato.DirectXOverlay
                         messages[i] = new Message(press_on, "", Screen.PrimaryScreen.Bounds.Width / 2 - (press_on.Length / 2), Screen.PrimaryScreen.Bounds.Height / 4 * 3);
                         break;
 
-                     // Message position dynamic
+                    // Message position dynamic
 
                     // 8: last hit
                     case 8:
@@ -1381,7 +1384,7 @@ namespace Yato.DirectXOverlay
             Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
             Tuple<string, int> font = new Tuple<string, int>("Consolas", 18);
 
-            AddMessage(11, suggestion, "", color,background,font);
+            AddMessage(11, suggestion, "", color, background, font);
         }
 
         public void AddMessage(int type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
@@ -1434,7 +1437,16 @@ namespace Yato.DirectXOverlay
         {
             hps = newHps;
         }
-        
+
+        public void UpdateHeroHPQueue(double newhp)
+        {
+            if (currHp.Count > 300)
+            {
+                currHp.Dequeue();
+            }
+            currHp.Enqueue(newhp);
+        }
+
         public void DeleteMessage(int type)
         {
             messages[type].clear();
@@ -1459,7 +1471,7 @@ namespace Yato.DirectXOverlay
         public void Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
         {
             IntPtr fg = GetForegroundWindow();
-            
+
             if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
             {
                 BeginScene();
@@ -1520,11 +1532,17 @@ namespace Yato.DirectXOverlay
 
                 if (drawGraphs)
                 {
+                    int currY = Screen.PrimaryScreen.Bounds.Height / 2;
+
                     for (int i = 0; i < 5; i++)
                     {
-                        int currY = Screen.PrimaryScreen.Bounds.Height / 2;
-
                         DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
+                    }
+
+                    for (int j = 0; j < currHp.Count - 1; j ++)
+                    {
+                        double[] tempCurrHp = currHp.ToArray();
+                        DrawLine(50 + j, (float)(currY - tempCurrHp[j]) / 6 + currY, 51 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
                     }
                 }
 
@@ -1582,7 +1600,7 @@ namespace Yato.DirectXOverlay
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             float title_left = heroes[0].x - modifier_x;
             float title_top = heroes[0].y - modifier_y * 3;
-            title = new Tuple<string, float, float> ("Hero Suggestion:", title_left, title_top);
+            title = new Tuple<string, float, float>("Hero Suggestion:", title_left, title_top);
         }
     }
 
@@ -1592,7 +1610,7 @@ namespace Yato.DirectXOverlay
         public bool on;
 
         //// Tuple<red, green, blue, alpha>
-        public Tuple<int,int,int,int> background;
+        public Tuple<int, int, int, int> background;
         public Tuple<int, int, int, int> color;
 
         //// Tuple<font, size>

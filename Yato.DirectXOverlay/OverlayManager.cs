@@ -21,7 +21,7 @@ namespace Yato.DirectXOverlay
 
         }
 
-        public OverlayManager(IntPtr parentWindowHandle, out OverlayWindow overlay,  out Direct2DRenderer d2d)
+        public OverlayManager(IntPtr parentWindowHandle, out OverlayWindow overlay, out Direct2DRenderer d2d)
         {
             Direct2DRendererOptions options = new Direct2DRendererOptions()
             {
