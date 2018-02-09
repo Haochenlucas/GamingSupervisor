@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Yato.DirectXOverlay;
-using System.Threading;
 
 namespace GamingSupervisor
 {
@@ -33,6 +33,16 @@ namespace GamingSupervisor
         public void AddHeroesSuggestionMessage(string[] heroes, string[] imgs)
         {
             renderer.HeroSelectionHints(heroes, imgs);
+        }
+
+        public void ToggleGraphForHeroHP(bool tog = true)
+        {
+            renderer.ToggleGraph(tog);
+        }
+
+        public void AddHPs(double[] newhps)
+        {
+            renderer.UpdateHeroHPGraph(newhps);
         }
 
         public void ShowMessage()

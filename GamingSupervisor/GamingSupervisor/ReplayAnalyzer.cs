@@ -10,6 +10,7 @@ namespace GamingSupervisor
         private replay_version01 parsedReplay;
         private double[,,] parsedData;
         private int heroId;
+        private List<int> teamHeroIds = new List<int>(4);
         private ReplayTick replayTick;
 
         private ReplayStartAnnouncer announcer = null;
@@ -140,6 +141,18 @@ namespace GamingSupervisor
                 }
             }
             int[,] suggestiontable = cp.suggestionTable(team_side);
+            for(int i = 0; i< 30; i++)
+            {
+                if(table[i,3] == team_side)
+                {
+                    heroID id = new heroID();
+                    Dictionary<int, string> id_string = id.getHeroID();
+                    string name = id_string[table[i, 0]];
+                    name = String.Join("", name.Split(' '));
+                    int index_id = parsedReplay.getHerosLowercase()[name.ToLower()];
+                    teamHeroIds.Add(index_id);
+                }
+            }
             int ticLast = 0;
             int ticNext = Int32.MaxValue;
             int mark_index = 0;
@@ -189,16 +202,23 @@ namespace GamingSupervisor
         private void HandleGamePlay()
         {
             int health = 0;
+            double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
             if (CurrentTick - parsedReplay.getOffSet() < 0)
             {
                 int cur_tic_fake = 0;
-                health = (int)parsedData[cur_tic_fake, heroId, 0];
-
+                health = (int)parsedData[cur_tic_fake, heroId, 0];                
+                hpToSend[0] = health;
+                for (int i = 0; i < 4; i ++)
+                {
+                    hpToSend[i] = parsedData[cur_tic_fake, teamHeroIds[i - 1], 0];
+                }
             }
             health = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
             //if (health < 470)
             if (true)
             {
+                overlay.ToggleGraphForHeroHP();
+                overlay.AddHPs(hpToSend);
                 //overlay.ShowMessage("Health is low, retreat");
                 overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet(), "");
                 //Console.WriteLine("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet());

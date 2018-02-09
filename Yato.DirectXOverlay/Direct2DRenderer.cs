@@ -1422,6 +1422,11 @@ namespace Yato.DirectXOverlay
             drawGraphs ^= true;
         }
 
+        public void ToggleGraph(bool toggle)
+        {
+            drawGraphs = toggle;
+        }
+
         // Updates (and overwrites the previous) the hero health
         // Currently holds 5 integers
         public void UpdateHeroHPGraph(double[] newHps)
