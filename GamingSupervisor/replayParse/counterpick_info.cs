@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace replayParse
 {
+    /*
+     * No need to create this object if using counter_pick_logic.
+     * Go create counter_pick_logic object.
+     */
     public class counterpick_info
     {
         public static double[,] counter_info_table = new double[116, 116];
