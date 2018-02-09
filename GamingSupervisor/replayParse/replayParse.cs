@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace replayParse
 {
-    
+
     public class replay_version01
     {
         public static double[,,] replayinfo = new double[200000, 10, 15];
