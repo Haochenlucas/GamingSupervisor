@@ -39,6 +39,7 @@ namespace Yato.DirectXOverlay
 
             d2d.blackBrush = d2d.CreateBrush(0, 0, 0, 255);
             d2d.redBrush = d2d.CreateBrush(255, 0, 0, 255);
+            d2d.lightRedBrush = d2d.CreateBrush(255, 100, 100, 255);
             d2d.greenBrush = d2d.CreateBrush(0, 255, 0, 255);
             d2d.blueBrush = d2d.CreateBrush(0, 0, 255, 255);
             d2d.font = d2d.CreateFont("Consolas", 22);

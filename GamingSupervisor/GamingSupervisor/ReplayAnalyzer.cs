@@ -143,14 +143,15 @@ namespace GamingSupervisor
             int[,] suggestiontable = cp.suggestionTable(team_side);
             for(int i = 0; i< 30; i++)
             {
-                if (table[i, 3] == team_side)
+                if (table[i, 2] == team_side)
                 {
                     heroID id = new heroID();
                     Dictionary<int, string> id_string = id.getHeroID();
                     string name = id_string[table[i, 0]];
                     name = String.Join("", name.Split(new string[] {" "}, StringSplitOptions.None));
                     int index_id = parsedReplay.getHerosLowercase()[name.ToLower()];
-                    teamHeroIds.Add(index_id);
+                    if (!teamHeroIds.Contains(index_id))
+                        teamHeroIds.Add(index_id);
                 }
             }
             int ticLast = 0;
@@ -210,10 +211,15 @@ namespace GamingSupervisor
                 hpToSend[0] = health;
                 for (int i = 0; i < 4; i ++)
                 {
-                    hpToSend[i] = parsedData[cur_tic_fake, teamHeroIds[i - 1], 0];
+                    hpToSend[i + 1] = parsedData[cur_tic_fake, teamHeroIds[i], 0];
                 }
             }
             health = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
+            hpToSend[0] = health;
+            for (int i = 0; i < 4; i++)
+            {
+                hpToSend[i + 1] = parsedData[CurrentTick - parsedReplay.getOffSet(), teamHeroIds[i], 0];
+            }
             //if (health < 470)
             if (true)
             {

@@ -87,6 +87,7 @@ namespace Yato.DirectXOverlay
         public Direct2DBrush whiteSmoke { get; set; }
         public Direct2DBrush blackBrush { get; set; }
         public Direct2DBrush redBrush { get; set; }
+        public Direct2DBrush lightRedBrush { get; set; }
         public Direct2DBrush greenBrush { get; set; }
         public Direct2DBrush blueBrush { get; set; }
         public Direct2DFont font { get; set; }
@@ -1523,7 +1524,7 @@ namespace Yato.DirectXOverlay
                     {
                         int currY = Screen.PrimaryScreen.Bounds.Height / 2;
 
-                        DrawBox2D(50 * i, (float)currY - (float)hps[i], 50, (float)hps[i], 5, redBrush, blackBrush);
+                        DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
                     }
                 }
 
