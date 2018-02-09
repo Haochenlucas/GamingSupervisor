@@ -1364,7 +1364,7 @@ namespace Yato.DirectXOverlay
         {
             hero_difficulty dt = new hero_difficulty(@"C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\GamingSupervisor\replayParse\Properties\hero_difficulty_version_1.txt");
             string suggestion = dt.mainDiff(HeroID);
-            string hero_rating = dt.getFinalLevel(HeroID)[0] + " " + dt.getFinalLevel(HeroID)[1] + "\n\n";
+            string hero_rating = dt.getFinalLevel(HeroID)[0] + ": " + dt.getFinalLevel(HeroID)[1] + "\n\n";
             // add a newline every 8 chars
             suggestion = hero_rating + suggestion;
             suggestion = Regex.Replace(suggestion, ".{50}", "$0\n");
