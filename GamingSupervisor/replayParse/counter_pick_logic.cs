@@ -11,7 +11,7 @@ namespace replayParse
     public class counter_pick_logic
     {
         private string dataFolderLocation;
-
+        // the matrix_info contains the information we need for counter pick factor.
         public static double[,] matrix_info = new double[116, 116];
         // the hero_ID_Client_Team is all pick and ban hero, 
         // the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
@@ -30,7 +30,9 @@ namespace replayParse
         }
 
         
-
+        /*
+         *
+         */
         public void readTeam()
         {
             //count the hero name

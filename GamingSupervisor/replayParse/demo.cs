@@ -13,8 +13,8 @@ namespace GamingSupervisor
         {
             string path = @"C:\Users\yuchengy\Source\Repos\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\";
             replay_version01 r = new replay_version01(path);
-            //Dictionary<string, int> h = r.getHeros();
-            //int[,,] info = r.getReplayInfo();
+            Dictionary<string, int> h = r.getHerosLowercase();
+            double[,,] info = r.getReplayInfo();
             heroID h_ID = new heroID();
             Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
             Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;

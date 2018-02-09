@@ -41,7 +41,7 @@ namespace replayParse
                     {
                         for (int i = 0; i < 10; i++)
                         {
-                            for (int j = 0; j < 3; j++)
+                            for (int j = 0; j < 15; j++)
                             {
                                 if (prev_stat[i, j] != 0)
                                 {
@@ -65,6 +65,10 @@ namespace replayParse
                 {
                     mode = 4;
                 }
+                else if (words[1].Contains("MANAREGEN"))
+                {
+                    mode = 10;
+                }
                 else if (words[1].Contains("MANA"))
                 {
                     mode = 5;
@@ -84,10 +88,6 @@ namespace replayParse
                 else if (words[1].Contains("MAXHEALTH"))
                 {
                     mode = 9;
-                }
-                else if (words[1].Contains("MANAREGEN"))
-                {
-                    mode = 10;
                 }
                 else if (words[1].Contains("HEALTHREGEN"))
                 {
