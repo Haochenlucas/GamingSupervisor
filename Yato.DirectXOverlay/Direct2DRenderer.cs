@@ -73,7 +73,7 @@ namespace Yato.DirectXOverlay
         // Determins if graphs should be drawn
         private bool drawGraphs = false;
 
-        private Queue<double> currHp = new Queue<double>(300);
+        private Queue<double> currHp = new Queue<double>(250);
 
         #endregion
 
@@ -1440,7 +1440,7 @@ namespace Yato.DirectXOverlay
 
         public void UpdateHeroHPQueue(double newhp)
         {
-            if (currHp.Count > 300)
+            if (currHp.Count > 250)
             {
                 currHp.Dequeue();
             }
@@ -1539,10 +1539,14 @@ namespace Yato.DirectXOverlay
                         DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
                     }
 
+
+                    DrawLine(250, currY-100, 250, currY +150, 2, redBrush);
+                    DrawLine(0, currY +150, 250, currY + 150, 2, redBrush);
+
                     for (int j = 0; j < currHp.Count - 1; j ++)
                     {
                         double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(50 + j, (float)(currY - tempCurrHp[j]) / 6 + currY, 51 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
+                        DrawLine(j, (float)(currY - tempCurrHp[j]) / 6 + currY, 1 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
                     }
                 }
 
