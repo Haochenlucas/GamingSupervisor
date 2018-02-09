@@ -127,7 +127,6 @@ namespace GamingSupervisor
         private void HandleHeroSelection()
         {
             counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
-            cp.readTeam();
             int[,] table = cp.selectTable();
             string heroname = GUISelection.heroName;
             heroID h_ID = new heroID();
