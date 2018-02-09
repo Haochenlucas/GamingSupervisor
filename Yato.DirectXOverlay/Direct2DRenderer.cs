@@ -1523,7 +1523,7 @@ namespace Yato.DirectXOverlay
                     {
                         int currY = Screen.PrimaryScreen.Bounds.Height / 2;
 
-                        DrawBox2D(50 * i, currY - (float)hps[i], 50, (float)hps[i], 5, redBrush, blackBrush);
+                        DrawBox2D(50 * i, (float)currY - (float)hps[i], 50, (float)hps[i], 5, redBrush, blackBrush);
                     }
                 }
 
