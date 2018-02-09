@@ -111,7 +111,7 @@ namespace replayParse
                  (?<=[^A-Z])(?=[A-Z]) |
                  (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
                 string name = r.Replace(substrings[1], "");
-                name = string.Join(" ", name.Split(new string[] { " _ " }, StringSplitOptions.None));
+                name = string.Join("", name.Split(new string[] { "_" }, StringSplitOptions.None));
                 name = name.ToLower();
                 if (name.Contains("never"))
                 {

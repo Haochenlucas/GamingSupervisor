@@ -41,17 +41,17 @@ namespace Yato.DirectXOverlay
                 if (true)
                 {
                     string[] messages = new string[5];
-                    messages[0] = "Trump";
-                    messages[1] = "Abaddon";
-                    messages[2] = "Alchemist";
-                    messages[3] = "Ancient Apparition";
-                    messages[4] = "Anti-mage";
+                    messages[0] = "Abaddon";
+                    messages[1] = "Alchemist";
+                    messages[2] = "Ancient Apparition";
+                    messages[3] = "Anti-mage";
+                    messages[4] = "Axe";
                     string[] imgName = new string[5];
-                    imgName[0] = "trump.png";
-                    imgName[1] = "1.png";
-                    imgName[2] = "2.png";
-                    imgName[3] = "3.png";
-                    imgName[4] = "4.png";
+                    imgName[0] = "1";
+                    imgName[1] = "2";
+                    imgName[2] = "3";
+                    imgName[3] = "4";
+                    imgName[4] = "6";
                     d2d.HeroSelectionHints(messages, imgName);
                     d2d.Retreat("Run", "");
                     //d2d.SelectedHeroSuggestion(38);
