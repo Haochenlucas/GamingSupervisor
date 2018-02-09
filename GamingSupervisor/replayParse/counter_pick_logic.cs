@@ -159,38 +159,14 @@ namespace replayParse
                         hero_ID_Client_Team[i, 3] = tic;
                     }
                 }
-                //if (words[1].Contains('B'))
-                //{
-                //    heroID = Int32.Parse(words[2]);
-                //    string hero_name = "";
-                //    clientHero_Dic.TryGetValue(heroID, out hero_name);
-                //    int cur_ID = 0;
-                //    ID_Dic.TryGetValue(hero_name, out cur_ID);
-                //    team = 1;
-                //    hero_ID_Client_Team[count, 1] = heroID;
-                //    hero_ID_Client_Team[count, 2] = team;
-                //    hero_ID_Client_Team[count, 0] = cur_ID;
-                //    hero_ID_Client_Team[count, 3] = tic;
-                //}
-                //else
-                //{
-                //    heroID = Int32.Parse(words[2]);
-                //    string hero_name = "";
-                //    clientHero_Dic.TryGetValue(heroID, out hero_name);
-                //    int cur_ID = 0;
-                //    ID_Dic.TryGetValue(hero_name, out cur_ID);
-                //    for(int i = 0; i < count; i++)
-                //    {
-                //        if(hero_ID_Client_Team[i,0] == cur_ID)
-                //        {
-                //            hero_ID_Client_Team[i, 3] = tic; 
-                //        }
-                //    }
-                //}
-
             }
         }
 
+        /*
+         *Output: the hero_ID_Client_Team table which is all pick and ban hero, 
+         *          the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
+         *          team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
+         */
         public int[,] selectTable()
         {
             return hero_ID_Client_Team;
@@ -280,6 +256,13 @@ namespace replayParse
             return table_suggestion;
         }
 
+        /*
+         * version_1.0.0 logic_counter 
+         * Input: the hero_sequence which is heros picked by enemy team
+         *        the ban_list contains the heros picked by own team and all baned heros by both team.
+         * output: the best five hero we suggest to pick
+         * improve place: consider the role of the heros in the own team, consider the difficulty of the heros.
+         */
         public static int[] logic_counter(int[] hero_sequence, int[] ban_list)
         {
             Dictionary<double, int> five_picks = new Dictionary<double, int>();

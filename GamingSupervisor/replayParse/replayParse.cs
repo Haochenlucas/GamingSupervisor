@@ -11,7 +11,9 @@ namespace replayParse
     
     public class replay_version01
     {
-        public static double[,,] replayinfo = new double[200000, 10, 15];
+        public static double[,,] replayinfo = new double[200000, 10, 15]; // first index is tic for this match (minus by offsetTic), second index is heroID for this match, the third index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z,
+                                                                          // 4:LEVEL, 5:MANA, 6:STRENGTH, 7: AGILITY, 8: INTELLECT, 9:MAXHEALTH, 10:MANAREGEN, 11: HEALTHREGEN, 12:MOVEMENTSPEED,\
+                                                                          // 13:DAMAGEMIN, 14:DAMAGEMAX;
         private double[,] prev_stat = new double[10, 15]; // first index is heroID for this match, the second index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z,
                                                    // 4:LEVEL, 5:MANA, 6:STRENGTH, 7: AGILITY, 8: INTELLECT, 9:MAXHEALTH, 10:MANAREGEN, 11: HEALTHREGEN, 12:MOVEMENTSPEED,\
                                                    // 13:DAMAGEMIN, 14:DAMAGEMAX;
@@ -169,19 +171,39 @@ namespace replayParse
             }
         }
 
+
+        /*
+         * output: the dictionary of name of the hero in this replay but the name is in lowercase and without the space. the int in the dictionary is the sort of ID show the sequence of picking(such as 1 to 10)
+         */
         public Dictionary<string, int> getHerosLowercase()
         {
             return heros;
         }
 
+
+        /*
+         *   output the big double matrix contains the infomation of the replay
+         *   first index is tic for this match (minus by offsetTic), second index is heroID for this match, the third index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z,
+         *                                                                4:LEVEL, 5:MANA, 6:STRENGTH, 7: AGILITY, 8: INTELLECT, 9:MAXHEALTH, 10:MANAREGEN, 11: HEALTHREGEN, 12:MOVEMENTSPEED,
+         *                                                                13:DAMAGEMIN, 14:DAMAGEMAX;
+         */
         public double[,,] getReplayInfo()
         {
             return replayinfo;
         }
+
+        /*
+         * offset is the first tic in the replay file(named: hero.txt).
+         */
         public int getOffSet()
         {
             return offsetTic;
         }
+
+        /*
+         * The index is the heroID: the sort of ID show the sequence of picking , the number in string shows the side of heros. 0: for one side, 1 : for another side.
+         * Not actually useful.
+         */
         public int[] getHeroSide()
         {
             return sideOfHero;
