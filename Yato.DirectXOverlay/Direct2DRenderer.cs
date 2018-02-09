@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using replayParse;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Yato.DirectXOverlay
 {
@@ -66,6 +67,14 @@ namespace Yato.DirectXOverlay
 
         private HeroSuggestion HeroSugg = new HeroSuggestion();
 
+        // Contains information about hero health
+        private double[] hps = new double[5];
+
+        // Determins if graphs should be drawn
+        private bool drawGraphs = false;
+
+        private Queue<double> currHp = new Queue<double>(250);
+
         #endregion
 
         #region public vars
@@ -81,6 +90,7 @@ namespace Yato.DirectXOverlay
         public Direct2DBrush whiteSmoke { get; set; }
         public Direct2DBrush blackBrush { get; set; }
         public Direct2DBrush redBrush { get; set; }
+        public Direct2DBrush lightRedBrush { get; set; }
         public Direct2DBrush greenBrush { get; set; }
         public Direct2DBrush blueBrush { get; set; }
         public Direct2DFont font { get; set; }
@@ -1281,7 +1291,7 @@ namespace Yato.DirectXOverlay
                         messages[i] = new Message(Hero_selection4, "", width_unit * 24, height_unit * (i * 2 + 3) * 2);
                         heroes_sugg[i] = messages[i];
                         break;
-                        
+
                     // Hero selection slot5
                     case 4:
                         string Hero_selection5 = "Hero selection slot5";
@@ -1306,7 +1316,7 @@ namespace Yato.DirectXOverlay
                         messages[i] = new Message(press_on, "", Screen.PrimaryScreen.Bounds.Width / 2 - (press_on.Length / 2), Screen.PrimaryScreen.Bounds.Height / 4 * 3);
                         break;
 
-                     // Message position dynamic
+                    // Message position dynamic
 
                     // 8: last hit
                     case 8:
@@ -1375,6 +1385,7 @@ namespace Yato.DirectXOverlay
             Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
             Tuple<string, int> font = new Tuple<string, int>("Consolas", 18);
 
+
             AddMessage(11, suggestion, "", color,background,font);
             messages[11].y = mouse_Y;
         }
@@ -1411,6 +1422,34 @@ namespace Yato.DirectXOverlay
             }
         }
 
+        // Inverts the graphs boolean
+        // i.e. true becomes false, and vice versa
+        public void ToggleGraph()
+        {
+            drawGraphs ^= true;
+        }
+
+        public void ToggleGraph(bool toggle)
+        {
+            drawGraphs = toggle;
+        }
+
+        // Updates (and overwrites the previous) the hero health
+        // Currently holds 5 integers
+        public void UpdateHeroHPGraph(double[] newHps)
+        {
+            hps = newHps;
+        }
+
+        public void UpdateHeroHPQueue(double newhp)
+        {
+            if (currHp.Count > 250)
+            {
+                currHp.Dequeue();
+            }
+            currHp.Enqueue(newhp);
+        }
+
         public void DeleteMessage(int type)
         {
             messages[type].clear();
@@ -1435,7 +1474,7 @@ namespace Yato.DirectXOverlay
         public void Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
         {
             IntPtr fg = GetForegroundWindow();
-            
+
             if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
             {
                 BeginScene();
@@ -1490,7 +1529,28 @@ namespace Yato.DirectXOverlay
                     DrawCircle(Screen.PrimaryScreen.Bounds.Width/2, Screen.PrimaryScreen.Bounds.Height/2, Screen.PrimaryScreen.Bounds.Height/5, 2f, redBrush);
                 }
 
+
                 CheckToShowHeroSuggestion();
+
+                if (drawGraphs)
+                {
+                    int currY = Screen.PrimaryScreen.Bounds.Height / 2;
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
+                    }
+
+
+                    DrawLine(250, currY-100, 250, currY +150, 2, redBrush);
+                    DrawLine(0, currY +150, 250, currY + 150, 2, redBrush);
+
+                    for (int j = 0; j < currHp.Count - 1; j ++)
+                    {
+                        double[] tempCurrHp = currHp.ToArray();
+                        DrawLine(j, (float)(currY - tempCurrHp[j]) / 6 + currY, 1 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
+                    }
+                }
 
                 EndScene();
 
@@ -1499,6 +1559,8 @@ namespace Yato.DirectXOverlay
                     Thread.Sleep(3000);
                     ban_and_pick = 0;
                 }
+
+
             }
             else
             {
@@ -1561,7 +1623,7 @@ namespace Yato.DirectXOverlay
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             float title_left = heroes[0].x - modifier_x;
             float title_top = heroes[0].y - modifier_y * 3;
-            title = new Tuple<string, float, float> ("Hero Suggestion:", title_left, title_top);
+            title = new Tuple<string, float, float>("Hero Suggestion:", title_left, title_top);
         }
     }
 
@@ -1571,7 +1633,7 @@ namespace Yato.DirectXOverlay
         public bool on;
 
         //// Tuple<red, green, blue, alpha>
-        public Tuple<int,int,int,int> background;
+        public Tuple<int, int, int, int> background;
         public Tuple<int, int, int, int> color;
 
         //// Tuple<font, size>
