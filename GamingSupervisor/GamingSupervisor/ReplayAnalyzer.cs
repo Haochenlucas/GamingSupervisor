@@ -180,6 +180,7 @@ namespace GamingSupervisor
         private void HandleGamePlay()
         {
             int health = 0;
+            int maxHealth = 0;
             if (CurrentTick - parsedReplay.getOffSet() < 0)
             {
                 int cur_tic_fake = 0;
@@ -187,8 +188,8 @@ namespace GamingSupervisor
 
             }
             health = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
-            //if (health < 470)
-            if (true)
+            maxHealth = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 9];
+            if (health <= 600)
             {
                 //overlay.ShowMessage("Health is low, retreat");
                 overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet(), "");
@@ -196,7 +197,8 @@ namespace GamingSupervisor
             }
             else
             {
-                overlay.Clear();
+                overlay.renderer.DeleteMessage(6);
+                overlay.renderer.low_hp = false;
             }
         }
 

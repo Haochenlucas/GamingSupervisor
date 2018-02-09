@@ -17,6 +17,9 @@ namespace replayParse
         // the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
         // team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
         public static int[,] hero_ID_Client_Team = new int[30,4];
+        // the table_suggestion is for each ban or pick tic, what heros we suggest to pick.
+        // the second dimension first column is tic, 2 to 6 are the fice suggestion heros.
+        public static int[,] table_suggestion = new int[25, 6];
 
         public counter_pick_logic(string dataFolderLocation)
         {
@@ -197,7 +200,6 @@ namespace replayParse
          */
         public int[,] suggestionTable(int team_name)
         {
-            int[,] table_suggestion = new int[25,6];
             int table_count = 0;
             if (team_name == 2)
             {
@@ -361,6 +363,40 @@ namespace replayParse
             }
 
             return five_hero_array;
+        }
+
+        public int[,] checkMark()
+        {
+            int[,] checkTable = new int[25,3];
+            // the hero_ID_Client_Team is all pick and ban hero, 
+            // the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
+            // team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
+            //public static int[,] hero_ID_Client_Team = new int[30, 4];
+            int index = 0;
+            for(int i = 0; i < 30; i++)
+            {
+                int banorpick = 1;
+                int tic_1 = table_suggestion[i, 0];
+                int tic_2 = table_suggestion[i + 1, 0];
+                int tic_3 = table_suggestion[i + 2, 0];
+                int shootIndex = 0;
+                for (int j = 1; j < 6; j++)
+                {
+                    if(table_suggestion[i,j] == hero_ID_Client_Team[i + 1, 0])
+                    {
+                        if(hero_ID_Client_Team[i + 1, 2]<= 1)
+                        {
+                            banorpick = -1;
+                        }
+                        shootIndex = (j-1)* banorpick;
+                        checkTable[index, 0] = tic_2;
+                        checkTable[index, 1] = tic_2+(int)(tic_3-tic_2)/2;
+                        checkTable[index, 2] = shootIndex; 
+                        index++;
+                    }
+                }
+            }
+            return checkTable;
         }
     }
 }

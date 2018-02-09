@@ -91,6 +91,8 @@ namespace Yato.DirectXOverlay
          */
         public int ban_and_pick = 0;
 
+        public bool low_hp = false;
+
         #endregion
 
         #region construct & destruct
@@ -1480,6 +1482,11 @@ namespace Yato.DirectXOverlay
                             }
                         }
                     }
+                }
+
+                if (low_hp)
+                {
+                    DrawCircle(Screen.PrimaryScreen.Bounds.Width/2, Screen.PrimaryScreen.Bounds.Height/2, Screen.PrimaryScreen.Bounds.Height/5, 2f, redBrush);
                 }
 
                 CheckToShowHeroSuggestion();

@@ -58,8 +58,13 @@ namespace Yato.DirectXOverlay
                 }
                 if (Control.ModifierKeys == Keys.Alt)
                 {
+                    d2d.low_hp = true;
                     //d2d.DeleteMessage(0);
-                    d2d.ban_and_pick = -5;
+                    //d2d.ban_and_pick = -5;
+                }
+                else
+                {
+                    d2d.low_hp = false;
                 }
 
                 d2d.Draw(VS_HWND, overlay);
