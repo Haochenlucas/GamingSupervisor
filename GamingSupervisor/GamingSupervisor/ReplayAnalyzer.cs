@@ -143,12 +143,12 @@ namespace GamingSupervisor
             int[,] suggestiontable = cp.suggestionTable(team_side);
             for(int i = 0; i< 30; i++)
             {
-                if(table[i,3] == team_side)
+                if (table[i, 3] == team_side)
                 {
                     heroID id = new heroID();
                     Dictionary<int, string> id_string = id.getHeroID();
                     string name = id_string[table[i, 0]];
-                    name = String.Join("", name.Split(' '));
+                    name = String.Join("", name.Split(new string[] {" "}, StringSplitOptions.None));
                     int index_id = parsedReplay.getHerosLowercase()[name.ToLower()];
                     teamHeroIds.Add(index_id);
                 }
