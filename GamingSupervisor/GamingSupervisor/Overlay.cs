@@ -17,6 +17,7 @@ namespace GamingSupervisor
             dotaProcessHandle = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
             overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
             renderer.SetupHintSlots();
+            Console.WriteLine("Overlay running!");
         }
 
         public void Clear()

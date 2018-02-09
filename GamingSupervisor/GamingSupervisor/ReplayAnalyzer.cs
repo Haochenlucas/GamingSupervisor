@@ -7,13 +7,13 @@ namespace GamingSupervisor
 {
     class ReplayAnalyzer
     {
-        replay_version01 parsedReplay;
-        double[,,] parsedData;
-        int heroId;
-        ReplayTick replayTick;
+        private replay_version01 parsedReplay;
+        private double[,,] parsedData;
+        private int heroId;
+        private ReplayTick replayTick;
 
         private ReplayStartAnnouncer announcer = null;
-        private Overlay overlay = null;
+        private static Overlay overlay = null;
 
         private System.Timers.Timer tickTimer;
         private readonly object tickLock = new object();
@@ -43,7 +43,7 @@ namespace GamingSupervisor
             {
                 announcer = new ReplayStartAnnouncer();
             }
-            //CurrentTick = announcer.GetStartTick();
+
             CurrentTick = 0;
             announcer.waitForReplayToStart();
             tickTimer.Start();
@@ -60,6 +60,7 @@ namespace GamingSupervisor
 
             CurrentTick = replayTick[announcer.GetCurrentGameTime()];
 
+            Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
                 switch (announcer.GetCurrentGameState())
@@ -91,11 +92,20 @@ namespace GamingSupervisor
                         break;
                 }
 
+                if (!keepLooping)
+                {
+                    break;
+                }
+
                 ShowHints();
 
                 Thread.Sleep(10);
 
                 currentGameTime = announcer.GetCurrentGameTime();
+                if (currentGameTime < 1)
+                {
+                    break;
+                }
                 if (currentGameTime != lastGameTime)
                 {
                     lastGameTime = currentGameTime;
