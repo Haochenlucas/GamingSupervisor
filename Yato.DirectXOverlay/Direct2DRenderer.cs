@@ -1461,6 +1461,7 @@ namespace Yato.DirectXOverlay
 
                         if (messages[i].imgName != "")
                         {
+
                             Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName+ ".png");
                             DrawBitmap(bmp, 1, messages[i].img_x, messages[i].img_y, messages[i].img_width, messages[i].img_height);
                             bmp.SharpDXBitmap.Dispose();

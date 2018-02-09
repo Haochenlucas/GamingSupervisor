@@ -104,6 +104,9 @@
     </Compile>
     <Compile Include="ReplayStartAnnouncer.cs" />
     <Compile Include="ReplayTick.cs" />
+    <Compile Include="WaitForCompletion.xaml.cs">
+      <DependentUpon>WaitForCompletion.xaml</DependentUpon>
+    </Compile>
     <Page Include="ConfirmSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -147,6 +150,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ReplayHeroSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WaitForCompletion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
