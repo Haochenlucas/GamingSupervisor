@@ -120,7 +120,7 @@ namespace replayParse
         /*
          * provide a table which only contain hero_id and hero final rating.
          */
-        public int[,] getDiffFinal()
+        public static int[,] getDiffFinal()
         {
             int[,] diffFinal = new int[116, 2];
             for(int i = 0; i< 116; i++)
@@ -485,6 +485,12 @@ namespace replayParse
             {
                 return 3;
             }
+        }
+
+        public int[] sortbyFinalDiff()
+        {
+            var myIndexedArray = myArray.Select((n, index) => (n, index));
+
         }
     }
 }

@@ -348,5 +348,93 @@ namespace replayParse
 
             return five_hero_array;
         }
+        /*
+       * version_1.0.0 logic_counter 
+       * Input: the hero_sequence which is heros picked by enemy team
+       *        the ban_list contains the heros picked by own team and all baned heros by both team.
+       * output: the best five hero we suggest to pick
+       * improved place: add diff_level to management the suggection pick to consider the Advanced_level of the user.
+       * user (1-beginner, 2-Intermediate, 3-Advanced )
+       */
+        public static int[] logic_counter_version_1_1(int[] teammate, int[] enemy, int[] ban_list, int Advanced_level)
+        {
+            Dictionary<double, int> five_picks = new Dictionary<double, int>();
+            hero_difficulty hd = new hero_difficulty();
+            int[,] diffFinal = hd.getDiffFinal();
+            int[] five_hero_array = new int[5];
+            int length = enemy.Length;
+            int count = 1;
+            int flag = 0;
+            double lowest_fact = 100;
+            double[] counterFact = new double[5];
+            if (enemy.Sum() == 0)
+            {
+                foreach (KeyValuePair<double, int> pair in porper_pick)
+                {
+                    if (!ban_list.Contains(pair.Value))
+                    {
+                        five_picks.Add(pair.Key, pair.Value);
+                    }
+                    if (five_picks.Count == 5)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                while (count <= 115)
+                {
+                    if (enemy.Contains(count) || ban_list.Contains(count) || teammate.Contains(count))
+                    {
+                        count++;
+                        continue;
+                    }
+                    double sum1 = 0;
+                    for (int i = 0; i < length; i++)
+                    {
+                        sum1 = sum1 + matrix_info[enemy[i], count];
+                    }
+                    if (flag < 5)
+                    {
+                        if (five_picks.ContainsKey(sum1))
+                        {
+                            sum1 = sum1 + 0.001;
+                        }
+                        five_picks.Add(sum1, count);
+                        if (sum1 < lowest_fact)
+                            lowest_fact = sum1;
+                        flag++;
+                    }
+                    else if (flag >= 5)
+                    {
+                        if (sum1 > lowest_fact)
+                        {
+                            five_picks.Remove(lowest_fact);
+                            if (five_picks.ContainsKey(sum1))
+                            {
+                                sum1 = sum1 + 0.001;
+                            }
+                            five_picks.Add(sum1, count);
+                            lowest_fact = five_picks.Min(i => i.Key);
+                        }
+                    }
+                    count++;
+                }
+            }
+
+            var list = five_picks.Keys.ToList();
+            list.Sort();
+
+            // Loop through keys.
+            int index = 4;
+            foreach (var key in list)
+            {
+                five_hero_array[index] = five_picks[key];
+                index--;
+            }
+
+            return five_hero_array;
+        }
     }
 }
