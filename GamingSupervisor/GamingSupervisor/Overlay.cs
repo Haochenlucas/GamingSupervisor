@@ -9,7 +9,7 @@ namespace GamingSupervisor
     {
         private OverlayManager overlayManager = null;
         private OverlayWindow window = null;
-        private Direct2DRenderer renderer = null;
+        public Direct2DRenderer renderer = null;
         private IntPtr dotaProcessHandle;
 
         public Overlay()
@@ -27,6 +27,7 @@ namespace GamingSupervisor
 
         public void AddRetreatMessage(string message, string img)
         {
+            renderer.low_hp = true;
             renderer.Retreat(message, img);
         }
 
