@@ -16,8 +16,9 @@ namespace GamingSupervisor
 
         private void Go(object sender, RoutedEventArgs e)
         {
-            GamingSupervisorManager manager = new GamingSupervisorManager();
-            manager.Start();
+            NavigationService navService = NavigationService.GetNavigationService(this);
+            WaitForCompletion waitForCompletion = new WaitForCompletion();
+            navService.Navigate(waitForCompletion);
         }
 
         private void GoBack(object sender, RoutedEventArgs e)
