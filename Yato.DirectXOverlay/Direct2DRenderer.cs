@@ -75,6 +75,10 @@ namespace Yato.DirectXOverlay
 
         private Queue<double> currHp = new Queue<double>(250);
 
+        private List<int> ticks;
+
+        private bool drawHighlight = false;
+
         #endregion
 
         #region public vars
@@ -1374,7 +1378,7 @@ namespace Yato.DirectXOverlay
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
         {
-            hero_difficulty dt = new hero_difficulty(@"C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\GamingSupervisor\replayParse\Properties\hero_difficulty_version_1.txt");
+            hero_difficulty dt = new hero_difficulty();// @"C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\GamingSupervisor\replayParse\Properties\hero_difficulty_version_1.txt");
             string suggestion = dt.mainDiff(HeroID);
             string hero_rating = dt.getFinalLevel(HeroID)[0] + ": " + dt.getFinalLevel(HeroID)[1] + "\n\n";
             // add a newline every 8 chars
@@ -1439,6 +1443,16 @@ namespace Yato.DirectXOverlay
         public void UpdateHeroHPGraph(double[] newHps)
         {
             hps = newHps;
+        }
+
+        public void UpdateHighlightTime(List<int> ticks)
+        {
+            this.ticks = ticks;
+        }
+
+        public void ToggleHightlight(bool drawHighlight)
+        {
+            this.drawHighlight = drawHighlight;
         }
 
         public void UpdateHeroHPQueue(double newhp)
@@ -1529,6 +1543,12 @@ namespace Yato.DirectXOverlay
                     DrawCircle(Screen.PrimaryScreen.Bounds.Width/2, Screen.PrimaryScreen.Bounds.Height/2, Screen.PrimaryScreen.Bounds.Height/5, 2f, redBrush);
                 }
 
+                if (drawHighlight)
+                {
+                    int x = Screen.PrimaryScreen.Bounds.Width;
+                    int y = Screen.PrimaryScreen.Bounds.Height;
+                    DrawLine(x / 3, y, 2 * x / 3, y, 2, lightRedBrush);
+                }
 
                 CheckToShowHeroSuggestion();
 
