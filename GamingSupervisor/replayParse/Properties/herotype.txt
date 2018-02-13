@@ -1,0 +1,88 @@
+[Carry] "Will become more useful later in the game if they gain a significant gold advantage."
+Abaddon icon.pngAbaddonAlchemist icon.pngAlchemistBrewmaster icon.pngBrewmasterBristleback icon.pngBristlebackChaos Knight icon.pngChaos KnightDoom icon.pngDoomDragon Knight icon.pngDragon KnightHuskar icon.pngHuskarKunkka icon.pngKunkkaLegion Commander icon.pngLegion CommanderLifestealer icon.pngLifestealerLycan icon.pngLycanNight Stalker icon.pngNight StalkerSlardar icon.pngSlardarSpirit Breaker icon.pngSpirit BreakerSven icon.pngSvenTiny icon.pngTinyWraith King icon.pngWraith King
+Agility attribute symbol.png Agility
+Anti-Mage icon.pngAnti-MageArc Warden icon.pngArc WardenBloodseeker icon.pngBloodseekerBroodmother icon.pngBroodmotherClinkz icon.pngClinkzDrow Ranger icon.pngDrow RangerEmber Spirit icon.pngEmber SpiritFaceless Void icon.pngFaceless VoidGyrocopter icon.pngGyrocopterJuggernaut icon.pngJuggernautLone Druid icon.pngLone DruidLuna icon.pngLunaMedusa icon.pngMedusaMeepo icon.pngMeepoMirana icon.pngMiranaMonkey King icon.pngMonkey KingMorphling icon.pngMorphlingNaga Siren icon.pngNaga SirenPhantom Assassin icon.pngPhantom AssassinPhantom Lancer icon.pngPhantom LancerRazor icon.pngRazorRiki icon.pngRikiShadow Fiend icon.pngShadow FiendSlark icon.pngSlarkSniper icon.pngSniperSpectre icon.pngSpectreTemplar Assassin icon.pngTemplar AssassinTerrorblade icon.pngTerrorbladeTroll Warlord icon.pngTroll WarlordUrsa icon.pngUrsaViper icon.pngViperWeaver icon.pngWeaver
+Intelligence attribute symbol.png Intelligence
+Death Prophet icon.pngDeath ProphetInvoker icon.pngInvokerLeshrac icon.pngLeshracLina icon.pngLinaNature's Prophet icon.pngNature's ProphetNecrophos icon.pngNecrophosOutworld Devourer icon.pngOutworld DevourerQueen of Pain icon.pngQueen of PainSilencer icon.pngSilencerStorm Spirit icon.pngStorm SpiritTinker icon.pngTinkerWindranger icon.pngWindranger
+
+
+[Disabler] "Has a guaranteed disable for one or more of their spells."
+Alchemist icon.pngAlchemistAxe icon.pngAxeBeastmaster icon.pngBeastmasterBrewmaster icon.pngBrewmasterCentaur Warrunner icon.pngCentaur WarrunnerChaos Knight icon.pngChaos KnightClockwerk icon.pngClockwerkDoom icon.pngDoomDragon Knight icon.pngDragon KnightEarthshaker icon.pngEarthshakerEarth Spirit icon.pngEarth SpiritElder Titan icon.pngElder TitanKunkka icon.pngKunkkaLegion Commander icon.pngLegion CommanderLifestealer icon.pngLifestealerMagnus icon.pngMagnusNight Stalker icon.pngNight StalkerPhoenix icon.pngPhoenixPudge icon.pngPudgeSand King icon.pngSand KingSlardar icon.pngSlardarSpirit Breaker icon.pngSpirit BreakerSven icon.pngSvenTidehunter icon.pngTidehunterTiny icon.pngTinyTreant Protector icon.pngTreant ProtectorTusk icon.pngTuskUnderlord icon.pngUnderlordUndying icon.pngUndyingWraith King icon.pngWraith King
+Agility attribute symbol.png Agility
+Bloodseeker icon.pngBloodseekerDrow Ranger icon.pngDrow RangerEmber Spirit icon.pngEmber SpiritFaceless Void icon.pngFaceless VoidGyrocopter icon.pngGyrocopterMedusa icon.pngMedusaMeepo icon.pngMeepoMirana icon.pngMiranaMonkey King icon.pngMonkey KingMorphling icon.pngMorphlingNaga Siren icon.pngNaga SirenNyx Assassin icon.pngNyx AssassinRiki icon.pngRikiSlark icon.pngSlarkTroll Warlord icon.pngTroll WarlordUrsa icon.pngUrsaVengeful Spirit icon.pngVengeful SpiritVenomancer icon.pngVenomancerViper icon.pngViper
+Intelligence attribute symbol.png Intelligence
+Ancient Apparition icon.pngAncient ApparitionBane icon.pngBaneBatrider icon.pngBatriderCrystal Maiden icon.pngCrystal MaidenDark Seer icon.pngDark SeerDazzle icon.pngDazzleDeath Prophet icon.pngDeath ProphetDisruptor icon.pngDisruptorEnchantress icon.pngEnchantressEnigma icon.pngEnigmaInvoker icon.pngInvokerJakiro icon.pngJakiroKeeper of the Light icon.pngKeeper of the LightLeshrac icon.pngLeshracLina icon.pngLinaLion icon.pngLionNecrophos icon.pngNecrophosOgre Magi icon.pngOgre MagiOracle icon.pngOracleOutworld Devourer icon.pngOutworld DevourerPuck icon.pngPuckRubick icon.pngRubickShadow Demon icon.pngShadow DemonShadow Shaman icon.pngShadow ShamanSilencer icon.pngSilencerSkywrath Mage icon.pngSkywrath MageStorm Spirit icon.pngStorm SpiritTechies icon.pngTechiesVisage icon.pngVisageWarlock icon.pngWarlockWindranger icon.pngWindrangerWinter Wyvern icon.pngWinter WyvernWitch Doctor icon.pngWitch Doctor
+
+
+[Initiator] "Good at starting a teamfight."
+Alchemist icon.pngAlchemistAxe icon.pngAxeBeastmaster icon.pngBeastmasterBrewmaster icon.pngBrewmasterBristleback icon.pngBristlebackCentaur Warrunner icon.pngCentaur WarrunnerChaos Knight icon.pngChaos KnightClockwerk icon.pngClockwerkDoom icon.pngDoomDragon Knight icon.pngDragon KnightEarthshaker icon.pngEarthshakerEarth Spirit icon.pngEarth SpiritElder Titan icon.pngElder TitanHuskar icon.pngHuskarKunkka icon.pngKunkkaLegion Commander icon.pngLegion CommanderMagnus icon.pngMagnusNight Stalker icon.pngNight StalkerPhoenix icon.pngPhoenixPudge icon.pngPudgeSand King icon.pngSand KingSlardar icon.pngSlardarSpirit Breaker icon.pngSpirit BreakerSven icon.pngSvenTidehunter icon.pngTidehunterTiny icon.pngTinyTreant Protector icon.pngTreant ProtectorTusk icon.pngTuskWraith King icon.pngWraith King
+Agility attribute symbol.png Agility
+Bloodseeker icon.pngBloodseekerEmber Spirit icon.pngEmber SpiritFaceless Void icon.pngFaceless VoidMeepo icon.pngMeepoMonkey King icon.pngMonkey KingNaga Siren icon.pngNaga SirenNyx Assassin icon.pngNyx AssassinVengeful Spirit icon.pngVengeful SpiritVenomancer icon.pngVenomancerViper icon.pngViper
+Intelligence attribute symbol.png Intelligence
+Batrider icon.pngBatriderDark Seer icon.pngDark SeerDisruptor icon.pngDisruptorEnigma icon.pngEnigmaLion icon.pngLionOgre Magi icon.pngOgre MagiPuck icon.pngPuckShadow Demon icon.pngShadow DemonShadow Shaman icon.pngShadow ShamanSilencer icon.pngSilencerStorm Spirit icon.pngStorm SpiritWarlock icon.pngWarlock
+
+
+[Jungler] "Can farm effectively from neutral creeps inside the jungle early in the game."
+Axe icon.pngAxeLifestealer icon.pngLifestealerLycan icon.pngLycanSand King icon.pngSand King
+Agility attribute symbol.png Agility
+Bloodseeker icon.pngBloodseekerLone Druid icon.pngLone DruidUrsa icon.pngUrsa
+Intelligence attribute symbol.png Intelligence
+Batrider icon.pngBatriderChen icon.pngChenCrystal Maiden icon.pngCrystal MaidenDark Seer icon.pngDark SeerEnchantress icon.pngEnchantressEnigma icon.pngEnigmaKeeper of the Light icon.pngKeeper of the LightNature's Prophet icon.pngNature's Prophet
+
+
+[Support] "Can focus less on amassing gold and items, and more on using their abilities to gain an advantage for the team."
+Abaddon icon.pngAbaddonAlchemist icon.pngAlchemistEarthshaker icon.pngEarthshakerIo icon.pngIoOmniknight icon.pngOmniknightPhoenix icon.pngPhoenixTreant Protector icon.pngTreant ProtectorUnderlord icon.pngUnderlordUndying icon.pngUndyingWraith King icon.pngWraith King
+Agility attribute symbol.png Agility
+Mirana icon.pngMiranaNaga Siren icon.pngNaga SirenVengeful Spirit icon.pngVengeful SpiritVenomancer icon.pngVenomancer
+Intelligence attribute symbol.png Intelligence
+Ancient Apparition icon.pngAncient ApparitionBane icon.pngBaneChen icon.pngChenCrystal Maiden icon.pngCrystal MaidenDazzle icon.pngDazzleDisruptor icon.pngDisruptorEnchantress icon.pngEnchantressJakiro icon.pngJakiroKeeper of the Light icon.pngKeeper of the LightLeshrac icon.pngLeshracLich icon.pngLichLina icon.pngLinaLion icon.pngLionOgre Magi icon.pngOgre MagiOracle icon.pngOracleRubick icon.pngRubickShadow Demon icon.pngShadow DemonShadow Shaman icon.pngShadow ShamanSilencer icon.pngSilencerSkywrath Mage icon.pngSkywrath MageVisage icon.pngVisageWarlock icon.pngWarlockWindranger icon.pngWindrangerWinter Wyvern icon.pngWinter WyvernWitch Doctor icon.pngWitch Doctor
+
+
+[Durable] "Has the ability to last longer in teamfights."
+Abaddon icon.pngAbaddonAlchemist icon.pngAlchemistAxe icon.pngAxeBeastmaster icon.pngBeastmasterBrewmaster icon.pngBrewmasterBristleback icon.pngBristlebackCentaur Warrunner icon.pngCentaur WarrunnerChaos Knight icon.pngChaos KnightClockwerk icon.pngClockwerkDoom icon.pngDoomDragon Knight icon.pngDragon KnightEarth Spirit icon.pngEarth SpiritElder Titan icon.pngElder TitanHuskar icon.pngHuskarKunkka icon.pngKunkkaLegion Commander icon.pngLegion CommanderLifestealer icon.pngLifestealerLycan icon.pngLycanNight Stalker icon.pngNight StalkerOmniknight icon.pngOmniknightPudge icon.pngPudgeSlardar icon.pngSlardarSpirit Breaker icon.pngSpirit BreakerSven icon.pngSvenTidehunter icon.pngTidehunterTimbersaw icon.pngTimbersawTiny icon.pngTinyTreant Protector icon.pngTreant ProtectorUnderlord icon.pngUnderlordUndying icon.pngUndyingWraith King icon.pngWraith King
+Agility attribute symbol.png Agility
+Faceless Void icon.pngFaceless VoidLone Druid icon.pngLone DruidMedusa icon.pngMedusaMorphling icon.pngMorphlingRazor icon.pngRazorSpectre icon.pngSpectreTroll Warlord icon.pngTroll WarlordUrsa icon.pngUrsaViper icon.pngViper
+Intelligence attribute symbol.png Intelligence
+Bane icon.pngBaneEnchantress icon.pngEnchantressNecrophos icon.pngNecrophosOgre Magi icon.pngOgre MagiVisage icon.pngVisage
+
+
+[Nuker] "Can quickly kill enemy heroes using high damage spells with low cooldowns."
+Alchemist icon.pngAlchemistBeastmaster icon.pngBeastmasterBrewmaster icon.pngBrewmasterBristleback icon.pngBristlebackCentaur Warrunner icon.pngCentaur WarrunnerClockwerk icon.pngClockwerkDoom icon.pngDoomDragon Knight icon.pngDragon KnightEarthshaker icon.pngEarthshakerEarth Spirit icon.pngEarth SpiritElder Titan icon.pngElder TitanIo icon.pngIoKunkka icon.pngKunkkaLegion Commander icon.pngLegion CommanderMagnus icon.pngMagnusNight Stalker icon.pngNight StalkerOmniknight icon.pngOmniknightPhoenix icon.pngPhoenixPudge icon.pngPudgeSand King icon.pngSand KingSven icon.pngSvenTidehunter icon.pngTidehunterTimbersaw icon.pngTimbersawTiny icon.pngTinyTusk icon.pngTuskUnderlord icon.pngUnderlordUndying icon.pngUndying
+Agility attribute symbol.png Agility
+Anti-Mage icon.pngAnti-MageArc Warden icon.pngArc WardenBloodseeker icon.pngBloodseekerBounty Hunter icon.pngBounty HunterBroodmother icon.pngBroodmotherEmber Spirit icon.pngEmber SpiritGyrocopter icon.pngGyrocopterLuna icon.pngLunaMeepo icon.pngMeepoMirana icon.pngMiranaMorphling icon.pngMorphlingNyx Assassin icon.pngNyx AssassinPhantom Lancer icon.pngPhantom LancerRazor icon.pngRazorShadow Fiend icon.pngShadow FiendSlark icon.pngSlarkSniper icon.pngSniperTerrorblade icon.pngTerrorbladeVengeful Spirit icon.pngVengeful SpiritVenomancer icon.pngVenomancer
+Intelligence attribute symbol.png Intelligence
+Ancient Apparition icon.pngAncient ApparitionBane icon.pngBaneCrystal Maiden icon.pngCrystal MaidenDazzle icon.pngDazzleDeath Prophet icon.pngDeath ProphetDisruptor icon.pngDisruptorInvoker icon.pngInvokerJakiro icon.pngJakiroKeeper of the Light icon.pngKeeper of the LightLeshrac icon.pngLeshracLich icon.pngLichLina icon.pngLinaLion icon.pngLionNature's Prophet icon.pngNature's ProphetNecrophos icon.pngNecrophosOgre Magi icon.pngOgre MagiOracle icon.pngOracleOutworld Devourer icon.pngOutworld DevourerPuck icon.pngPuckPugna icon.pngPugnaQueen of Pain icon.pngQueen of PainRubick icon.pngRubickShadow Demon icon.pngShadow DemonShadow Shaman icon.pngShadow ShamanSilencer icon.pngSilencerSkywrath Mage icon.pngSkywrath MageStorm Spirit icon.pngStorm SpiritTechies icon.pngTechiesTinker icon.pngTinkerVisage icon.pngVisageWindranger icon.pngWindrangerWinter Wyvern icon.pngWinter WyvernWitch Doctor icon.pngWitch DoctorZeus icon.pngZeus
+
+
+[Pusher] "Can quickly siege and destroy towers and barracks at all points of the game."
+Chaos Knight icon.pngChaos KnightDragon Knight icon.pngDragon KnightLycan icon.pngLycanTiny icon.pngTiny
+Agility attribute symbol.png Agility
+Broodmother icon.pngBroodmotherClinkz icon.pngClinkzDrow Ranger icon.pngDrow RangerJuggernaut icon.pngJuggernautLone Druid icon.pngLone DruidLuna icon.pngLunaMeepo icon.pngMeepoNaga Siren icon.pngNaga SirenPhantom Lancer icon.pngPhantom LancerRazor icon.pngRazorTerrorblade icon.pngTerrorbladeTroll Warlord icon.pngTroll WarlordVenomancer icon.pngVenomancer
+Intelligence attribute symbol.png Intelligence
+Chen icon.pngChenDeath Prophet icon.pngDeath ProphetEnchantress icon.pngEnchantressEnigma icon.pngEnigmaInvoker icon.pngInvokerJakiro icon.pngJakiroLeshrac icon.pngLeshracNature's Prophet icon.pngNature's ProphetPugna icon.pngPugnaShadow Shaman icon.pngShadow ShamanTinker icon.pngTinkerVisage icon.pngVisage
+
+
+[Escape] "Has the ability to quickly avoid death."
+Centaur Warrunner icon.pngCentaur WarrunnerEarth Spirit icon.pngEarth SpiritIo icon.pngIoLifestealer icon.pngLifestealerLycan icon.pngLycanMagnus icon.pngMagnusPhoenix icon.pngPhoenixSand King icon.pngSand KingSlardar icon.pngSlardarSpirit Breaker icon.pngSpirit BreakerTimbersaw icon.pngTimbersawTreant Protector icon.pngTreant ProtectorUnderlord icon.pngUnderlord
+Agility attribute symbol.png Agility
+Anti-Mage icon.pngAnti-MageArc Warden icon.pngArc WardenBounty Hunter icon.pngBounty HunterBroodmother icon.pngBroodmotherClinkz icon.pngClinkzEmber Spirit icon.pngEmber SpiritFaceless Void icon.pngFaceless VoidJuggernaut icon.pngJuggernautMeepo icon.pngMeepoMirana icon.pngMiranaMonkey King icon.pngMonkey KingMorphling icon.pngMorphlingNaga Siren icon.pngNaga SirenNyx Assassin icon.pngNyx AssassinPhantom Assassin icon.pngPhantom AssassinPhantom Lancer icon.pngPhantom LancerRiki icon.pngRikiSlark icon.pngSlarkSpectre icon.pngSpectreTemplar Assassin icon.pngTemplar AssassinVengeful Spirit icon.pngVengeful SpiritWeaver icon.pngWeaver
+Intelligence attribute symbol.png Intelligence
+Batrider icon.pngBatriderDark Seer icon.pngDark SeerInvoker icon.pngInvokerNature's Prophet icon.pngNature's ProphetOracle icon.pngOraclePuck icon.pngPuckQueen of Pain icon.pngQueen of PainStorm Spirit icon.pngStorm SpiritWindranger icon.pngWindranger
+
+
+
+
+
+[Offlane]
+Pangolier Doom Tidehunter Legion Commander Omniknight Brewmaster Pudge Clockwerk Sand King Nyx Assassin Puck Bristleback Axe Underlord Batrider Earthshaker Faceless Void Timbersaw Windranger Weaver	
+
+
+[Midlane]
+Tinker	Shadow Fiend Storm Spirit Templar Assassin Invoker Outworld Devourer Queen of Pain Death Prophet Puck Zeus Ember Spirit Viper Alchemist
+Arc Warden Lina Sniper Meepo Dragon Knight Razor Leshrac Windranger Kunkka Magnus Tiny Pudge Mirana Medusa Bounty Hunter Huskar Visage Clinkz Pugna Earth Spirit Necrophos Skywrath Mage Monkey King Riki Brewmaster Silencer Phantom Assassin Io Night Stalker Dark Willow Tusk Morphling Naga Siren Broodmother Bloodseeker Drow Ranger Lone Druid Timbersaw Gyrocopter Venomancer
+
+
+
+
+
+
