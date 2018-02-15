@@ -74,8 +74,8 @@ namespace Yato.DirectXOverlay
         private bool drawGraphs = false;
 
         private Queue<double> currHp = new Queue<double>(250);
-
-        private List<int> ticks;
+        
+        private Dictionary<int, string> ticksInfo;
 
         private bool drawHighlight = false;
 
@@ -1447,10 +1447,10 @@ namespace Yato.DirectXOverlay
             hps = newHps;
         }
 
-        public void UpdateHighlightTime(List<int> ticks, int total)
+        public void UpdateHighlightTime(Dictionary<int, string> ticks, int maxTick)
         {
-            this.ticks = ticks;
-            this.maxTick = total;
+            this.ticksInfo = ticks;
+            this.maxTick = maxTick;
         }
 
         public void ToggleHightlight(bool drawHighlight)
@@ -1553,12 +1553,10 @@ namespace Yato.DirectXOverlay
                     float xInit = x / 3;
                     float xEnd = 2 * x / 3;
                     DrawLine(xInit, y / 2, xEnd, y / 2, 2, lightRedBrush);
-                    foreach (var a in ticks)
+                    foreach (var a in ticksInfo)
                     {
-                        float percent = a / (float)maxTick;
+                        float percent = a.Key / (float)maxTick;
                         float xCurr = xInit + (xEnd - xInit) * percent;
-                        //Console.WriteLine("{0}, {1}, {2}", a, xCurr, percent);
-                        //DrawCircle(xCurr, y / 2, 2, 4, blueBrush);
                         DrawBox2D(xCurr, y/2 - 2, 4, 4, 2, blueBrush, blueBrush);
                     }
 
@@ -1638,7 +1636,7 @@ namespace Yato.DirectXOverlay
 
         private void CheckToShowHighlightTime()
         {
-            foreach (var a in ticks)
+            foreach (var a in ticksInfo)
             {
                 var mousePosition = Control.MousePosition;
                 var mX = mousePosition.X;
@@ -1648,21 +1646,15 @@ namespace Yato.DirectXOverlay
                 int y = Screen.PrimaryScreen.Bounds.Height;
                 float xInit = x / 3;
                 float xEnd = 2 * x / 3;
-                float percent = a / (float)maxTick;
+                float percent = a.Key / (float)maxTick;
                 float xCurr = xInit + (xEnd - xInit) * percent;
-
-                //DrawBox2D(xCurr, y / 2 - 2, 4, 4, 2, blueBrush, blueBrush);
-
+                
                 Direct2DFont font = CreateFont("Consolas", 12);
                 Direct2DBrush brush = CreateBrush(255, 255, 255, 255);
                 Direct2DBrush background = CreateBrush(109, 109, 109, 255);
-
-
-                //Console.WriteLine("small : {0}; x : {1}; big : {2}; bool : {3}", xCurr - 50, mX, xCurr + 54, mX > xCurr - 50 && mX < xCurr + 54);
-                //Console.WriteLine("small : {0}; y : {1}; big : {2}; bool : {3}", y / 2 - 52, mY, y / 2 + 52, mY > y / 2 - 52 && mY < y / 2 + 52);
-
-                if (mX > xCurr - 10 && mX < xCurr + 14 && mY > y / 2 - 12 && mY < y / 2 + 12)
-                    DrawTextWithBackground(a.ToString(), xCurr, y / 2 - x / 80, font, brush, background);
+                
+                if (mX > xCurr - 2 && mX < xCurr + 2 && mY > y / 2 - 14 && mY < y / 2 + 10)
+                    DrawTextWithBackground(a.Value, xCurr, y / 2 - x / 80, font, brush, background);
             }
         }
     }

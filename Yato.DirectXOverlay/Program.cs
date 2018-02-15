@@ -45,10 +45,10 @@ namespace Yato.DirectXOverlay
 
             System.Random rand = new System.Random();
             int numHighlights = 10;
-            List<int> randTimes = new List<int>(numHighlights);
+            Dictionary<int, string> randInfo = new Dictionary<int, string>();
             for (int i = 0; i < numHighlights; i++)
             {
-                randTimes.Add(rand.Next(initStateTick, postStateTick));
+                randInfo[rand.Next(initStateTick, postStateTick)] = rand.Next(1, 10).ToString() + " kills";
             }
 
             #endregion
@@ -87,7 +87,7 @@ namespace Yato.DirectXOverlay
                     d2d.HeroSelectionHints(messages, imgName);
 
                     d2d.ToggleHightlight(true);
-                    d2d.UpdateHighlightTime(randTimes, totalTick);
+                    d2d.UpdateHighlightTime(randInfo, totalTick);
 
                     d2d.Retreat("Run", "");
                     
