@@ -347,15 +347,17 @@ namespace replayParse
             return five_hero_array;
         }
 
+        /*
+         * Call this function require to call suggestionTable() to update the table_suggestion table.
+         * Output: int[,]: the first dimension is about how many checkmark or X mark will show in the selection part.
+         * The second dimension: the first column is start_tic of this checkmark or x mark. the second column is end_tic of this checkmark or x mark.
+         * the third column is whether is a checkmark or x mark and combine with hero_id.
+         */
         public int[,] checkMark()
         {
             int[,] checkTable = new int[25,3];
-            // the hero_ID_Client_Team is all pick and ban hero, 
-            // the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
-            // team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
-            //public static int[,] hero_ID_Client_Team = new int[30, 4];
             int index = 0;
-            for(int i = 0; i < 30; i++)
+            for(int i = 0; i < 25; i++)
             {
                 int banorpick = 1;
                 int tic_1 = table_suggestion[i, 0];
@@ -372,7 +374,14 @@ namespace replayParse
                         }
                         shootIndex = (j-1)* banorpick;
                         checkTable[index, 0] = tic_2;
-                        checkTable[index, 1] = tic_2+(int)(tic_3-tic_2)/2;
+                        if ((tic_2 + (int)(tic_3 - tic_2) / 2) > 60)
+                        {
+                            checkTable[index, 1] = tic_2+60;
+                        }
+                        else
+                        {
+                            checkTable[index, 1] = tic_2 + (int)(tic_3 - tic_2) / 2;
+                        }
                         checkTable[index, 2] = shootIndex; 
                         index++;
                     }

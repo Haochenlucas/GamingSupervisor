@@ -124,6 +124,12 @@ namespace GamingSupervisor
             overlay.ShowMessage();
         }
 
+
+
+
+        /*
+         * This function is to logic of what to draw in selection mode.
+         */
         private void HandleHeroSelection()
         {
             counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
@@ -221,28 +227,31 @@ namespace GamingSupervisor
             health = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
 
             maxHealth = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 9];
-            if (health <= 600)
+            //if (health <= 600)
 
             hpToSend[0] = health;
             for (int i = 0; i < 4; i++)
             {
                 hpToSend[i + 1] = parsedData[CurrentTick - parsedReplay.getOffSet(), teamHeroIds[i], 0];
             }
-            //if (health < 470)
-            if (true)
+            if (health < 600)
             {
-                overlay.ToggleGraphForHeroHP();
-                overlay.AddHPs(hpToSend);
-                overlay.AddHp(hpToSend[0]);
-                //overlay.ShowMessage("Health is low, retreat");
                 overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet(), "");
-                //Console.WriteLine("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet());
+
             }
             else
             {
                 overlay.renderer.DeleteMessage(6);
                 overlay.renderer.low_hp = false;
             }
+            
+                overlay.ToggleGraphForHeroHP();
+                overlay.AddHPs(hpToSend);
+                overlay.AddHp(hpToSend[0]);
+                //overlay.ShowMessage("Health is low, retreat");
+                               //Console.WriteLine("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet());
+            
+            
         }
 
         private void tickCallback(object sender, EventArgs e)
