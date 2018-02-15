@@ -87,7 +87,7 @@ namespace Yato.DirectXOverlay
                     d2d.HeroSelectionHints(messages, imgName);
 
                     d2d.ToggleHightlight(true);
-                    d2d.UpdateHighlightTime(randTimes);
+                    d2d.UpdateHighlightTime(randTimes, totalTick);
 
                     d2d.Retreat("Run", "");
                     

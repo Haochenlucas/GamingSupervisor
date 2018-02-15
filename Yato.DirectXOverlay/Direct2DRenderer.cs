@@ -79,6 +79,8 @@ namespace Yato.DirectXOverlay
 
         private bool drawHighlight = false;
 
+        private int maxTick;
+
         #endregion
 
         #region public vars
@@ -1445,9 +1447,10 @@ namespace Yato.DirectXOverlay
             hps = newHps;
         }
 
-        public void UpdateHighlightTime(List<int> ticks)
+        public void UpdateHighlightTime(List<int> ticks, int total)
         {
             this.ticks = ticks;
+            this.maxTick = total;
         }
 
         public void ToggleHightlight(bool drawHighlight)
@@ -1547,7 +1550,19 @@ namespace Yato.DirectXOverlay
                 {
                     int x = Screen.PrimaryScreen.Bounds.Width;
                     int y = Screen.PrimaryScreen.Bounds.Height;
-                    DrawLine(x / 3, y, 2 * x / 3, y, 2, lightRedBrush);
+                    float xInit = x / 3;
+                    float xEnd = 2 * x / 3;
+                    DrawLine(xInit, y / 2, xEnd, y / 2, 2, lightRedBrush);
+                    foreach (var a in ticks)
+                    {
+                        float percent = a / (float)maxTick;
+                        float xCurr = xInit + (xEnd - xInit) * percent;
+                        //Console.WriteLine("{0}, {1}, {2}", a, xCurr, percent);
+                        //DrawCircle(xCurr, y / 2, 2, 4, blueBrush);
+                        DrawBox2D(xCurr, y/2 - 2, 4, 4, 2, blueBrush, blueBrush);
+                    }
+
+                    CheckToShowHighlightTime();
                 }
 
                 CheckToShowHeroSuggestion();
@@ -1606,7 +1621,10 @@ namespace Yato.DirectXOverlay
             for(int i = 0; i < 5; i++)
             {
                 var mouse_pos = Control.MousePosition;
-                if (mouse_pos.X > messages[i].img_x && mouse_pos.X < messages[i].img_x + messages[i].img_width && mouse_pos.Y > messages[i].img_y && mouse_pos.Y < messages[i].img_y + messages[i].img_height)
+                if (mouse_pos.X > messages[i].img_x && 
+                    mouse_pos.X < messages[i].img_x + messages[i].img_width && 
+                    mouse_pos.Y > messages[i].img_y && 
+                    mouse_pos.Y < messages[i].img_y + messages[i].img_height)
                 {
                     SelectedHeroSuggestion(Int32.Parse(messages[i].imgName), mouse_pos.Y);
                     return;
@@ -1615,6 +1633,36 @@ namespace Yato.DirectXOverlay
                 {
                     messages[11].on = false;
                 }
+            }
+        }
+
+        private void CheckToShowHighlightTime()
+        {
+            foreach (var a in ticks)
+            {
+                var mousePosition = Control.MousePosition;
+                var mX = mousePosition.X;
+                var mY = mousePosition.Y;
+
+                int x = Screen.PrimaryScreen.Bounds.Width;
+                int y = Screen.PrimaryScreen.Bounds.Height;
+                float xInit = x / 3;
+                float xEnd = 2 * x / 3;
+                float percent = a / (float)maxTick;
+                float xCurr = xInit + (xEnd - xInit) * percent;
+
+                //DrawBox2D(xCurr, y / 2 - 2, 4, 4, 2, blueBrush, blueBrush);
+
+                Direct2DFont font = CreateFont("Consolas", 12);
+                Direct2DBrush brush = CreateBrush(255, 255, 255, 255);
+                Direct2DBrush background = CreateBrush(109, 109, 109, 255);
+
+
+                //Console.WriteLine("small : {0}; x : {1}; big : {2}; bool : {3}", xCurr - 50, mX, xCurr + 54, mX > xCurr - 50 && mX < xCurr + 54);
+                //Console.WriteLine("small : {0}; y : {1}; big : {2}; bool : {3}", y / 2 - 52, mY, y / 2 + 52, mY > y / 2 - 52 && mY < y / 2 + 52);
+
+                if (mX > xCurr - 10 && mX < xCurr + 14 && mY > y / 2 - 12 && mY < y / 2 + 12)
+                    DrawTextWithBackground(a.ToString(), xCurr, y / 2 - x / 80, font, brush, background);
             }
         }
     }
