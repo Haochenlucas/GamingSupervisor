@@ -71,6 +71,7 @@
     <Compile Include="demo.cs" />
     <Compile Include="heroID.cs" />
     <Compile Include="heroIDClient.cs" />
+    <Compile Include="HeroParser.cs" />
     <Compile Include="hero_difficulty.cs" />
     <Compile Include="makeup_difficulty-table.cs" />
     <Compile Include="replayParse.cs" />
