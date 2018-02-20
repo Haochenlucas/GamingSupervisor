@@ -9,20 +9,56 @@ namespace replayParse
         private static int FirstTick { get; set; }
         private class TickEntries<T> : Dictionary<int, T>
         {
-            public new T this[int key]
+            private int cachedTick = 0;
+            private T cachedValue = default(T);
+
+            private int lastTickAccessed = -1;
+
+            public new T this[int tick]
             {
                 get
                 {
-                    // Iterate through every previous key/tick until finding one with a value
-                    if (base.ContainsKey(key))
-                        return base[key];
-                    else
-                        for (int i = key; i >= FirstTick; i--)
+                    // Iterate through every previous tick until finding one with a value
+                    if (base.ContainsKey(tick))
+                    {
+                        cachedTick = tick;
+                        cachedValue = base[tick];
+                        lastTickAccessed = tick;
+                        return base[tick];
+                    }
+                    else if (lastTickAccessed != -1 && tick >= lastTickAccessed)
+                    {
+                        for (int i = tick; i >= lastTickAccessed; i--)
+                        {
                             if (base.ContainsKey(i))
+                            {
+                                cachedTick = i;
+                                cachedValue = base[i];
+                                lastTickAccessed = tick;
                                 return base[i];
-                    return default(T);
+                            }
+                        }
+                        lastTickAccessed = tick;
+                        return cachedValue;
+                    }
+                    else if (lastTickAccessed != -1 && tick < lastTickAccessed && tick >= cachedTick)
+                        return cachedValue;
+                    else
+                    {
+                        for (int i = tick; i >= FirstTick; i--)
+                        {
+                            if (base.ContainsKey(i))
+                            {
+                                cachedTick = i;
+                                cachedValue = base[i];
+                                lastTickAccessed = tick;
+                                return base[i];
+                            }
+                        }
+                        return default(T);
+                    }
                 }
-                set => base[key] = value;
+                set => base[tick] = value;
             }
         }
 
