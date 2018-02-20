@@ -197,9 +197,6 @@ namespace GamingSupervisor
                 heroesimg[j - 1] = suggestiontable[shuangla, j].ToString();
                 heroes[j - 1] = ID_table[suggestiontable[shuangla, j]];
             }
-
-
-
             overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
         }
 

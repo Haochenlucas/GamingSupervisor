@@ -45,7 +45,10 @@ namespace replayParse
                 {
                     name = "treantprotector";
                 }
-
+                if (name.Contains("Rattletrap"))
+                {
+                    name = "Clockwerk";
+                }
                 int heroID = Int32.Parse(words[0]);
                 heroNameToID[name] = heroID;
                 heroIDToName[heroID] = name;
@@ -76,6 +79,10 @@ namespace replayParse
             if (heroName.Contains("treant"))
             {
                 heroName = "treantprotector";
+            }
+            if (heroName.Contains("Rattletrap"))
+            {
+                heroName = "Clockwerk";
             }
 
             return heroNameToID[heroName];

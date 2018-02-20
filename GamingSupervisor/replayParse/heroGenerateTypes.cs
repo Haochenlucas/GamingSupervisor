@@ -8,6 +8,8 @@ namespace replayParse
 {
     public class heroGenerateTypes
     {
+        // 0:[Carry], 1: [Disabler] 2: [Initiator], 3:[Jungler], 4:[Support], 5:[Durable] 
+        // 6:[Nuker], 2: [[Pusher] ] 
         private static int[,] hero_generate_type_table = new int[116, 12];
 
         /*
