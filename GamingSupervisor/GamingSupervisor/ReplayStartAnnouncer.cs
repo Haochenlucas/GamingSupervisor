@@ -17,7 +17,8 @@ namespace GamingSupervisor
         public int GetStartTick()
         {
             string firstLine = "";
-            foreach (string line in File.ReadLines(@"../../Parser/state.txt"))
+            foreach (string line in
+                File.ReadLines(GUISelection.replayDataFolderLocation + "state.txt"))
             {
                 firstLine = line;
                 break;
@@ -45,7 +46,10 @@ namespace GamingSupervisor
                 gameStateIntegration.StartListener();
                 listenerStarted = true;
             }
-            SpinWait.SpinUntil(() => gameStateIntegration.GameState != "Undefined");
+            SpinWait.SpinUntil(() =>
+                gameStateIntegration.GameState != "Undefined" && 
+                gameStateIntegration.GameState != null &&
+                gameStateIntegration.GameState != "");
             Console.WriteLine("Replay started!");
         }
 

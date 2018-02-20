@@ -27,11 +27,13 @@ public class App
     private PrintWriter cameraWriter;
     private PrintWriter stateWriter;
     private PrintWriter heroIdWriter;
+    private PrintWriter timeWriter;
     
     private Hero hero;
     private Camera camera;
     private Selection selection;
     private GameState state;
+    private GameTime time;
     
     private HashMap<Object, String> heroIds;
     
@@ -42,7 +44,6 @@ public class App
         sb.append(ctx.getTick() + " [");
         sb.append(type);
         sb.append("]");
-        sb.append(" " + e.getDtClass().getDtName());
         for (int i = 0; i < fieldPaths.length; i++)
         {
             sb.append(" " + e.getPropertyForFieldPath(fieldPaths[i]));
@@ -71,33 +72,31 @@ public class App
     private void initializeSelection(Entity e)
     {
         if (selection == null)
-        {
             selection = new Selection(e);
-        }
     }
     
     private void initializeHero(Entity e)
     {
         if (hero == null)
-        {
-            hero = new Hero(e);            
-        }
+            hero = new Hero(e); 
     }
     
     private void initializeCamera(Entity e)
     {
         if (camera == null)
-        {
             camera = new Camera(e);
-        }
     }
     
     private void initializeState(Entity e)
     {
         if (state == null)
-        {
             state = new GameState(e);
-        }
+    }
+    
+    private void initializeTime(Entity e)
+    {
+        if (time == null)
+            time = new GameTime(e);
     }
     
     @OnEntityCreated
@@ -123,6 +122,7 @@ public class App
         {
             handleHeroSelection(ctx, e, updatedPaths, updateCount);
             handleGameState(ctx, e, updatedPaths, updateCount);
+            handleGameTime(ctx, e, updatedPaths, updateCount);
         }
         else if (isPlayer(e))
         {
@@ -174,6 +174,28 @@ public class App
             stateWriter.format("%d [STATE] %s\n", ctx.getTick(),
                 e.getPropertyForFieldPath(state.state));
             stateWriter.flush();
+        }
+    }
+    
+    private void handleGameTime(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
+    {
+    	initializeTime(e);
+        
+        boolean updateTime = false;
+        for (int i = 0; i < updateCount; i++)
+        {
+            if (time.isTime(updatedPaths[i]))
+            {
+                updateTime = true;
+                break;
+            }
+        }
+        
+        if (updateTime)
+        {
+            timeWriter.format("%d [TIME] %s\n", ctx.getTick(),
+                e.getPropertyForFieldPath(time.time));
+            timeWriter.flush();
         }
     }
     
@@ -268,29 +290,29 @@ public class App
         }
         
         if (updatePosition || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "POSITION", hero.x, hero.y, hero.z);
+            writeToFile(heroWriter, ctx, e, "POSITION", hero.playerID, hero.x, hero.y, hero.z);
         if (updateHealth || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "HEALTH", hero.health);
+            writeToFile(heroWriter, ctx, e, "HEALTH", hero.playerID, hero.health);
         if (updateLevel || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "LEVEL", hero.level);
+            writeToFile(heroWriter, ctx, e, "LEVEL", hero.playerID, hero.level);
         if (updateMana || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "MANA", hero.mana);
+            writeToFile(heroWriter, ctx, e, "MANA", hero.playerID, hero.mana);
         if (updateStrength || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "STRENGTH", hero.strength);
+            writeToFile(heroWriter, ctx, e, "STRENGTH", hero.playerID, hero.strength);
         if (updateIntellect || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "INTELLECT", hero.intellect);
+            writeToFile(heroWriter, ctx, e, "INTELLECT", hero.playerID, hero.intellect);
         if (updateMaxHealth || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "MAXHEALTH", hero.maxHealth);
+            writeToFile(heroWriter, ctx, e, "MAXHEALTH", hero.playerID, hero.maxHealth);
         if (updateManaRegen || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "MANAREGEN", hero.manaRegen);
+            writeToFile(heroWriter, ctx, e, "MANAREGEN", hero.playerID, hero.manaRegen);
         if (updateHealthRegen || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "HEALTHREGEN", hero.healthRegen);
+            writeToFile(heroWriter, ctx, e, "HEALTHREGEN", hero.playerID, hero.healthRegen);
         if (updateMovementSpeed || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "MOVEMENTSPEED", hero.movementSpeed);
+            writeToFile(heroWriter, ctx, e, "MOVEMENTSPEED", hero.playerID, hero.movementSpeed);
         if (updateDamageMin || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "DAMAGEMIN", hero.damageMin);
+            writeToFile(heroWriter, ctx, e, "DAMAGEMIN", hero.playerID, hero.damageMin);
         if (updateDamageMax || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "DAMAGEMAX", hero.damageMax);
+            writeToFile(heroWriter, ctx, e, "DAMAGEMAX", hero.playerID, hero.damageMax);
         //if (updateItems || forceUpdate)
         //    writeToFile(heroWriter, ctx, e, "ITEMS", hero.playerID, hero.);
     }
@@ -308,12 +330,14 @@ public class App
         File cameraFile = new File(args[1] + "/camera.txt");
         File stateFile = new File(args[1] + "/state.txt");
         File heroIdFile = new File(args[1] + "/heroId.txt");
+        File timeFile = new File(args[1] + "/time.txt");
         
         heroWriter = new PrintWriter(heroFile);
         heroSelectionWriter = new PrintWriter(selectionFile);
         cameraWriter = new PrintWriter(cameraFile);
         stateWriter = new PrintWriter(stateFile);
         heroIdWriter = new PrintWriter(heroIdFile);
+        timeWriter = new PrintWriter(timeFile);
         
         heroIds = new HashMap<Object, String>();
         
@@ -331,6 +355,7 @@ public class App
         cameraWriter.close();
         stateWriter.close();
         heroIdWriter.close();
+        timeWriter.close();
     }
 
     public static void main(String[] args) throws Exception

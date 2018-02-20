@@ -9,35 +9,29 @@ namespace GamingSupervisor
     /// </summary>
     public partial class ConfirmSelection : Page
     {
-        private GUISelection selection;
-
         public ConfirmSelection()
         {
             InitializeComponent();
         }
 
-        public ConfirmSelection(GUISelection selection) : this()
-        {
-            this.selection = selection;
-        }
-
         private void Go(object sender, RoutedEventArgs e)
         {
-            GamingSupervisorManager manager = new GamingSupervisorManager(selection);
-            manager.Start();
+            NavigationService navService = NavigationService.GetNavigationService(this);
+            WaitForCompletion waitForCompletion = new WaitForCompletion();
+            navService.Navigate(waitForCompletion);
         }
 
         private void GoBack(object sender, RoutedEventArgs e)
         {
             NavigationService navService = NavigationService.GetNavigationService(this);
-            if (selection.fileName == null)
+            if (GUISelection.fileName == null)
             {
-                GameTypeSelection gameTypeSelection = new GameTypeSelection(selection);
+                GameTypeSelection gameTypeSelection = new GameTypeSelection();
                 navService.Navigate(gameTypeSelection);
             }
             else
             {
-                ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection(selection);
+                ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection();
                 navService.Navigate(replayHeroSelection);
             }
         }

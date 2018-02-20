@@ -86,6 +86,28 @@ namespace replayParse
                 }
             }
         }
+        public hero_difficulty(string path)
+        {
+            string s = path;
+            string[] lines = System.IO.File.ReadAllLines(s);
+            string[] second_lines = lines;
+            int key = 0;
+            int length_name = 0;
+            foreach (string line in lines)
+            {
+                key++;
+                length_name = 0;
+                string second_string = string.Empty;
+                string[] words = line.Split('\t');
+                string[] name = words[0].Split(' ');
+                length_name = name.Length;
+
+                for (int i = 0; i < length_name; i++)
+                {
+                    Int32.TryParse(name[i], out difficulty_table[key, i]);
+                }
+            }
+        }
 
         /*
         * provide the whole rating table.

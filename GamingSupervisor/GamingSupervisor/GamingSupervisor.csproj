@@ -86,8 +86,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Yato.DirectXOverlay, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Yato.DirectXOverlay">
       <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -104,6 +103,10 @@
       <DependentUpon>ReplayHeroSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReplayStartAnnouncer.cs" />
+    <Compile Include="ReplayTick.cs" />
+    <Compile Include="WaitForCompletion.xaml.cs">
+      <DependentUpon>WaitForCompletion.xaml</DependentUpon>
+    </Compile>
     <Page Include="ConfirmSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -150,6 +153,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WaitForCompletion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="xaml\ToolTip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,11 +190,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Parser\info.txt" />
     <Content Include="Parser\parser.jar" />
-    <Resource Include="Parser\position.txt" />
-    <Resource Include="Parser\replay.txt" />
-    <Resource Include="Parser\selection.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\replayParse\replayParse.csproj">

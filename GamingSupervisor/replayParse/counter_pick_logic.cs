@@ -1,37 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace replayParse
 {
     public class counter_pick_logic
     {
+        private string dataFolderLocation;
+        // the matrix_info contains the information we need for counter pick factor.
         public static double[,] matrix_info = new double[116, 116];
         // the hero_ID_Client_Team is all pick and ban hero, 
         // the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
         // team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
         public static int[,] hero_ID_Client_Team = new int[30,4];
+        // the table_suggestion is for each ban or pick tic, what heros we suggest to pick.
+        // the second dimension first column is tic, 2 to 6 are the fice suggestion heros.
+        public static int[,] table_suggestion = new int[25, 6];
 
-        public counter_pick_logic()
+        public counter_pick_logic(string dataFolderLocation)
         {
+            this.dataFolderLocation = dataFolderLocation;
+
             counterpick_info cp_info = new counterpick_info();
             matrix_info = cp_info.getCounterTable();
+            this.readTeam();
         }
 
-        
 
+        /*
+         *build up the hero_ID_Client_Team Team
+         */
         public void readTeam()
         {
             //count the hero name
             int count = 0;
             //count the hero team
             int count1 = 0;
-            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\GamingSupervisor\Parser\info.txt");
-            //s = @"C: \Users\dominate\Desktop\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\replay.txt";
+            string s = dataFolderLocation + "info.txt";
+
             string[] lines = System.IO.File.ReadAllLines(s);
             heroIDClient ID_client = new heroIDClient();
             Dictionary<string, int> clientID_Dic = ID_client.getIDHero();
@@ -129,8 +135,8 @@ namespace replayParse
                 }
             }
 
-            s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\GamingSupervisor\Parser\selection.txt");
-            //s = @"C: \Users\dominate\Desktop\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\replay.txt";
+            s = dataFolderLocation + "selection.txt";
+
             lines = System.IO.File.ReadAllLines(s);
             foreach (string line in lines)
             {
@@ -150,38 +156,14 @@ namespace replayParse
                         hero_ID_Client_Team[i, 3] = tic;
                     }
                 }
-                //if (words[1].Contains('B'))
-                //{
-                //    heroID = Int32.Parse(words[2]);
-                //    string hero_name = "";
-                //    clientHero_Dic.TryGetValue(heroID, out hero_name);
-                //    int cur_ID = 0;
-                //    ID_Dic.TryGetValue(hero_name, out cur_ID);
-                //    team = 1;
-                //    hero_ID_Client_Team[count, 1] = heroID;
-                //    hero_ID_Client_Team[count, 2] = team;
-                //    hero_ID_Client_Team[count, 0] = cur_ID;
-                //    hero_ID_Client_Team[count, 3] = tic;
-                //}
-                //else
-                //{
-                //    heroID = Int32.Parse(words[2]);
-                //    string hero_name = "";
-                //    clientHero_Dic.TryGetValue(heroID, out hero_name);
-                //    int cur_ID = 0;
-                //    ID_Dic.TryGetValue(hero_name, out cur_ID);
-                //    for(int i = 0; i < count; i++)
-                //    {
-                //        if(hero_ID_Client_Team[i,0] == cur_ID)
-                //        {
-                //            hero_ID_Client_Team[i, 3] = tic; 
-                //        }
-                //    }
-                //}
-
             }
         }
 
+        /*
+         *Output: the hero_ID_Client_Team table which is all pick and ban hero, 
+         *          the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
+         *          team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
+         */
         public int[,] selectTable()
         {
             return hero_ID_Client_Team;
@@ -193,7 +175,6 @@ namespace replayParse
          */
         public int[,] suggestionTable(int team_name)
         {
-            int[,] table_suggestion = new int[25,6];
             int table_count = 0;
             if (team_name == 2)
             {
@@ -272,6 +253,13 @@ namespace replayParse
             return table_suggestion;
         }
 
+        /*
+         * version_1.0.0 logic_counter 
+         * Input: the hero_sequence which is heros picked by enemy team
+         *        the ban_list contains the heros picked by own team and all baned heros by both team.
+         * output: the best five hero we suggest to pick
+         * improve place: consider the role of the heros in the own team, consider the difficulty of the heros.
+         */
         public static int[] logic_counter(int[] hero_sequence, int[] ban_list)
         {
             Dictionary<double, int> five_picks = new Dictionary<double, int>();
@@ -357,6 +345,49 @@ namespace replayParse
             }
 
             return five_hero_array;
+        }
+
+        /*
+         * Call this function require to call suggestionTable() to update the table_suggestion table.
+         * Output: int[,]: the first dimension is about how many checkmark or X mark will show in the selection part.
+         * The second dimension: the first column is start_tic of this checkmark or x mark. the second column is end_tic of this checkmark or x mark.
+         * the third column is whether is a checkmark or x mark and combine with hero_id.
+         */
+        public int[,] checkMark()
+        {
+            int[,] checkTable = new int[25,3];
+            int index = 0;
+            for(int i = 0; i < 25; i++)
+            {
+                int banorpick = 1;
+                int tic_1 = table_suggestion[i, 0];
+                int tic_2 = table_suggestion[i + 1, 0];
+                int tic_3 = table_suggestion[i + 2, 0];
+                int shootIndex = 0;
+                for (int j = 1; j < 6; j++)
+                {
+                    if(table_suggestion[i,j] == hero_ID_Client_Team[i + 1, 0])
+                    {
+                        if(hero_ID_Client_Team[i + 1, 2]<= 1)
+                        {
+                            banorpick = -1;
+                        }
+                        shootIndex = (j-1)* banorpick;
+                        checkTable[index, 0] = tic_2;
+                        if ((tic_2 + (int)(tic_3 - tic_2) / 2) > 60)
+                        {
+                            checkTable[index, 1] = tic_2+60;
+                        }
+                        else
+                        {
+                            checkTable[index, 1] = tic_2 + (int)(tic_3 - tic_2) / 2;
+                        }
+                        checkTable[index, 2] = shootIndex; 
+                        index++;
+                    }
+                }
+            }
+            return checkTable;
         }
     }
 }

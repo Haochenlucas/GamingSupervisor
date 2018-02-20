@@ -11,10 +11,10 @@ namespace GamingSupervisor
     class demo{
         static void Main()
         {
-            string path = @"X:\data_info\replay.txt";
-            //replay_version01 r = new replay_version01();
-            //Dictionary<string, int> h = r.getHeros();
-            //int[,,] info = r.getReplayInfo();
+            //string path = @"C:\Users\yuchengy\Source\Repos\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\";
+            //replay_version01 r = new replay_version01(path);
+            //Dictionary<string, int> h = r.getHerosLowercase();
+            //double[,,] info = r.getReplayInfo();
             //heroID h_ID = new heroID();
             //Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
             //Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
@@ -39,13 +39,13 @@ namespace GamingSupervisor
             //int[] hero_pick = { 1, 2, 3, 7, 115 };
             //int[] ban = { 10, 20, 30, 70, 114 };
             //int[,] suggestiontable = cp.suggestionTable(2);
-            makeup_difficulty_talbe mdt = new makeup_difficulty_talbe();
-            hero_difficulty dt = new hero_difficulty();
-            string nimabi = dt.mainDiff(38);
-            Console.WriteLine(nimabi);
-            Console.WriteLine(dt.getFinalRating(38));
-            Console.WriteLine(dt.getFinalLevel(38)[0]+ " "+ dt.getFinalLevel(38)[1]);
-            Console.Read();
+            //makeup_difficulty_talbe mdt = new makeup_difficulty_talbe();
+            //hero_difficulty dt = new hero_difficulty();
+            //string nimabi = dt.mainDiff(38);
+            //Console.WriteLine(nimabi);
+            //Console.WriteLine(dt.getFinalRating(38));
+            //Console.WriteLine(dt.getFinalLevel(38)[0]+ " "+ dt.getFinalLevel(38)[1]);
+            //Console.Read();
         }
     }
 }

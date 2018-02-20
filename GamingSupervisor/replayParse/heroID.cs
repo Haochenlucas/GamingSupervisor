@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace replayParse
 {
@@ -116,5 +113,17 @@ namespace replayParse
         {
             return heroName;
         }
+
+        public Dictionary<string, int> getIDfromLowercaseHeroname()
+        {
+            Dictionary<string, int> ID_LowercaseHeroname = new Dictionary<string, int>();
+            foreach (KeyValuePair<string, int> pair in ID_heroDictionary)
+            {
+                string lowerKey = pair.Key.Replace(" ", "");
+                ID_LowercaseHeroname.Add(lowerKey.ToLower(), pair.Value);
+            }
+            return ID_LowercaseHeroname;
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using replayParse;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,43 +9,44 @@ namespace GamingSupervisor
 {
     class ParserHandler
     {
-        private string fileName;
-
-        public ParserHandler(string fileName)
+        public ParserHandler()
         {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                throw new ArgumentNullException("File name cannot be null");
-            }
-            this.fileName = fileName;
         }
 
         public List<string> ParseReplayFile()
         {
-            Console.WriteLine("Starting parsing..." + fileName);
-            Process p = new Process();
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = "javaw";
-            p.StartInfo.Arguments =
-                "-jar "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar ")
-                + "\"" + fileName.Replace(@"\", @"\\") + "\""
-                + " "
-                + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\"); // Data dump location
-            p.Start();
-
-            while (!p.HasExited)
+            if (!Directory.Exists(GUISelection.replayDataFolderLocation))
             {
-                Console.WriteLine(p.StandardOutput.ReadLine());
+                Directory.CreateDirectory(GUISelection.replayDataFolderLocation);
+
+                Console.WriteLine("Starting parsing..." + GUISelection.fileName);
+                Process p = new Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.FileName = "javaw";
+                p.StartInfo.Arguments =
+                    "-jar "
+                    + "\"" + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar").Replace(@"\", @"\\") + "\""
+                    + " "
+                    + "\"" + GUISelection.fileName.Replace(@"\", @"\\") + "\""
+                    + " "
+                    + "\"" + GUISelection.replayDataFolderLocation.Replace(@"\", @"\\") + "\""; // Data dump location
+                p.Start();
+
+                while (!p.HasExited)
+                {
+                    Console.WriteLine(p.StandardOutput.ReadLine());
+                }
+
+                p.WaitForExit();
+                Console.WriteLine("Finished parsing!");
             }
 
-            p.WaitForExit();
-            Console.WriteLine("Finished parsing!");
-
             List<string> heroNameList = new List<string>();
-
-            string[] infoFile = File.ReadAllLines(System.IO.Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\info.txt"));
+            heroID h_ID = new heroID();
+            Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
+            Dictionary<string, int> hero_table = h_ID.getIDfromLowercaseHeroname(); // key is hero_name, value is ID;
+            string[] infoFile = File.ReadAllLines(GUISelection.replayDataFolderLocation + "info.txt");
             foreach (string line in infoFile)
             {
                 if (line.Contains("hero_name"))
@@ -57,9 +59,31 @@ namespace GamingSupervisor
                     {
                         upperCase[i] = temp[i].First().ToString().ToUpper() + temp[i].Substring(1);
                     }
-                    parsedHeroName = string.Join(" ", upperCase);
+                    parsedHeroName = string.Join("", upperCase);
+                    string name = parsedHeroName.ToLower();
+                    if (name.Contains("never"))
+                    {
+                        name = "shadowfiend";
+                    }
+                    if (name.Contains("obsidian"))
+                    {
+                        name = "outworlddevourer";
+                    }
+                    if (name.Contains("wisp"))
+                    {
+                        name = "io";
+                    }
+                    if (name.Contains("magnataur"))
+                    {
+                        name = "magnus";
+                    }
+                    if (name.Contains("treant"))
+                    {
+                        name = "treantprotector";
+                    }
+                    int key = hero_table[name];
 
-                    heroNameList.Add(parsedHeroName);
+                    heroNameList.Add(ID_table[key]);
                 }
             }
 
