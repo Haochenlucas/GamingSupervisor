@@ -1532,33 +1532,33 @@ namespace Yato.DirectXOverlay
 
                 CheckToShowHeroSuggestion();
 
-                if (drawGraphs)
-                {
-                    int currY = Screen.PrimaryScreen.Bounds.Height / 2;
+                //if (drawGraphs)
+                //{
+                //    int currY = Screen.PrimaryScreen.Bounds.Height / 2;
 
-                    for (int i = 0; i < 5; i++)
-                    {
-                        DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
-                    }
+                //    for (int i = 0; i < 5; i++)
+                //    {
+                //        DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
+                //    }
 
 
-                    DrawLine(250, currY-100, 250, currY +150, 2, redBrush);
-                    DrawLine(0, currY +150, 250, currY + 150, 2, redBrush);
+                //    DrawLine(250, currY-100, 250, currY +150, 2, redBrush);
+                //    DrawLine(0, currY +150, 250, currY + 150, 2, redBrush);
 
-                    for (int j = 0; j < currHp.Count - 1; j ++)
-                    {
-                        double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(j, (float)(currY - tempCurrHp[j]) / 6 + currY, 1 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
-                    }
-                }
+                //    for (int j = 0; j < currHp.Count - 1; j ++)
+                //    {
+                //        double[] tempCurrHp = currHp.ToArray();
+                //        DrawLine(j, (float)(currY - tempCurrHp[j]) / 6 + currY, 1 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
+                //    }
+                //}
 
                 EndScene();
 
-                if (ban_and_pick != 0)
-                {
-                    Thread.Sleep(3000);
-                    ban_and_pick = 0;
-                }
+                //if (ban_and_pick != 0)
+                //{
+                //    Thread.Sleep(3000);
+                //    ban_and_pick = 0;
+                //}
 
 
             }

@@ -8,7 +8,7 @@ namespace GamingSupervisor
     {
         private OverlayManager overlayManager = null;
         private OverlayWindow window = null;
-        public Direct2DRenderer renderer = null;
+        public Direct2DRenderer renderer;
         private IntPtr dotaProcessHandle;
 
         public Overlay()
