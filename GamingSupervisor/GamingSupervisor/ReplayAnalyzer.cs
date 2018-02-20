@@ -86,6 +86,7 @@ namespace GamingSupervisor
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
                         replayStarted = true;
                         HandleHeroSelection();
+                        ShowDraftHints();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
@@ -95,6 +96,7 @@ namespace GamingSupervisor
                             overlay.ClearMessage(i);
                         }
                         HandleGamePlay();
+                        ShowIngameHints();
                         break;
                     default:
                         replayStarted = true;
@@ -105,8 +107,6 @@ namespace GamingSupervisor
                 {
                     break;
                 }
-
-                ShowHints();
 
                 Thread.Sleep(10);
 
@@ -127,12 +127,15 @@ namespace GamingSupervisor
             Console.WriteLine("Replay stopped!");
         }
 
-        private void ShowHints()
+        private void ShowIngameHints()
         {
-            overlay.ShowMessage();
+            overlay.ShowIngameMessage();
         }
-
-
+        
+        private void ShowDraftHints()
+        {
+            overlay.ShowDraftMessage();
+        }
 
 
         /*
@@ -203,13 +206,13 @@ namespace GamingSupervisor
             int counter = 0;
             if (CurrentTick > table_checkmark[counter, 0] && CurrentTick < table_checkmark[counter, 1])
             {
-                overlay.renderer.ban_and_pick = table_checkmark[counter, 2];
+                overlay.XorCheck(table_checkmark[counter, 2]);
                 index = index - 1;
                 counter++;
             }
             else
             {
-                overlay.renderer.ban_and_pick = 0;
+                overlay.XorCheck(0);
             }
 
             for (int j = 1; j < 6; j++)
@@ -256,17 +259,14 @@ namespace GamingSupervisor
             }
             else
             {
-                overlay.renderer.DeleteMessage(6);
-                overlay.renderer.low_hp = false;
+                overlay.ClearMessage(6);
             }
             
                 overlay.ToggleGraphForHeroHP();
                 overlay.AddHPs(hpToSend);
                 overlay.AddHp(hpToSend[0]);
                 //overlay.ShowMessage("Health is low, retreat");
-                               //Console.WriteLine("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet());
-            
-            
+                //Console.WriteLine("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet());
         }
 
         private void tickCallback(object sender, EventArgs e)
