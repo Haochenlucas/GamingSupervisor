@@ -7,9 +7,8 @@ namespace GamingSupervisor
 {
     class ReplayAnalyzer
     {
-        private replay_version01 parsedReplay;
-        private double[,,] parsedData;
-        private int heroId;
+        private HeroParser heroData;
+        private ReplayHeroID heroIDData;
         private List<int> teamHeroIds = new List<int>(4);
         private ReplayTick replayTick;
 
@@ -33,17 +32,18 @@ namespace GamingSupervisor
             set { lock (tickLock) { currentTick = value; } }
         }
 
+        private int heroID;
+
         public ReplayAnalyzer()
         {
             tickTimer = new System.Timers.Timer(1000.0 / 30.0);
             tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(tickCallback);
 
-            parsedReplay = new replay_version01(GUISelection.replayDataFolderLocation);
-            parsedData = parsedReplay.getReplayInfo();
-            string name = GUISelection.heroName.ToLower().Replace(" ", "");
-            heroId = parsedReplay.getHerosLowercase()[name];
-
+            heroData = new HeroParser(GUISelection.replayDataFolderLocation);
+            heroIDData = new ReplayHeroID(GUISelection.replayDataFolderLocation);
             replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
+
+            heroID = heroIDData.getHeroID(GUISelection.heroName);
         }
 
         public void Start()
@@ -72,6 +72,7 @@ namespace GamingSupervisor
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
+                Console.WriteLine(announcer.GetCurrentGameState());
                 switch (announcer.GetCurrentGameState())
                 {
                     case null:
@@ -137,7 +138,6 @@ namespace GamingSupervisor
             overlay.ShowDraftMessage();
         }
 
-
         /*
          * This function is to logic of what to draw in selection mode.
          */
@@ -162,8 +162,7 @@ namespace GamingSupervisor
                     heroID id = new heroID();
                     Dictionary<int, string> id_string = id.getHeroID();
                     string name = id_string[table[i, 0]];
-                    name = String.Join("", name.Split(new string[] { " " }, StringSplitOptions.None));
-                    int index_id = parsedReplay.getHerosLowercase()[name.ToLower()];
+                    int index_id = heroIDData.getHeroID(name);
                     if (!teamHeroIds.Contains(index_id))
                         teamHeroIds.Add(index_id);
                 }
@@ -232,29 +231,30 @@ namespace GamingSupervisor
 
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
-            if (CurrentTick - parsedReplay.getOffSet() < 0)
-            {
-                int cur_tic_fake = 0;
-                health = (int)parsedData[cur_tic_fake, heroId, 0];
-                hpToSend[0] = health;
-                for (int i = 0; i < 4; i++)
-                {
-                    hpToSend[i + 1] = parsedData[cur_tic_fake, teamHeroIds[i], 0];
-                }
-            }
-            health = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 0];
-
-            maxHealth = (int)parsedData[CurrentTick - parsedReplay.getOffSet(), heroId, 9];
+            //if (CurrentTick < 0)
+            //{
+            //    int cur_tic_fake = 0;
+            //    health = heroData.getHealth(cur_tic_fake, heroID);
+            //    hpToSend[0] = health;
+            //    for (int i = 0; i < 4; i++)
+            //    {
+            //        hpToSend[i + 1] = heroData.getHealth(cur_tic_fake, teamHeroIds[i]);
+            //    }
+            //}
+            Console.WriteLine(CurrentTick + " getting health " + heroID);
+            health = heroData.getHealth(CurrentTick, heroID);
+            Console.WriteLine("Tick " + CurrentTick + " Health " + health);
+            //maxHealth = (int)heroData.getMaxHealth(CurrentTick, heroID);
             //if (health <= 600)
 
             hpToSend[0] = health;
             for (int i = 0; i < 4; i++)
             {
-                hpToSend[i + 1] = parsedData[CurrentTick - parsedReplay.getOffSet(), teamHeroIds[i], 0];
+                hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
             if (health < 600)
             {
-                overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet(), "");
+                overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health, "");
 
             }
             else

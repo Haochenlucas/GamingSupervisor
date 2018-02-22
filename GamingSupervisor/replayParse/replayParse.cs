@@ -1,209 +1,243 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+using System.IO;
 
 namespace replayParse
 {
-
-    public class replay_version01
+    public class HeroParser
     {
-        public static double[,,] replayinfo = new double[200000, 10, 15]; // first index is tic for this match (minus by offsetTic), second index is heroID for this match, the third index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z,
-                                                                          // 4:LEVEL, 5:MANA, 6:STRENGTH, 7: AGILITY, 8: INTELLECT, 9:MAXHEALTH, 10:MANAREGEN, 11: HEALTHREGEN, 12:MOVEMENTSPEED,\
-                                                                          // 13:DAMAGEMIN, 14:DAMAGEMAX;
-        private double[,] prev_stat = new double[10, 15]; // first index is heroID for this match, the second index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z,
-                                                   // 4:LEVEL, 5:MANA, 6:STRENGTH, 7: AGILITY, 8: INTELLECT, 9:MAXHEALTH, 10:MANAREGEN, 11: HEALTHREGEN, 12:MOVEMENTSPEED,\
-                                                   // 13:DAMAGEMIN, 14:DAMAGEMAX;
-        public static Dictionary<string, int> heros = new Dictionary<string, int>();
-        public int[] sideOfHero = new int[10];  // the index is the heroID: the sort of ID show the sequence of picking , the number in string shows the side of heros. 0: for one side, 1 : for another side.
-        public int offsetTic = 0;    // offset is the first tic in the replay file.
-
-        public replay_version01(string dataFolderLocation)
+        private static int FirstTick { get; set; }
+        private class TickEntries<T> : Dictionary<int, T>
         {
-            string s = dataFolderLocation + "hero.txt";
+            private int cachedTick = 0;
+            private T cachedValue = default(T);
 
-            string[] lines = System.IO.File.ReadAllLines(s);
-            int tic = 0;
-            int value = 0;
-            foreach (string line in lines)
+            private int lastTickAccessed = -1;
+
+            public new T this[int tick]
             {
-                string[] words = line.Split(' ');
-                int time = Int32.Parse(words[0]);
-                if (tic == 0)
+                get
                 {
-                    offsetTic = time;
-                    tic = time;
-                }
-                else
-                {
-                    while (time > tic)
+                    // Iterate through every previous tick until finding one with a value
+                    if (base.ContainsKey(tick))
                     {
-                        for (int i = 0; i < 10; i++)
+                        cachedTick = tick;
+                        cachedValue = base[tick];
+                        lastTickAccessed = tick;
+                        return base[tick];
+                    }
+                    else if (lastTickAccessed != -1 && tick >= lastTickAccessed)
+                    {
+                        for (int i = tick; i >= lastTickAccessed; i--)
                         {
-                            for (int j = 0; j < 15; j++)
+                            if (base.ContainsKey(i))
                             {
-                                if (prev_stat[i, j] != 0)
-                                {
-                                    replayinfo[tic - offsetTic, i, j] = prev_stat[i, j];
-                                }
+                                cachedTick = i;
+                                cachedValue = base[i];
+                                lastTickAccessed = tick;
+                                return base[i];
                             }
                         }
-                        tic++;
+                        lastTickAccessed = tick;
+                        return cachedValue;
                     }
-                    tic = time;
-                }
-                int mode = 0;
-                int heroID = 0;
-                //4:LEVEL, 5:MANA, 6:STRENGTH, 7: AGILITY, 8: INTELLECT, 9:MAXHEALTH, 10:MANAREGEN, 11: HEALTHREGEN, 12:MOVEMENTSPEED,\
-                                                   // 13:DAMAGEMIN, 14:DAMAGEMAX;
-                if (words[1].Contains("POSITION"))
-                {
-                    mode = 1;
-                }
-                else if (words[1].Contains("LEVEL"))
-                {
-                    mode = 4;
-                }
-                else if (words[1].Contains("MANAREGEN"))
-                {
-                    mode = 10;
-                }
-                else if (words[1].Contains("MANA"))
-                {
-                    mode = 5;
-                }
-                else if (words[1].Contains("STRENGTH"))
-                {
-                    mode = 6;
-                }
-                else if (words[1].Contains("AGILITY"))
-                {
-                    mode = 7;
-                }
-                else if (words[1].Contains("INTELLECT"))
-                {
-                    mode = 8;
-                }
-                else if (words[1].Contains("MAXHEALTH"))
-                {
-                    mode = 9;
-                }
-                else if (words[1].Contains("HEALTHREGEN"))
-                {
-                    mode = 11;
-                }
-                else if (words[1].Contains("MOVEMENTSPEED"))
-                {
-                    mode = 12;
-                }
-                else if (words[1].Contains("DAMAGEMIN"))
-                {
-                    mode = 13;
-                }
-                else if (words[1].Contains("DAMAGEMAX"))
-                {
-                    mode = 14;
-                }
-                string[] substrings = Regex.Split(words[2], "Hero_");
-                var r = new Regex(@"
-                (?<=[A-Z])(?=[A-Z][a-z]) |
-                 (?<=[^A-Z])(?=[A-Z]) |
-                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
-                string name = r.Replace(substrings[1], "");
-                name = string.Join("", name.Split(new string[] { "_" }, StringSplitOptions.None));
-                name = name.ToLower();
-                if (name.Contains("never"))
-                {
-                    name = "shadowfiend";
-                }
-                if (name.Contains("obsidian"))
-                {
-                    name = "outworlddevourer";
-                }
-                if (name.Contains("wisp"))
-                {
-                    name = "io";
-                }
-                if (name.Contains("magnataur"))
-                {
-                    name = "magnus";
-                }
-                if (name.Contains("treant"))
-                {
-                    name = "treantprotector";
-                }
-                if (!heros.Keys.Contains(name))
-                {
-                    heros.Add(name, value);
-                    heroID = heros[name];
-                    if (double.Parse(words[3]) > 100)
+                    else if (lastTickAccessed != -1 && tick < lastTickAccessed && tick >= cachedTick)
+                        return cachedValue;
+                    else
                     {
-                        sideOfHero[heroID] = 1;
+                        for (int i = tick; i >= FirstTick; i--)
+                        {
+                            if (base.ContainsKey(i))
+                            {
+                                cachedTick = i;
+                                cachedValue = base[i];
+                                lastTickAccessed = tick;
+                                return base[i];
+                            }
+                        }
+                        return default(T);
                     }
-                    value++;
                 }
-                else
-                {
-                    heroID = heros[name];
-                }
-                if (mode == 1)
-                {
-                    if (words.Length < 6)
-                    {
-                        throw new System.ArgumentOutOfRangeException("lost position information");
-                    }
+                set => base[tick] = value;
+            }
+        }
 
-                    replayinfo[time - offsetTic, heroID, 1] = double.Parse(words[3]);
-                    replayinfo[time - offsetTic, heroID, 2] = double.Parse(words[4]);
-                    replayinfo[time - offsetTic, heroID, 3] = double.Parse(words[5]);
-                    prev_stat[heroID, 1] = double.Parse(words[3]);
-                    prev_stat[heroID, 2] = double.Parse(words[4]);
-                    prev_stat[heroID, 3] = double.Parse(words[5]);
-                }
-                else
+        private const int NUMBER_OF_PLAYERS = 10;
+        
+        private static TickEntries<int>[] health = new TickEntries<int>[NUMBER_OF_PLAYERS];
+        private static TickEntries<Tuple<int, int, int>>[] heroPosition = new TickEntries<Tuple<int, int, int>>[NUMBER_OF_PLAYERS];
+        private static TickEntries<int>[] level = new TickEntries<int>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] mana = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] strength = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] agility = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] intellect = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] maxHealth = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] manaRegen = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] healthRegen = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] movementSpeed = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] damageMin = new TickEntries<double>[NUMBER_OF_PLAYERS];
+        private static TickEntries<double>[] damageMax = new TickEntries<double>[NUMBER_OF_PLAYERS];
+
+        public HeroParser(string dataFolderLocation)
+        {
+            for (int i = 0; i < NUMBER_OF_PLAYERS; i++)
+            {
+                health[i] = new TickEntries<int>();
+                heroPosition[i] = new TickEntries<Tuple<int, int, int>>();
+                level[i] = new TickEntries<int>();
+                mana[i] = new TickEntries<double>();
+                strength[i] = new TickEntries<double>();
+                agility[i] = new TickEntries<double>();
+                intellect[i] = new TickEntries<double>();
+                maxHealth[i] = new TickEntries<double>();
+                manaRegen[i] = new TickEntries<double>();
+                healthRegen[i] = new TickEntries<double>();
+                movementSpeed[i] = new TickEntries<double>();
+                damageMin[i] = new TickEntries<double>();
+                damageMax[i] = new TickEntries<double>();
+            }
+
+            FirstTick = -1;
+            foreach (string line in File.ReadLines(dataFolderLocation + "hero.txt"))
+            {
+                string[] words = line.Split(' ');
+                int tick = Int32.Parse(words[0]);
+                if (FirstTick == -1)
                 {
-                    replayinfo[time - offsetTic, heroID, mode] = double.Parse(words[3]);
-                    prev_stat[heroID, mode] = double.Parse(words[3]);
+                    FirstTick = tick;
+                }
+
+                int heroId = Int32.Parse(words[2]);
+
+                switch (words[1])
+                {
+                    case "[HEALTH]":
+                        health[heroId][tick] = Int32.Parse(words[3]);
+                        break;
+
+                    case "[POSITION]":
+                        if (words.Length < 6)
+                        {
+                            throw new ArgumentOutOfRangeException("Lost position information");
+                        }
+
+                        heroPosition[heroId][tick] = Tuple.Create(Int32.Parse(words[3]), Int32.Parse(words[4]), Int32.Parse(words[5]));
+                        break;
+
+                    case "[LEVEL]":
+                        level[heroId][tick] = Int32.Parse(words[3]);
+                        break;
+
+                    case "[MANA]":
+                        mana[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[MANAREGEN]":
+                        manaRegen[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[STRENGTH]":
+                        strength[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[AGILITY]":
+                        agility[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[INTELLECT]":
+                        intellect[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[MAXHEALTH]":
+                        maxHealth[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[HEALTHREGEN]":
+                        healthRegen[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[MOVEMENTSPEED]":
+                        movementSpeed[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[DAMAGEMIN]":
+                        damageMin[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    case "[DAMAGEMAX]":
+                        damageMax[heroId][tick] = Double.Parse(words[3]);
+                        break;
+
+                    default:
+                        Console.WriteLine("Found unimplemented identifier: " + words[1]);
+                        break;
                 }
             }
         }
 
-
-        /*
-         * output: the dictionary of name of the hero in this replay but the name is in lowercase and without the space. the int in the dictionary is the sort of ID show the sequence of picking(such as 1 to 10)
-         */
-        public Dictionary<string, int> getHerosLowercase()
+        public int getHealth(int tick, int heroID)
         {
-            return heros;
+            return health[heroID][tick];
         }
 
-
-        /*
-         *   output the big double matrix contains the infomation of the replay
-         *   first index is tic for this match (minus by offsetTic), second index is heroID for this match, the third index is some info: 0: health, 1: cell_x, 2: cell_y, 3 cell_z,
-         *                                                                4:LEVEL, 5:MANA, 6:STRENGTH, 7: AGILITY, 8: INTELLECT, 9:MAXHEALTH, 10:MANAREGEN, 11: HEALTHREGEN, 12:MOVEMENTSPEED,
-         *                                                                13:DAMAGEMIN, 14:DAMAGEMAX;
-         */
-        public double[,,] getReplayInfo()
+        public (int x, int y, int z) getHeroPosition(int tick, int heroID)
         {
-            return replayinfo;
+            return (x: heroPosition[heroID][tick].Item1, y: heroPosition[heroID][tick].Item2, z: heroPosition[heroID][tick].Item3);
         }
 
-        /*
-         * offset is the first tic in the replay file(named: hero.txt).
-         */
-        public int getOffSet()
+        public int getLevel(int tick, int heroID)
         {
-            return offsetTic;
+            return level[heroID][tick];
         }
 
-        /*
-         * The index is the heroID: the sort of ID show the sequence of picking , the number in string shows the side of heros. 0: for one side, 1 : for another side.
-         * Not actually useful.
-         */
-        public int[] getHeroSide()
+        public double getMana(int tick, int heroID)
         {
-            return sideOfHero;
+            return mana[heroID][tick];
+        }
+
+        public double getStrength(int tick, int heroID)
+        {
+            return strength[heroID][tick];
+        }
+
+        public double getAgility(int tick, int heroID)
+        {
+            return agility[heroID][tick];
+        }
+
+        public double getIntellect(int tick, int heroID)
+        {
+            return intellect[heroID][tick];
+        }
+
+        public double getMaxHealth(int tick, int heroID)
+        {
+            return maxHealth[heroID][tick];
+        }
+
+        public double getManaRegen(int tick, int heroID)
+        {
+            return manaRegen[heroID][tick];
+        }
+
+        public double getHealthRegen(int tick, int heroID)
+        {
+            return healthRegen[heroID][tick];
+        }
+
+        public double getMovementSpeed(int tick, int heroID)
+        {
+            return movementSpeed[heroID][tick];
+        }
+
+        public double getDamageMin(int tick, int heroID)
+        {
+            return damageMin[heroID][tick];
+        }
+
+        public double getDamageMax(int tick, int heroID)
+        {
+            return damageMax[heroID][tick];
         }
     }
 }
