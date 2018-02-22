@@ -360,9 +360,22 @@ namespace replayParse
             for(int i = 0; i < 25; i++)
             {
                 int banorpick = 1;
-                int tic_1 = table_suggestion[i, 0];
-                int tic_2 = table_suggestion[i + 1, 0];
-                int tic_3 = table_suggestion[i + 2, 0];
+                int tic_1 ;
+                int tic_2 ;
+                int tic_3 ;
+                if (i >= 23)
+                {
+                    tic_1 = table_suggestion[i, 0];
+                    tic_2 = table_suggestion[i , 0];
+                    tic_3 = table_suggestion[i , 0];
+                }
+                else
+                {
+                    tic_1 = table_suggestion[i, 0];
+                    tic_2 = table_suggestion[i + 1, 0];
+                    tic_3 = table_suggestion[i + 2, 0];
+                }
+                
                 int shootIndex = 0;
                 for (int j = 1; j < 6; j++)
                 {
@@ -372,7 +385,7 @@ namespace replayParse
                         {
                             banorpick = -1;
                         }
-                        shootIndex = (j-1)* banorpick;
+                        shootIndex = (j)* banorpick;
                         checkTable[index, 0] = tic_2;
                         if ((tic_2 + (int)(tic_3 - tic_2) / 2) > 60)
                         {

@@ -8,7 +8,7 @@ namespace GamingSupervisor
     {
         private OverlayManager overlayManager = null;
         private OverlayWindow window = null;
-        public Direct2DRenderer renderer = null;
+        public Direct2DRenderer renderer;
         private IntPtr dotaProcessHandle;
 
         public Overlay()
@@ -26,7 +26,6 @@ namespace GamingSupervisor
 
         public void AddRetreatMessage(string message, string img)
         {
-            renderer.low_hp = true;
             renderer.Retreat(message, img);
         }
 
@@ -50,14 +49,24 @@ namespace GamingSupervisor
             renderer.UpdateHeroHPQueue(newhp);
         }
 
-        public void ShowMessage()
+        public void ShowIngameMessage()
         {
-            renderer.Draw(dotaProcessHandle, window);
+            renderer.Ingame_Draw(dotaProcessHandle, window);
+        }
+
+        public void ShowDraftMessage()
+        {
+            renderer.HeroSelection_Draw(dotaProcessHandle, window);
         }
 
         public void ClearMessage(int MessageNum)
         {
             renderer.DeleteMessage(MessageNum);
+        }
+
+        public void XorCheck(int code)
+        {
+            renderer.HeroSelectionFeedBack(code);
         }
     }
 }
