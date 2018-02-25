@@ -6,18 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import skadistats.clarity.Clarity;
+import skadistats.clarity.model.CombatLogEntry;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.StringTable;
 import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.entities.OnEntityCreated;
 import skadistats.clarity.processor.entities.OnEntityUpdated;
 import skadistats.clarity.processor.entities.UsesEntities;
+import skadistats.clarity.processor.gameevents.OnCombatLogEntry;
 import skadistats.clarity.processor.reader.OnTickStart;
 import skadistats.clarity.processor.runner.Context;
 import skadistats.clarity.processor.runner.SimpleRunner;
+import skadistats.clarity.processor.stringtables.StringTables;
+import skadistats.clarity.processor.stringtables.UsesStringTable;
 import skadistats.clarity.source.MappedFileSource;
 import skadistats.clarity.source.Source;
 import skadistats.clarity.wire.common.proto.Demo.CDemoFileInfo;
+import skadistats.clarity.wire.common.proto.DotaUserMessages;
 
 @UsesEntities
 public class App
@@ -28,12 +34,15 @@ public class App
     private PrintWriter stateWriter;
     private PrintWriter heroIdWriter;
     private PrintWriter timeWriter;
+    private PrintWriter combatWriter;
     
     private Hero hero;
     private Camera camera;
     private Selection selection;
     private GameState state;
     private GameTime time;
+    private Team team;
+    private Spectator spectator;
     
     private HashMap<Object, String> heroIds;
     
@@ -69,6 +78,17 @@ public class App
         return e.getDtClass().getDtName().equals("CDOTAPlayer");
     }
     
+    private boolean isTeam(Entity e)
+    {
+        return e.getDtClass().getDtName().equals("CDOTA_DataRadiant") ||
+        	e.getDtClass().getDtName().equals("CDOTA_DataDire");
+    }
+    
+    private boolean isSpectator(Entity e)
+    {
+        return e.getDtClass().getDtName().equals("CDOTA_DataSpectator");
+    }
+    
     private void initializeSelection(Entity e)
     {
         if (selection == null)
@@ -99,19 +119,41 @@ public class App
             time = new GameTime(e);
     }
     
+    private void initializeTeam(Entity e)
+    {
+        if (team == null)
+            team = new Team(e);
+    }
+    
+    private void initializeSpectator(Entity e)
+    {
+        if (spectator == null)
+        	spectator = new Spectator(e);
+    }
+    
     @OnEntityCreated
+    @UsesStringTable("EntityNames")
     public void onCreated(Context ctx, Entity e)
     {
-        if (!isHero(e))
+        if (isHero(e))
         {
-            return;
+            initializeHero(e);
+            handleHero(ctx, e, null, 0, true);
         }
-        initializeHero(e);
-        
-        handleHero(ctx, e, null, 0, true);
+        else if (isTeam(e))
+        {
+        	initializeTeam(e);
+        	handleTeam(ctx, e, null, 0, true);
+        }
+        else if (isSpectator(e))
+        {
+        	initializeSpectator(e);
+        	handleSpectator(ctx, e, null, 0, true);
+        }
     }
 
     @OnEntityUpdated
+    @UsesStringTable("EntityNames")
     public void onUpdated(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
     {
         if (isHero(e))
@@ -127,6 +169,14 @@ public class App
         else if (isPlayer(e))
         {
             handleCamera(ctx, e, updatedPaths, updateCount);
+        }
+        else if (isTeam(e))
+        {
+        	handleTeam(ctx, e, updatedPaths, updateCount, false);
+        }
+        else if (isSpectator(e))
+        {
+        	handleSpectator(ctx, e, updatedPaths, updateCount, false);
         }
     }
     
@@ -252,6 +302,7 @@ public class App
         boolean updateMana = false;
         boolean updateStrength = false;
         boolean updateIntellect = false;
+        boolean updateAgility = false;
         boolean updateMaxHealth = false;
         boolean updateManaRegen = false;
         boolean updateHealthRegen = false;
@@ -273,6 +324,8 @@ public class App
                 updateStrength = true;
             if (hero.isIntellect(updatedPaths[i]))
                 updateIntellect = true;
+            if (hero.isAgility(updatedPaths[i]))
+                updateAgility = true;
             if (hero.isMaxHealth(updatedPaths[i]))
                 updateMaxHealth = true;
             if (hero.isManaRegen(updatedPaths[i]))
@@ -301,6 +354,8 @@ public class App
             writeToFile(heroWriter, ctx, e, "STRENGTH", hero.playerID, hero.strength);
         if (updateIntellect || forceUpdate)
             writeToFile(heroWriter, ctx, e, "INTELLECT", hero.playerID, hero.intellect);
+        if (updateAgility || forceUpdate)
+            writeToFile(heroWriter, ctx, e, "AGILITY", hero.playerID, hero.agility);
         if (updateMaxHealth || forceUpdate)
             writeToFile(heroWriter, ctx, e, "MAXHEALTH", hero.playerID, hero.maxHealth);
         if (updateManaRegen || forceUpdate)
@@ -313,8 +368,83 @@ public class App
             writeToFile(heroWriter, ctx, e, "DAMAGEMIN", hero.playerID, hero.damageMin);
         if (updateDamageMax || forceUpdate)
             writeToFile(heroWriter, ctx, e, "DAMAGEMAX", hero.playerID, hero.damageMax);
-        //if (updateItems || forceUpdate)
-        //    writeToFile(heroWriter, ctx, e, "ITEMS", hero.playerID, hero.);
+        if (updateItems || forceUpdate)
+        {
+        	StringTable itemNames = ctx.getProcessor(StringTables.class).forName("EntityNames");
+        	heroWriter.format("%d [ITEMS] %s ", ctx.getTick(), e.getPropertyForFieldPath(hero.playerID));
+        	for (int i = 0; i < hero.itemCount; i++)
+        	{
+        		Entity itemEntity = ctx.getProcessor(Entities.class).getByHandle((Integer)e.getPropertyForFieldPath(hero.items[i]));
+        		if (itemEntity == null)
+        		{
+        			heroWriter.write("null ");
+        		}
+        		else
+        		{
+        			Integer itemHandle = (Integer)itemEntity.getProperty("m_pEntity.m_nameStringableIndex");
+        			heroWriter.format("%s ", itemNames.getNameByIndex(itemHandle));
+        		}
+        	}
+        	heroWriter.write("\n");
+        	heroWriter.flush();
+        }
+    }
+    
+    private void handleTeam(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
+    {
+    	boolean updateGold[] = new boolean[5];
+    	boolean updatingGold = false;
+        for (int i = 0; i < updateCount; i++)
+        {
+            for (int j = 0; j < 5; j++)
+                if (team.isGold(updatedPaths[i], j))
+                {
+                	updatingGold = true;
+                	updateGold[j] = true;
+                }
+        }        
+        
+        if (updatingGold)
+        {
+        	// Need to get the player id out of 10 players, so add 5 to id if on dire team
+        	int add = 0;
+        	if (e.getDtClass().getDtName().equals("CDOTA_DataDire"))
+        	{
+        		add = 5;
+        	}
+        	
+        	for (int i = 0; i < 5; i++)
+        		if (updateGold[i])
+        			heroWriter.format("%d [EARNEDGOLD] %d %s %s \n",
+        				ctx.getTick(), (i + add), e.getPropertyForFieldPath(team.reliableGold[i]), e.getPropertyForFieldPath(team.unreliableGold[i]));
+
+	        heroWriter.flush();
+        }
+    }
+    
+    private void handleSpectator(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
+    {
+    	boolean updateNetWorth[] = new boolean[10];
+    	boolean updatingNetWorth = false;
+        for (int i = 0; i < updateCount; i++)
+        {
+            for (int j = 0; j < 10; j++)
+                if (spectator.isNetWorth(updatedPaths[i], j))
+                {
+                	updatingNetWorth = true;
+                	updateNetWorth[j] = true;
+                }
+        }        
+        
+        if (updatingNetWorth)
+        {        	
+        	for (int i = 0; i < 10; i++)
+        		if (updateNetWorth[i])
+        			heroWriter.format("%d [NETWORTH] %d %s \n",
+        				ctx.getTick(), i, e.getPropertyForFieldPath(spectator.netWorth[i]));
+
+	        heroWriter.flush();
+        }
     }
     
     public void run(String[] args) throws Exception
@@ -331,6 +461,7 @@ public class App
         File stateFile = new File(args[1] + "/state.txt");
         File heroIdFile = new File(args[1] + "/heroId.txt");
         File timeFile = new File(args[1] + "/time.txt");
+        File combatFile = new File(args[1] + "/combat.txt");
         
         heroWriter = new PrintWriter(heroFile);
         heroSelectionWriter = new PrintWriter(selectionFile);
@@ -338,6 +469,7 @@ public class App
         stateWriter = new PrintWriter(stateFile);
         heroIdWriter = new PrintWriter(heroIdFile);
         timeWriter = new PrintWriter(timeFile);
+        combatWriter = new PrintWriter(combatFile);
         
         heroIds = new HashMap<Object, String>();
         
@@ -356,6 +488,7 @@ public class App
         stateWriter.close();
         heroIdWriter.close();
         timeWriter.close();
+        combatWriter.close();
     }
 
     public static void main(String[] args) throws Exception

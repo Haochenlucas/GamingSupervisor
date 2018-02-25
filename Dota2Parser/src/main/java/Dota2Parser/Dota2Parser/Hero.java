@@ -5,7 +5,7 @@ import skadistats.clarity.model.Entity;
 
 public class Hero
 {
-    private final int itemCount = 17; // Clarity analyzer has 17 spots for items
+    public final int itemCount = 17; // Clarity analyzer has 17 spots for items
     
     public FieldPath x;
     public FieldPath y;
@@ -16,6 +16,7 @@ public class Hero
     public FieldPath mana;
     public FieldPath strength;
     public FieldPath intellect;
+    public FieldPath agility;
     public FieldPath maxHealth;
     public FieldPath manaRegen;
     public FieldPath healthRegen;
@@ -35,6 +36,7 @@ public class Hero
         mana = e.getDtClass().getFieldPathForName("m_flMana");
         strength = e.getDtClass().getFieldPathForName("m_flStrength");
         intellect = e.getDtClass().getFieldPathForName("m_flIntellect");
+        agility = e.getDtClass().getFieldPathForName("m_flAgility");
         maxHealth = e.getDtClass().getFieldPathForName("m_iMaxHealth");
         manaRegen = e.getDtClass().getFieldPathForName("m_flManaRegen");
         healthRegen = e.getDtClass().getFieldPathForName("m_flHealthRegen");
@@ -80,6 +82,11 @@ public class Hero
     public boolean isIntellect(FieldPath path)
     {
         return path.equals(intellect);
+    }
+
+    public boolean isAgility(FieldPath path)
+    {
+        return path.equals(agility);
     }
     
     public boolean isMaxHealth(FieldPath path)
