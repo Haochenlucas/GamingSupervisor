@@ -538,9 +538,17 @@ public class App
         }
         
         if (updatePosition || forceUpdate)
-            writeToFile(laneCreepWriter, ctx, e, "POSITION", laneCreep.teamNumber, laneCreep.x, laneCreep.y, laneCreep.z);
+        	laneCreepWriter.format("%d [POSITION] %d %s %s %s\n",
+    				ctx.getTick(),
+    				e.getHandle(),
+    				e.getPropertyForFieldPath(laneCreep.x),
+					e.getPropertyForFieldPath(laneCreep.y),
+					e.getPropertyForFieldPath(laneCreep.z));
         if (updateHealth || forceUpdate)
-            writeToFile(laneCreepWriter, ctx, e, "HEALTH", laneCreep.teamNumber, laneCreep.health);
+        	laneCreepWriter.format("%d [HEALTH] %d %s\n",
+    				ctx.getTick(),
+    				e.getHandle(),
+    				e.getPropertyForFieldPath(laneCreep.health));
     }
     
     public void run(String[] args) throws Exception
