@@ -484,15 +484,15 @@ public class App
     	initializeNeutralMonster(e);
     	
         boolean updatePosition = false;
-        boolean updateHealth = false;
+        boolean updateMaxHealth = false;
         boolean updatePhysicalArmor = false;
         boolean updateMagicalResistance = false;
         for (int i = 0; i < updateCount; i++)
         {
             if (neutralMonster.isPosition(updatedPaths[i]))
                 updatePosition = true;
-            if (neutralMonster.isHealth(updatedPaths[i]))
-                updateHealth = true;
+            if (neutralMonster.isMaxHealth(updatedPaths[i]))
+                updateMaxHealth = true;
             if (neutralMonster.isPhysicalArmor(updatedPaths[i]))
                 updatePhysicalArmor = true;
             if (neutralMonster.isMagicalResistance(updatedPaths[i]))
@@ -500,13 +500,27 @@ public class App
         }
 
         if (updatePosition || forceUpdate)
-        	writeToFile(neutralMonsterWriter, ctx, e, "POSITION", neutralMonster.x, neutralMonster.y, neutralMonster.z);
-        if (updateHealth || forceUpdate)
-        	writeToFile(neutralMonsterWriter, ctx, e, "HEALTH", neutralMonster.health);
+        	neutralMonsterWriter.format("%d [POSITION] %d %s %s %s\n",
+    				ctx.getTick(),
+    				e.getHandle(),
+    				e.getPropertyForFieldPath(neutralMonster.x),
+					e.getPropertyForFieldPath(neutralMonster.y),
+					e.getPropertyForFieldPath(neutralMonster.z));
+        if (updateMaxHealth || forceUpdate)
+        	neutralMonsterWriter.format("%d [MAXHEALTH] %d %s\n",
+    				ctx.getTick(),
+    				e.getHandle(),
+    				e.getPropertyForFieldPath(neutralMonster.maxHealth));
         if (updatePhysicalArmor || forceUpdate)
-            writeToFile(neutralMonsterWriter, ctx, e, "ARMOR", neutralMonster.physicalArmor);
+        	neutralMonsterWriter.format("%d [ARMOR] %d %s\n",
+    				ctx.getTick(),
+    				e.getHandle(),
+    				e.getPropertyForFieldPath(neutralMonster.physicalArmor));
         if (updateMagicalResistance || forceUpdate)
-            writeToFile(neutralMonsterWriter, ctx, e, "RESISTANCE", neutralMonster.magicalResistance);
+	    	neutralMonsterWriter.format("%d [RESISTANCE] %d %s\n",
+					ctx.getTick(),
+					e.getHandle(),
+					e.getPropertyForFieldPath(neutralMonster.magicalResistance));
     }
     
     private void handleLaneCreep(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
