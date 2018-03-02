@@ -24,7 +24,7 @@ namespace Yato.DirectXOverlay
             }
 
             // For test use only. Show overlay on Visual Studio
-            var VS_HWND = Process.GetProcessesByName("devenv")[0].MainWindowHandle;
+            var VS_HWND = Process.GetProcessesByName("notepad++")[0].MainWindowHandle;
             manager = new OverlayManager(VS_HWND,out overlay,out d2d);
 
             #region timeline
@@ -45,10 +45,38 @@ namespace Yato.DirectXOverlay
 
             System.Random rand = new System.Random();
             int numHighlights = 10;
-            Dictionary<int, string> randInfo = new Dictionary<int, string>();
+            Dictionary<int, List<Tuple<string, string, string>>> randInfo = new Dictionary<int, List<Tuple<string, string, string>>>();
+            List<String> myTeam = new List<string>{ "Disruptor", "Storm Spirit", "Tusk", "Brewmaster", "Morphling" };
+            List<String> theirTeam = new List<string> { "Witch Doctor", "Dragon Knight", "Gyrocopter", "Invoker", "Rattletrap" };
+            String myHero = myTeam[rand.Next(0,5)];
+            Console.Write(myHero);
+
             for (int i = 0; i < numHighlights; i++)
             {
-                randInfo[rand.Next(initStateTick, postStateTick)] = rand.Next(1, 10).ToString() + " kills";
+                int currTick = rand.Next(initStateTick, postStateTick);
+                randInfo[currTick] = new List<Tuple<string, string, string>>();
+                int killCount = rand.Next(1, 10);
+                for (int j = 0; j < killCount; j++) {
+                    int whoKillWho = rand.Next(2);
+                    if (whoKillWho == 1) // myTeam kill theirTeam
+                    {
+                        string killer = myTeam[rand.Next(5)];
+                        string killed = theirTeam[rand.Next(5)];
+                        string color = "LG";
+                        if (killer == myHero)
+                            color = "G";
+                        randInfo[currTick].Add(new Tuple<string, string, string>(killer, killed, color));
+                    }
+                    else
+                    {
+                        string killer = theirTeam[rand.Next(5)];
+                        string killed = myTeam[rand.Next(5)];
+                        string color = "LR";
+                        if (killed == myHero)
+                            color = "R";
+                        randInfo[currTick].Add(new Tuple<string, string, string>(killer, killed, color));
+                    }
+                }
             }
 
             #endregion
@@ -57,9 +85,7 @@ namespace Yato.DirectXOverlay
             // Control FPS
             Stopwatch watch = new Stopwatch();
             d2d.SetupHintSlots();
-
-            //https://repl.it/repls/NeighboringScholarlyVoxels
-
+            
             watch.Start();
             while (true)
             {
