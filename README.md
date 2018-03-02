@@ -1,5 +1,15 @@
 # GamingSupervisor
 
+Jeremy Pope
+
+Andrew Yang
+
+Yucheng Yang
+
+Haochen Zhang
+
+University of Utah Senior Project
+
 ## Dota2GSI
 
 Game state integration, used to sync replay with overlay.
