@@ -35,6 +35,8 @@ public class App
     private PrintWriter heroIdWriter;
     private PrintWriter timeWriter;
     private PrintWriter combatWriter;
+    private PrintWriter neutralCreepWriter;
+    private PrintWriter laneCreepWriter;
     
     private Hero hero;
     private Camera camera;
@@ -43,6 +45,9 @@ public class App
     private GameTime time;
     private Team team;
     private Spectator spectator;
+    private CombatLog combatLog;
+    private NeutralCreep neutralCreep;
+    private LaneCreep laneCreep;
     
     private HashMap<Object, String> heroIds;
     
@@ -89,6 +94,16 @@ public class App
         return e.getDtClass().getDtName().equals("CDOTA_DataSpectator");
     }
     
+    private boolean isNeutralCreep(Entity e)
+    {
+    	return e.getDtClass().getDtName().equals("CDOTA_BaseNPC_Creep_Neutral");
+    }
+    
+    private boolean isLaneCreep(Entity e)
+    {
+    	return e.getDtClass().getDtName().equals("CDOTA_BaseNPC_Creep_Lane");
+    }
+    
     private void initializeSelection(Entity e)
     {
         if (selection == null)
@@ -131,6 +146,24 @@ public class App
         	spectator = new Spectator(e);
     }
     
+    private void initializeNeutralCreep(Entity e)
+    {
+        if (neutralCreep == null)
+        	neutralCreep = new NeutralCreep(e);
+    }
+    
+    private void initializeLaneCreep(Entity e)
+    {
+        if (laneCreep == null)
+        	laneCreep = new LaneCreep(e);
+    }
+    
+    @OnCombatLogEntry
+    public void onCombatLogEntry(CombatLogEntry cle) 
+    {
+    	combatLog.onCombatLogEntry(cle);
+    }
+    
     @OnEntityCreated
     @UsesStringTable("EntityNames")
     public void onCreated(Context ctx, Entity e)
@@ -149,6 +182,14 @@ public class App
         {
         	initializeSpectator(e);
         	handleSpectator(ctx, e, null, 0, true);
+        }
+        else if (isNeutralCreep(e))
+        {
+        	handleNeutralCreep(ctx, e, null, 0, true);
+        }
+        else if (isLaneCreep(e))
+        {
+        	handleLaneCreep(ctx, e, null, 0, true);
         }
     }
 
@@ -177,6 +218,14 @@ public class App
         else if (isSpectator(e))
         {
         	handleSpectator(ctx, e, updatedPaths, updateCount, false);
+        }
+        else if (isNeutralCreep(e))
+        {
+        	handleNeutralCreep(ctx, e, updatedPaths, updateCount, false);
+        }
+        else if (isLaneCreep(e))
+        {
+        	handleLaneCreep(ctx, e, updatedPaths, updateCount, false);
         }
     }
     
@@ -447,6 +496,46 @@ public class App
         }
     }
     
+    private void handleNeutralCreep(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
+    {
+    	initializeNeutralCreep(e);
+    	
+        boolean updatePosition = false;
+        boolean updateHealth = false;
+        for (int i = 0; i < updateCount; i++)
+        {
+            if (hero.isPosition(updatedPaths[i]))
+                updatePosition = true;
+            if (hero.isHealth(updatedPaths[i]))
+                updateHealth = true; 
+        }
+        
+        if (updatePosition || forceUpdate)
+            writeToFile(neutralCreepWriter, ctx, e, "POSITION", neutralCreep.x, neutralCreep.y, neutralCreep.z);
+        if (updateHealth || forceUpdate)
+            writeToFile(neutralCreepWriter, ctx, e, "HEALTH", neutralCreep.health);
+    }
+    
+    private void handleLaneCreep(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
+    {
+    	initializeLaneCreep(e);
+    	
+        boolean updatePosition = false;
+        boolean updateHealth = false;
+        for (int i = 0; i < updateCount; i++)
+        {
+            if (hero.isPosition(updatedPaths[i]))
+                updatePosition = true;
+            if (hero.isHealth(updatedPaths[i]))
+                updateHealth = true; 
+        }
+        
+        if (updatePosition || forceUpdate)
+            writeToFile(laneCreepWriter, ctx, e, "POSITION", laneCreep.teamNumber, laneCreep.x, laneCreep.y, laneCreep.z);
+        if (updateHealth || forceUpdate)
+            writeToFile(laneCreepWriter, ctx, e, "HEALTH", laneCreep.teamNumber, laneCreep.health);
+    }
+    
     public void run(String[] args) throws Exception
     {
         CDemoFileInfo info = Clarity.infoForFile(args[0]);
@@ -462,6 +551,8 @@ public class App
         File heroIdFile = new File(args[1] + "/heroId.txt");
         File timeFile = new File(args[1] + "/time.txt");
         File combatFile = new File(args[1] + "/combat.txt");
+        File neutralCreepFile = new File(args[1] + "/neutral_creep.txt");
+        File laneCreepFile = new File(args[1] + "/lane_creep.txt");
         
         heroWriter = new PrintWriter(heroFile);
         heroSelectionWriter = new PrintWriter(selectionFile);
@@ -470,6 +561,10 @@ public class App
         heroIdWriter = new PrintWriter(heroIdFile);
         timeWriter = new PrintWriter(timeFile);
         combatWriter = new PrintWriter(combatFile);
+        neutralCreepWriter = new PrintWriter(neutralCreepFile);
+        laneCreepWriter = new PrintWriter(laneCreepFile);
+        
+        combatLog = new CombatLog(combatWriter);
         
         heroIds = new HashMap<Object, String>();
         
@@ -489,6 +584,8 @@ public class App
         heroIdWriter.close();
         timeWriter.close();
         combatWriter.close();
+        neutralCreepWriter.close();
+        laneCreepWriter.close();
     }
 
     public static void main(String[] args) throws Exception
