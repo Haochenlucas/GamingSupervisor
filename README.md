@@ -1,14 +1,11 @@
 # GamingSupervisor
 
-Jeremy Pope
-
-Andrew Yang
-
-Yucheng Yang
-
+Jeremy Pope - 
+Andrew Yang - 
+Yucheng Yang - 
 Haochen Zhang
 
-University of Utah Senior Project
+University of Utah School of Computing Senior Project
 
 ## Dota2GSI
 
