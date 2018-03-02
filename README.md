@@ -10,8 +10,8 @@ Parser used to parse replay files (.dem).
 
 ## GamingSupervisor
 
-Main logic loop and UI
+Program UI and logic controller for the overlay.
 
 ## Yato.DirectXOverlay
 
-Overlay library used to graph circles on the screen.
+Library used to produce the overlays and graphics shown on the game screen.
