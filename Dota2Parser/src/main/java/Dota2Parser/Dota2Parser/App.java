@@ -35,7 +35,7 @@ public class App
     private PrintWriter heroIdWriter;
     private PrintWriter timeWriter;
     private PrintWriter combatWriter;
-    private PrintWriter neutralCreepWriter;
+    private PrintWriter neutralMonsterWriter;
     private PrintWriter laneCreepWriter;
     
     private Hero hero;
@@ -46,7 +46,7 @@ public class App
     private Team team;
     private Spectator spectator;
     private CombatLog combatLog;
-    private NeutralCreep neutralCreep;
+    private NeutralMonster neutralMonster;
     private LaneCreep laneCreep;
     
     private HashMap<Object, String> heroIds;
@@ -94,7 +94,7 @@ public class App
         return e.getDtClass().getDtName().equals("CDOTA_DataSpectator");
     }
     
-    private boolean isNeutralCreep(Entity e)
+    private boolean isNeutralMonster(Entity e)
     {
     	return e.getDtClass().getDtName().equals("CDOTA_BaseNPC_Creep_Neutral");
     }
@@ -146,10 +146,10 @@ public class App
         	spectator = new Spectator(e);
     }
     
-    private void initializeNeutralCreep(Entity e)
+    private void initializeNeutralMonster(Entity e)
     {
-        if (neutralCreep == null)
-        	neutralCreep = new NeutralCreep(e);
+        if (neutralMonster == null)
+        	neutralMonster = new NeutralMonster(e);
     }
     
     private void initializeLaneCreep(Entity e)
@@ -183,12 +183,14 @@ public class App
         	initializeSpectator(e);
         	handleSpectator(ctx, e, null, 0, true);
         }
-        else if (isNeutralCreep(e))
+        else if (isNeutralMonster(e))
         {
-        	handleNeutralCreep(ctx, e, null, 0, true);
+        	initializeNeutralMonster(e);
+        	handleNeutralMonster(ctx, e, null, 0, true);
         }
         else if (isLaneCreep(e))
         {
+        	initializeLaneCreep(e);
         	handleLaneCreep(ctx, e, null, 0, true);
         }
     }
@@ -219,9 +221,9 @@ public class App
         {
         	handleSpectator(ctx, e, updatedPaths, updateCount, false);
         }
-        else if (isNeutralCreep(e))
+        else if (isNeutralMonster(e))
         {
-        	handleNeutralCreep(ctx, e, updatedPaths, updateCount, false);
+        	handleNeutralMonster(ctx, e, updatedPaths, updateCount, false);
         }
         else if (isLaneCreep(e))
         {
@@ -244,14 +246,7 @@ public class App
         }
         
         if (updatePosition)
-        {
-            cameraWriter.format("%d [POSITION] %s %s %s %s\n", ctx.getTick(),
-                e.getPropertyForFieldPath(camera.playerID),
-                e.getPropertyForFieldPath(camera.x),
-                e.getPropertyForFieldPath(camera.y),
-                e.getPropertyForFieldPath(camera.z));
-            cameraWriter.flush();
-        }
+        	writeToFile(cameraWriter, ctx, e, "POSITION", camera.playerID, camera.x, camera.y, camera.z);
     }
     
     private void handleGameState(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
@@ -269,11 +264,7 @@ public class App
         }
         
         if (updateState)
-        {
-            stateWriter.format("%d [STATE] %s\n", ctx.getTick(),
-                e.getPropertyForFieldPath(state.state));
-            stateWriter.flush();
-        }
+        	writeToFile(stateWriter, ctx, e, "STATE", state.state);
     }
     
     private void handleGameTime(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount)
@@ -292,9 +283,7 @@ public class App
         
         if (updateTime)
         {
-            timeWriter.format("%d [TIME] %s\n", ctx.getTick(),
-                e.getPropertyForFieldPath(time.time));
-            timeWriter.flush();
+        	writeToFile(timeWriter, ctx, e, "TIME", time.time);
         }
     }
     
@@ -316,34 +305,18 @@ public class App
         }        
         
         for (int i = 0; i < 10; i++)
-        {
             if (updateSelection[i])
-            {
-                heroSelectionWriter.format("%d [SELECT] %s\n",
-                    ctx.getTick(),
-                    e.getPropertyForFieldPath(selection.selections[i]));
-                heroSelectionWriter.flush();
-            }
-        }
+            	writeToFile(heroSelectionWriter, ctx, e, "SELECT", selection.selections[i]);
         
         for (int i = 0; i < 12; i++)
-        {
             if (updateBan[i])
-            {
-                heroSelectionWriter.format("%d [BAN] %s\n",
-                    ctx.getTick(),
-                    e.getPropertyForFieldPath(selection.bans[i]));
-                heroSelectionWriter.flush();
-            }
-        }
+            	writeToFile(heroSelectionWriter, ctx, e, "BAN", selection.bans[i]);
     }
     
     private void handleHero(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
     {
         if (heroIds.size() != 10)
-        {
             heroIds.put(e.getPropertyForFieldPath(hero.playerID), e.getDtClass().getDtName());
-        }
         
         boolean updatePosition = false;
         boolean updateHealth = false;
@@ -359,6 +332,8 @@ public class App
         boolean updateDamageMin = false;
         boolean updateDamageMax = false;
         boolean updateItems = false;
+        boolean updatePhysicalArmor = false;
+        boolean updateMagicalResistance = false;
         for (int i = 0; i < updateCount; i++)
         {
             if (hero.isPosition(updatedPaths[i]))
@@ -389,6 +364,10 @@ public class App
                 updateDamageMax = true;
             if (hero.isItems(updatedPaths[i]))
                 updateItems = true;
+            if (hero.isPhysicalArmor(updatedPaths[i]))
+                updatePhysicalArmor = true;
+            if (hero.isMagicalResistance(updatedPaths[i]))
+                updateMagicalResistance = true;
         }
         
         if (updatePosition || forceUpdate)
@@ -417,6 +396,10 @@ public class App
             writeToFile(heroWriter, ctx, e, "DAMAGEMIN", hero.playerID, hero.damageMin);
         if (updateDamageMax || forceUpdate)
             writeToFile(heroWriter, ctx, e, "DAMAGEMAX", hero.playerID, hero.damageMax);
+        if (updatePhysicalArmor || forceUpdate)
+            writeToFile(heroWriter, ctx, e, "ARMOR", hero.playerID, hero.physicalArmor);
+        if (updateMagicalResistance || forceUpdate)
+            writeToFile(heroWriter, ctx, e, "RESISTANCE", hero.playerID, hero.magicalResistance);
         if (updateItems || forceUpdate)
         {
         	StringTable itemNames = ctx.getProcessor(StringTables.class).forName("EntityNames");
@@ -496,24 +479,34 @@ public class App
         }
     }
     
-    private void handleNeutralCreep(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
+    private void handleNeutralMonster(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
     {
-    	initializeNeutralCreep(e);
+    	initializeNeutralMonster(e);
     	
         boolean updatePosition = false;
         boolean updateHealth = false;
+        boolean updatePhysicalArmor = false;
+        boolean updateMagicalResistance = false;
         for (int i = 0; i < updateCount; i++)
         {
-            if (hero.isPosition(updatedPaths[i]))
+            if (neutralMonster.isPosition(updatedPaths[i]))
                 updatePosition = true;
-            if (hero.isHealth(updatedPaths[i]))
-                updateHealth = true; 
+            if (neutralMonster.isHealth(updatedPaths[i]))
+                updateHealth = true;
+            if (neutralMonster.isPhysicalArmor(updatedPaths[i]))
+                updatePhysicalArmor = true;
+            if (neutralMonster.isMagicalResistance(updatedPaths[i]))
+                updateMagicalResistance = true;
         }
-        
+
         if (updatePosition || forceUpdate)
-            writeToFile(neutralCreepWriter, ctx, e, "POSITION", neutralCreep.x, neutralCreep.y, neutralCreep.z);
+        	writeToFile(neutralMonsterWriter, ctx, e, "POSITION", neutralMonster.x, neutralMonster.y, neutralMonster.z);
         if (updateHealth || forceUpdate)
-            writeToFile(neutralCreepWriter, ctx, e, "HEALTH", neutralCreep.health);
+        	writeToFile(neutralMonsterWriter, ctx, e, "HEALTH", neutralMonster.health);
+        if (updatePhysicalArmor || forceUpdate)
+            writeToFile(neutralMonsterWriter, ctx, e, "ARMOR", neutralMonster.physicalArmor);
+        if (updateMagicalResistance || forceUpdate)
+            writeToFile(neutralMonsterWriter, ctx, e, "RESISTANCE", neutralMonster.magicalResistance);
     }
     
     private void handleLaneCreep(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
@@ -551,7 +544,7 @@ public class App
         File heroIdFile = new File(args[1] + "/heroId.txt");
         File timeFile = new File(args[1] + "/time.txt");
         File combatFile = new File(args[1] + "/combat.txt");
-        File neutralCreepFile = new File(args[1] + "/neutral_creep.txt");
+        File neutralMonsterFile = new File(args[1] + "/neutral_creep.txt");
         File laneCreepFile = new File(args[1] + "/lane_creep.txt");
         
         heroWriter = new PrintWriter(heroFile);
@@ -561,7 +554,7 @@ public class App
         heroIdWriter = new PrintWriter(heroIdFile);
         timeWriter = new PrintWriter(timeFile);
         combatWriter = new PrintWriter(combatFile);
-        neutralCreepWriter = new PrintWriter(neutralCreepFile);
+        neutralMonsterWriter = new PrintWriter(neutralMonsterFile);
         laneCreepWriter = new PrintWriter(laneCreepFile);
         
         combatLog = new CombatLog(combatWriter);
@@ -584,7 +577,7 @@ public class App
         heroIdWriter.close();
         timeWriter.close();
         combatWriter.close();
-        neutralCreepWriter.close();
+        neutralMonsterWriter.close();
         laneCreepWriter.close();
     }
 

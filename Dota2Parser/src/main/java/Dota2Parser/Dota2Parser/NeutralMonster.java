@@ -1,0 +1,11 @@
+package Dota2Parser.Dota2Parser;
+
+import skadistats.clarity.model.Entity;
+
+public class NeutralMonster extends Unit
+{    
+    public NeutralMonster(Entity e)
+    {
+        super(e);
+    }
+}
