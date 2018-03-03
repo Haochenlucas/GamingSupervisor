@@ -5,6 +5,13 @@ namespace GamingSupervisor
 {
     public static class GUISelection
     {
+        public enum Difficulty
+        {
+            novice,
+            learning,
+            experienced
+        }
+
         public enum Customize
         {
             lastHit,
@@ -20,7 +27,8 @@ namespace GamingSupervisor
             replay,
             live
         }
-        
+
+        public static Difficulty difficulty;
         public static Dictionary<Customize, bool> customize;
         public static GameType gameType;
         public static string fileName;

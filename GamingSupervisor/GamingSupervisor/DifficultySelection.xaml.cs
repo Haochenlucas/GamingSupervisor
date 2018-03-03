@@ -16,6 +16,8 @@ namespace GamingSupervisor
 
         private void SelectNovice(object sender, RoutedEventArgs e)
         {
+            GUISelection.difficulty = GUISelection.Difficulty.novice;
+
             GUISelection.customize[GUISelection.Customize.lastHit] = true;
             GUISelection.customize[GUISelection.Customize.heroSelection] = true;
             GUISelection.customize[GUISelection.Customize.itemHelper] = true;
@@ -28,6 +30,8 @@ namespace GamingSupervisor
 
         private void SelectLearning(object sender, RoutedEventArgs e)
         {
+            GUISelection.difficulty = GUISelection.Difficulty.learning;
+
             GUISelection.customize[GUISelection.Customize.lastHit] = true;
             GUISelection.customize[GUISelection.Customize.heroSelection] = false;
             GUISelection.customize[GUISelection.Customize.itemHelper] = false;
@@ -40,6 +44,8 @@ namespace GamingSupervisor
 
         private void SelectAlmostGotIt(object sender, RoutedEventArgs e)
         {
+            GUISelection.difficulty = GUISelection.Difficulty.experienced;
+
             GUISelection.customize[GUISelection.Customize.lastHit] = false;
             GUISelection.customize[GUISelection.Customize.heroSelection] = false;
             GUISelection.customize[GUISelection.Customize.itemHelper] = false;
