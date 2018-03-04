@@ -334,6 +334,8 @@ public class App
         boolean updateItems = false;
         boolean updatePhysicalArmor = false;
         boolean updateMagicalResistance = false;
+        boolean updateDaytimeVisionRange = false;
+        boolean updateNighttimeVisionRange = false;        
         for (int i = 0; i < updateCount; i++)
         {
             if (hero.isPosition(updatedPaths[i]))
@@ -368,6 +370,10 @@ public class App
                 updatePhysicalArmor = true;
             if (hero.isMagicalResistance(updatedPaths[i]))
                 updateMagicalResistance = true;
+            if (hero.isDaytimeVisionRange(updatedPaths[i]))
+            	updateDaytimeVisionRange = true;
+            if (hero.isNighttimeVisionRange(updatedPaths[i]))
+            	updateNighttimeVisionRange = true;
         }
         
         if (updatePosition || forceUpdate)
@@ -400,6 +406,10 @@ public class App
             writeToFile(heroWriter, ctx, e, "ARMOR", hero.playerID, hero.physicalArmor);
         if (updateMagicalResistance || forceUpdate)
             writeToFile(heroWriter, ctx, e, "RESISTANCE", hero.playerID, hero.magicalResistance);
+        if (updateDaytimeVisionRange || forceUpdate)
+            writeToFile(heroWriter, ctx, e, "DAYVISION", hero.playerID, hero.daytimeVisionRange);
+        if (updateNighttimeVisionRange || forceUpdate)
+            writeToFile(heroWriter, ctx, e, "NIGHTVISION", hero.playerID, hero.nighttimeVisionRange);
         if (updateItems || forceUpdate)
         {
         	StringTable itemNames = ctx.getProcessor(StringTables.class).forName("EntityNames");

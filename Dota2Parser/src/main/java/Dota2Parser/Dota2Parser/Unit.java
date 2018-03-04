@@ -27,6 +27,8 @@ public class Unit
     public FieldPath physicalArmor;
     public FieldPath magicalResistance;
     public FieldPath teamNumber;
+    public FieldPath daytimeVisionRange;
+    public FieldPath nighttimeVisionRange;
     
     public Unit(Entity e)
     {
@@ -58,6 +60,8 @@ public class Unit
         physicalArmor = e.getDtClass().getFieldPathForName("m_flPhysicalArmorValue");
         magicalResistance = e.getDtClass().getFieldPathForName("m_flMagicalResistanceValue");
         teamNumber = e.getDtClass().getFieldPathForName("m_iTeamNum");
+        daytimeVisionRange = e.getDtClass().getFieldPathForName("m_iDayTimeVisionRange");
+        nighttimeVisionRange = e.getDtClass().getFieldPathForName("m_iNightTimeVisionRange");
     }
     
     public boolean isPosition(FieldPath path)
@@ -150,5 +154,15 @@ public class Unit
     public boolean isTeamNumber(FieldPath path)
     {
         return path.equals(teamNumber);
+    }
+    
+    public boolean isDaytimeVisionRange(FieldPath path)
+    {
+        return path.equals(daytimeVisionRange);
+    }
+    
+    public boolean isNighttimeVisionRange(FieldPath path)
+    {
+        return path.equals(nighttimeVisionRange);
     }
 }
