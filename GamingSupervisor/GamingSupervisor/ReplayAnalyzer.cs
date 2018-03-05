@@ -225,7 +225,7 @@ namespace GamingSupervisor
             for (int j = 1; j < 6; j++)
             {
                 heroesimg[j - 1] = suggestiontable[index, j].ToString();
-                heroes[j - 1] = ID_table[suggestiontable[index, j]];
+                heroes[j - 1] = ID_table[suggestiontable[index, j]] + announcer.GetCurrentGameTime().ToString();
             }
             
             overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
@@ -267,7 +267,7 @@ namespace GamingSupervisor
             }
             else
             {
-                overlay.ClearMessage(6);
+                overlay.ClearMessage(7);
             }
             
                 overlay.ToggleGraphForHeroHP();

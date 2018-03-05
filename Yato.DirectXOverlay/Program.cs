@@ -30,6 +30,8 @@ namespace Yato.DirectXOverlay
             Stopwatch watch = new Stopwatch();
             d2d.SetupHintSlots();
             watch.Start();
+            d2d.Intructions_setup();
+            d2d.HeroIntro_setup(38);
             while (true)
             {
                 if (watch.ElapsedMilliseconds < 15)
@@ -53,18 +55,17 @@ namespace Yato.DirectXOverlay
                     imgName[3] = "4";
                     imgName[4] = "6";
                     d2d.HeroSelectionHints(messages, imgName);
-                    d2d.Retreat("Run", "");
-                    //d2d.SelectedHeroSuggestion(38);
+                    d2d.ItemSelectionHints(messages[0], imgName[0]);
                 }
                 if (Control.ModifierKeys == Keys.Alt)
                 {
-                    d2d.HeroSelection_Draw(VS_HWND, overlay);
+                    //d2d.Ingame_Draw(VS_HWND, overlay);
+                    d2d.HeroInfo_Draw(VS_HWND, overlay);
                 }
                 else
                 {
-                    d2d.Ingame_Draw(VS_HWND, overlay);
+                    d2d.Intructions_Draw(VS_HWND, overlay);
                 }
-
 
                 watch.Restart();
             }
