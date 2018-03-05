@@ -44,7 +44,6 @@ public class App
         sb.append(ctx.getTick() + " [");
         sb.append(type);
         sb.append("]");
-        sb.append(" " + e.getDtClass().getDtName());
         for (int i = 0; i < fieldPaths.length; i++)
         {
             sb.append(" " + e.getPropertyForFieldPath(fieldPaths[i]));
@@ -291,29 +290,29 @@ public class App
         }
         
         if (updatePosition || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "POSITION", hero.x, hero.y, hero.z);
+            writeToFile(heroWriter, ctx, e, "POSITION", hero.playerID, hero.x, hero.y, hero.z);
         if (updateHealth || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "HEALTH", hero.health);
+            writeToFile(heroWriter, ctx, e, "HEALTH", hero.playerID, hero.health);
         if (updateLevel || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "LEVEL", hero.level);
+            writeToFile(heroWriter, ctx, e, "LEVEL", hero.playerID, hero.level);
         if (updateMana || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "MANA", hero.mana);
+            writeToFile(heroWriter, ctx, e, "MANA", hero.playerID, hero.mana);
         if (updateStrength || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "STRENGTH", hero.strength);
+            writeToFile(heroWriter, ctx, e, "STRENGTH", hero.playerID, hero.strength);
         if (updateIntellect || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "INTELLECT", hero.intellect);
+            writeToFile(heroWriter, ctx, e, "INTELLECT", hero.playerID, hero.intellect);
         if (updateMaxHealth || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "MAXHEALTH", hero.maxHealth);
+            writeToFile(heroWriter, ctx, e, "MAXHEALTH", hero.playerID, hero.maxHealth);
         if (updateManaRegen || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "MANAREGEN", hero.manaRegen);
+            writeToFile(heroWriter, ctx, e, "MANAREGEN", hero.playerID, hero.manaRegen);
         if (updateHealthRegen || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "HEALTHREGEN", hero.healthRegen);
+            writeToFile(heroWriter, ctx, e, "HEALTHREGEN", hero.playerID, hero.healthRegen);
         if (updateMovementSpeed || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "MOVEMENTSPEED", hero.movementSpeed);
+            writeToFile(heroWriter, ctx, e, "MOVEMENTSPEED", hero.playerID, hero.movementSpeed);
         if (updateDamageMin || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "DAMAGEMIN", hero.damageMin);
+            writeToFile(heroWriter, ctx, e, "DAMAGEMIN", hero.playerID, hero.damageMin);
         if (updateDamageMax || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "DAMAGEMAX", hero.damageMax);
+            writeToFile(heroWriter, ctx, e, "DAMAGEMAX", hero.playerID, hero.damageMax);
         //if (updateItems || forceUpdate)
         //    writeToFile(heroWriter, ctx, e, "ITEMS", hero.playerID, hero.);
     }
