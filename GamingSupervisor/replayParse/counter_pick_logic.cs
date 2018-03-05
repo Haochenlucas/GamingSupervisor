@@ -399,16 +399,119 @@ namespace replayParse
 
 
         /*
+         * team_name is come from the selectionTable. So proper input is 2 and 3.
+         * suggestionTable: second dim: first column : tic, second to six column is hero_id.
+         */
+        public int[,] suggestionTable_1(int team_name, int diff_level)
+        {
+            int table_count = 0;
+            if (team_name == 2)
+            {
+                int[] pick_list = new int[5];
+                int[] team_list = new int[5];
+                int pick_count = 0;
+                int team_count = 0;
+                int[] ban_list = new int[12];
+                int ban_count = 0;
+                //     tip for hero_ID_Client_Team the second dimension first column is about hero_id,the second_column is about hero client id, the third_column is about team side, the fourth_column is about tic.
+                //*team side(0: (ban from team 1), 1: (ban from team 2) , 2: (pick from team 1), 3: (pick from team 2)).
+                for (int i = 0; i < hero_ID_Client_Team.Length / 4; i++)
+                {
+                    if (hero_ID_Client_Team[i, 1] != 0)
+                    {
+                        int tic = hero_ID_Client_Team[i, 3];
+                        table_suggestion[table_count, 0] = tic;
+                        if (hero_ID_Client_Team[i, 2] < 2)
+                        {
+                            ban_list[ban_count] = hero_ID_Client_Team[i, 0];
+                            ban_count++;
+                        }
+                        else if (hero_ID_Client_Team[i, 2] == 2)
+                        {
+                            team_list[team_count] = hero_ID_Client_Team[i, 0];
+                            team_count++;
+                        }
+                        else
+                        {
+                            pick_list[pick_count] = hero_ID_Client_Team[i, 0];
+                            pick_count++;
+                        }
+                        int[] suggest_cur = logic_counter_1(pick_list, team_list, ban_list, diff_level);
+                        for (int j = 1; j < 6; j++)
+                        {
+                            table_suggestion[table_count, j] = suggest_cur[j - 1];
+                        }
+                        table_count++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }
+
+            }
+            else
+            {
+                int[] pick_list = new int[5];
+                int[] team_list = new int[5];
+                int pick_count = 0;
+                int team_count = 0;
+                int[] ban_list = new int[12];
+                int ban_count = 0;
+                for (int i = 0; i < hero_ID_Client_Team.Length / 4; i++)
+                {
+                    if (hero_ID_Client_Team[i, 1] != 0)
+                    {
+                        int tic = hero_ID_Client_Team[i, 3];
+                        table_suggestion[table_count, 0] = tic;
+                        if (hero_ID_Client_Team[i, 2] < 2 )
+                        {
+                            ban_list[ban_count] = hero_ID_Client_Team[i, 0];
+                            ban_count++;
+                        }
+                        else if ( hero_ID_Client_Team[i, 2] == 3)
+                        {
+                            team_list[team_count] = hero_ID_Client_Team[i, 0];
+                            team_count++;
+                        }
+                        else
+                        {
+                            pick_list[pick_count] = hero_ID_Client_Team[i, 0];
+                            pick_count++;
+                        }
+                        int[] suggest_cur = logic_counter_1(pick_list, team_list, ban_list, diff_level);
+                        for (int j = 1; j < 6; j++)
+                        {
+                            table_suggestion[table_count, j] = suggest_cur[j - 1];
+                        }
+                        table_count++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }
+
+            }
+            return table_suggestion;
+        }
+
+
+
+        /*
          * version_1.1.0 logic_counter 
          * Input: the hero_sequence which is heros picked by enemy team
          *        the ban_list contains the heros picked by own team and all baned heros by both team.
          * output: the best five hero we suggest to pick
          * improve place: consider the role of the heros in the own team, consider the difficulty of the heros.
          */
-        public static int[] logic_counter_1(int[] hero_sequence_enemy, int[] hero_sequence_teammate, int[] ban_list)
+        public static int[] logic_counter_1(int[] hero_sequence_enemy, int[] hero_sequence_teammate, int[] ban_list,int diff_level)
         {
             Dictionary<double, int> five_picks = new Dictionary<double, int>();
             Dictionary<double, int> porper_pick = new Dictionary<double, int>();
+            hero_difficulty h_diff = new hero_difficulty();
             // At least a team needs at least two Disabler[1], 
             // better have one middle laner[10] and one offlaner[9],
             // at least two support[4] and at least two carry[0], 
@@ -456,7 +559,7 @@ namespace replayParse
                     double sum1 = 0;
                     for (int i = 0; i < length; i++)
                     {
-                        sum1 = sum1 + matrix_info[hero_sequence_enemy[i], count];
+                        sum1 = sum1 + matrix_info[hero_sequence_enemy[i], count]+ 0.3*role_factor(roleList,count)+0.2*(4- diff_level) *(14-h_diff.getFinalRating(count));
                     }
                     if (flag < 5)
                     {
@@ -513,7 +616,7 @@ namespace replayParse
             // 0:[Carry], 1: [Disabler] 2: [Initiator], 3:[Jungler], 4:[Support], 5:[Durable] 
             // 6:[Nuker], 7: [Pusher], 8: [Escape], 9: [Offlane] 10: [Midlane]
          */
-        public int role_factor(int[] roleList, int hero_id)
+        private static int role_factor(int[] roleList, int hero_id)
         {
             int roleFactor = 0;
 

@@ -144,7 +144,8 @@ namespace GamingSupervisor
                     team_side = table[i, 2];
                 }
             }
-            int[,] suggestiontable = cp.suggestionTable(team_side);
+            //int[,] suggestiontable = cp.suggestionTable(team_side);
+            int[,] suggestiontable = cp.suggestionTable_1(team_side,1);
             for (int i = 0; i < 30; i++)
             {
                 if (table[i, 2] == team_side)
