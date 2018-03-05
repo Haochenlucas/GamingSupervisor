@@ -1,0 +1,10 @@
+0 CDOTA_Unit_Hero_Gyrocopter
+1 CDOTA_Unit_Hero_SandKing
+2 CDOTA_Unit_Hero_AncientApparition
+3 CDOTA_Unit_Hero_DeathProphet
+4 CDOTA_Unit_Hero_Enigma
+5 CDOTA_Unit_Hero_SkeletonKing
+6 CDOTA_Unit_Hero_Naga_Siren
+7 CDOTA_Unit_Hero_Disruptor
+8 CDOTA_Unit_Hero_StormSpirit
+9 CDOTA_Unit_Hero_Omniknight
