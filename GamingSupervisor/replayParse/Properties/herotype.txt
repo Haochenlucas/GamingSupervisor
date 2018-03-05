@@ -55,13 +55,13 @@ Batrider *BatriderDark Seer *Dark SeerInvoker *InvokerNature's Prophet *Nature's
 
 
 
-[Offlane]
-Pangolier Doom Tidehunter Legion Commander Omniknight Brewmaster Pudge Clockwerk Sand King Nyx Assassin Puck Bristleback Axe Underlord Batrider Earthshaker Faceless Void Timbersaw Windranger Weaver	
+[Offlane] "In Radiant, offlane heroes should go top lane. In Dire, offlane heros should go bot lane."
+Pangolier *Doom *Tidehunter *Legion Commander *Omniknight *Brewmaster *Pudge *Clockwerk *Sand King *Nyx Assassin *Puck *Bristleback *Axe *Underlord *Batrider *Earthshaker *Faceless Void *Timbersaw *Windranger *Weaver *Abaddon 	
 
 
-[Midlane]
-Tinker	Shadow Fiend Storm Spirit Templar Assassin Invoker Outworld Devourer Queen of Pain Death Prophet Puck Zeus Ember Spirit Viper Alchemist
-Arc Warden Lina Sniper Meepo Dragon Knight Razor Leshrac Windranger Kunkka Magnus Tiny Pudge Mirana Medusa Bounty Hunter Huskar Visage Clinkz Pugna Earth Spirit Necrophos Skywrath Mage Monkey King Riki Brewmaster Silencer Phantom Assassin Io Night Stalker Dark Willow Tusk Morphling Naga Siren Broodmother Bloodseeker Drow Ranger Lone Druid Timbersaw Gyrocopter Venomancer
+[Midlane] "Midlane heroes should go Midlane??"
+Tinker	*Shadow Fiend *Storm Spirit *Templar Assassin *Invoker *Outworld Devourer *Queen of Pain *Death Prophet *Puck *Zeus *Ember Spirit *Viper *Alchemist
+Arc Warden *Lina *Sniper *Meepo *Dragon Knight *Razor *Leshrac *Windranger *Kunkka *Magnus *Tiny *Pudge *Mirana *Medusa *Bounty Hunter *Huskar *Visage *Clinkz *Pugna *Earth Spirit *Necrophos *Skywrath Mage *Monkey King *Riki *Brewmaster *Silencer *Phantom Assassin *Io *Night Stalker *Dark Willow *Tusk *Morphling *Naga Siren *Broodmother *Bloodseeker *Drow Ranger *Lone Druid *Timbersaw *Gyrocopter *Venomancer
 
 
 
