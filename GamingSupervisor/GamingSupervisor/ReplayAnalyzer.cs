@@ -64,10 +64,12 @@ namespace GamingSupervisor
 
             int lastGameTime = announcer.GetCurrentGameTime();
             int currentGameTime = 0;
+            int lastTickWhenGameTimeChanged = 0;
             bool replayStarted = false;
             bool keepLooping = true;
 
             CurrentTick = replayTick[announcer.GetCurrentGameTime()];
+            lastTickWhenGameTimeChanged = CurrentTick;
 
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
@@ -120,6 +122,12 @@ namespace GamingSupervisor
                 {
                     lastGameTime = currentGameTime;
                     CurrentTick = replayTick[announcer.GetCurrentGameTime()];
+                    lastTickWhenGameTimeChanged = CurrentTick;
+                }
+                else if (CurrentTick - lastTickWhenGameTimeChanged >= 45 /*ticks*/)
+                {
+                    // Give ~1.5sec for game time to change before assuming game is paused )
+                    CurrentTick = replayTick[currentGameTime];
                 }
             }
 

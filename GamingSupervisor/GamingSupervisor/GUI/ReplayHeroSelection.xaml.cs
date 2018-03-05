@@ -27,6 +27,8 @@ namespace GamingSupervisor
         {
             InitializeComponent();
 
+            MainWindow.Description.Text = "Select which hero to analyze.";
+
             ConfirmButton.IsEnabled = false;
 
             ParsingMessageLabel.Visibility = Visibility.Visible;

@@ -15,6 +15,11 @@ namespace GamingSupervisor
         public GameTypeSelection()
         {
             InitializeComponent();
+
+            MainWindow.Description.Text = "Select 'Live' to play a live game with the Gaming Supervisor providing live feedback.";
+            MainWindow.Description.Text += "\n\n";
+            MainWindow.Description.Text += "Select 'Replay' to analyze a replay with the Gaming Supervisor.";
+            MainWindow.Description.Text += " You must have played at least one live game or downloaded a replay to select this option.";
         }
 
         private void SelectLive(object sender, RoutedEventArgs e)
