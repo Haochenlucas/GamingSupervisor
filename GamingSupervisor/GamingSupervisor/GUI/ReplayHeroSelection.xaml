@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:local="clr-namespace:GamingSupervisor"
       xmlns:fa="http://schemas.fontawesome.io/icons/"
       mc:Ignorable="d" 
@@ -15,22 +16,24 @@
                          Foreground="{StaticResource Foreground}"/>
         </StackPanel>
         <StackPanel>
-            <ListBox ToolTipService.ToolTip="Select which hero to analyze"
-                     ToolTipService.InitialShowDelay="2000"
-                     Name="HeroNameListBox" SelectionMode="Single" FontSize="16" Foreground="{StaticResource Foreground}"
-                     SelectionChanged="ListBoxSelectionChanged" Padding="0" BorderThickness="0">
+            <ListBox Name="HeroNameListBox" SelectionMode="Single" FontSize="16"
+                     SelectionChanged="ListBoxSelectionChanged" Padding="0" BorderThickness="0" Margin="5"
+                     Style="{StaticResource MetroListBox}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
-                            <Image Margin="-8" Stretch="Fill" Height="32" Source="{Binding ImagePath}"/>
-                            <Separator Margin="0" Width="20" Background="Transparent"/>
-                            <TextBlock Text="{Binding Title}"/>
+                            <TextBlock x:Name="Tb" Text="{Binding Title}" FontSize="20"/>
+                            <Image HorizontalAlignment="Right" Height="{Binding ActualHeight, ElementName=Tb}" Source="{Binding ImagePath}"/>
                         </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Name="ConfirmButton" Margin="10" Height="50" Click="ConfirmSelection" FontSize="30">Confirm</Button>
+            <Button Name="ConfirmButton" Margin="10" Height="50" Click="ConfirmSelection" FontSize="30"
+                Style="{DynamicResource AccentedSquareButtonStyle}"
+                controls:ControlsHelper.ContentCharacterCasing="Normal">Confirm</Button>
         </StackPanel>
-        <Button Name="GoBackButton" Margin="10" VerticalAlignment="Bottom" Height="50" Click="GoBack" FontSize="16">Go Back</Button>
+        <Button Name="GoBackButton" Margin="10" VerticalAlignment="Bottom" Height="50" Click="GoBack" FontSize="16"
+                Style="{DynamicResource AccentedSquareButtonStyle}"
+                controls:ControlsHelper.ContentCharacterCasing="Normal">Go Back</Button>
     </Grid>
 </Page>

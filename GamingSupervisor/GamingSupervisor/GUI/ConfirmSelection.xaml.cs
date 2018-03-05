@@ -12,6 +12,8 @@ namespace GamingSupervisor
         public ConfirmSelection()
         {
             InitializeComponent();
+
+            MainWindow.Description.Text = "When you click go, DotA 2 will start if it's not already started. Follow the instructions on the screen.";
         }
 
         private void Go(object sender, RoutedEventArgs e)

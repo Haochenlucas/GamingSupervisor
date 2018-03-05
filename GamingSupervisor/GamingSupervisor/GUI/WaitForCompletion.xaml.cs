@@ -28,8 +28,10 @@ namespace GamingSupervisor
         {
             InitializeComponent();
 
-            ParsingMessageLabel.Text = "Currently analyzing replay. Open 'Watch', 'Downloads', and select " +
+            MainWindow.Description.Text = "Currently analyzing replay. Follow the directions once DotA starts. Open 'Watch', 'Downloads', and select " +
                 System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName);
+
+            ParsingMessageLabel.Text = "Analyzing...";
 
             manager = new GamingSupervisorManager();
 

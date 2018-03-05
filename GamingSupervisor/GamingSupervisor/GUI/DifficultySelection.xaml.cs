@@ -1,4 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Resources;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
@@ -12,7 +18,14 @@ namespace GamingSupervisor
         public DifficultySelection()
         {
             InitializeComponent();
+
+            MainWindow.Description.Text = "Welcome to the Gaming Supervisor! The Gaming Supervisor will help you analyze your replays and play games in DotA 2.";
+            MainWindow.Description.Text += "\n\n";
+            MainWindow.Description.Text += "Select your experience level. If you have only limited experience, select 'Novice'.";
+            MainWindow.Description.Text += " If you have a few more games under your belt, select 'Learning'.";
+            MainWindow.Description.Text += " If you think you are almost ready to play without the Gaming Supervisor, select 'Almost got it'.";
         }
+
 
         private void SelectNovice(object sender, RoutedEventArgs e)
         {
