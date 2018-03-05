@@ -81,6 +81,10 @@ namespace GamingSupervisor
                     {
                         name = "treantprotector";
                     }
+                    if (name.Contains("skele"))
+                    {
+                        name = "wraithking";
+                    }
                     int key = hero_table[name];
 
                     heroNameList.Add(ID_table[key]);

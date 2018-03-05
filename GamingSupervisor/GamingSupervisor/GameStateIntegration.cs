@@ -9,7 +9,7 @@ namespace GamingSupervisor
 {
     class GameStateIntegration
     {
-        private static GameStateListener gameStateListener;
+        private static GameStateListener gameStateListener = null;
         public bool GameStarted { get; set; }
 
         private readonly object gameStateLock = new object();
@@ -67,8 +67,11 @@ namespace GamingSupervisor
                 Thread.Sleep(1000);
             }
 
-            gameStateListener = new GameStateListener(3000);
-            gameStateListener.NewGameState += OnNewGameState;
+            if (gameStateListener != null)
+            {
+                gameStateListener = new GameStateListener(3000);
+                gameStateListener.NewGameState += OnNewGameState;
+            }
         }
 
         public void StartListener()

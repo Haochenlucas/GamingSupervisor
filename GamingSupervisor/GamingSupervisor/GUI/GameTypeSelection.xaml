@@ -1,0 +1,24 @@
+﻿<Page x:Class="GamingSupervisor.GameTypeSelection"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:local="clr-namespace:GamingSupervisor"
+      mc:Ignorable="d" 
+      d:DesignHeight="640" d:DesignWidth="480"
+      Title="GameTypeSelection">
+    <Grid Margin="50">
+        <StackPanel>
+            <Button Margin="10" Height="50" Click="SelectLive" FontSize="30"
+                Style="{DynamicResource AccentedSquareButtonStyle}"
+                controls:ControlsHelper.ContentCharacterCasing="Normal">Live</Button>
+            <Button Margin="10" Height="50" Click="SelectReplay" FontSize="30"
+                Style="{DynamicResource AccentedSquareButtonStyle}"
+                controls:ControlsHelper.ContentCharacterCasing="Normal">Replay</Button>
+        </StackPanel>
+        <Button Margin="10" VerticalAlignment="Bottom" Height="50" Click="GoBack" FontSize="16"
+                Style="{DynamicResource AccentedSquareButtonStyle}"
+                controls:ControlsHelper.ContentCharacterCasing="Normal">Go Back</Button>
+    </Grid>
+</Page>

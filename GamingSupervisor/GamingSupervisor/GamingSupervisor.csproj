@@ -33,6 +33,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dota2GSI, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -86,7 +106,8 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Yato.DirectXOverlay">
+    <Reference Include="Yato.DirectXOverlay, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -99,31 +120,31 @@
     <Compile Include="Overlay.cs" />
     <Compile Include="ParserHandler.cs" />
     <Compile Include="ReplayAnalyzer.cs" />
-    <Compile Include="ReplayHeroSelection.xaml.cs">
+    <Compile Include="GUI\ReplayHeroSelection.xaml.cs">
       <DependentUpon>ReplayHeroSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReplayStartAnnouncer.cs" />
     <Compile Include="ReplayTick.cs" />
-    <Compile Include="WaitForCompletion.xaml.cs">
+    <Compile Include="GUI\WaitForCompletion.xaml.cs">
       <DependentUpon>WaitForCompletion.xaml</DependentUpon>
     </Compile>
-    <Page Include="ConfirmSelection.xaml">
+    <Page Include="GUI\ConfirmSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CustomizeSelection.xaml">
+    <Page Include="GUI\CustomizeSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DifficultySelection.xaml">
+    <Page Include="GUI\DifficultySelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GameTypeSelection.xaml">
+    <Page Include="GUI\GameTypeSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="GUI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -131,33 +152,33 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConfirmSelection.xaml.cs">
+    <Compile Include="GUI\ConfirmSelection.xaml.cs">
       <DependentUpon>ConfirmSelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomizeSelection.xaml.cs">
+    <Compile Include="GUI\CustomizeSelection.xaml.cs">
       <DependentUpon>CustomizeSelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DifficultySelection.xaml.cs">
+    <Compile Include="GUI\DifficultySelection.xaml.cs">
       <DependentUpon>DifficultySelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameTypeSelection.xaml.cs">
+    <Compile Include="GUI\GameTypeSelection.xaml.cs">
       <DependentUpon>GameTypeSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="GamingSupervisorManager.cs" />
     <Compile Include="GUISelection.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="GUI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ReplayHeroSelection.xaml">
+    <Page Include="GUI\ReplayHeroSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WaitForCompletion.xaml">
+    <Page Include="GUI\WaitForCompletion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="xaml\ToolTip.xaml">
+    <Page Include="GUI\ToolTip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
