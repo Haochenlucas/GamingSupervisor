@@ -65,7 +65,6 @@ public class App
         sb.append("\n");
         
         writer.write(sb.toString());
-        writer.flush();
     }
     
     private boolean isHero(Entity e)
@@ -428,7 +427,6 @@ public class App
         		}
         	}
         	heroWriter.write("\n");
-        	heroWriter.flush();
         }
     }
     
@@ -459,8 +457,6 @@ public class App
         		if (updateGold[i])
         			heroWriter.format("%d [EARNEDGOLD] %d %s %s \n",
         				ctx.getTick(), (i + add), e.getPropertyForFieldPath(team.reliableGold[i]), e.getPropertyForFieldPath(team.unreliableGold[i]));
-
-	        heroWriter.flush();
         }
     }
     
@@ -484,8 +480,6 @@ public class App
         		if (updateNetWorth[i])
         			heroWriter.format("%d [NETWORTH] %d %s \n",
         				ctx.getTick(), i, e.getPropertyForFieldPath(spectator.netWorth[i]));
-
-	        heroWriter.flush();
         }
     }
     
@@ -601,6 +595,16 @@ public class App
             heroIdWriter.write(heroId.getKey() + " " + heroId.getValue() + "\n");
             heroIdWriter.flush();
         }
+        
+        heroWriter.flush();
+        heroSelectionWriter.flush();
+        cameraWriter.flush();
+        stateWriter.flush();
+        heroIdWriter.flush();
+        timeWriter.flush();
+        combatWriter.flush();
+        neutralMonsterWriter.flush();
+        laneCreepWriter.flush();
         
         heroWriter.close();
         heroSelectionWriter.close();
