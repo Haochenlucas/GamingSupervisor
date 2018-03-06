@@ -30,7 +30,7 @@ namespace Yato.DirectXOverlay
             Stopwatch watch = new Stopwatch();
             d2d.SetupHintSlots();
             watch.Start();
-            d2d.Intructions_setup();
+            //d2d.Intructions_setup();
             d2d.HeroIntro_setup(38);
             while (true)
             {

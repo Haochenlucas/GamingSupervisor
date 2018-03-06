@@ -1417,9 +1417,14 @@ namespace Yato.DirectXOverlay
             }
         }
 
-        public void ItemSelectionHints(string heros, string img)
+        public void ItemSelectionHints(string item, string img)
         {
-             AddMessage(6, heros, img);
+             AddMessage(5, item, img);
+        }
+
+        public void HeroInfoHints(string item, string img)
+        {
+            AddMessage(6, item, img);
         }
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
@@ -1707,11 +1712,11 @@ namespace Yato.DirectXOverlay
         }
 
         public Instruction instruction;
-        public void Intructions_setup()
+        public void Intructions_setup(string content)
         {
             float width_unit = Screen.PrimaryScreen.Bounds.Width / 32;
             float height_unit = Screen.PrimaryScreen.Bounds.Height / 32;
-            string text = "This is the content of the instruction.\n I want to test it when it is long.";
+            string text = content;
             Message instructions = new Message(text, "", width_unit * 20, height_unit * 6);
             instruction = new Instruction(instructions, "This is the title");
         }

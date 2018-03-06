@@ -2,6 +2,7 @@
 using replayParse;
 using System.Threading;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace GamingSupervisor
 {
@@ -53,14 +54,20 @@ namespace GamingSupervisor
                 announcer = new ReplayStartAnnouncer();
             }
 
-            CurrentTick = 0;
-            announcer.waitForReplayToStart();
-            tickTimer.Start();
-
             if (overlay == null)
             {
                 overlay = new Overlay();
             }
+
+            CurrentTick = 0;
+            string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is " + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName) + ", \n    click watch to start the replay.";
+            overlay.Intructions_setup(instru_OpenReplay);
+            while (!announcer.waitForReplayToStart())
+            {
+                // draw instruction to watch the replay in dota2 client
+                overlay.ShowInstructionMessage();
+            }
+            tickTimer.Start();
 
             int lastGameTime = announcer.GetCurrentGameTime();
             int currentGameTime = 0;
@@ -225,7 +232,7 @@ namespace GamingSupervisor
             for (int j = 1; j < 6; j++)
             {
                 heroesimg[j - 1] = suggestiontable[index, j].ToString();
-                heroes[j - 1] = ID_table[suggestiontable[index, j]] + announcer.GetCurrentGameTime().ToString();
+                heroes[j - 1] = ID_table[suggestiontable[index, j]];
             }
             
             overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
@@ -233,6 +240,30 @@ namespace GamingSupervisor
 
         private void HandleGamePlay()
         {
+            // TODO:
+
+            //// if first 10 sec, show camer setting instruction
+            //if (announcer.GetCurrentGameTime() < 10)
+            //{
+            //    string instru_OpenReplay = "Step 1: Change the camera mode to Hero Chase\nStep 2: Click on the hero you choose.";
+            //    overlay.Intructions_setup(instru_OpenReplay);
+            //    overlay.ShowInstructionMessage();
+            //}
+             if (announcer.GetCurrentGameTime() >= 871 && announcer.GetCurrentGameTime() <= 891)
+            {
+                string temp = "Lycan is a remarkable pusher who can wear down buildings and force enemies to react quickly to his regular tower onslaughts; as towers melt incredibly fast under Lycan's and his units' pressure, boosted by their canine Feral Impulse. His only contribution to full-on team fights will be the bonus damage he grants with Howl to his allies, his allies' summons, his owns summons, and himself, as well as his formidable physical attacks. Else he can surge out of the woods for a quick gank or push after he transformed with Shapeshift, moving at a haste speed of 650. Finally, good players will make the best usage of his Summon Wolves ability and scout the enemies' position while remaining undetected with invisibility at level 4.";
+
+                temp = Regex.Replace(temp, ".{50}", "$0\n");
+                // after that, show hero information
+                overlay.AddHeroInfoMessage(temp, "");
+            }
+
+            // Add item suggestion
+            if (announcer.GetCurrentGameTime() >= 871 && announcer.GetCurrentGameTime() <= 891)
+            {
+                overlay.AddItemSuggestionMessage("Necronomicon", "");
+            }
+
             int health = 0;
 
             int maxHealth = 0;

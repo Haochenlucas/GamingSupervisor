@@ -41,19 +41,17 @@ namespace GamingSupervisor
             return gameStateIntegration.GameState;
         }
 
-        public void waitForReplayToStart()
+        public bool waitForReplayToStart()
         {
-            Console.WriteLine("Waiting for replay to start...");
             if (!listenerStarted)
             {
                 gameStateIntegration.StartListener();
                 listenerStarted = true;
             }
-            SpinWait.SpinUntil(() =>
-                gameStateIntegration.GameState != "Undefined" && 
+            return(
+                gameStateIntegration.GameState != "Undefined" &&
                 gameStateIntegration.GameState != null &&
                 gameStateIntegration.GameState != "");
-            Console.WriteLine("Replay started!");
         }
 
         public void waitForHeroSelectionToComplete()
