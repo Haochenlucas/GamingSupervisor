@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Yato.DirectXOverlay;
 
@@ -47,6 +48,16 @@ namespace GamingSupervisor
         public void AddHp(double newhp)
         {
             renderer.UpdateHeroHPQueue(newhp);
+        }
+
+        public void ToggleHighlight(bool tog = true)
+        {
+            renderer.ToggleHightlight(tog);
+        }
+
+        public void UpdateHighlight(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
+        {
+            renderer.UpdateHighlightTime(ticks, maxTick);
         }
 
         public void ShowIngameMessage()

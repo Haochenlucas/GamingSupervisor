@@ -1,5 +1,12 @@
 # GamingSupervisor
 
+Jeremy Pope - 
+Andrew Yang - 
+Yucheng Yang - 
+Haochen Zhang
+
+University of Utah School of Computing Senior Project
+
 ## Dota2GSI
 
 Game state integration, used to sync replay with overlay.
@@ -10,8 +17,8 @@ Parser used to parse replay files (.dem).
 
 ## GamingSupervisor
 
-Main logic loop and UI
+Program UI and logic controller for the overlay.
 
 ## Yato.DirectXOverlay
 
-Overlay library used to graph circles on the screen.
+Library used to produce the overlays and graphics shown on the game screen.

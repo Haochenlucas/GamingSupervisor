@@ -82,6 +82,12 @@ namespace Yato.DirectXOverlay
 
         private Queue<double> currHp = new Queue<double>(250);
 
+        private Dictionary<int, List<Tuple<String, String, String>>> ticksInfo;
+
+        private bool drawHighlight = false;
+
+        private int maxTick;
+
         #endregion
 
         #region public vars
@@ -1152,7 +1158,7 @@ namespace Yato.DirectXOverlay
 
             layout.Dispose();
         }
-        
+
         public void DrawTextWithBackground(string text, float x, float y, Tuple<string, int> tfont, Tuple<int, int, int, int> tcolor, Tuple<int, int, int, int> tbackground)
         {
             Direct2DBrush color = CreateBrush(tcolor.Item1, tcolor.Item2, tcolor.Item3, tcolor.Item4);
@@ -1173,6 +1179,34 @@ namespace Yato.DirectXOverlay
 
             layout.Dispose();
         }
+
+        public void DrawTextWithBackground(List<Tuple<String, Direct2DBrush>> text, float x, float y, Direct2DFont font, Direct2DBrush backgroundBrush)
+        {
+            int offset = 0;
+            float xoffset = 0f;
+
+            foreach (var t in text)
+            {
+                var layout = new TextLayout(fontFactory, t.Item1, font, float.MaxValue, float.MaxValue);
+                xoffset = Math.Max(xoffset, layout.Metrics.Width);
+            }
+
+            foreach (var t in text)
+            {
+                var layout = new TextLayout(fontFactory, t.Item1, font, float.MaxValue, float.MaxValue);
+
+                float modifier = font.FontSize / 4.0f;
+
+                device.FillRectangle(new RawRectangleF(x - modifier, y - modifier - offset, x + xoffset + modifier, y + layout.Metrics.Height + modifier - offset), backgroundBrush);
+
+                device.DrawTextLayout(new RawVector2(x, y - offset), layout, t.Item2, DrawTextOptions.NoSnap);
+
+                offset += 15;
+
+                layout.Dispose();
+            }
+        }
+
 
         public void DrawTextWithBackground(string text, float x, float y, Direct2DFont font, Direct2DBrush brush, Direct2DBrush backgroundBrush)
         {
@@ -1401,7 +1435,7 @@ namespace Yato.DirectXOverlay
 
         public void ItemSelectionHints(string heros, string img)
         {
-             AddMessage(6, heros, img);
+            AddMessage(6, heros, img);
         }
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
@@ -1418,7 +1452,7 @@ namespace Yato.DirectXOverlay
             Tuple<string, int> font = new Tuple<string, int>("Consolas", 18);
 
 
-            AddMessage(5, suggestion, "", color,background,font);
+            AddMessage(5, suggestion, "", color, background, font);
             messages[5].y = mouse_Y;
         }
 
@@ -1507,9 +1541,20 @@ namespace Yato.DirectXOverlay
             currHp.Enqueue(newhp);
         }
 
+        public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
+        {
+            this.ticksInfo = ticks;
+            this.maxTick = maxTick;
+        }
+
+        public void ToggleHightlight(bool drawHighlight)
+        {
+            this.drawHighlight = drawHighlight;
+        }
+
         public void DeleteMessage(int type)
         {
-            if(type == 7)
+            if (type == 7)
             {
                 low_hp = false;
             }
@@ -1549,43 +1594,114 @@ namespace Yato.DirectXOverlay
                         DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background);
                         if (messages[i].imgName != "")
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName+ ".png");
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
                             DrawBitmap(bmp, 1, messages[i].img_x, messages[i].img_y, messages[i].img_width, messages[i].img_height);
                             bmp.SharpDXBitmap.Dispose();
                         }
                     }
                 }
 
-                if (low_hp)
+                if (drawHighlight)
                 {
-                    DrawCircle(Screen.PrimaryScreen.Bounds.Width/2, Screen.PrimaryScreen.Bounds.Height/2, Screen.PrimaryScreen.Bounds.Height/5, 2f, redBrush);
+                    int x = Screen.PrimaryScreen.Bounds.Width;
+                    int y = Screen.PrimaryScreen.Bounds.Height;
+                    float xInit = x / 4;
+                    float xEnd = 3 * x / 4;
+                    DrawLine(xInit, 3 * y / 4, xEnd, 3 * y / 4, 2, lightRedBrush);
+                    foreach (var a in ticksInfo)
+                    {
+                        float percent = a.Key / (float)maxTick;
+                        float xCurr = xInit + (xEnd - xInit) * percent;
+                        DrawBox2D(xCurr, (3 * y / 4) - 2, 4, 4, 2, blueBrush, blueBrush);
+                    }
+
+                    CheckToShowHighlightTime();
                 }
 
-                //if (drawGraphs)
-                //{
-                //    int currY = Screen.PrimaryScreen.Bounds.Height / 2;
+                if (low_hp)
+                {
+                    DrawCircle(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
+                }
 
-                //    for (int i = 0; i < 5; i++)
-                //    {
-                //        DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
-                //    }
+                if (drawGraphs)
+                {
+                    int currY = Screen.PrimaryScreen.Bounds.Height / 2;
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
+                    }
 
 
-                //    DrawLine(250, currY-100, 250, currY +150, 2, redBrush);
-                //    DrawLine(0, currY +150, 250, currY + 150, 2, redBrush);
+                    DrawLine(250, currY - 100, 250, currY + 150, 2, redBrush);
+                    DrawLine(0, currY + 150, 250, currY + 150, 2, redBrush);
 
-                //    for (int j = 0; j < currHp.Count - 1; j ++)
-                //    {
-                //        double[] tempCurrHp = currHp.ToArray();
-                //        DrawLine(j, (float)(currY - tempCurrHp[j]) / 6 + currY, 1 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
-                //    }
-                //}
+                    for (int j = 0; j < currHp.Count - 1; j++)
+                    {
+                        double[] tempCurrHp = currHp.ToArray();
+                        DrawLine(j, (float)(currY - tempCurrHp[j]) / 6 + currY, 1 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
+                    }
+                }
 
                 EndScene();
             }
             else
             {
                 clear();
+            }
+        }
+
+        private void CheckToShowHighlightTime()
+        {
+            var mousePosition = Control.MousePosition;
+            var mX = mousePosition.X;
+            var mY = mousePosition.Y;
+
+            int x = Screen.PrimaryScreen.Bounds.Width;
+            int y = Screen.PrimaryScreen.Bounds.Height;
+            float xInit = x / 4;
+            float xEnd = 3 * x / 4;
+
+
+            Direct2DFont font = CreateFont("Consolas", 12);
+            //Direct2DBrush brush = CreateBrush(0, 0, 0, 255);
+            Direct2DBrush background = CreateBrush(109, 109, 109, 255);
+
+            foreach (var a in ticksInfo)
+            {
+                float percent = a.Key / (float)maxTick;
+                float xCurr = xInit + (xEnd - xInit) * percent;
+
+                List<Tuple<String, Direct2DBrush>> killText = new List<Tuple<String, Direct2DBrush>>();
+                foreach (var k in a.Value)
+                {
+                    if (killText.Count == 0)
+                        killText.Add(new Tuple<string, Direct2DBrush>(TimeSpan.FromSeconds(a.Key).ToString(@"hh\:mm\:ss"), CreateBrush(200, 200, 200)));
+                    Direct2DBrush brush = null;
+                    switch (k.Item3)
+                    {
+                        case "LR":
+                            brush = CreateBrush(255, 100, 100);
+                            break;
+                        case "R":
+                            brush = CreateBrush(255, 0, 0);
+                            break;
+                        case "LG":
+                            brush = CreateBrush(180, 255, 180);
+                            break;
+                        case "G":
+                            brush = CreateBrush(0, 255, 0);
+                            break;
+                        default:
+                            brush = CreateBrush(200, 200, 200);
+                            break;
+                    }
+                    killText.Add(new Tuple<string, Direct2DBrush>(k.Item1 + " killed " + k.Item2, brush));
+                }
+                killText.Reverse();
+                //killText = killText.TrimEnd('\r', '\n');
+                if (mX > xCurr - 2 && mX < xCurr + 2 && mY > (3 * y / 4) - 14 && mY < (3 * y / 4) + 10)
+                    DrawTextWithBackground(killText, xCurr, 3 * y / 4 - x / 80, font, background);
             }
         }
 
@@ -1597,7 +1713,7 @@ namespace Yato.DirectXOverlay
             {
                 BeginScene();
                 ClearScene();
-                
+
                 // Draw hero selection suggestion box
                 Direct2DBrush color = CreateBrush(messages[0].color.Item1, messages[0].color.Item2, messages[0].color.Item3, messages[0].color.Item4);
                 Direct2DBrush background = CreateBrush(messages[0].background.Item1, messages[0].background.Item2, messages[0].background.Item3, messages[0].background.Item4);
@@ -1795,7 +1911,7 @@ namespace Yato.DirectXOverlay
 
         private void CheckToShowHeroSuggestion()
         {
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var mouse_pos = Control.MousePosition;
                 if (mouse_pos.X > messages[i].img_x && mouse_pos.X < messages[i].img_x + messages[i].img_width && mouse_pos.Y > messages[i].img_y && mouse_pos.Y < messages[i].img_y + messages[i].img_height)
@@ -1866,7 +1982,7 @@ namespace Yato.DirectXOverlay
             float title_left = Info.x - modifier_x;
             float title_top = Info.y - modifier_y * 3;
             title = new Tuple<string, float, float>("Hero tutorial:", title_left, title_top);
-            content = new Tuple<string, float, float>(_content, Info.img_x, Info.img_y + modifier_y * 4); 
+            content = new Tuple<string, float, float>(_content, Info.img_x, Info.img_y + modifier_y * 4);
         }
     }
 
@@ -1910,7 +2026,7 @@ namespace Yato.DirectXOverlay
         public Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
         // Tuple<font, size>
         public Tuple<string, int> font = new Tuple<string, int>("Consolas", 32);
-        
+
         public string close_button_red = "close_button_red";
         // x, y, width, height
         public Tuple<float, float, float, float> close_button_pos;
@@ -1934,7 +2050,7 @@ namespace Yato.DirectXOverlay
             float title_left = instructions.x + modifier_x * 3;
             float title_top = instructions.y - modifier_y * 3;
             title = new Tuple<string, float, float>(_title, title_left, title_top);
-            close_button_pos = new Tuple<float, float, float, float> (box_right - modifier_x, title_top, 512 / 10, 512 / 10);
+            close_button_pos = new Tuple<float, float, float, float>(box_right - modifier_x, title_top, 512 / 10, 512 / 10);
         }
     }
 

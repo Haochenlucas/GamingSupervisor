@@ -38,7 +38,7 @@ namespace replayParse
             //count the hero name
             int count = 0;
             //count the hero team
-            int count1 = 0;
+            //int count1 = 0;
             string s = dataFolderLocation + "info.txt";
 
             string[] lines = System.IO.File.ReadAllLines(s);
@@ -145,7 +145,7 @@ namespace replayParse
             {
                 string[] words = line.Split(' ');
                 int tic = Int32.Parse(words[0]);
-                int team = 0;
+                //int team = 0;
                 int heroID = 0;
                 heroID = Int32.Parse(words[2]);
                 string hero_name = "";
