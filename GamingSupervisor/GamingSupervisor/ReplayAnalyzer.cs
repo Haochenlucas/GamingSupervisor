@@ -11,6 +11,7 @@ namespace GamingSupervisor
         private ReplayHeroID heroIDData;
         private List<int> teamHeroIds = new List<int>(4);
         private ReplayTick replayTick;
+        private ReplayHighlights replayHighlights;
 
         private ReplayStartAnnouncer announcer = null;
         private static Overlay overlay = null;
@@ -42,6 +43,8 @@ namespace GamingSupervisor
             heroData = new HeroParser(GUISelection.replayDataFolderLocation);
             heroIDData = new ReplayHeroID(GUISelection.replayDataFolderLocation);
             replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
+            replayHighlights = new ReplayHighlights(GUISelection.replayDataFolderLocation, GUISelection.heroName);
+
 
             heroID = heroIDData.getHeroID(GUISelection.heroName);
         }
@@ -231,24 +234,19 @@ namespace GamingSupervisor
             overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
         }
 
+        private void HandleHighlight()
+        {
+
+        }
+
         private void HandleGamePlay()
         {
             int health = 0;
 
-            int maxHealth = 0;
+            //int maxHealth = 0;
 
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
-            //if (CurrentTick < 0)
-            //{
-            //    int cur_tic_fake = 0;
-            //    health = heroData.getHealth(cur_tic_fake, heroID);
-            //    hpToSend[0] = health;
-            //    for (int i = 0; i < 4; i++)
-            //    {
-            //        hpToSend[i + 1] = heroData.getHealth(cur_tic_fake, teamHeroIds[i]);
-            //    }
-            //}
             Console.WriteLine(CurrentTick + " getting health " + heroID);
             health = heroData.getHealth(CurrentTick, heroID);
             Console.WriteLine("Tick " + CurrentTick + " Health " + health);
@@ -260,6 +258,11 @@ namespace GamingSupervisor
             {
                 hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
+
+            overlay.ToggleGraphForHeroHP();
+            overlay.AddHPs(hpToSend);
+            overlay.AddHp(hpToSend[0]);
+
             if (health < 600)
             {
                 overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health, "");
@@ -269,12 +272,6 @@ namespace GamingSupervisor
             {
                 overlay.ClearMessage(7);
             }
-            
-                overlay.ToggleGraphForHeroHP();
-                overlay.AddHPs(hpToSend);
-                overlay.AddHp(hpToSend[0]);
-                //overlay.ShowMessage("Health is low, retreat");
-                //Console.WriteLine("Tick " + CurrentTick + " Health " + health + " " + parsedReplay.getOffSet());
         }
 
         private void tickCallback(object sender, EventArgs e)

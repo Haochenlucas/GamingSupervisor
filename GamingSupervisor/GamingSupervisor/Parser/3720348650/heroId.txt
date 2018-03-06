@@ -1,0 +1,10 @@
+0 CDOTA_Unit_Hero_SandKing
+1 CDOTA_Unit_Hero_FacelessVoid
+2 CDOTA_Unit_Hero_QueenOfPain
+3 CDOTA_Unit_Hero_Silencer
+4 CDOTA_Unit_Hero_Enchantress
+5 CDOTA_Unit_Hero_Bane
+6 CDOTA_Unit_Hero_NightStalker
+7 CDOTA_Unit_Hero_PhantomLancer
+8 CDOTA_Unit_Hero_Broodmother
+9 CDOTA_Unit_Hero_Razor
