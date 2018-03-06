@@ -13,3 +13,16 @@ C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Y
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csproj.CoreCompileInputs.cache
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe.config
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.pdb
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.dll
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.dll
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.dll
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\replayParse.pdb
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.xml
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
+X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml

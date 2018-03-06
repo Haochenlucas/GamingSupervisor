@@ -102,6 +102,7 @@ namespace GamingSupervisor
                             overlay.ClearMessage(i);
                         }
                         HandleGamePlay();
+                        HandleHighlight();
                         ShowIngameHints();
                         break;
                     default:
@@ -236,7 +237,8 @@ namespace GamingSupervisor
 
         private void HandleHighlight()
         {
-
+            overlay.ToggleHighlight();
+            overlay.UpdateHighlight(replayHighlights.tickInfo, replayHighlights.lastTick);
         }
 
         private void HandleGamePlay()
