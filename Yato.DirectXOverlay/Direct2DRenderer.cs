@@ -1260,6 +1260,24 @@ namespace Yato.DirectXOverlay
         }
         #endregion
 
+        public enum hits
+        {
+             hero_selection_1 = 0,
+             hero_selection_2 = 1,
+             hero_selection_3 = 2,
+             hero_selection_4 = 3,
+             hero_selection_5 = 4,
+
+             hero_introduction = 5,
+
+             items_selection = 6,
+             retreat = 7,
+             press_on = 8,
+             last_hit = 9,
+             jungle = 10,
+             safe_farming = 11,
+             heroinformation = 12,
+        };
 
         // Type:
         // 0: hero selection
