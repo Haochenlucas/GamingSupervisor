@@ -85,6 +85,10 @@ namespace GamingSupervisor
                     {
                         name = "wraithking";
                     }
+                    if (name.Contains("Rattletrap"))
+                    {
+                        name = "Clockwerk";
+                    }
                     int key = hero_table[name];
 
                     heroNameList.Add(ID_table[key]);

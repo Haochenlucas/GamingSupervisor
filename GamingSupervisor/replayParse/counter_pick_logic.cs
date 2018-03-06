@@ -363,9 +363,22 @@ namespace replayParse
             for (int i = 0; i < 25; i++)
             {
                 int banorpick = 1;
-                int tic_1 = table_suggestion[i, 0];
-                int tic_2 = table_suggestion[i + 1, 0];
-                int tic_3 = table_suggestion[i + 2, 0];
+                int tic_1;
+                int tic_2;
+                int tic_3;
+                if (table_suggestion [i,0] >0 && i < 23)
+                {
+                    tic_1 = table_suggestion[i, 0];
+                    tic_2 = table_suggestion[i + 1, 0];
+                    tic_3 = table_suggestion[i + 2, 0];
+                }
+                else
+                {
+                    tic_1 = table_suggestion[i, 0];
+                    tic_2 = table_suggestion[i, 0];
+                    tic_3 = table_suggestion[i, 0];
+                }
+                
                 int shootIndex = 0;
                 for (int j = 1; j < 6; j++)
                 {
@@ -510,8 +523,10 @@ namespace replayParse
         public static int[] logic_counter_1(int[] hero_sequence_enemy, int[] hero_sequence_teammate, int[] ban_list,int diff_level)
         {
             Dictionary<double, int> five_picks = new Dictionary<double, int>();
-            Dictionary<double, int> porper_pick = new Dictionary<double, int>();
+            Dictionary<double, int> proper_pick = new Dictionary<double, int>();
             hero_difficulty h_diff = new hero_difficulty();
+            heroGenerateTypes h_type = new heroGenerateTypes();
+            int[,] h_type_table = h_type.getTypeTable();
             // At least a team needs at least two Disabler[1], 
             // better have one middle laner[10] and one offlaner[9],
             // at least two support[4] and at least two carry[0], 
@@ -519,14 +534,37 @@ namespace replayParse
             // 0:[Carry], 1: [Disabler] 2: [Initiator], 3:[Jungler], 4:[Support], 5:[Durable] 
             // 6:[Nuker], 7: [Pusher], 8: [Escape], 9: [Offlane] 10: [Midlane]
             int[] roleList = new int[5];
+            for(int i =0; i< hero_sequence_teammate.Length; i++)
+            {
+                if (h_type_table[hero_sequence_teammate[i], 0] == 1)
+                {
+                    roleList[0]++;
+                }
+                if (h_type_table[hero_sequence_teammate[i], 1] == 1)
+                {
+                    roleList[1]++;
+                }
+                if (h_type_table[hero_sequence_teammate[i], 4] == 1)
+                {
+                    roleList[2]++;
+                }
+                if (h_type_table[hero_sequence_teammate[i], 9] == 1)
+                {
+                    roleList[3]++;
+                }
+                if (h_type_table[hero_sequence_teammate[i], 10] == 1)
+                {
+                    roleList[4]++;
+                }
+            }
 
-            porper_pick.Add(1, 91);
-            porper_pick.Add(1.4, 46);
-            porper_pick.Add(1.6, 87);
-            porper_pick.Add(1.8, 105);
-            porper_pick.Add(2, 13);
-            porper_pick.Add(1.7, 15);
-            porper_pick.Add(1.2, 20);
+            proper_pick.Add(1, 91);
+            proper_pick.Add(1.4, 46);
+            proper_pick.Add(1.6, 87);
+            proper_pick.Add(1.8, 105);
+            proper_pick.Add(2, 13);
+            proper_pick.Add(1.7, 15);
+            proper_pick.Add(1.2, 20);
             int[] five_hero_array = new int[5];
             int length = hero_sequence_enemy.Length;
             int count = 1;
@@ -535,7 +573,7 @@ namespace replayParse
             double[] counterFact = new double[5];
             if (hero_sequence_enemy.Sum() == 0)
             {
-                foreach (KeyValuePair<double, int> pair in porper_pick)
+                foreach (KeyValuePair<double, int> pair in proper_pick)
                 {
                     if (!ban_list.Contains(pair.Value))
                     {
@@ -559,7 +597,7 @@ namespace replayParse
                     double sum1 = 0;
                     for (int i = 0; i < length; i++)
                     {
-                        sum1 = sum1 + matrix_info[hero_sequence_enemy[i], count]+ 0.3*role_factor(roleList,count)+0.2*(4- diff_level) *(14-h_diff.getFinalRating(count));
+                        sum1 = sum1 + matrix_info[hero_sequence_enemy[i], count]+ 0.2*role_factor(roleList,count)+0.2*(3- diff_level) *(14-h_diff.getFinalRating(count));
                     }
                     if (flag < 5)
                     {
@@ -568,6 +606,7 @@ namespace replayParse
                             sum1 = sum1 + 0.001;
                         }
                         five_picks.Add(sum1, count);
+
                         if (sum1 < lowest_fact)
                             lowest_fact = sum1;
                         flag++;
@@ -576,7 +615,9 @@ namespace replayParse
                     {
                         if (sum1 > lowest_fact)
                         {
+                            int removeKey = five_picks[lowest_fact];
                             five_picks.Remove(lowest_fact);
+                           
                             if (five_picks.ContainsKey(sum1))
                             {
                                 sum1 = sum1 + 0.001;
@@ -622,7 +663,7 @@ namespace replayParse
 
             int badAction = -10;
             int earnAction = 1;
-            int greatAction = 5;
+            int greatAction = 50;
 
             // no more than 4 support or no more 4 carry.
             // no more than 3 midlane.

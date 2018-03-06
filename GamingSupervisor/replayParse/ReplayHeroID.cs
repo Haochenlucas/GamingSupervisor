@@ -49,6 +49,10 @@ namespace replayParse
                 {
                     name = "Clockwerk";
                 }
+                if (name.Contains("skele"))
+                {
+                    name = "wraithking";
+                }
                 int heroID = Int32.Parse(words[0]);
                 heroNameToID[name] = heroID;
                 heroIDToName[heroID] = name;
@@ -60,30 +64,6 @@ namespace replayParse
             heroName = heroName.Replace(" ", "");
             heroName = heroName.Replace("_", "");
             heroName = heroName.ToLower();
-            if (heroName.Contains("never"))
-            {
-                heroName = "shadowfiend";
-            }
-            if (heroName.Contains("obsidian"))
-            {
-                heroName = "outworlddevourer";
-            }
-            if (heroName.Contains("wisp"))
-            {
-                heroName = "io";
-            }
-            if (heroName.Contains("magnataur"))
-            {
-                heroName = "magnus";
-            }
-            if (heroName.Contains("treant"))
-            {
-                heroName = "treantprotector";
-            }
-            if (heroName.Contains("Rattletrap"))
-            {
-                heroName = "Clockwerk";
-            }
 
             return heroNameToID[heroName];
         }

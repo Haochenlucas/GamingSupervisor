@@ -12,8 +12,8 @@ namespace replayParse
     {
         // 0:[Carry], 1: [Disabler] 2: [Initiator], 3:[Jungler], 4:[Support], 5:[Durable] 
         // 6:[Nuker], 7: [Pusher], 8: [Escape], 9: [Offlane] 10: [Midlane]
-        private static int[,] hero_generate_type_table = new int[116, 11];
-        private static Dictionary<string, string> type_explain = new Dictionary<string, string>();
+        private int[,] hero_generate_type_table = new int[116, 11];
+        private Dictionary<string, string> type_explain = new Dictionary<string, string>();
         /*
          * 
          */
@@ -35,7 +35,7 @@ namespace replayParse
                     string role_name = words[0].Replace("[", "");
                     role_name = role_name.Replace("]", "");
                     string explain = words[1].Replace("\"", "");
-                    type_explain.Add(role_name, explain);
+                    type_explain[role_name] = explain;
                     index = type_explain.Count - 1;
                 }
                 else
