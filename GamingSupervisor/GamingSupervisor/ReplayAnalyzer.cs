@@ -161,7 +161,7 @@ namespace GamingSupervisor
                     team_side = table[i, 2];
                 }
             }
-            int[,] suggestiontable = cp.suggestionTable(team_side);
+            int[,] suggestiontable = cp.suggestionTable_1(team_side,3);
             int[,] table_checkmark = cp.checkMark();
             for (int i = 0; i < 30; i++)
             {
@@ -225,7 +225,7 @@ namespace GamingSupervisor
             for (int j = 1; j < 6; j++)
             {
                 heroesimg[j - 1] = suggestiontable[index, j].ToString();
-                heroes[j - 1] = ID_table[suggestiontable[index, j]] + announcer.GetCurrentGameTime().ToString();
+                heroes[j - 1] = ID_table[suggestiontable[index, j]] + CurrentTick.ToString();
             }
             
             overlay.AddHeroesSuggestionMessage(heroes, heroesimg);

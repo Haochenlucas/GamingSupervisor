@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 namespace GamingSupervisor
 {
 
-    class demo{
+    class demo
+    {
         static void Main()
         {
             //string path = @"C:\Users\yuchengy\Source\Repos\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\";
             //replay_version01 r = new replay_version01(path);
             //Dictionary<string, int> h = r.getHerosLowercase();
             //double[,,] info = r.getReplayInfo();
-            //heroID h_ID = new heroID();
-            //Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
-            //Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
+            heroID h_ID = new heroID();
+            Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
+            Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
             //string[] heroName = h_ID.getHeroName();
             //foreach (KeyValuePair<int, string> kvp in ID_table)
             //{
@@ -46,6 +47,10 @@ namespace GamingSupervisor
             //Console.WriteLine(dt.getFinalRating(38));
             //Console.WriteLine(dt.getFinalLevel(38)[0]+ " "+ dt.getFinalLevel(38)[1]);
             //Console.Read();
+            heroGenerateTypes hGT = new heroGenerateTypes();
+            int[,] HT_table = hGT.getTypeTable();
+            Dictionary<string, string> HT_exp = hGT.getTypeDic();
+            Console.Read();
         }
     }
 }

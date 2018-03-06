@@ -67,7 +67,7 @@ namespace GamingSupervisor
                 Thread.Sleep(1000);
             }
 
-            if (gameStateListener != null)
+            if (gameStateListener == null)
             {
                 gameStateListener = new GameStateListener(3000);
                 gameStateListener.NewGameState += OnNewGameState;

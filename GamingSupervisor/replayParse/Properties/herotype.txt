@@ -1,0 +1,70 @@
+[Carry] "Will become more useful later in the game if they gain a significant gold advantage."
+Abaddon *AbaddonAlchemist *AlchemistBrewmaster *BrewmasterBristleback *BristlebackChaos Knight *Chaos KnightDoom *DoomDragon Knight *Dragon KnightHuskar *HuskarKunkka *KunkkaLegion Commander *Legion CommanderLifestealer *LifestealerLycan *LycanNight Stalker *Night StalkerSlardar *SlardarSpirit Breaker *Spirit BreakerSven *SvenTiny *TinyWraith King *Wraith King
+Anti-Mage *Anti-MageArc Warden *Arc WardenBloodseeker *BloodseekerBroodmother *BroodmotherClinkz *ClinkzDrow Ranger *Drow RangerEmber Spirit *Ember SpiritFaceless Void *Faceless VoidGyrocopter *GyrocopterJuggernaut *JuggernautLone Druid *Lone DruidLuna *LunaMedusa *MedusaMeepo *MeepoMirana *MiranaMonkey King *Monkey KingMorphling *MorphlingNaga Siren *Naga SirenPhantom Assassin *Phantom AssassinPhantom Lancer *Phantom LancerRazor *RazorRiki *RikiShadow Fiend *Shadow FiendSlark *SlarkSniper *SniperSpectre *SpectreTemplar Assassin *Templar AssassinTerrorblade *TerrorbladeTroll Warlord *Troll WarlordUrsa *UrsaViper *ViperWeaver *Weaver
+Death Prophet *Death ProphetInvoker *InvokerLeshrac *LeshracLina *LinaNature's Prophet *Nature's ProphetNecrophos *NecrophosOutworld Devourer *Outworld DevourerQueen of Pain *Queen of PainSilencer *SilencerStorm Spirit *Storm SpiritTinker *TinkerWindranger *Windranger
+
+
+[Disabler] "Has a guaranteed disable for one or more of their spells."
+Alchemist *AlchemistAxe *AxeBeastmaster *BeastmasterBrewmaster *BrewmasterCentaur Warrunner *Centaur WarrunnerChaos Knight *Chaos KnightClockwerk *ClockwerkDoom *DoomDragon Knight *Dragon KnightEarthshaker *EarthshakerEarth Spirit *Earth SpiritElder Titan *Elder TitanKunkka *KunkkaLegion Commander *Legion CommanderLifestealer *LifestealerMagnus *MagnusNight Stalker *Night StalkerPhoenix *PhoenixPudge *PudgeSand King *Sand KingSlardar *SlardarSpirit Breaker *Spirit BreakerSven *SvenTidehunter *TidehunterTiny *TinyTreant Protector *Treant ProtectorTusk *TuskUnderlord *UnderlordUndying *UndyingWraith King *Wraith King
+Bloodseeker *BloodseekerDrow Ranger *Drow RangerEmber Spirit *Ember SpiritFaceless Void *Faceless VoidGyrocopter *GyrocopterMedusa *MedusaMeepo *MeepoMirana *MiranaMonkey King *Monkey KingMorphling *MorphlingNaga Siren *Naga SirenNyx Assassin *Nyx AssassinRiki *RikiSlark *SlarkTroll Warlord *Troll WarlordUrsa *UrsaVengeful Spirit *Vengeful SpiritVenomancer *VenomancerViper *Viper
+Ancient Apparition *Ancient ApparitionBane *BaneBatrider *BatriderCrystal Maiden *Crystal MaidenDark Seer *Dark SeerDazzle *DazzleDeath Prophet *Death ProphetDisruptor *DisruptorEnchantress *EnchantressEnigma *EnigmaInvoker *InvokerJakiro *JakiroKeeper of the Light *Keeper of the LightLeshrac *LeshracLina *LinaLion *LionNecrophos *NecrophosOgre Magi *Ogre MagiOracle *OracleOutworld Devourer *Outworld DevourerPuck *PuckRubick *RubickShadow Demon *Shadow DemonShadow Shaman *Shadow ShamanSilencer *SilencerSkywrath Mage *Skywrath MageStorm Spirit *Storm SpiritTechies *TechiesVisage *VisageWarlock *WarlockWindranger *WindrangerWinter Wyvern *Winter WyvernWitch Doctor *Witch Doctor
+
+
+[Initiator] "Good at starting a teamfight."
+Alchemist *AlchemistAxe *AxeBeastmaster *BeastmasterBrewmaster *BrewmasterBristleback *BristlebackCentaur Warrunner *Centaur WarrunnerChaos Knight *Chaos KnightClockwerk *ClockwerkDoom *DoomDragon Knight *Dragon KnightEarthshaker *EarthshakerEarth Spirit *Earth SpiritElder Titan *Elder TitanHuskar *HuskarKunkka *KunkkaLegion Commander *Legion CommanderMagnus *MagnusNight Stalker *Night StalkerPhoenix *PhoenixPudge *PudgeSand King *Sand KingSlardar *SlardarSpirit Breaker *Spirit BreakerSven *SvenTidehunter *TidehunterTiny *TinyTreant Protector *Treant ProtectorTusk *TuskWraith King *Wraith King
+Bloodseeker *BloodseekerEmber Spirit *Ember SpiritFaceless Void *Faceless VoidMeepo *MeepoMonkey King *Monkey KingNaga Siren *Naga SirenNyx Assassin *Nyx AssassinVengeful Spirit *Vengeful SpiritVenomancer *VenomancerViper *Viper
+Batrider *BatriderDark Seer *Dark SeerDisruptor *DisruptorEnigma *EnigmaLion *LionOgre Magi *Ogre MagiPuck *PuckShadow Demon *Shadow DemonShadow Shaman *Shadow ShamanSilencer *SilencerStorm Spirit *Storm SpiritWarlock *Warlock
+
+
+[Jungler] "Can farm effectively from neutral creeps inside the jungle early in the game."
+Axe *AxeLifestealer *LifestealerLycan *LycanSand King *Sand King
+Bloodseeker *BloodseekerLone Druid *Lone DruidUrsa *Ursa
+Batrider *BatriderChen *ChenCrystal Maiden *Crystal MaidenDark Seer *Dark SeerEnchantress *EnchantressEnigma *EnigmaKeeper of the Light *Keeper of the LightNature's Prophet *Nature's Prophet
+
+
+[Support] "Can focus less on amassing gold and items, and more on using their abilities to gain an advantage for the team."
+Abaddon *AbaddonAlchemist *AlchemistEarthshaker *EarthshakerIo *IoOmniknight *OmniknightPhoenix *PhoenixTreant Protector *Treant ProtectorUnderlord *UnderlordUndying *UndyingWraith King *Wraith King
+Mirana *MiranaNaga Siren *Naga SirenVengeful Spirit *Vengeful SpiritVenomancer *Venomancer
+Ancient Apparition *Ancient ApparitionBane *BaneChen *ChenCrystal Maiden *Crystal MaidenDazzle *DazzleDisruptor *DisruptorEnchantress *EnchantressJakiro *JakiroKeeper of the Light *Keeper of the LightLeshrac *LeshracLich *LichLina *LinaLion *LionOgre Magi *Ogre MagiOracle *OracleRubick *RubickShadow Demon *Shadow DemonShadow Shaman *Shadow ShamanSilencer *SilencerSkywrath Mage *Skywrath MageVisage *VisageWarlock *WarlockWindranger *WindrangerWinter Wyvern *Winter WyvernWitch Doctor *Witch Doctor
+
+
+[Durable] "Has the ability to last longer in teamfights."
+Abaddon *AbaddonAlchemist *AlchemistAxe *AxeBeastmaster *BeastmasterBrewmaster *BrewmasterBristleback *BristlebackCentaur Warrunner *Centaur WarrunnerChaos Knight *Chaos KnightClockwerk *ClockwerkDoom *DoomDragon Knight *Dragon KnightEarth Spirit *Earth SpiritElder Titan *Elder TitanHuskar *HuskarKunkka *KunkkaLegion Commander *Legion CommanderLifestealer *LifestealerLycan *LycanNight Stalker *Night StalkerOmniknight *OmniknightPudge *PudgeSlardar *SlardarSpirit Breaker *Spirit BreakerSven *SvenTidehunter *TidehunterTimbersaw *TimbersawTiny *TinyTreant Protector *Treant ProtectorUnderlord *UnderlordUndying *UndyingWraith King *Wraith King
+Faceless Void *Faceless VoidLone Druid *Lone DruidMedusa *MedusaMorphling *MorphlingRazor *RazorSpectre *SpectreTroll Warlord *Troll WarlordUrsa *UrsaViper *Viper
+Bane *BaneEnchantress *EnchantressNecrophos *NecrophosOgre Magi *Ogre MagiVisage *Visage
+
+
+[Nuker] "Can quickly kill enemy heroes using high damage spells with low cooldowns."
+Alchemist *AlchemistBeastmaster *BeastmasterBrewmaster *BrewmasterBristleback *BristlebackCentaur Warrunner *Centaur WarrunnerClockwerk *ClockwerkDoom *DoomDragon Knight *Dragon KnightEarthshaker *EarthshakerEarth Spirit *Earth SpiritElder Titan *Elder TitanIo *IoKunkka *KunkkaLegion Commander *Legion CommanderMagnus *MagnusNight Stalker *Night StalkerOmniknight *OmniknightPhoenix *PhoenixPudge *PudgeSand King *Sand KingSven *SvenTidehunter *TidehunterTimbersaw *TimbersawTiny *TinyTusk *TuskUnderlord *UnderlordUndying *Undying
+Anti-Mage *Anti-MageArc Warden *Arc WardenBloodseeker *BloodseekerBounty Hunter *Bounty HunterBroodmother *BroodmotherEmber Spirit *Ember SpiritGyrocopter *GyrocopterLuna *LunaMeepo *MeepoMirana *MiranaMorphling *MorphlingNyx Assassin *Nyx AssassinPhantom Lancer *Phantom LancerRazor *RazorShadow Fiend *Shadow FiendSlark *SlarkSniper *SniperTerrorblade *TerrorbladeVengeful Spirit *Vengeful SpiritVenomancer *Venomancer
+Ancient Apparition *Ancient ApparitionBane *BaneCrystal Maiden *Crystal MaidenDazzle *DazzleDeath Prophet *Death ProphetDisruptor *DisruptorInvoker *InvokerJakiro *JakiroKeeper of the Light *Keeper of the LightLeshrac *LeshracLich *LichLina *LinaLion *LionNature's Prophet *Nature's ProphetNecrophos *NecrophosOgre Magi *Ogre MagiOracle *OracleOutworld Devourer *Outworld DevourerPuck *PuckPugna *PugnaQueen of Pain *Queen of PainRubick *RubickShadow Demon *Shadow DemonShadow Shaman *Shadow ShamanSilencer *SilencerSkywrath Mage *Skywrath MageStorm Spirit *Storm SpiritTechies *TechiesTinker *TinkerVisage *VisageWindranger *WindrangerWinter Wyvern *Winter WyvernWitch Doctor *Witch DoctorZeus *Zeus
+
+
+[Pusher] "Can quickly siege and destroy towers and barracks at all points of the game."
+Chaos Knight *Chaos KnightDragon Knight *Dragon KnightLycan *LycanTiny *Tiny
+Broodmother *BroodmotherClinkz *ClinkzDrow Ranger *Drow RangerJuggernaut *JuggernautLone Druid *Lone DruidLuna *LunaMeepo *MeepoNaga Siren *Naga SirenPhantom Lancer *Phantom LancerRazor *RazorTerrorblade *TerrorbladeTroll Warlord *Troll WarlordVenomancer *Venomancer
+Chen *ChenDeath Prophet *Death ProphetEnchantress *EnchantressEnigma *EnigmaInvoker *InvokerJakiro *JakiroLeshrac *LeshracNature's Prophet *Nature's ProphetPugna *PugnaShadow Shaman *Shadow ShamanTinker *TinkerVisage *Visage
+
+
+[Escape] "Has the ability to quickly avoid death."
+Centaur Warrunner *Centaur WarrunnerEarth Spirit *Earth SpiritIo *IoLifestealer *LifestealerLycan *LycanMagnus *MagnusPhoenix *PhoenixSand King *Sand KingSlardar *SlardarSpirit Breaker *Spirit BreakerTimbersaw *TimbersawTreant Protector *Treant ProtectorUnderlord *Underlord
+Anti-Mage *Anti-MageArc Warden *Arc WardenBounty Hunter *Bounty HunterBroodmother *BroodmotherClinkz *ClinkzEmber Spirit *Ember SpiritFaceless Void *Faceless VoidJuggernaut *JuggernautMeepo *MeepoMirana *MiranaMonkey King *Monkey KingMorphling *MorphlingNaga Siren *Naga SirenNyx Assassin *Nyx AssassinPhantom Assassin *Phantom AssassinPhantom Lancer *Phantom LancerRiki *RikiSlark *SlarkSpectre *SpectreTemplar Assassin *Templar AssassinVengeful Spirit *Vengeful SpiritWeaver *Weaver
+Batrider *BatriderDark Seer *Dark SeerInvoker *InvokerNature's Prophet *Nature's ProphetOracle *OraclePuck *PuckQueen of Pain *Queen of PainStorm Spirit *Storm SpiritWindranger *Windranger
+
+
+
+
+
+[Offlane] "In Radiant, offlane heroes should go top lane. In Dire, offlane heros should go bot lane."
+Pangolier *Doom *Tidehunter *Legion Commander *Omniknight *Brewmaster *Pudge *Clockwerk *Sand King *Nyx Assassin *Puck *Bristleback *Axe *Underlord *Batrider *Earthshaker *Faceless Void *Timbersaw *Windranger *Weaver *Abaddon 	
+
+
+[Midlane] "Midlane heroes should go Midlane??"
+Tinker	*Shadow Fiend *Storm Spirit *Templar Assassin *Invoker *Outworld Devourer *Queen of Pain *Death Prophet *Puck *Zeus *Ember Spirit *Viper *Alchemist
+Arc Warden *Lina *Sniper *Meepo *Dragon Knight *Razor *Leshrac *Windranger *Kunkka *Magnus *Tiny *Pudge *Mirana *Medusa *Bounty Hunter *Huskar *Visage *Clinkz *Pugna *Earth Spirit *Necrophos *Skywrath Mage *Monkey King *Riki *Brewmaster *Silencer *Phantom Assassin *Io *Night Stalker *Dark Willow *Tusk *Morphling *Naga Siren *Broodmother *Bloodseeker *Drow Ranger *Lone Druid *Timbersaw *Gyrocopter *Venomancer
+
+
+
+
+
+

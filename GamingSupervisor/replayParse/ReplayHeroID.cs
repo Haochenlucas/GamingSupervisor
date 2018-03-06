@@ -45,6 +45,10 @@ namespace replayParse
                 {
                     name = "treantprotector";
                 }
+                if (name.Contains("Rattletrap"))
+                {
+                    name = "Clockwerk";
+                }
                 if (name.Contains("skele"))
                 {
                     name = "wraithking";
