@@ -75,7 +75,7 @@ namespace Yato.DirectXOverlay
 
         private Queue<double> currHp = new Queue<double>(250);
         
-        private Dictionary<int, List<Tuple<String, String, string>>> ticksInfo;
+        private Dictionary<int, List<Tuple<String, String, String>>> ticksInfo;
 
         private bool drawHighlight = false;
 
@@ -1685,6 +1685,8 @@ namespace Yato.DirectXOverlay
                 List<Tuple<String, Direct2DBrush>> killText = new List<Tuple<String, Direct2DBrush>>();
                 foreach (var k in a.Value)
                 {
+                    if (killText.Count == 0)
+                        killText.Add(new Tuple<string, Direct2DBrush>(TimeSpan.FromSeconds(a.Key).ToString(@"hh\:mm\:ss"), CreateBrush(200, 200, 200)));
                     Direct2DBrush brush = null;
                     switch (k.Item3)
                     {
@@ -1701,10 +1703,12 @@ namespace Yato.DirectXOverlay
                             brush = CreateBrush(0, 255, 0);
                             break;
                         default:
+                            brush = CreateBrush(200, 200, 200);
                             break;
                     }
-                    killText.Add(new Tuple<string, Direct2DBrush>(k.Item1 + " x " + k.Item2, brush));
+                    killText.Add(new Tuple<string, Direct2DBrush>(k.Item1 + " killed " + k.Item2, brush));
                 }
+                killText.Reverse();
                 //killText = killText.TrimEnd('\r', '\n');
                 if (mX > xCurr - 2 && mX < xCurr + 2 && mY > (3*y/4) - 14 && mY < (3*y/4) + 10)
                     DrawTextWithBackground(killText, xCurr, 3 * y / 4 - x / 80, font, background);

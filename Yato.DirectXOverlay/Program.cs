@@ -4,11 +4,66 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+
 
 namespace Yato.DirectXOverlay
 {
     class Program
     {
+        // Finds teamfights, returns them in a list with each item being a teamfight
+        // Each teamfight starts with a time, then followed by strings of "killed killer"
+        public static List<List<String>> GetTeamfight(List<String> lines)
+        {
+            List<List<String>> teamfight = new List<List<string>>();
+            int currInd = 0;
+            TimeSpan prevTime = new TimeSpan();
+            TimeSpan thirty = TimeSpan.FromSeconds(30);
+            string heroPattern = "hero.*hero";
+
+            foreach (var line in lines)
+            {
+                if (line.Contains("[KILL]"))
+                {
+                    if (Regex.IsMatch(line, heroPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                    {
+                        int filler = 1;
+
+                        if (teamfight.Count < currInd + 1)
+                            teamfight.Add(new List<String>());
+
+                        List<String> contents = new List<String>(line.Split(new char[] { ' ' }));
+                        if (prevTime == new TimeSpan())
+                            prevTime = TimeSpan.FromSeconds(Double.Parse(contents[0]));
+
+                        TimeSpan currTime = TimeSpan.FromSeconds(Double.Parse(contents[0]));
+
+                        if (prevTime == currTime)
+                        {
+                            teamfight[currInd].Add(contents[0]);
+                            //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
+                            teamfight[currInd].Add(contents[2] + " " + contents[3]);                   
+                        }
+                        else if (prevTime.Add(thirty) > currTime)
+                        {
+                            teamfight[currInd].Add(contents[2] + " " + contents[3]);
+                        }
+                        else
+                        {
+                            currInd++;
+                            teamfight.Add(new List<String>());
+                            prevTime = currTime;
+                            teamfight[currInd].Add(contents[0]);
+                            //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
+                            teamfight[currInd].Add(contents[2] + " " + contents[3]);
+                        }
+                        
+                    }
+                }
+            }
+            return teamfight;
+        }
+
         static void Main(string[] args)
         {
             // Declare window and overlay object
@@ -29,55 +84,39 @@ namespace Yato.DirectXOverlay
 
             #region timeline
 
-            string timePath = @"X:\Documents\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3703866531\time.txt";
+            string timePath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\time.txt";
             List<String> timeLines = new List<String>(System.IO.File.ReadAllLines(timePath));
-            int firstTick = 0;
-            Int32.TryParse(timeLines.First().Split(' ')[0], out firstTick);
-            int totalTick = 0;
-            Int32.TryParse(timeLines.Last().Split(' ')[0], out totalTick);
+            Double.TryParse(timeLines.First().Split(' ')[2], out double firstTick);
+            Double.TryParse(timeLines.Last().Split(' ')[2], out double totalTick);
             
-            string statePath = @"X:\Documents\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3703866531\state.txt";
-            List<String> stateLines = new List<String>(System.IO.File.ReadAllLines(statePath));
-            int initStateTick = 0;
-            Int32.TryParse(stateLines.Find(str => str.Contains("[STATE] 4")).Split(' ')[0], out initStateTick);
-            int postStateTick = 0;
-            Int32.TryParse(stateLines.Find(str => str.Contains("[STATE] 6")).Split(' ')[0], out postStateTick);
+            string combatPath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\combat.txt";
+            List<String> combatLines = new List<String>(System.IO.File.ReadAllLines(combatPath));
+            List<List<String>> killLines = GetTeamfight(combatLines);
+            String myHero = "npc_dota_hero_storm_spirit";
+            Dictionary<int, List<Tuple<String, String, String>>> tickInfo = new Dictionary<int, List<Tuple<string, string, string>>>();
 
-            System.Random rand = new System.Random();
-            int numHighlights = 10;
-            Dictionary<int, List<Tuple<string, string, string>>> randInfo = new Dictionary<int, List<Tuple<string, string, string>>>();
-            List<String> myTeam = new List<string>{ "Disruptor", "Storm Spirit", "Tusk", "Brewmaster", "Morphling" };
-            List<String> theirTeam = new List<string> { "Witch Doctor", "Dragon Knight", "Gyrocopter", "Invoker", "Rattletrap" };
-            String myHero = myTeam[rand.Next(0,5)];
-            Console.Write(myHero);
-
-            for (int i = 0; i < numHighlights; i++)
+            foreach (var kills in killLines)
             {
-                int currTick = rand.Next(initStateTick, postStateTick);
-                randInfo[currTick] = new List<Tuple<string, string, string>>();
-                int killCount = rand.Next(1, 10);
-                for (int j = 0; j < killCount; j++) {
-                    int whoKillWho = rand.Next(2);
-                    if (whoKillWho == 1) // myTeam kill theirTeam
+                tickInfo[(int)Double.Parse(kills[0])] = new List<Tuple<string, string, string>>();
+                for (int i = 1; i < kills.Count; i++)
+                {
+                    string[] cont = kills[i].Split(new char[] { ' ' });
+                    string color = "we";
+                    if (cont[0] == myHero)
                     {
-                        string killer = myTeam[rand.Next(5)];
-                        string killed = theirTeam[rand.Next(5)];
-                        string color = "LG";
-                        if (killer == myHero)
-                            color = "G";
-                        randInfo[currTick].Add(new Tuple<string, string, string>(killer, killed, color));
+                        color = "R";
                     }
-                    else
+                    else if (cont[1] == myHero)
                     {
-                        string killer = theirTeam[rand.Next(5)];
-                        string killed = myTeam[rand.Next(5)];
-                        string color = "LR";
-                        if (killed == myHero)
-                            color = "R";
-                        randInfo[currTick].Add(new Tuple<string, string, string>(killer, killed, color));
+                        color = "G";
                     }
+                    tickInfo[(int)Double.Parse(kills[0])].Add(new Tuple<string, string, string>(cont[1], cont[0], color));
                 }
             }
+
+            
+
+           
 
             #endregion
 
@@ -113,7 +152,7 @@ namespace Yato.DirectXOverlay
                     d2d.HeroSelectionHints(messages, imgName);
 
                     d2d.ToggleHightlight(true);
-                    d2d.UpdateHighlightTime(randInfo, totalTick);
+                    d2d.UpdateHighlightTime(tickInfo, (int)totalTick);
 
                     d2d.Retreat("Run", "");
                     

@@ -13,3 +13,19 @@ C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Y
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csproj.CoreCompileInputs.cache
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.dll
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.pdb
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.dll
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.dll
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.dll
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\System.ValueTuple.dll
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\replayParse.pdb
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.xml
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\System.ValueTuple.xml
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csproj.CoreCompileInputs.cache
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe.config
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe
+E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
