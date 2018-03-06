@@ -34,6 +34,15 @@ namespace GamingSupervisor
         {
             renderer.HeroSelectionHints(heroes, imgs);
         }
+        
+        public void AddItemSuggestionMessage(string message, string img)
+        { 
+            renderer.ItemSelectionHints(message, img);
+        }
+        public void AddHeroInfoMessage(string message, string img)
+        {
+            renderer.HeroInfoHints(message, img);
+        }
 
         public void ToggleGraphForHeroHP(bool tog = true)
         {
@@ -48,6 +57,16 @@ namespace GamingSupervisor
         public void AddHp(double newhp)
         {
             renderer.UpdateHeroHPQueue(newhp);
+        }
+        
+        public void Intructions_setup(string content)
+        {
+            renderer.Intructions_setup(content);
+        }
+
+        public void ShowInstructionMessage()
+        {
+            renderer.Intructions_Draw(dotaProcessHandle, window);
         }
 
         public void ToggleHighlight(bool tog = true)

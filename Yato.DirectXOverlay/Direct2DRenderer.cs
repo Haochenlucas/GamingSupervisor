@@ -1294,6 +1294,24 @@ namespace Yato.DirectXOverlay
         }
         #endregion
 
+        public enum hits
+        {
+             hero_selection_1 = 0,
+             hero_selection_2 = 1,
+             hero_selection_3 = 2,
+             hero_selection_4 = 3,
+             hero_selection_5 = 4,
+
+             hero_introduction = 5,
+
+             items_selection = 6,
+             retreat = 7,
+             press_on = 8,
+             last_hit = 9,
+             jungle = 10,
+             safe_farming = 11,
+             heroinformation = 12,
+        };
 
         // Type:
         // 0: hero selection
@@ -1433,9 +1451,14 @@ namespace Yato.DirectXOverlay
             }
         }
 
-        public void ItemSelectionHints(string heros, string img)
+        public void ItemSelectionHints(string item, string img)
         {
-            AddMessage(6, heros, img);
+             AddMessage(5, item, img);
+        }
+
+        public void HeroInfoHints(string item, string img)
+        {
+            AddMessage(6, item, img);
         }
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
@@ -1805,11 +1828,11 @@ namespace Yato.DirectXOverlay
         }
 
         public Instruction instruction;
-        public void Intructions_setup()
+        public void Intructions_setup(string content)
         {
             float width_unit = Screen.PrimaryScreen.Bounds.Width / 32;
             float height_unit = Screen.PrimaryScreen.Bounds.Height / 32;
-            string text = "This is the content of the instruction.\n I want to test it when it is long.";
+            string text = content;
             Message instructions = new Message(text, "", width_unit * 20, height_unit * 6);
             instruction = new Instruction(instructions, "This is the title");
         }
