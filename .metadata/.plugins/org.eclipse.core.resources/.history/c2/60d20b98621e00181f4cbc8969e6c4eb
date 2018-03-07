@@ -1,0 +1,18 @@
+package Dota2Parser.Dota2Parser;
+
+import skadistats.clarity.model.FieldPath;
+import skadistats.clarity.model.Entity;
+
+public class LaneCreep
+{    
+    public FieldPath x;
+    public FieldPath y;
+    public FieldPath z;
+    public FieldPath health;
+    public FieldPath teamNumber;
+    
+    public LaneCreep(Entity e)
+    {
+        super(e);
+    }
+}
