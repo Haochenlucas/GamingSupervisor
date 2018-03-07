@@ -259,13 +259,9 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-/GamingSupervisor/GamingSupervisor/Parser/info.txt
-/GamingSupervisor/GamingSupervisor/Parser/replay.txt
-/GamingSupervisor/GamingSupervisor/Parser/camera.txt
-/GamingSupervisor/GamingSupervisor/Parser/health.txt
-/GamingSupervisor/GamingSupervisor/Parser/position.txt
-/GamingSupervisor/GamingSupervisor/Parser/selection.txt
-/GamingSupervisor/GamingSupervisor/Parser/state.txt
+
 *.dem
-/GamingSupervisor/GamingSupervisor/Parser/hero.txt
-/GamingSupervisor/GamingSupervisor/Parser/3716503818
+/GamingSupervisor/GamingSupervisor/Parser/*
+!/GamingSupervisor/GamingSupervisor/Parser/parser.jar
+/Yato.DirectXOverlay/bin
+/Yato.DirectXOverlay/obj

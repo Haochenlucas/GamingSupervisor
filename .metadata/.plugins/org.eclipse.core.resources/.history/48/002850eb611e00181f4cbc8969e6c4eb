@@ -1,0 +1,24 @@
+package Dota2Parser.Dota2Parser;
+
+import skadistats.clarity.model.FieldPath;
+
+public class Unit
+{
+	public FieldPath x;
+    public FieldPath y;
+    public FieldPath z;
+    public FieldPath health;
+    public FieldPath playerID;
+    public FieldPath level;
+    public FieldPath mana;
+    public FieldPath strength;
+    public FieldPath intellect;
+    public FieldPath agility;
+    public FieldPath maxHealth;
+    public FieldPath manaRegen;
+    public FieldPath healthRegen;
+    public FieldPath movementSpeed;
+    public FieldPath damageMin;
+    public FieldPath damageMax;
+    public FieldPath items[];
+}
