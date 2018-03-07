@@ -261,7 +261,7 @@ __pycache__/
 *.pyc
 
 *.dem
-/GamingSupervisor/GamingSupervisor/Parser/
+/GamingSupervisor/GamingSupervisor/Parser/*
 !/GamingSupervisor/GamingSupervisor/Parser/parser.jar
 /Yato.DirectXOverlay/bin
 /Yato.DirectXOverlay/obj
