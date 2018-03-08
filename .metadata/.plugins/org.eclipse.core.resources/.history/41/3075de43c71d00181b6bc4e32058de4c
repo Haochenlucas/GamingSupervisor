@@ -1,0 +1,134 @@
+package Dota2Parser.Dota2Parser;
+
+import java.io.PrintWriter;
+
+import skadistats.clarity.model.CombatLogEntry;
+import skadistats.clarity.wire.common.proto.DotaUserMessages;
+
+public class CombatLog
+{
+	private PrintWriter writer;
+	
+	public CombatLog(PrintWriter writer)
+	{
+		this.writer = writer;
+	}
+	
+	private String compileName(String attackerName, boolean isIllusion)
+	{
+        return attackerName != null ? attackerName + (isIllusion ? " (illusion)" : "") : "UNKNOWN";
+    }
+
+    private String getAttackerNameCompiled(CombatLogEntry cle)
+    {
+        return compileName(cle.getAttackerName(), cle.isAttackerIllusion());
+    }
+
+    private String getTargetNameCompiled(CombatLogEntry cle)
+    {
+        return compileName(cle.getTargetName(), cle.isTargetIllusion());
+    }
+
+    public void onCombatLogEntry(CombatLogEntry cle) {
+        String time = "[" + GAMETIME_FORMATTER.print(Duration.millis((int) (1000.0f * cle.getTimestamp())).toPeriod()) + "]";
+        cle.
+        switch (cle.getType()) {
+            case DOTA_COMBATLOG_DAMAGE:
+                writer.format("%f [DAMAGE] %s %s %s %d\n",
+                    time,
+                    getAttackerNameCompiled(cle),
+                    getTargetNameCompiled(cle),
+                    cle.getInflictorName() != null ? String.format(" with %s", cle.getInflictorName()) : "null",
+                    cle.getValue()
+                );
+                break;
+            case DOTA_COMBATLOG_HEAL:
+                writer.format("{} {}'s {} heals {} for {} health ({}->{})",
+                    time,
+                    getAttackerNameCompiled(cle),
+                    cle.getInflictorName(),
+                    getTargetNameCompiled(cle),
+                    cle.getValue(),
+                    cle.getHealth() - cle.getValue(),
+                    cle.getHealth()
+                );
+                break;
+            case DOTA_COMBATLOG_MODIFIER_ADD:
+                writer.format("{} {} receives {} buff/debuff from {}",
+                    time,
+                    getTargetNameCompiled(cle),
+                    cle.getInflictorName(),
+                    getAttackerNameCompiled(cle)
+                );
+                break;
+            case DOTA_COMBATLOG_MODIFIER_REMOVE:
+                writer.format("{} {} loses {} buff/debuff",
+                    time,
+                    getTargetNameCompiled(cle),
+                    cle.getInflictorName()
+                );
+                break;
+            case DOTA_COMBATLOG_DEATH:
+                writer.format("{} {} is killed by {}",
+                    time,
+                    getTargetNameCompiled(cle),
+                    getAttackerNameCompiled(cle)
+                );
+                break;
+            case DOTA_COMBATLOG_ABILITY:
+                writer.format("{} {} {} ability {} (lvl {}){}{}",
+                    time,
+                    getAttackerNameCompiled(cle),
+                    cle.isAbilityToggleOn() || cle.isAbilityToggleOff() ? "toggles" : "casts",
+                    cle.getInflictorName(),
+                    cle.getAbilityLevel(),
+                    cle.isAbilityToggleOn() ? " on" : cle.isAbilityToggleOff() ? " off" : "",
+                    cle.getTargetName() != null ? " on " + getTargetNameCompiled(cle) : ""
+                );
+                break;
+            case DOTA_COMBATLOG_ITEM:
+                writer.format("%f [ITEMUSE] %s %s\n",
+                    time,
+                    getAttackerNameCompiled(cle),
+                    cle.getInflictorName()
+                );
+                break;
+            case DOTA_COMBATLOG_GOLD:
+                writer.format("%f [GOLD] %s %d\n",
+                    time,
+                    getTargetNameCompiled(cle),
+                    cle.getValue()
+                );
+                break;
+            case DOTA_COMBATLOG_GAME_STATE:
+                writer.format("%f [GAMESTATE] %s\n",
+                    time,
+                    cle.getValue()
+                );
+                break;
+            case DOTA_COMBATLOG_XP:
+                writer.format("%f [XPGAIN] %s %d\n",
+                    time,
+                    getTargetNameCompiled(cle),
+                    cle.getValue()
+                );
+                break;
+            case DOTA_COMBATLOG_PURCHASE:
+                writer.format("%f [PURCHASE] %s %s\n",
+                    time,
+                    getTargetNameCompiled(cle),
+                    cle.getValueName()
+                );
+                break;
+            case DOTA_COMBATLOG_BUYBACK:
+            	writer.format("%f [BUYBACK] %d\n", // Player in slot x did buyback
+                    time,
+                    cle.getValue()
+                );
+                break;
+            default:
+                break;
+
+        }
+    }
+}
