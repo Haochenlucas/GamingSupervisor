@@ -63,7 +63,7 @@ namespace GamingSupervisor
             }
 
             CurrentTick = 0;
-            string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is " + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName) + ", \n    click watch to start the replay.";
+            string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is\n     " + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName) + ", click Watch to start.";
             overlay.Intructions_setup(instru_OpenReplay);
             while (!announcer.waitForReplayToStart())
             {
@@ -268,12 +268,16 @@ namespace GamingSupervisor
                 // after that, show hero information
                 overlay.AddHeroInfoMessage(temp, "");
             }
+            else
+            {
+                overlay.ClearMessage(6);
+            }
 
             // Add item suggestion
-            if (announcer.GetCurrentGameTime() >= 1380 && announcer.GetCurrentGameTime() <= 1390)
-            {
-                overlay.AddItemSuggestionMessage("Necronomicon", "");
-            }
+            //if (announcer.GetCurrentGameTime() >= 1380 && announcer.GetCurrentGameTime() <= 1390)
+            //{
+            //    overlay.AddItemSuggestionMessage("Necronomicon", "");
+            //}
 
             int health = 0;
 
@@ -299,7 +303,7 @@ namespace GamingSupervisor
 
             if (health < 600)
             {
-                overlay.AddRetreatMessage("Tick " + CurrentTick + " Health " + health, "");
+                overlay.AddRetreatMessage("Low health warning! " + "Current Health: " + health, "");
 
             }
             else

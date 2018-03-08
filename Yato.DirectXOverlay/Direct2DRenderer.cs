@@ -1834,7 +1834,7 @@ namespace Yato.DirectXOverlay
             float height_unit = Screen.PrimaryScreen.Bounds.Height / 32;
             string text = content;
             Message instructions = new Message(text, "", width_unit * 20, height_unit * 6);
-            instruction = new Instruction(instructions, "This is the title");
+            instruction = new Instruction(instructions, "Instructions");
         }
 
         static private Stopwatch button_timer = new Stopwatch();

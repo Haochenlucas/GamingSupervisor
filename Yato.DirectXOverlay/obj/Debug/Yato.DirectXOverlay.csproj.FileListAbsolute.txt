@@ -7,15 +7,9 @@ C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\S
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csproj.CoreCompileInputs.cache
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
-<<<<<<< HEAD
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll.config
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll
 C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.dll
-=======
-C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe.config
-C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.exe
-C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
-C:\Users\Haoch\OneDrive\Desktop\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csprojResolveAssemblyReference.cache
 X:\Documents\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.csproj.CoreCompileInputs.cache
 X:\Documents\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.exe
 X:\Documents\GamingSupervisor\Yato.DirectXOverlay\obj\Debug\Yato.DirectXOverlay.pdb
@@ -29,4 +23,3 @@ X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\replayParse.pdb
 X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.xml
 X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.xml
 X:\Documents\GamingSupervisor\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.xml
->>>>>>> highlight
