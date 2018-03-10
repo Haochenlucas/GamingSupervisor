@@ -61,7 +61,7 @@ namespace GamingSupervisor
             CurrentTick = 0;
             string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is\n     " + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName) + ", click Watch to start.";
             overlay.Intructions_setup(instru_OpenReplay);
-            while (!announcer.waitForReplayToStart())
+            while (!announcer.isReplayStarted())
             {
                 if (Terminate)
                 {
