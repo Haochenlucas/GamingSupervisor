@@ -84,12 +84,12 @@ namespace Yato.DirectXOverlay
 
             #region timeline
 
-            string timePath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\time.txt";
+            string timePath = @"C:\Users\J\Documents\CS_Senior_Project\GamingSupervisor\GamingSupervisor\Parser\3690751201\time.txt";
             List<String> timeLines = new List<String>(System.IO.File.ReadAllLines(timePath));
             Double.TryParse(timeLines.First().Split(' ')[2], out double firstTick);
             Double.TryParse(timeLines.Last().Split(' ')[2], out double totalTick);
             
-            string combatPath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\combat.txt";
+            string combatPath = @"C:\Users\J\Documents\CS_Senior_Project\GamingSupervisor\GamingSupervisor\Parser\3690751201\combat.txt";
             List<String> combatLines = new List<String>(System.IO.File.ReadAllLines(combatPath));
             List<List<String>> killLines = GetTeamfight(combatLines);
             String myHero = "npc_dota_hero_storm_spirit";
@@ -126,7 +126,7 @@ namespace Yato.DirectXOverlay
             d2d.SetupHintSlots();
             
             watch.Start();
-            //d2d.Intructions_setup();
+            d2d.Intructions_setup("");
             d2d.HeroIntro_setup(38);
             while (true)
             {
@@ -158,16 +158,16 @@ namespace Yato.DirectXOverlay
 
                     d2d.Retreat("Run", "");
                     
-                    //d2d.SelectedHeroSuggestion(38);
+                    d2d.SelectedHeroSuggestion(38, 500);
                 }
-                if (Control.ModifierKeys == Keys.Alt)
+                //if (Control.ModifierKeys == Keys.Alt)
                 {
                     //d2d.Ingame_Draw(VS_HWND, overlay);
                     d2d.HeroInfo_Draw(VS_HWND, overlay);
                 }
-                else
+                //else
                 {
-                    d2d.Intructions_Draw(VS_HWND, overlay);
+                    //d2d.Intructions_Draw(VS_HWND, overlay);
                 }
 
                 watch.Restart();

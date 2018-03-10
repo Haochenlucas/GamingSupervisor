@@ -1,6 +1,7 @@
 ﻿using Dota2GSI;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -13,44 +14,83 @@ namespace GamingSupervisor
         public bool GameStarted { get; set; }
 
         private readonly object gameStateLock = new object();
-        private readonly object gameTimeLock = new object();
-
         private string gameState;
         public string GameState
         {
-            get
-            {
-                lock (gameStateLock)
-                {
-                    return gameState;
-                }
-            }
-            set
-            {
-                lock (gameStateLock)
-                {
-                    gameState = value;
-                }
-            }
+            get { lock (gameStateLock) { return gameState; } }
+            set { lock (gameStateLock) { gameState = value; } }
         }
 
-        public int gameTime;
+        private readonly object gameTimeLock = new object();
+        private int gameTime;
         public int GameTime
         {
-            get
-            {
-                lock (gameTimeLock)
-                {
-                    return gameTime;
-                }
-            }
-            set
-            {
-                lock (gameTimeLock)
-                {
-                    gameTime = value;
-                }
-            }
+            get { lock (gameTimeLock) { return gameTime; } }
+            set { lock (gameTimeLock) { gameTime = value; } }
+        }
+
+        private readonly object goldLock = new object();
+        private int gold;
+        public int Gold
+        {
+            get { lock (goldLock) { return gold; } }
+            set { lock (goldLock) { gold = value; } }
+        }
+
+        private readonly object nameLock = new object();
+        private string name;
+        public string Name
+        {
+            get { lock (nameLock) { return name; } }
+            set { lock (nameLock) { name = value; } }
+        }
+
+        private readonly object levelLock = new object();
+        private int level;
+        public int Level
+        {
+            get { lock (levelLock) { return level; } }
+            set { lock (levelLock) { level = value; } }
+        }
+
+        private readonly object healthLock = new object();
+        private int health;
+        public int Health
+        {
+            get { lock (healthLock) { return health; } }
+            set { lock (healthLock) { health = value; } }
+        }
+
+        private readonly object maxHealthLock = new object();
+        private int maxHealth;
+        public int MaxHealth
+        {
+            get { lock (maxHealthLock) { return maxHealth; } }
+            set { lock (maxHealthLock) { maxHealth = value; } }
+        }
+
+        private readonly object healthPercentLock = new object();
+        private int healthPercent;
+        public int HealthPercent
+        {
+            get { lock (healthPercentLock) { return healthPercent; } }
+            set { lock (healthPercentLock) { healthPercent = value; } }
+        }
+
+        private readonly object manaLock = new object();
+        private int mana;
+        public int Mana
+        {
+            get { lock (manaLock) { return mana; } }
+            set { lock (manaLock) { mana = value; } }
+        }
+
+        private readonly object itemLock = new object();
+        private List<string> items;
+        public List<string> Items
+        {
+            get { lock (itemLock) { return items; } }
+            set { lock (itemLock) { items = value; } }
         }
 
         public GameStateIntegration()
@@ -87,6 +127,20 @@ namespace GamingSupervisor
         {
             GameState = gs.Map.GameState.ToString();
             GameTime = gs.Map.GameTime;
+            Gold = gs.Player.Gold;
+            Name = gs.Hero.Name;
+            Level = gs.Hero.Level;
+            Health = gs.Hero.Health;
+            MaxHealth = gs.Hero.Health;
+            HealthPercent = gs.Hero.HealthPercent;
+            Mana = gs.Hero.Mana;
+
+            List<string> itemList = new List<string>();
+            foreach (var item in gs.Items.Inventory)
+            {
+                itemList.Add(item.Name);
+            }
+            Items = itemList;
         }
 
         private static void CreateGameStateIntegrationFile()
