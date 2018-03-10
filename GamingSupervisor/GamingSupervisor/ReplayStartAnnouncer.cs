@@ -6,8 +6,8 @@ namespace GamingSupervisor
 {
     class ReplayStartAnnouncer
     {
-        private static GameStateIntegration gameStateIntegration = null;
-        private static bool listenerStarted = false;
+        private GameStateIntegration gameStateIntegration = null;
+        private bool listenerStarted = false;
 
         public ReplayStartAnnouncer()
         {

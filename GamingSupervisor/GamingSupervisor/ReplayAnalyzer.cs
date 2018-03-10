@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace GamingSupervisor
 {
-    class ReplayAnalyzer
+    class ReplayAnalyzer : Analyzer
     {
         private HeroParser heroData;
         private ReplayHeroID heroIDData;
@@ -15,7 +15,6 @@ namespace GamingSupervisor
         private ReplayHighlights replayHighlights;
 
         private ReplayStartAnnouncer announcer = null;
-        private static Overlay overlay = null;
 
         private System.Timers.Timer tickTimer;
         private readonly object tickLock = new object();
@@ -36,7 +35,8 @@ namespace GamingSupervisor
 
         private int heroID;
 
-        public ReplayAnalyzer()
+
+        public ReplayAnalyzer() : base()
         {
             tickTimer = new System.Timers.Timer(1000.0 / 30.0);
             tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(tickCallback);
@@ -46,27 +46,29 @@ namespace GamingSupervisor
             replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
             replayHighlights = new ReplayHighlights(GUISelection.replayDataFolderLocation, GUISelection.heroName);
 
-
             heroID = heroIDData.getHeroID(GUISelection.heroName);
         }
 
-        public void Start()
+        public override void Start()
         {
             if (announcer == null)
             {
                 announcer = new ReplayStartAnnouncer();
             }
 
-            if (overlay == null)
-            {
-                overlay = new Overlay();
-            }
+            overlay = OverlaySingleton.Instance;
 
             CurrentTick = 0;
             string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is " + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName) + ", \n    click watch to start the replay.";
             overlay.Intructions_setup(instru_OpenReplay);
             while (!announcer.waitForReplayToStart())
             {
+                if (Terminate)
+                {
+                    overlay.Clear();
+                    return;
+                }
+
                 // draw instruction to watch the replay in dota2 client
                 overlay.ShowInstructionMessage();
             }
@@ -84,6 +86,12 @@ namespace GamingSupervisor
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
+                if (Terminate)
+                {
+                    overlay.Clear();
+                    return;
+                }
+
                 Console.WriteLine(announcer.GetCurrentGameState());
                 switch (announcer.GetCurrentGameState())
                 {
@@ -134,11 +142,21 @@ namespace GamingSupervisor
                     lastGameTime = currentGameTime;
                     CurrentTick = replayTick[announcer.GetCurrentGameTime()];
                     lastTickWhenGameTimeChanged = CurrentTick;
+
+                    if (!tickTimer.Enabled)
+                    {
+                        tickTimer.Start();
+                    }
                 }
                 else if (CurrentTick - lastTickWhenGameTimeChanged >= 45 /*ticks*/)
                 {
                     // Give ~1.5sec for game time to change before assuming game is paused )
                     CurrentTick = replayTick[currentGameTime];
+
+                    if (tickTimer.Enabled)
+                    {
+                        tickTimer.Stop();
+                    }
                 }
             }
 
