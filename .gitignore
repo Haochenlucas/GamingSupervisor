@@ -265,3 +265,5 @@ __pycache__/
 !/GamingSupervisor/GamingSupervisor/Parser/parser.jar
 /Yato.DirectXOverlay/bin
 /Yato.DirectXOverlay/obj
+/GamingSupervisor/Yato.DirectXOverlay/bin
+/GamingSupervisor/Yato.DirectXOverlay/obj
