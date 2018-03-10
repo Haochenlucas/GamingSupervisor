@@ -33,22 +33,11 @@ namespace GamingSupervisor
 
             if (Process.GetProcessesByName("dota2").Length == 0)
             {
-                RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
-                if (regKey != null)
+                string serverLog = Path.Combine(SteamAppsLocation.Get(), "server_log.txt");
+                var originalLastLine = File.ReadLines(serverLog).Last();
+                while (originalLastLine != File.ReadLines(serverLog).Last())
                 {
-                    string serverLog = regKey.GetValue("SteamPath") + @"\steamapps\common\dota 2 beta\game\dota\server_log.txt";
-                    var originalLastLine = File.ReadLines(serverLog).Last();
-                    while (originalLastLine != File.ReadLines(serverLog).Last())
-                    {
-                        Thread.Sleep(1000);
-                    }
-                }
-                else
-                {
-                    while (Process.GetProcessesByName("dota2").Length == 0)
-                    {
-                        Thread.Sleep(500);
-                    }
+                    Thread.Sleep(1000);
                 }
             }
 
@@ -75,7 +64,7 @@ namespace GamingSupervisor
             }
             else
             {
-                p.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Steam\Steam.exe");
+                throw new Exception("Could not start DotA 2. Is Steam installed?");
             }
             p.StartInfo.Arguments = "-applaunch 570";
             try

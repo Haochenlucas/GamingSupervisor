@@ -4,34 +4,57 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace GamingSupervisor
 {
-    class ParserHandler
+    static class ParserHandler
     {
-        public ParserHandler()
+        private static List<Thread> threads;
+
+        public static void ParseReplayFiles(string replayFolderLocation)
         {
+            threads = new List<Thread>();
+
+            string[] fileEntries = Directory.GetFiles(replayFolderLocation);
+
+            foreach (string file in fileEntries)
+            {
+                if (Path.GetExtension(file) != ".dem")
+                    continue;
+
+                Thread thread = new Thread(() => ParseReplay(Path.Combine(replayFolderLocation, file)));
+                threads.Add(thread);
+                thread.Start();
+            }            
         }
 
-        public List<string> ParseReplayFile()
+        private static void ParseReplay(string replayLocation)
         {
-            if (!Directory.Exists(GUISelection.replayDataFolderLocation))
-            {
-                Directory.CreateDirectory(GUISelection.replayDataFolderLocation);
+            string directoryPath = Path.Combine(Environment.CurrentDirectory,
+                "../../Parser/",
+                Path.GetFileNameWithoutExtension(replayLocation));
+            string fileName = Path.GetFileName(replayLocation);
 
-                Console.WriteLine("Starting parsing..." + GUISelection.fileName);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+
+                Console.WriteLine("Starting parsing..." + replayLocation);
                 Process p = new Process();
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.FileName = "javaw";
                 p.StartInfo.Arguments =
                     "-jar "
-                    + "\"" + Path.Combine(Environment.CurrentDirectory, @"..\..\Parser\parser.jar").Replace(@"\", @"\\") + "\""
+                    + '"' + Path.Combine(Environment.CurrentDirectory, "../../Parser/parser.jar") + '"'
                     + " "
-                    + "\"" + GUISelection.fileName.Replace(@"\", @"\\") + "\""
+                    + '"' + replayLocation.Replace(@"\", "/") + '"' // Replay .dem location
                     + " "
-                    + "\"" + GUISelection.replayDataFolderLocation.Replace(@"\", @"\\") + "\""; // Data dump location
+                    + '"' + directoryPath.Replace(@"\", "/") + '"'; // Data dump location
                 p.Start();
+
+                p.PriorityClass = ProcessPriorityClass.High;
 
                 while (!p.HasExited)
                 {
@@ -39,14 +62,23 @@ namespace GamingSupervisor
                 }
 
                 p.WaitForExit();
-                Console.WriteLine("Finished parsing!");
+                Console.WriteLine("Finished parsing " + fileName);
             }
+        }
 
+        public static void WaitForParsing()
+        {
+            foreach (Thread thread in threads)
+                thread.Join();
+        }
+    
+        public static List<string> GetHeroNameList(string directory)
+        {
             List<string> heroNameList = new List<string>();
             heroID h_ID = new heroID();
             Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
             Dictionary<string, int> hero_table = h_ID.getIDfromLowercaseHeroname(); // key is hero_name, value is ID;
-            string[] infoFile = File.ReadAllLines(GUISelection.replayDataFolderLocation + "info.txt");
+            string[] infoFile = File.ReadAllLines(directory + "info.txt");
             foreach (string line in infoFile)
             {
                 if (line.Contains("hero_name"))
