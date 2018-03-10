@@ -12,8 +12,6 @@ namespace GamingSupervisor
     {
         private ReplayAnalyzer replayAnalyzer = null;
         private LiveAnalyzer liveAnalyzer = null;
-        private GameStateIntegration gsi;
-        private Process Dota2Process;
 
         public GamingSupervisorManager()
         {
@@ -33,21 +31,24 @@ namespace GamingSupervisor
                     break;
             }
 
-            RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
-            if (regKey != null)
+            if (Process.GetProcessesByName("dota2").Length == 0)
             {
-                string serverLog = regKey.GetValue("SteamPath") + @"\steamapps\common\dota 2 beta\game\dota\server_log.txt";
-                var originalLastLine = File.ReadLines(serverLog).Last();
-                while (originalLastLine != File.ReadLines(serverLog).Last())
+                RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
+                if (regKey != null)
                 {
-                    Thread.Sleep(1000);
+                    string serverLog = regKey.GetValue("SteamPath") + @"\steamapps\common\dota 2 beta\game\dota\server_log.txt";
+                    var originalLastLine = File.ReadLines(serverLog).Last();
+                    while (originalLastLine != File.ReadLines(serverLog).Last())
+                    {
+                        Thread.Sleep(1000);
+                    }
                 }
-            }
-            else
-            {
-                while (Process.GetProcessesByName("dota2").Length == 0)
+                else
                 {
-                    Thread.Sleep(500);
+                    while (Process.GetProcessesByName("dota2").Length == 0)
+                    {
+                        Thread.Sleep(500);
+                    }
                 }
             }
 
@@ -65,21 +66,21 @@ namespace GamingSupervisor
         private void StartDota()
         {
             Console.WriteLine("Starting dota...");
-            Dota2Process = new Process();
+            Process p = new Process();
 
             RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
             if (regKey != null)
             {
-                Dota2Process.StartInfo.FileName = regKey.GetValue("SteamPath") + "/Steam.exe";
+                p.StartInfo.FileName = regKey.GetValue("SteamPath") + "/Steam.exe";
             }
             else
             {
-                Dota2Process.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Steam\Steam.exe");
+                p.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Steam\Steam.exe");
             }
-            Dota2Process.StartInfo.Arguments = "-applaunch 570";
+            p.StartInfo.Arguments = "-applaunch 570";
             try
             {
-                Dota2Process.Start();
+                p.Start();
                 Console.WriteLine("Dota running!");
             }
             catch (Win32Exception ex)

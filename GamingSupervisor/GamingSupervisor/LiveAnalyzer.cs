@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GamingSupervisor
 {
@@ -17,11 +12,12 @@ namespace GamingSupervisor
 
         public override void Start()
         {
-            Console.WriteLine("Started");
-            Thread.Sleep(1000 * 60);
+            Console.WriteLine("Started live...");
 
-            gsi = GameStateIntegrationSingleton.Instance;
             overlay = OverlaySingleton.Instance;
+            gsi = GameStateIntegrationSingleton.Instance;
+
+            gsi.StartListener();
 
             bool gameStarted = false;
             bool keepLooping = true;
@@ -29,7 +25,6 @@ namespace GamingSupervisor
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
-                Console.WriteLine(gsi.GameState + " game state");
                 switch (gsi.GameState)
                 {
                     case null:
@@ -42,8 +37,6 @@ namespace GamingSupervisor
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
                         gameStarted = true;
-                        //HandleHeroSelection();
-                        //ShowDraftHints();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
@@ -80,7 +73,7 @@ namespace GamingSupervisor
             overlay.AddHPs(hpToSend);
             overlay.AddHp(hpToSend[0]);
 
-            if (healthPercent < 25)
+            if (true)//healthPercent < 25)
             {
                 overlay.AddRetreatMessage("Health " + gsi.Health, "");
 

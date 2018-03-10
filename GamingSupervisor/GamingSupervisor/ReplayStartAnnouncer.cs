@@ -11,10 +11,7 @@ namespace GamingSupervisor
 
         public ReplayStartAnnouncer()
         {
-            if (gameStateIntegration == null)
-            {
-                gameStateIntegration = new GameStateIntegration();
-            }
+            gameStateIntegration = GameStateIntegrationSingleton.Instance;
         }
 
         public int GetStartTick()
@@ -41,7 +38,7 @@ namespace GamingSupervisor
             return gameStateIntegration.GameState;
         }
 
-        public bool waitForReplayToStart()
+        public bool isReplayStarted()
         {
             if (!listenerStarted)
             {
