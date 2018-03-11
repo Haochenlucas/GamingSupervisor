@@ -15,24 +15,31 @@
             <fa:ImageAwesome Margin="30" Name="LoadingIcon" Height="50" Icon="Spinner" Spin="True" SpinDuration="2"
                          Foreground="{StaticResource Foreground}"/>
         </StackPanel>
-        <StackPanel>
-            <ListBox Name="ReplayNameListBox" SelectionMode="Single" FontSize="16"
+        <Grid Name="GridHolder" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="400"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <ListBox Grid.Row="0" Name="ReplayNameListBox" SelectionMode="Single" FontSize="16"
                      SelectionChanged="ListBoxSelectionChanged" Padding="0" BorderThickness="0" Margin="5"
-                     Style="{StaticResource MetroListBox}">
+                     Style="{StaticResource MetroListBox}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
-                            <TextBlock Text="{Binding Title}" FontSize="20"/>
+                            <TextBlock Text="{Binding Title}" FontSize="14" TextWrapping="Wrap"/>
                         </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Name="ConfirmButton" Margin="10" Height="50" Click="ConfirmSelection" FontSize="30"
-                Style="{DynamicResource AccentedSquareButtonStyle}"
-                controls:ControlsHelper.ContentCharacterCasing="Normal">Confirm</Button>
-        </StackPanel>
-        <Button Name="GoBackButton" Margin="10" VerticalAlignment="Bottom" Height="50" Click="GoBack" FontSize="16"
-                Style="{DynamicResource AccentedSquareButtonStyle}"
-                controls:ControlsHelper.ContentCharacterCasing="Normal">Go Back</Button>
+            <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
+                <Button Name="ConfirmButton" Margin="10" Height="50" Click="ConfirmSelection" FontSize="30"
+                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                    controls:ControlsHelper.ContentCharacterCasing="Normal">Confirm</Button>
+                <Button Name="GoBackButton" Margin="10" Height="50" Click="GoBack" FontSize="16"
+                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                    controls:ControlsHelper.ContentCharacterCasing="Normal">Go Back</Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
