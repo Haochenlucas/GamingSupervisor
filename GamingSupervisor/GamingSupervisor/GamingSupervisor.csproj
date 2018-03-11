@@ -127,6 +127,9 @@
     <Compile Include="Analyzer.cs" />
     <Compile Include="GameStateIntegration.cs" />
     <Compile Include="GameStateIntegrationSingleton.cs" />
+    <Compile Include="GUI\ReplaySelection.xaml.cs">
+      <DependentUpon>ReplaySelection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LiveAnalyzer.cs" />
     <Compile Include="Overlay.cs" />
     <Compile Include="OverlaySingleton.cs" />
@@ -140,6 +143,7 @@
     <Compile Include="GUI\WaitForCompletion.xaml.cs">
       <DependentUpon>WaitForCompletion.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SteamAppsLocation.cs" />
     <Page Include="GUI\ConfirmSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,6 +187,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="GUI\ReplayHeroSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\ReplaySelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

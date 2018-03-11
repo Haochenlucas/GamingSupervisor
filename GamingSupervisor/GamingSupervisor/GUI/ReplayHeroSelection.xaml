@@ -5,16 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:local="clr-namespace:GamingSupervisor"
-      xmlns:fa="http://schemas.fontawesome.io/icons/"
       mc:Ignorable="d" 
       d:DesignHeight="640" d:DesignWidth="480"
       Title="ReplayHeroSelection">
     <Grid Margin="50" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label Name="ParsingMessageLabel" FontSize="30" Foreground="{StaticResource Foreground}">Parsing...</Label>
-            <fa:ImageAwesome Margin="30" Name="LoadingIcon" Height="50" Icon="Spinner" Spin="True" SpinDuration="2"
-                         Foreground="{StaticResource Foreground}"/>
-        </StackPanel>
         <StackPanel>
             <ListBox Name="HeroNameListBox" SelectionMode="Single" FontSize="16"
                      SelectionChanged="ListBoxSelectionChanged" Padding="0" BorderThickness="0" Margin="5"

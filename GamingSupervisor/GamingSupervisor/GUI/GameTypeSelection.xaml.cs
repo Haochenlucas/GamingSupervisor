@@ -24,7 +24,6 @@ namespace GamingSupervisor
 
         private void SelectLive(object sender, RoutedEventArgs e)
         {
-            GUISelection.fileName = null;
             GUISelection.gameType = GUISelection.GameType.live;
 
             NavigationService navService = NavigationService.GetNavigationService(this);
@@ -34,29 +33,12 @@ namespace GamingSupervisor
 
         private void SelectReplay(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.DefaultExt = ".dem";
-            dialog.Filter = "DEM Files (*.dem)|*.dem";
+            GUISelection.fileName = null;
+            GUISelection.gameType = GUISelection.GameType.replay;
 
-            //RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
-            //if (regKey != null)
-            //{
-            //    dialog.InitialDirectory = regKey.GetValue("SteamPath") + @"\steamapps\common\dota 2 beta\game\dota\replays\";                
-            //}
-
-            Nullable<bool> result = dialog.ShowDialog();
-
-            if (result == true)
-            {
-                GUISelection.fileName = dialog.FileName;
-                GUISelection.gameType = GUISelection.GameType.replay;
-                GUISelection.replayDataFolderLocation = Path.Combine(Environment.CurrentDirectory,
-                    @"..\..\Parser\" + Path.GetFileNameWithoutExtension(GUISelection.fileName) + @"\");
-
-                NavigationService navService = NavigationService.GetNavigationService(this);
-                ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection();
-                navService.Navigate(replayHeroSelection);
-            }
+            NavigationService navService = NavigationService.GetNavigationService(this);
+            ReplaySelection replaySelection = new ReplaySelection();
+            navService.Navigate(replaySelection);
         }
 
         private void GoBack(object sender, RoutedEventArgs e)

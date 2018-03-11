@@ -19,7 +19,14 @@ namespace GamingSupervisor
 
         public void Start()
         {
-            StartDota();
+            ParserHandler.StartFullParsing(GUISelection.fileName + ".dem");
+
+            bool isDotaAlreadyRunning = Process.GetProcessesByName("dota2").Length != 0;
+            string serverLog = Path.Combine(SteamAppsLocation.Get(), "server_log.txt");
+            var originalLastLine = File.ReadLines(serverLog).Last();
+
+            if (!isDotaAlreadyRunning)
+                StartDota();
 
             switch (GUISelection.gameType)
             {
@@ -27,30 +34,14 @@ namespace GamingSupervisor
                     liveAnalyzer = new LiveAnalyzer();
                     break;
                 case GUISelection.GameType.replay:
+                    ParserHandler.WaitForFullParsing();
                     replayAnalyzer = new ReplayAnalyzer();
                     break;
             }
 
-            if (Process.GetProcessesByName("dota2").Length == 0)
-            {
-                RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
-                if (regKey != null)
-                {
-                    string serverLog = regKey.GetValue("SteamPath") + @"\steamapps\common\dota 2 beta\game\dota\server_log.txt";
-                    var originalLastLine = File.ReadLines(serverLog).Last();
-                    while (originalLastLine != File.ReadLines(serverLog).Last())
-                    {
-                        Thread.Sleep(1000);
-                    }
-                }
-                else
-                {
-                    while (Process.GetProcessesByName("dota2").Length == 0)
-                    {
-                        Thread.Sleep(500);
-                    }
-                }
-            }
+            if (!isDotaAlreadyRunning)
+                while (originalLastLine != File.ReadLines(serverLog).Last())
+                    Thread.Sleep(1000);
 
             switch (GUISelection.gameType)
             {
@@ -75,7 +66,7 @@ namespace GamingSupervisor
             }
             else
             {
-                p.StartInfo.FileName = Environment.ExpandEnvironmentVariables(@"%programfiles(x86)%\Steam\Steam.exe");
+                throw new Exception("Could not start DotA 2. Is Steam installed?");
             }
             p.StartInfo.Arguments = "-applaunch 570";
             try

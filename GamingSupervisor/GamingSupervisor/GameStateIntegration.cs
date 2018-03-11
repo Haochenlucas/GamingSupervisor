@@ -145,21 +145,16 @@ namespace GamingSupervisor
 
         private static void CreateGameStateIntegrationFile()
         {
-            RegistryKey regKey = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
-
-            if (regKey != null)
+            string gsifolder = Path.Combine(SteamAppsLocation.Get(), "cfg/gamestate_integration");
+            Directory.CreateDirectory(gsifolder);
+            string gsifile = Path.Combine(gsifolder, "gamestate_integration_testGSI.cfg");
+            if (File.Exists(gsifile))
             {
-                string gsifolder = regKey.GetValue("SteamPath") +
-                                   @"\steamapps\common\dota 2 beta\game\dota\cfg\gamestate_integration";
-                Directory.CreateDirectory(gsifolder);
-                string gsifile = gsifolder + @"\gamestate_integration_testGSI.cfg";
-                if (File.Exists(gsifile))
-                {
-                    return;
-                }
+                return;
+            }
 
-                string[] contentofgsifile =
-                {
+            string[] contentofgsifile =
+            {
                     "\"Dota 2 Integration Configuration\"",
                     "{",
                     "    \"uri\"           \"http://localhost:3000\"",
@@ -180,12 +175,7 @@ namespace GamingSupervisor
 
                 };
 
-                File.WriteAllLines(gsifile, contentofgsifile);
-            }
-            else
-            {
-                Console.WriteLine("Registry key for steam not found, cannot create Gamestate Integration file");
-            }
+            File.WriteAllLines(gsifile, contentofgsifile);
         }
     }
 }
