@@ -43,7 +43,7 @@ namespace GamingSupervisor
 
         private void WaitForParsing(object sender, DoWorkEventArgs e)
         {
-            ParserHandler.WaitForParsing();
+            ParserHandler.WaitForInfoParsing();
         }
 
         private void FinishedParsing(object sender, RunWorkerCompletedEventArgs e)

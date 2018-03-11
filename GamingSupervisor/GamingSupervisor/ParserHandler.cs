@@ -10,68 +10,96 @@ namespace GamingSupervisor
 {
     static class ParserHandler
     {
-        private static List<Thread> threads;
+        private static Thread infoThread;
+        private static Thread fullThread;
+        private static bool infoParsingComplete;
 
-        public static void ParseReplayFiles(string replayFolderLocation)
+        public static void StartInfoParsing()
         {
-            threads = new List<Thread>();
+            infoThread = new Thread(() => ParseInfoReplayFiles());
+            infoThread.Start();
+        }
 
-            string[] fileEntries = Directory.GetFiles(replayFolderLocation);
+        public static void StartFullParsing(string fileName)
+        {
+            fullThread = new Thread(() => ParseFullReplayFile(fileName));
+            fullThread.Start();
+        }
+
+        private static void ParseInfoReplayFiles()
+        {
+            string replayDirectory = Path.Combine(SteamAppsLocation.Get(), "replays");
+
+            string[] fileEntries = Directory.GetFiles(replayDirectory);
 
             foreach (string file in fileEntries)
             {
                 if (Path.GetExtension(file) != ".dem")
                     continue;
 
-                Thread thread = new Thread(() => ParseReplay(Path.Combine(replayFolderLocation, file)));
-                threads.Add(thread);
-                thread.Start();
-            }            
+                ParseReplay(Path.Combine(replayDirectory, file), "info");
+            }
         }
 
-        private static void ParseReplay(string replayLocation)
+        private static void ParseFullReplayFile(string fileName)
+        {
+            string replayDirectory = Path.Combine(SteamAppsLocation.Get(), "replays");
+
+            ParseReplay(Path.Combine(replayDirectory, fileName), "full");
+        }
+
+        private static void ParseReplay(string replayLocation, string arg)
         {
             string directoryPath = Path.Combine(Environment.CurrentDirectory,
                 "../../Parser/",
                 Path.GetFileNameWithoutExtension(replayLocation));
             string fileName = Path.GetFileName(replayLocation);
 
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
+            if (Directory.Exists(directoryPath) && arg == "info")
+                return;
+            else if (File.Exists(Path.Combine(directoryPath, "hero.txt")))
+                return;
 
-                Console.WriteLine("Starting parsing..." + replayLocation);
-                Process p = new Process();
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.FileName = "javaw";
-                p.StartInfo.Arguments =
-                    "-jar "
-                    + '"' + Path.Combine(Environment.CurrentDirectory, "../../Parser/parser.jar") + '"'
-                    + " "
-                    + '"' + replayLocation.Replace(@"\", "/") + '"' // Replay .dem location
-                    + " "
-                    + '"' + directoryPath.Replace(@"\", "/") + '"'; // Data dump location
-                p.Start();
+            Directory.CreateDirectory(directoryPath);
 
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.FileName = "javaw";
+            p.StartInfo.Arguments =
+                "-jar "
+                + '"' + Path.Combine(Environment.CurrentDirectory, "../../Parser/parser.jar") + '"'
+                + " "
+                + '"' + replayLocation.Replace(@"\", "/") + '"' // Replay .dem location
+                + " "
+                + '"' + directoryPath.Replace(@"\", "/") + '"' // Data dump location
+                + " "
+                + '"' + arg + '"'; // "info" or "full" parsing
+            p.Start();
+
+            if (arg == "info")
+                p.PriorityClass = ProcessPriorityClass.Idle;
+            else if (arg == "full")
                 p.PriorityClass = ProcessPriorityClass.High;
 
-                while (!p.HasExited)
-                {
-                    Console.WriteLine(p.StandardOutput.ReadLine());
-                }
-
-                p.WaitForExit();
-                Console.WriteLine("Finished parsing " + fileName);
+            while (!p.HasExited)
+            {
+                Console.WriteLine(p.StandardOutput.ReadLine());
             }
+
+            p.WaitForExit();
         }
 
-        public static void WaitForParsing()
+        public static void WaitForFullParsing()
         {
-            foreach (Thread thread in threads)
-                thread.Join();
+            fullThread.Join();
         }
-    
+
+        public static void WaitForInfoParsing()
+        {
+            infoThread.Join();
+        }
+
         public static List<string> GetHeroNameList(string directory)
         {
             List<string> heroNameList = new List<string>();

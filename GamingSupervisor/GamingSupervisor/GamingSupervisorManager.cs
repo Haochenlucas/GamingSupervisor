@@ -19,7 +19,14 @@ namespace GamingSupervisor
 
         public void Start()
         {
-            StartDota();
+            ParserHandler.StartFullParsing(GUISelection.fileName + ".dem");
+
+            bool isDotaAlreadyRunning = Process.GetProcessesByName("dota2").Length != 0;
+            string serverLog = Path.Combine(SteamAppsLocation.Get(), "server_log.txt");
+            var originalLastLine = File.ReadLines(serverLog).Last();
+
+            if (!isDotaAlreadyRunning)
+                StartDota();
 
             switch (GUISelection.gameType)
             {
@@ -27,19 +34,14 @@ namespace GamingSupervisor
                     liveAnalyzer = new LiveAnalyzer();
                     break;
                 case GUISelection.GameType.replay:
+                    ParserHandler.WaitForFullParsing();
                     replayAnalyzer = new ReplayAnalyzer();
                     break;
             }
 
-            if (Process.GetProcessesByName("dota2").Length == 0)
-            {
-                string serverLog = Path.Combine(SteamAppsLocation.Get(), "server_log.txt");
-                var originalLastLine = File.ReadLines(serverLog).Last();
+            if (!isDotaAlreadyRunning)
                 while (originalLastLine != File.ReadLines(serverLog).Last())
-                {
                     Thread.Sleep(1000);
-                }
-            }
 
             switch (GUISelection.gameType)
             {

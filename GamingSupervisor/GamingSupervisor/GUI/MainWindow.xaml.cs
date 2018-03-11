@@ -20,8 +20,7 @@ namespace GamingSupervisor
 
             Description = GUIDescription;
 
-            string replayDirectory = Path.Combine(SteamAppsLocation.Get(), "replays");
-            ParserHandler.ParseReplayFiles(replayDirectory);
+            ParserHandler.StartInfoParsing();
 
             DifficultySelection difficultySelection = new DifficultySelection();
             GUINavigation.Navigate(difficultySelection);
