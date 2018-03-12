@@ -66,8 +66,7 @@ namespace replayParse
         public static int[,] difficulty_table = new int[116, 8];
         public hero_difficulty()
         {
-            string s = Path.Combine(Environment.CurrentDirectory,
-                @"..\..\..\replayParse\Properties\hero_difficulty_version_1.txt");
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/hero_difficulty_version_1.txt");
             string[] lines = File.ReadAllLines(s);
             string[] second_lines = lines;
             int key = 0;

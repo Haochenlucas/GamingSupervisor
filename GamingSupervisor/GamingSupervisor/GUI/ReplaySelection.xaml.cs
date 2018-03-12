@@ -64,7 +64,7 @@ namespace GamingSupervisor
 
                 replays = new List<ReplayListItem>();
                 foreach (string replay in
-                    Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "../../Parser/")))
+                    Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "Parser")))
                 {
                     var matchResult = await api.GetDetailedMatch(Path.GetFileName(replay));
 
@@ -128,7 +128,7 @@ namespace GamingSupervisor
 
         private void ConfirmSelection(object sender, RoutedEventArgs e)
         {
-            GUISelection.replayDataFolderLocation = Path.Combine("../../Parser", GUISelection.fileName + "/");
+            GUISelection.replayDataFolderLocation = Path.Combine("Parser", GUISelection.fileName + "/");
 
             NavigationService navService = NavigationService.GetNavigationService(this);
             ReplayHeroSelection replayHeroSelection = new ReplayHeroSelection();

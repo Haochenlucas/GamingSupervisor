@@ -1463,7 +1463,7 @@ namespace Yato.DirectXOverlay
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
         {
-            string file = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\hero_difficulty_version_1.txt");
+            string file = Path.Combine(Environment.CurrentDirectory, "Properties/hero_difficulty_version_1.txt");
             hero_difficulty dt = new hero_difficulty(file);
             string suggestion = dt.mainDiff(HeroID);
             string hero_rating = dt.getFinalLevel(HeroID)[0] + ": " + dt.getFinalLevel(HeroID)[1] + "\n\n";
@@ -1588,7 +1588,7 @@ namespace Yato.DirectXOverlay
         // one of the five suggested heroes get banned by the other team
         public void SuggestedHeroBanned(int heroIndex)
         {
-            Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\red_cross.png");
+            Direct2DBitmap cross = new Direct2DBitmap(device, "other_images/red_cross.png");
             DrawBitmap(cross, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
             cross.SharpDXBitmap.Dispose();
         }
@@ -1596,7 +1596,7 @@ namespace Yato.DirectXOverlay
         // one of the five suggested heroes get picked by our team
         public void SuggestedHeroPicked(int heroIndex)
         {
-            Direct2DBitmap check = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
+            Direct2DBitmap check = new Direct2DBitmap(device, "other_images/green_check.png");
             DrawBitmap(check, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
             check.SharpDXBitmap.Dispose();
         }
@@ -1618,7 +1618,7 @@ namespace Yato.DirectXOverlay
                         DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background);
                         if (messages[i].imgName != "")
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, "hero_icon_images/" + messages[i].imgName + ".png");
                             DrawBitmap(bmp, 1, messages[i].img_x, messages[i].img_y, messages[i].img_width, messages[i].img_height);
                             bmp.SharpDXBitmap.Dispose();
                         }
@@ -1756,7 +1756,7 @@ namespace Yato.DirectXOverlay
                         DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background);
                         if (messages[i].imgName != "")
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, "hero_icon_images/" + messages[i].imgName + ".png");
                             DrawBitmap(bmp, 1, messages[i].img_x, messages[i].img_y, messages[i].img_width, messages[i].img_height);
                             bmp.SharpDXBitmap.Dispose();
                         }
@@ -1816,7 +1816,7 @@ namespace Yato.DirectXOverlay
                 DrawTextWithBackground(messages[12].text, messages[12].x, messages[12].y, messages[12].font, messages[12].color, messages[12].background);
                 if (messages[12].imgName != "")
                 {
-                    Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[12].imgName + ".png");
+                    Direct2DBitmap bmp = new Direct2DBitmap(device, "hero_icon_images/" + messages[12].imgName + ".png");
                     DrawBitmap(bmp, 1, messages[12].img_x, messages[12].img_y, messages[12].img_width, messages[12].img_height);
                     bmp.SharpDXBitmap.Dispose();
                 }
@@ -1883,7 +1883,7 @@ namespace Yato.DirectXOverlay
                 button_timer.Reset();
             }
 
-            Direct2DBitmap close_button_red = new Direct2DBitmap(device, @"..\\..\\buttons\" + instruction.close_button_red + ".png");
+            Direct2DBitmap close_button_red = new Direct2DBitmap(device, "buttons/" + instruction.close_button_red + ".png");
 
             float scale = button_timer.ElapsedMilliseconds;
             scale = scale / 6000;
