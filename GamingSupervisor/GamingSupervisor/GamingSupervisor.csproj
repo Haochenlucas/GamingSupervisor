@@ -86,9 +86,6 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="replayParse">
-      <HintPath>..\replayParse\bin\Debug\replayParse.dll</HintPath>
-    </Reference>
     <Reference Include="Selen.Wpf.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dc472ed4b6daaa58, processorArchitecture=MSIL">
       <HintPath>..\packages\Selen.Wpf.1.0.0\lib\net45\Selen.Wpf.Core.dll</HintPath>
     </Reference>
@@ -119,9 +116,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Yato.DirectXOverlay">
-      <HintPath>..\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -248,6 +242,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\replayParse\replayParse.csproj">
+      <Project>{ebdb3153-80d6-4709-bd02-f58ad8407465}</Project>
+      <Name>replayParse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yato.DirectXOverlay\Yato.DirectXOverlay.csproj">
+      <Project>{313a83b1-c9c1-411d-a747-63bfa1ffa24c}</Project>
+      <Name>Yato.DirectXOverlay</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
