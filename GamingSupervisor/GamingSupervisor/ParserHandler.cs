@@ -51,7 +51,7 @@ namespace GamingSupervisor
         private static void ParseReplay(string replayLocation, string arg)
         {
             string directoryPath = Path.Combine(Environment.CurrentDirectory,
-                "../../Parser/",
+                "Parser",
                 Path.GetFileNameWithoutExtension(replayLocation));
             string fileName = Path.GetFileName(replayLocation);
 
@@ -68,7 +68,7 @@ namespace GamingSupervisor
             p.StartInfo.FileName = "javaw";
             p.StartInfo.Arguments =
                 "-jar "
-                + '"' + Path.Combine(Environment.CurrentDirectory, "../../Parser/parser.jar") + '"'
+                + '"' + Path.Combine(Environment.CurrentDirectory, "parser.jar") + '"'
                 + " "
                 + '"' + replayLocation.Replace(@"\", "/") + '"' // Replay .dem location
                 + " "

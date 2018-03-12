@@ -11,7 +11,7 @@ namespace replayParse
     {
         public makeup_difficulty_talbe()
         {
-            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\hero_difficulty_version_0.txt");
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/hero_difficulty_version_0.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
             string[] second_lines = lines;
             int key = 0;
@@ -32,7 +32,7 @@ namespace replayParse
                 key++;
 
             }
-            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\hero_difficulty_version_1.txt");
+            string path = Path.Combine(Environment.CurrentDirectory, "Properties/hero_difficulty_version_1.txt");
             if (!File.Exists(path))
             {
                 // Create a file to write to.

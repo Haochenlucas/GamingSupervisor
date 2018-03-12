@@ -19,7 +19,7 @@ namespace replayParse
          */
         public heroGenerateTypes()
         {
-            string s = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\herotype.txt");
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/herotype.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
             string[] second_lines = lines;
             int index = 0;

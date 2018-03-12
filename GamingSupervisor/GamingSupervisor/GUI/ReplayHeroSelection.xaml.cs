@@ -34,7 +34,7 @@ namespace GamingSupervisor
             {
                 heros.Add(new HeroListItem()
                 {
-                    ImagePath = Path.Combine(Environment.CurrentDirectory, @"..\..\hero_icon_images\" + replayParse.heroID.ID_heroDictionary[heroName].ToString() + ".png"),
+                    ImagePath = Path.Combine(Environment.CurrentDirectory, "hero_icon_images/" + replayParse.heroID.ID_heroDictionary[heroName].ToString() + ".png"),
                     Title = heroName
                 });
             }
