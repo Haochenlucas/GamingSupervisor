@@ -255,7 +255,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)Parser\parser.jar" "$(ProjectDir)bin\$(ConfigurationName)" /R /Y
+    <PostBuildEvent>mkdir "$(ProjectDir)bin\$(ConfigurationName)\Parser"
+xcopy "$(ProjectDir)Parser\parser.jar" "$(ProjectDir)bin\$(ConfigurationName)" /R /Y
 xcopy "$(ProjectDir)hero_icon_images" "$(ProjectDir)bin\$(ConfigurationName)\hero_icon_images\" /R /Y /I
 xcopy "$(ProjectDir)other_images" "$(ProjectDir)bin\$(ConfigurationName)\other_images\"  /R /Y /I
 xcopy "$(ProjectDir)buttons" "$(ProjectDir)bin\$(ConfigurationName)\buttons\"  /R /Y /I
