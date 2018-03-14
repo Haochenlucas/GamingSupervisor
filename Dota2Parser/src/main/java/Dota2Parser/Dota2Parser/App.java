@@ -377,7 +377,24 @@ public class App
         }
         
         if (updatePosition || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "POSITION", hero.playerID, hero.x, hero.y, hero.z);
+        {
+        	int cellX = e.getPropertyForFieldPath(hero.cellX);
+        	int cellY = e.getPropertyForFieldPath(hero.cellY);
+        	
+        	float vecX = e.getPropertyForFieldPath(hero.vecX);
+        	float vecY = e.getPropertyForFieldPath(hero.vecY);
+        	
+        	float posX = cellX * 128 + vecX;
+        	float posY = cellY * 128 + vecY;
+        	
+        	heroWriter.format("%d [POSITION] %d %f %f %d \n",
+    				ctx.getTick(),
+    				e.getPropertyForFieldPath(hero.playerID),
+    				posX,
+    				posY,
+    				e.getPropertyForFieldPath(hero.cellZ));
+        	heroWriter.flush();
+        }
         if (updateHealth || forceUpdate)
             writeToFile(heroWriter, ctx, e, "HEALTH", hero.playerID, hero.health);
         if (updateLevel || forceUpdate)
@@ -513,9 +530,9 @@ public class App
         	neutralMonsterWriter.format("%d [POSITION] %d %s %s %s\n",
     				ctx.getTick(),
     				e.getHandle(),
-    				e.getPropertyForFieldPath(neutralMonster.x),
-					e.getPropertyForFieldPath(neutralMonster.y),
-					e.getPropertyForFieldPath(neutralMonster.z));
+    				e.getPropertyForFieldPath(neutralMonster.cellX),
+					e.getPropertyForFieldPath(neutralMonster.cellY),
+					e.getPropertyForFieldPath(neutralMonster.cellZ));
         if (updateMaxHealth || forceUpdate)
         	neutralMonsterWriter.format("%d [MAXHEALTH] %d %s\n",
     				ctx.getTick(),
@@ -551,9 +568,9 @@ public class App
         	laneCreepWriter.format("%d [POSITION] %d %s %s %s\n",
     				ctx.getTick(),
     				e.getHandle(),
-    				e.getPropertyForFieldPath(laneCreep.x),
-					e.getPropertyForFieldPath(laneCreep.y),
-					e.getPropertyForFieldPath(laneCreep.z));
+    				e.getPropertyForFieldPath(laneCreep.cellX),
+					e.getPropertyForFieldPath(laneCreep.cellY),
+					e.getPropertyForFieldPath(laneCreep.cellZ));
         if (updateHealth || forceUpdate)
         	laneCreepWriter.format("%d [HEALTH] %d %s\n",
     				ctx.getTick(),
