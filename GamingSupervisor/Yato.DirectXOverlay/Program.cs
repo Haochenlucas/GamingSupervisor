@@ -79,17 +79,20 @@ namespace Yato.DirectXOverlay
             }
 
             // For test use only. Show overlay on Visual Studio
-            var VS_HWND = Process.GetProcessesByName("notepad++")[0].MainWindowHandle;
+            var VS_HWND = Process.GetProcessesByName("notepad")[0].MainWindowHandle;
             manager = new OverlayManager(VS_HWND,out overlay,out d2d);
 
             #region timeline
+            /*
+            string timePath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\time.txt";
 
-            string timePath = @"C:\Users\J\Documents\CS_Senior_Project\GamingSupervisor\GamingSupervisor\Parser\3690751201\time.txt";
             List<String> timeLines = new List<String>(System.IO.File.ReadAllLines(timePath));
             Double.TryParse(timeLines.First().Split(' ')[2], out double firstTick);
             Double.TryParse(timeLines.Last().Split(' ')[2], out double totalTick);
             
-            string combatPath = @"C:\Users\J\Documents\CS_Senior_Project\GamingSupervisor\GamingSupervisor\Parser\3690751201\combat.txt";
+
+            string combatPath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\combat.txt";
+
             List<String> combatLines = new List<String>(System.IO.File.ReadAllLines(combatPath));
             List<List<String>> killLines = GetTeamfight(combatLines);
             String myHero = "npc_dota_hero_storm_spirit";
@@ -114,7 +117,6 @@ namespace Yato.DirectXOverlay
                 }
             }
 
-            
 
            
 
@@ -126,7 +128,7 @@ namespace Yato.DirectXOverlay
             d2d.SetupHintSlots();
             
             watch.Start();
-            d2d.Intructions_setup("");
+            d2d.Intructions_setup("ABCD");
             d2d.HeroIntro_setup(38);
             while (true)
             {
@@ -136,39 +138,41 @@ namespace Yato.DirectXOverlay
                 }
 
                 // Low health
-                if (true)
-                {
-                    string[] messages = new string[5];
-                    messages[0] = "Abaddon";
-                    messages[1] = "Alchemist";
-                    messages[2] = "Ancient Apparition";
-                    messages[3] = "Anti-mage";
-                    messages[4] = "Axe";
-                    string[] imgName = new string[5];
-                    imgName[0] = "1";
-                    imgName[1] = "2";
-                    imgName[2] = "3";
-                    imgName[3] = "4";
-                    imgName[4] = "6";
+                string[] messages = new string[5];
+                messages[0] = "Abaddon";
+                messages[1] = "Alchemist";
+                messages[2] = "Ancient Apparition";
+                messages[3] = "Anti-mage";
+                messages[4] = "Axe";
+                string[] imgName = new string[5];
+                imgName[0] = "1";
+                imgName[1] = "2";
+                imgName[2] = "3";
+                imgName[3] = "4";
+                imgName[4] = "6";
 
-                    d2d.HeroSelectionHints(messages, imgName);
+                d2d.HeroSelectionHints(messages, imgName);
+                string temp = "Lycan is a remarkable pusher who can wear down buildings and force enemies to react quickly to his regular tower onslaughts; as towers melt incredibly fast under Lycan's and his units' pressure, boosted by their canine Feral Impulse. His only contribution to full-on team fights will be the bonus damage he grants with Howl to his allies, his allies' summons, his owns summons, and himself, as well as his formidable physical attacks. Else he can surge out of the woods for a quick gank or push after he transformed with Shapeshift, moving at a haste speed of 650. Finally, good players will make the best usage of his Summon Wolves ability and scout the enemies' position while remaining undetected with invisibility at level 4.";
 
-                    d2d.ToggleHightlight(true);
-                    d2d.UpdateHighlightTime(tickInfo, (int)totalTick);
+                d2d.HeroInfoHints(temp, "");
+                d2d.ItemSelectionHints("You need to wear boots", "Boots_of_Speed_icon");
+                //d2d.ToggleHightlight(true);
+                //d2d.UpdateHighlightTime(tickInfo, (int)totalTick);
 
-                    d2d.Retreat("Run", "");
-                    
-                    d2d.SelectedHeroSuggestion(38, 500);
-                }
-                //if (Control.ModifierKeys == Keys.Alt)
+                d2d.Retreat("Run", "exclamation_mark");
+
+                //d2d.SelectedHeroSuggestion(38, Cursor.Position.Y);
+
+                if (Control.ModifierKeys == Keys.Alt)
                 {
-                    //d2d.Ingame_Draw(VS_HWND, overlay);
-                    d2d.HeroInfo_Draw(VS_HWND, overlay);
-                }
-                //else
-                {
+                    d2d.HeroSelection_Draw(VS_HWND, overlay);
                     //d2d.Intructions_Draw(VS_HWND, overlay);
                 }
+                else
+                {
+                    d2d.Ingame_Draw(VS_HWND, overlay);
+                }
+                //Console.WriteLine(Direct2DRenderer.hits.hero_selection_1);
 
                 watch.Restart();
             }
