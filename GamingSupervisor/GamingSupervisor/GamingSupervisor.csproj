@@ -108,7 +108,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="Yato.DirectXOverlay, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Yato.DirectXOverlay\bin\Release\Yato.DirectXOverlay.dll</HintPath>
+      <HintPath>..\Yato.DirectXOverlay\bin\Debug\Yato.DirectXOverlay.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

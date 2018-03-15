@@ -43,7 +43,7 @@ namespace GamingSupervisor
         {
             renderer.HeroInfoHints(message, img);
         }
-
+        
         public void ToggleGraphForHeroHP(bool tog = true)
         {
             renderer.ToggleGraph(tog);
@@ -89,9 +89,33 @@ namespace GamingSupervisor
             renderer.HeroSelection_Draw(dotaProcessHandle, window);
         }
 
-        public void ClearMessage(int MessageNum)
+        public void ClearMessage(Direct2DRenderer.hints hint)
         {
-            renderer.DeleteMessage(MessageNum);
+            renderer.DeleteMessage(hint);
+        }
+
+        public void ClearHeroSuggestion()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_1);
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_2);
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_3);
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_4);
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_5);
+        }
+
+        public void ClearItemSuggestion()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.items_selection);
+        }
+
+        public void ClearHeroInfo()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.heroinformation);
+        }
+
+        public void ClearRetreat()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.retreat);
         }
 
         public void XorCheck(int code)

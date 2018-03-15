@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "replayParse", "replayParse\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Overlay", "Overlay", "{C9FAF55F-7CF3-4C5F-819B-E43CC4B71B4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yato.DirectXOverlay", "..\Yato.DirectXOverlay\Yato.DirectXOverlay.csproj", "{313A83B1-C9C1-411D-A747-63BFA1FFA24C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yato.DirectXOverlay", "Yato.DirectXOverlay\Yato.DirectXOverlay.csproj", "{313A83B1-C9C1-411D-A747-63BFA1FFA24C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
