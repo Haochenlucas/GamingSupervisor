@@ -1725,6 +1725,9 @@ namespace Yato.DirectXOverlay
                                 currY - 108,
                                 50,
                                 28);
+
+                            bmp.SharpDXBitmap.Dispose();
+                            csb.Dispose();
                         }
                     }
 
