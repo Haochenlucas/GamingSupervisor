@@ -11,6 +11,7 @@ namespace GamingSupervisor
         private HeroParser heroData;
         private ReplayHeroID heroIDData;
         private List<int> teamHeroIds = new List<int>(4);
+        private List<int> teamIDGraph = new List<int>();
         private ReplayTick replayTick;
         private ReplayHighlights replayHighlights;
 
@@ -196,6 +197,7 @@ namespace GamingSupervisor
             {
                 if (table[i, 2] == team_side)
                 {
+                    teamIDGraph.Add(table[i, 0]);
                     heroID id = new heroID();
                     Dictionary<int, string> id_string = id.getHeroID();
                     string name = id_string[table[i, 0]];
@@ -316,6 +318,7 @@ namespace GamingSupervisor
             }
 
             overlay.ToggleGraphForHeroHP();
+            overlay.AddHeroGraphIcons(teamIDGraph);
             overlay.AddHPs(hpToSend);
             overlay.AddHp(hpToSend[0]);
 

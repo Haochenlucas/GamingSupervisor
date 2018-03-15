@@ -58,6 +58,11 @@ namespace GamingSupervisor
         {
             renderer.UpdateHeroHPQueue(newhp);
         }
+
+        public void AddHeroGraphIcons(List<int> graphsIds)
+        {
+            renderer.UpdateHeroHpGraphIcons(graphsIds);
+        }
         
         public void Intructions_setup(string content)
         {

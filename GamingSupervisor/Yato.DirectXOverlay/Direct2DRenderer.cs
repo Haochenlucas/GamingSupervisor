@@ -82,6 +82,8 @@ namespace Yato.DirectXOverlay
 
         private Queue<double> currHp = new Queue<double>(250);
 
+        private List<int> heroIds;
+
         private Dictionary<int, List<Tuple<String, String, String>>> ticksInfo;
 
         private bool drawHighlight = false;
@@ -1565,7 +1567,12 @@ namespace Yato.DirectXOverlay
             currHp.Enqueue(newhp);
         }
 
-        public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
+        public void UpdateHeroHpGraphIcons(List<int> heroIds)
+        {
+            this.heroIds = heroIds;
+        }
+
+    public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
         {
             this.ticksInfo = ticks;
             this.maxTick = maxTick;
@@ -1599,6 +1606,47 @@ namespace Yato.DirectXOverlay
             Direct2DBitmap check = new Direct2DBitmap(device, "other_images/green_check.png");
             DrawBitmap(check, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
             check.SharpDXBitmap.Dispose();
+        }
+
+        private Tuple<int, int, int> AveragePixelColor(System.Drawing.Bitmap bmp)
+        {
+            System.Drawing.Imaging.BitmapData scrData = bmp.LockBits(
+                new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+                System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                System.Drawing.Imaging.PixelFormat.Format24bppRgb
+                );
+
+            int stride = scrData.Stride;
+            IntPtr Scan0 = scrData.Scan0;
+
+            long[] totals = new long[] { 0, 0, 0 };
+
+            int w = bmp.Width;
+            int h = bmp.Height;
+
+            unsafe
+            {
+                byte* p = (byte*)(void*)Scan0;
+
+                for (int y = 0; y < h; y++)
+                {
+                    for (int x = 0; x < w; x++)
+                    {
+                        for (int color = 0; color < 3; color++)
+                        {
+                            int idx = (y * stride) + x * 3 + color;
+
+                            totals[color] += p[idx];
+                        }
+                    }
+                }
+            }
+
+            int avgB = (int)totals[0] / (w * h);
+            int avgG = (int)totals[1] / (w * h);
+            int avgR = (int)totals[2] / (w * h);
+
+            return new Tuple<int, int, int>(avgR, avgG, avgB); ;
         }
 
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
@@ -1651,19 +1699,64 @@ namespace Yato.DirectXOverlay
                 {
                     int currY = Screen.PrimaryScreen.Bounds.Height / 2;
 
+                    // bar graph
                     for (int i = 0; i < 5; i++)
                     {
-                        DrawBox2D(51 * i, ((float)currY - (float)hps[i]) * .3f + currY / 2, 50, (float)hps[i] * .3f, 1, i == 0 ? redBrush : lightRedBrush, blackBrush);
+                        {
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + heroIds[i] + ".png");
+
+                            System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"..\\..\\hero_icon_images\" + heroIds[i] + ".png");
+
+                            Tuple<int, int, int> rgb = AveragePixelColor(csb);
+
+                            DrawBox2D(
+                            51 * i,                                                // x
+                            ((float)currY - (float)hps[i]) * .3f + currY / 2,      // y  
+                            50,                                                    // width
+                            (float)hps[i] * .3f,                                   // height
+                            1,                                                     // stroke
+                            i == 0 ? redBrush : lightRedBrush,                     // int brush 
+                            blackBrush                                             // ext brush
+                            );
+                            
+                            DrawBitmap(bmp,
+                                1,
+                                51 * i,
+                                currY - 108,
+                                50,
+                                28);
+
+                            bmp.SharpDXBitmap.Dispose();
+                            csb.Dispose();
+                        }
                     }
 
+                    // vertical line
+                    DrawLine(250,           // start_x
+                            currY - 100 + 28,   // start_y
+                            250,                // end_x
+                            currY + 150 + 28,   // end_y
+                            2,                  // stroke
+                            redBrush);          // brush
 
-                    DrawLine(250, currY - 100, 250, currY + 150, 2, redBrush);
-                    DrawLine(0, currY + 150, 250, currY + 150, 2, redBrush);
+                    // horizontal line
+                    DrawLine(0,             // start_x
+                        currY + 150 + 28,   // start_y
+                        250,                // end_x
+                        currY + 150 + 28,   // end_y
+                        2,                  // stroke
+                        redBrush);          // brush
 
+                    // line graph
                     for (int j = 0; j < currHp.Count - 1; j++)
                     {
                         double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(j, (float)(currY - tempCurrHp[j]) / 6 + currY, 1 + j, (float)(currY - tempCurrHp[j + 1]) / 6 + currY, 1, redBrush);
+                        DrawLine(j,                                         // start_x
+                         (float)(currY - tempCurrHp[j]) / 6 + currY + 28,       // start_y
+                                 1 + j,                                          // end_x
+                         (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,   // end_y
+                                 1,                                              // stroke
+                                 redBrush);                                      // brush
                     }
                 }
 
@@ -1687,7 +1780,7 @@ namespace Yato.DirectXOverlay
             float xEnd = 3 * x / 4;
 
 
-            Direct2DFont font = CreateFont("Consolas", 12);
+            Direct2DFont font = CreateFont("Consolas", 18);
             //Direct2DBrush brush = CreateBrush(0, 0, 0, 255);
             Direct2DBrush background = CreateBrush(109, 109, 109, 255);
 
