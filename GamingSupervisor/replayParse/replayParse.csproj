@@ -53,6 +53,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Python.Runtime">
+      <HintPath>..\GamingSupervisor\libs\Python.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -78,6 +81,7 @@
     <Compile Include="replayParse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReplayHeroID.cs" />
+    <Compile Include="Retreat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
