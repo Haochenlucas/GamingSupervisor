@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EBDB3153-80D6-4709-BD02-F58AD8407465}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>replayParse</RootNamespace>
     <AssemblyName>replayParse</AssemblyName>
@@ -53,6 +53,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -73,6 +78,8 @@
     <Compile Include="heroID.cs" />
     <Compile Include="heroIDClient.cs" />
     <Compile Include="hero_difficulty.cs" />
+    <Compile Include="hero_intro.cs" />
+    <Compile Include="item_info.cs" />
     <Compile Include="makeup_difficulty-table.cs" />
     <Compile Include="replayHighlights.cs" />
     <Compile Include="replayParse.cs" />
