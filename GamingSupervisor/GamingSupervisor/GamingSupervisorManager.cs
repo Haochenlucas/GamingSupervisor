@@ -43,6 +43,9 @@ namespace GamingSupervisor
                 while (originalLastLine != File.ReadLines(serverLog).Last())
                     Thread.Sleep(1000);
 
+            // window dosent create after the process created
+            Thread.Sleep(5000);
+
             switch (GUISelection.gameType)
             {
                 case GUISelection.GameType.live:

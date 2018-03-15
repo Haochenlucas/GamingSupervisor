@@ -284,7 +284,14 @@ namespace Yato.DirectXOverlay
             if (!isDrawing) return;
 
             long tag_0 = 0L, tag_1 = 0L;
-            var result = device.TryEndDraw(out tag_0, out tag_1);
+            Result result;
+            try
+            {
+                result = device.TryEndDraw(out tag_0, out tag_1);
+            }
+            catch (System.ArgumentOutOfRangeException e) { return; }
+            catch (System.InvalidCastException e) { return; }
+
 
             if (result.Failure)
             {
