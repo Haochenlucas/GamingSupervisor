@@ -19,7 +19,7 @@ namespace replayParse
         {
             //Create COM Objects. Create a COM object for everything that is referenced
             Excel.Application xlApp = new Excel.Application();
-            string s = Path.Combine(Environment.CurrentDirectory, "../../Properties/item_info.xlsx");
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/item_info.xlsx");
             Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(s);
             Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
             Excel.Range xlRange = xlWorksheet.UsedRange;
@@ -66,7 +66,7 @@ namespace replayParse
             xlApp.Quit();
             Marshal.ReleaseComObject(xlApp);
 
-            s = Path.Combine(Environment.CurrentDirectory, "../../Properties/hero_item.txt");
+            s = Path.Combine(Environment.CurrentDirectory, "Properties/hero_item.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
 
             for( int i = 0; i < lines.Length; i ++ )

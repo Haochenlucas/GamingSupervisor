@@ -79,7 +79,7 @@ namespace GamingSupervisor
             renderer.ToggleHightlight(tog);
         }
 
-        public void UpdateHighlight(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
+        public void UpdateHighlight(Dictionary<int, List<Tuple<String, String, String>>> ticks, float maxTick)
         {
             renderer.UpdateHighlightTime(ticks, maxTick);
         }

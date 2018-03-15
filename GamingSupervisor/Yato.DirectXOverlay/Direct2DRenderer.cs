@@ -88,7 +88,7 @@ namespace Yato.DirectXOverlay
 
         private bool drawHighlight = false;
 
-        private int maxTick;
+        private float maxTick;
 
         #endregion
 
@@ -1579,7 +1579,7 @@ namespace Yato.DirectXOverlay
             this.heroIds = heroIds;
         }
 
-    public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
+    public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, float maxTick)
         {
             this.ticksInfo = ticks;
             this.maxTick = maxTick;
@@ -1710,9 +1710,9 @@ namespace Yato.DirectXOverlay
                     for (int i = 0; i < 5; i++)
                     {
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + heroIds[i] + ".png");
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"hero_icon_images\" + heroIds[i] + ".png");
 
-                            System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"..\\..\\hero_icon_images\" + heroIds[i] + ".png");
+                            System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"hero_icon_images\" + heroIds[i] + ".png");
 
                             Tuple<int, int, int> rgb = AveragePixelColor(csb);
 
@@ -1722,7 +1722,7 @@ namespace Yato.DirectXOverlay
                             50,                                                    // width
                             (float)hps[i] * .3f,                                   // height
                             1,                                                     // stroke
-                            i == 0 ? redBrush : lightRedBrush,                     // int brush 
+                            CreateBrush(rgb.Item1,rgb.Item2,rgb.Item3),                     // int brush 
                             blackBrush                                             // ext brush
                             );
                             
@@ -1787,7 +1787,7 @@ namespace Yato.DirectXOverlay
             float xEnd = 3 * x / 4;
 
 
-            Direct2DFont font = CreateFont("Consolas", 18);
+            Direct2DFont font = CreateFont("Consolas", 12);
             //Direct2DBrush brush = CreateBrush(0, 0, 0, 255);
             Direct2DBrush background = CreateBrush(109, 109, 109, 255);
 
