@@ -1,18 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingSupervisor", "GamingSupervisor\GamingSupervisor.csproj", "{7C14EFE7-67E1-411C-894C-E2485A1DFC62}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EBDB3153-80D6-4709-BD02-F58AD8407465} = {EBDB3153-80D6-4709-BD02-F58AD8407465}
+		{313A83B1-C9C1-411D-A747-63BFA1FFA24C} = {313A83B1-C9C1-411D-A747-63BFA1FFA24C}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "replayParse", "replayParse\replayParse.csproj", "{EBDB3153-80D6-4709-BD02-F58AD8407465}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Overlay", "Overlay", "{C9FAF55F-7CF3-4C5F-819B-E43CC4B71B4A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yato.DirectXOverlay", "Yato.DirectXOverlay\Yato.DirectXOverlay.csproj", "{313A83B1-C9C1-411D-A747-63BFA1FFA24C}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "GamingSupervisorInstaller", "GamingSupervisorInstaller\GamingSupervisorInstaller.vdproj", "{78DF004E-E50F-4C91-8505-26E10D229257}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,14 +47,21 @@ Global
 		{313A83B1-C9C1-411D-A747-63BFA1FFA24C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{313A83B1-C9C1-411D-A747-63BFA1FFA24C}.Release|x86.ActiveCfg = Release|Any CPU
 		{313A83B1-C9C1-411D-A747-63BFA1FFA24C}.Release|x86.Build.0 = Release|Any CPU
+		{78DF004E-E50F-4C91-8505-26E10D229257}.Debug|Any CPU.ActiveCfg = Debug
+		{78DF004E-E50F-4C91-8505-26E10D229257}.Debug|x86.ActiveCfg = Debug
+		{78DF004E-E50F-4C91-8505-26E10D229257}.Release|Any CPU.ActiveCfg = Release
+		{78DF004E-E50F-4C91-8505-26E10D229257}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{313A83B1-C9C1-411D-A747-63BFA1FFA24C} = {C9FAF55F-7CF3-4C5F-819B-E43CC4B71B4A}
-	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0FFD5607-7D18-40B2-AE3D-6BCBF4D15FAE}
+		SolutionGuid = {96990351-E0C7-4FB3-A34D-32720CCDEC6D}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 EndGlobal

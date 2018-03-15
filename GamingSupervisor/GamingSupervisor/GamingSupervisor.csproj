@@ -13,6 +13,21 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -54,6 +69,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dota2Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dota2Api\Dota2Api\bin\Debug\Dota2Api.dll</HintPath>
+    </Reference>
     <Reference Include="Dota2GSI, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>libs\Dota2GSI.dll</HintPath>
@@ -78,15 +97,6 @@
     </Reference>
     <Reference Include="Selen.Wpf.SystemStyles, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dc472ed4b6daaa58, processorArchitecture=MSIL">
       <HintPath>..\packages\Selen.Wpf.1.0.0\lib\net45\Selen.Wpf.SystemStyles.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX">
-      <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct2D1">
-      <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\..\Yato.DirectXOverlay\bin\Debug\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -116,8 +126,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Analyzer.cs" />
     <Compile Include="GameStateIntegration.cs" />
+    <Compile Include="GameStateIntegrationSingleton.cs" />
+    <Compile Include="GUI\ReplaySelection.xaml.cs">
+      <DependentUpon>ReplaySelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LiveAnalyzer.cs" />
     <Compile Include="Overlay.cs" />
+    <Compile Include="OverlaySingleton.cs" />
     <Compile Include="ParserHandler.cs" />
     <Compile Include="ReplayAnalyzer.cs" />
     <Compile Include="GUI\ReplayHeroSelection.xaml.cs">
@@ -128,6 +145,7 @@
     <Compile Include="GUI\WaitForCompletion.xaml.cs">
       <DependentUpon>WaitForCompletion.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SteamAppsLocation.cs" />
     <Page Include="GUI\ConfirmSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -174,6 +192,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\ReplaySelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\WaitForCompletion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -214,10 +236,34 @@
     <Content Include="Parser\parser.jar" />
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\replayParse\replayParse.csproj">
-      <Project>{EBDB3153-80D6-4709-BD02-F58AD8407465}</Project>
+      <Project>{ebdb3153-80d6-4709-bd02-f58ad8407465}</Project>
       <Name>replayParse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yato.DirectXOverlay\Yato.DirectXOverlay.csproj">
+      <Project>{313a83b1-c9c1-411d-a747-63bfa1ffa24c}</Project>
+      <Name>Yato.DirectXOverlay</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(ProjectDir)bin\$(ConfigurationName)\Parser"
+xcopy "$(ProjectDir)Parser\parser.jar" "$(ProjectDir)bin\$(ConfigurationName)" /R /Y
+xcopy "$(ProjectDir)hero_icon_images" "$(ProjectDir)bin\$(ConfigurationName)\hero_icon_images\" /R /Y /I
+xcopy "$(ProjectDir)other_images" "$(ProjectDir)bin\$(ConfigurationName)\other_images\"  /R /Y /I
+xcopy "$(ProjectDir)buttons" "$(ProjectDir)bin\$(ConfigurationName)\buttons\"  /R /Y /I
+xcopy "$(ProjectDir)..\replayParse\Properties" "$(ProjectDir)bin\$(ConfigurationName)\Properties\"  /R /Y /I</PostBuildEvent>
+  </PropertyGroup>
 </Project>

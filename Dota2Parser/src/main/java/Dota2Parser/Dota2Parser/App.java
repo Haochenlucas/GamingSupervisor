@@ -377,7 +377,24 @@ public class App
         }
         
         if (updatePosition || forceUpdate)
-            writeToFile(heroWriter, ctx, e, "POSITION", hero.playerID, hero.x, hero.y, hero.z);
+        {
+        	int cellX = e.getPropertyForFieldPath(hero.cellX);
+        	int cellY = e.getPropertyForFieldPath(hero.cellY);
+        	
+        	float vecX = e.getPropertyForFieldPath(hero.vecX);
+        	float vecY = e.getPropertyForFieldPath(hero.vecY);
+        	
+        	float posX = cellX * 128 + vecX;
+        	float posY = cellY * 128 + vecY;
+        	
+        	heroWriter.format("%d [POSITION] %d %f %f %d \n",
+    				ctx.getTick(),
+    				e.getPropertyForFieldPath(hero.playerID),
+    				posX,
+    				posY,
+    				e.getPropertyForFieldPath(hero.cellZ));
+        	heroWriter.flush();
+        }
         if (updateHealth || forceUpdate)
             writeToFile(heroWriter, ctx, e, "HEALTH", hero.playerID, hero.health);
         if (updateLevel || forceUpdate)
@@ -513,9 +530,9 @@ public class App
         	neutralMonsterWriter.format("%d [POSITION] %d %s %s %s\n",
     				ctx.getTick(),
     				e.getHandle(),
-    				e.getPropertyForFieldPath(neutralMonster.x),
-					e.getPropertyForFieldPath(neutralMonster.y),
-					e.getPropertyForFieldPath(neutralMonster.z));
+    				e.getPropertyForFieldPath(neutralMonster.cellX),
+					e.getPropertyForFieldPath(neutralMonster.cellY),
+					e.getPropertyForFieldPath(neutralMonster.cellZ));
         if (updateMaxHealth || forceUpdate)
         	neutralMonsterWriter.format("%d [MAXHEALTH] %d %s\n",
     				ctx.getTick(),
@@ -551,9 +568,9 @@ public class App
         	laneCreepWriter.format("%d [POSITION] %d %s %s %s\n",
     				ctx.getTick(),
     				e.getHandle(),
-    				e.getPropertyForFieldPath(laneCreep.x),
-					e.getPropertyForFieldPath(laneCreep.y),
-					e.getPropertyForFieldPath(laneCreep.z));
+    				e.getPropertyForFieldPath(laneCreep.cellX),
+					e.getPropertyForFieldPath(laneCreep.cellY),
+					e.getPropertyForFieldPath(laneCreep.cellZ));
         if (updateHealth || forceUpdate)
         	laneCreepWriter.format("%d [HEALTH] %d %s\n",
     				ctx.getTick(),
@@ -564,53 +581,59 @@ public class App
     public void run(String[] args) throws Exception
     {
         CDemoFileInfo info = Clarity.infoForFile(args[0]);
-        File infoFile = new File(args[1] + "/info.txt");
-        PrintWriter w = new PrintWriter(infoFile);
-        w.write(info.toString());
-        w.close();
         
-        File heroFile = new File(args[1] + "/hero.txt");
-        File selectionFile = new File(args[1] + "/selection.txt");
-        File cameraFile = new File(args[1] + "/camera.txt");
-        File stateFile = new File(args[1] + "/state.txt");
-        File heroIdFile = new File(args[1] + "/heroId.txt");
-        File timeFile = new File(args[1] + "/time.txt");
-        File combatFile = new File(args[1] + "/combat.txt");
-        File neutralMonsterFile = new File(args[1] + "/neutral_creep.txt");
-        File laneCreepFile = new File(args[1] + "/lane_creep.txt");
-        
-        heroWriter = new PrintWriter(heroFile);
-        heroSelectionWriter = new PrintWriter(selectionFile);
-        cameraWriter = new PrintWriter(cameraFile);
-        stateWriter = new PrintWriter(stateFile);
-        heroIdWriter = new PrintWriter(heroIdFile);
-        timeWriter = new PrintWriter(timeFile);
-        combatWriter = new PrintWriter(combatFile);
-        neutralMonsterWriter = new PrintWriter(neutralMonsterFile);
-        laneCreepWriter = new PrintWriter(laneCreepFile);
-        
-        combatLog = new CombatLog(combatWriter);
-        
-        heroIds = new HashMap<Object, String>();
-        
-        Source source = new MappedFileSource(args[0]);
-        new SimpleRunner(source).runWith(this);
-        
-        for (Map.Entry<Object, String> heroId : heroIds.entrySet())
+        if (args[2].equals("info"))
         {
-            heroIdWriter.write(heroId.getKey() + " " + heroId.getValue() + "\n");
-            heroIdWriter.flush();
+	        File infoFile = new File(args[1] + "/info.txt");
+	        PrintWriter w = new PrintWriter(infoFile);
+	        w.write(info.toString());
+	        w.close();
         }
-        
-        heroWriter.close();
-        heroSelectionWriter.close();
-        cameraWriter.close();
-        stateWriter.close();
-        heroIdWriter.close();
-        timeWriter.close();
-        combatWriter.close();
-        neutralMonsterWriter.close();
-        laneCreepWriter.close();
+        else if (args[2].equals("full"))
+        {
+	        File heroFile = new File(args[1] + "/hero.txt");
+	        File selectionFile = new File(args[1] + "/selection.txt");
+	        File cameraFile = new File(args[1] + "/camera.txt");
+	        File stateFile = new File(args[1] + "/state.txt");
+	        File heroIdFile = new File(args[1] + "/heroId.txt");
+	        File timeFile = new File(args[1] + "/time.txt");
+	        File combatFile = new File(args[1] + "/combat.txt");
+	        File neutralMonsterFile = new File(args[1] + "/neutral_creep.txt");
+	        File laneCreepFile = new File(args[1] + "/lane_creep.txt");
+	        
+	        heroWriter = new PrintWriter(heroFile);
+	        heroSelectionWriter = new PrintWriter(selectionFile);
+	        cameraWriter = new PrintWriter(cameraFile);
+	        stateWriter = new PrintWriter(stateFile);
+	        heroIdWriter = new PrintWriter(heroIdFile);
+	        timeWriter = new PrintWriter(timeFile);
+	        combatWriter = new PrintWriter(combatFile);
+	        neutralMonsterWriter = new PrintWriter(neutralMonsterFile);
+	        laneCreepWriter = new PrintWriter(laneCreepFile);
+	        
+	        combatLog = new CombatLog(combatWriter);
+	        
+	        heroIds = new HashMap<Object, String>();
+	        
+	        Source source = new MappedFileSource(args[0]);
+	        new SimpleRunner(source).runWith(this);
+	        
+	        for (Map.Entry<Object, String> heroId : heroIds.entrySet())
+	        {
+	            heroIdWriter.write(heroId.getKey() + " " + heroId.getValue() + "\n");
+	            heroIdWriter.flush();
+	        }
+	        
+	        heroWriter.close();
+	        heroSelectionWriter.close();
+	        cameraWriter.close();
+	        stateWriter.close();
+	        heroIdWriter.close();
+	        timeWriter.close();
+	        combatWriter.close();
+	        neutralMonsterWriter.close();
+	        laneCreepWriter.close();
+        }
     }
 
     public static void main(String[] args) throws Exception

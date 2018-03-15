@@ -85,11 +85,14 @@ namespace Yato.DirectXOverlay
             #region timeline
             /*
             string timePath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\time.txt";
+
             List<String> timeLines = new List<String>(System.IO.File.ReadAllLines(timePath));
             Double.TryParse(timeLines.First().Split(' ')[2], out double firstTick);
             Double.TryParse(timeLines.Last().Split(' ')[2], out double totalTick);
             
+
             string combatPath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\combat.txt";
+
             List<String> combatLines = new List<String>(System.IO.File.ReadAllLines(combatPath));
             List<List<String>> killLines = GetTeamfight(combatLines);
             String myHero = "npc_dota_hero_storm_spirit";
@@ -114,8 +117,7 @@ namespace Yato.DirectXOverlay
                 }
             }
 
-            
-    */
+
            
 
             #endregion
@@ -171,6 +173,7 @@ namespace Yato.DirectXOverlay
                     d2d.Ingame_Draw(VS_HWND, overlay);
                 }
                 //Console.WriteLine(Direct2DRenderer.hits.hero_selection_1);
+
                 watch.Restart();
             }
         }

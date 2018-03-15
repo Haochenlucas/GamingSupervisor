@@ -58,6 +58,11 @@ namespace GamingSupervisor
         {
             renderer.UpdateHeroHPQueue(newhp);
         }
+
+        public void AddHeroGraphIcons(List<int> graphsIds)
+        {
+            renderer.UpdateHeroHpGraphIcons(graphsIds);
+        }
         
         public void Intructions_setup(string content)
         {
@@ -74,7 +79,7 @@ namespace GamingSupervisor
             renderer.ToggleHightlight(tog);
         }
 
-        public void UpdateHighlight(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
+        public void UpdateHighlight(Dictionary<int, List<Tuple<String, String, String>>> ticks, float maxTick)
         {
             renderer.UpdateHighlightTime(ticks, maxTick);
         }

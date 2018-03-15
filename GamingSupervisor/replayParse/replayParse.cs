@@ -65,7 +65,7 @@ namespace replayParse
         private const int NUMBER_OF_PLAYERS = 10;
         
         private static TickEntries<int>[] health = new TickEntries<int>[NUMBER_OF_PLAYERS];
-        private static TickEntries<Tuple<int, int, int>>[] heroPosition = new TickEntries<Tuple<int, int, int>>[NUMBER_OF_PLAYERS];
+        private static TickEntries<Tuple<double, double, double>>[] heroPosition = new TickEntries<Tuple<double, double, double>>[NUMBER_OF_PLAYERS];
         private static TickEntries<int>[] level = new TickEntries<int>[NUMBER_OF_PLAYERS];
         private static TickEntries<double>[] mana = new TickEntries<double>[NUMBER_OF_PLAYERS];
         private static TickEntries<double>[] strength = new TickEntries<double>[NUMBER_OF_PLAYERS];
@@ -83,7 +83,7 @@ namespace replayParse
             for (int i = 0; i < NUMBER_OF_PLAYERS; i++)
             {
                 health[i] = new TickEntries<int>();
-                heroPosition[i] = new TickEntries<Tuple<int, int, int>>();
+                heroPosition[i] = new TickEntries<Tuple<double, double, double>>();
                 level[i] = new TickEntries<int>();
                 mana[i] = new TickEntries<double>();
                 strength[i] = new TickEntries<double>();
@@ -121,7 +121,7 @@ namespace replayParse
                             throw new ArgumentOutOfRangeException("Lost position information");
                         }
 
-                        heroPosition[heroId][tick] = Tuple.Create(Int32.Parse(words[3]), Int32.Parse(words[4]), Int32.Parse(words[5]));
+                        heroPosition[heroId][tick] = Tuple.Create(Double.Parse(words[3]), Double.Parse(words[4]), Double.Parse(words[5]));
                         break;
 
                     case "[LEVEL]":
@@ -169,7 +169,7 @@ namespace replayParse
                         break;
 
                     default:
-                        Console.WriteLine("Found unimplemented identifier: " + words[1]);
+                        //Console.WriteLine("Found unimplemented identifier: " + words[1]);
                         break;
                 }
             }
@@ -180,7 +180,7 @@ namespace replayParse
             return health[heroID][tick];
         }
 
-        public (int x, int y, int z) getHeroPosition(int tick, int heroID)
+        public (double x, double y, double z) getHeroPosition(int tick, int heroID)
         {
             return (x: heroPosition[heroID][tick].Item1, y: heroPosition[heroID][tick].Item2, z: heroPosition[heroID][tick].Item3);
         }
