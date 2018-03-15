@@ -145,9 +145,13 @@ namespace GamingSupervisor
                     {
                         name = "wraithking";
                     }
-                    if (name.Contains("Rattletrap"))
+                    if (name.Contains("rattletrap"))
                     {
-                        name = "Clockwerk";
+                        name = "clockwerk";
+                    }
+                    if (name.Contains("doombringer"))
+                    {
+                        name = "doom";
                     }
                     int key = hero_table[name];
 
