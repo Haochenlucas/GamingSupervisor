@@ -23,8 +23,8 @@ namespace replayParse
             string combatPath = dataFolderLocation + "combat.txt";
 
             List<String> timeLines = new List<String>(System.IO.File.ReadAllLines(timePath));
-            Int32.TryParse(timeLines.First().Split(' ')[0], out this.firstTick);
-            Int32.TryParse(timeLines.Last().Split(' ')[0], out this.lastTick);
+            Int32.TryParse(timeLines.First().Split(' ')[2], out this.firstTick);
+            Int32.TryParse(timeLines.Last().Split(' ')[2], out this.lastTick);
 
             List<String> combatLines = new List<String>(System.IO.File.ReadAllLines(combatPath));
             List<List<String>> killLines = GetTeamfight(combatLines);
