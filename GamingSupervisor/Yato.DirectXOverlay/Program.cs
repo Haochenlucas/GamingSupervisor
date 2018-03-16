@@ -42,7 +42,7 @@ namespace Yato.DirectXOverlay
                         {
                             teamfight[currInd].Add(contents[0]);
                             //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
-                            teamfight[currInd].Add(contents[2] + " " + contents[3]);                   
+                            teamfight[currInd].Add(contents[2] + " " + contents[3]);
                         }
                         else if (prevTime.Add(thirty) > currTime)
                         {
@@ -57,7 +57,7 @@ namespace Yato.DirectXOverlay
                             //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
                             teamfight[currInd].Add(contents[2] + " " + contents[3]);
                         }
-                        
+
                     }
                 }
             }
@@ -80,9 +80,8 @@ namespace Yato.DirectXOverlay
 
             // For test use only. Show overlay on Visual Studio
             var VS_HWND = Process.GetProcessesByName("notepad")[0].MainWindowHandle;
-            manager = new OverlayManager(VS_HWND,out overlay,out d2d);
+            manager = new OverlayManager(VS_HWND, out overlay, out d2d);
 
-            #region timeline
             /*
             string timePath = @"E:\University\2017 Second Half aka Fall\CS 4000 Senior Project\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\3716503818\time.txt";
 
@@ -116,11 +115,8 @@ namespace Yato.DirectXOverlay
                     tickInfo[(int)Double.Parse(kills[0])].Add(new Tuple<string, string, string>(cont[1], cont[0], color));
                 }
             }
-
-
-           
-
-            #endregion
+            
+            */
 
             //Thread.Sleep(2000);
             // Control FPS
@@ -165,8 +161,8 @@ namespace Yato.DirectXOverlay
 
                 if (Control.ModifierKeys == Keys.Alt)
                 {
-                    d2d.HeroSelection_Draw(VS_HWND, overlay);
-                    //d2d.Intructions_Draw(VS_HWND, overlay);
+                    //d2d.HeroSelection_Draw(VS_HWND, overlay);
+                    d2d.Intructions_Draw(VS_HWND, overlay);
                 }
                 else
                 {

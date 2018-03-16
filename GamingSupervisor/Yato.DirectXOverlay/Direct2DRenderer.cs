@@ -86,8 +86,7 @@ namespace Yato.DirectXOverlay
         private Dictionary<int, List<Tuple<String, String, String>>> ticksInfo;
 
         private bool drawHighlight = false;
-
-        private int maxTick;
+        
         
         private float width_unit = Screen.PrimaryScreen.Bounds.Width / 32;
 
@@ -1209,6 +1208,16 @@ namespace Yato.DirectXOverlay
             var layout = new TextLayout(fontFactory, text, font, float.MaxValue, float.MaxValue);
 
             modifier = layout.FontSize / 4.0f;
+
+            sharedBrush.Color = backgroundColor;
+
+            device.FillRectangle(new RawRectangleF(x - modifier, y - modifier, x + layout.Metrics.Width + modifier, y + layout.Metrics.Height + modifier), sharedBrush);
+
+            sharedBrush.Color = color;
+
+            device.DrawTextLayout(new RawVector2(x, y), layout, sharedBrush, DrawTextOptions.NoSnap);
+
+            layout.Dispose();
         }
         
         public void DrawTextWithBackground(string text, float x, float y, Tuple<string, int> tfont, Tuple<int, int, int, int> tcolor, Tuple<int, int, int, int> tbackground)
@@ -1637,7 +1646,7 @@ namespace Yato.DirectXOverlay
         #endregion
 
         #region High Light
-        public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
+        public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, float maxTick)
 
         {
             this.ticksInfo = ticks;
@@ -1744,9 +1753,51 @@ namespace Yato.DirectXOverlay
             }
             return path;
         }
+        public void UpdateHeroHpGraphIcons(List<int> heroIds)
+        {
+            this.heroIds = heroIds;
+        }
+    static private Stopwatch warning_timer = new Stopwatch();
+        private Tuple<int, int, int> AveragePixelColor(System.Drawing.Bitmap bmp)
+        {
+            System.Drawing.Imaging.BitmapData scrData = bmp.LockBits(
+                new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+                System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                System.Drawing.Imaging.PixelFormat.Format24bppRgb
+                );
 
-        static private Stopwatch warning_timer = new Stopwatch();
+            int stride = scrData.Stride;
+            IntPtr Scan0 = scrData.Scan0;
 
+            long[] totals = new long[] { 0, 0, 0 };
+
+            int w = bmp.Width;
+            int h = bmp.Height;
+
+            unsafe
+            {
+                byte* p = (byte*)(void*)Scan0;
+
+                for (int y = 0; y < h; y++)
+                {
+                    for (int x = 0; x < w; x++)
+                    {
+                        for (int color = 0; color < 3; color++)
+                        {
+                            int idx = (y * stride) + x * 3 + color;
+
+                            totals[color] += p[idx];
+                        }
+                    }
+                }
+            }
+
+            int avgB = (int)totals[0] / (w * h);
+            int avgG = (int)totals[1] / (w * h);
+            int avgR = (int)totals[2] / (w * h);
+
+            return new Tuple<int, int, int>(avgR, avgG, avgB); ;
+        }
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
         {
             IntPtr fg = GetForegroundWindow();
@@ -1870,7 +1921,6 @@ namespace Yato.DirectXOverlay
 
         private void ShowImage(string path, int i, float modifier)
         {
-            Console.WriteLine(warning_timer.ElapsedMilliseconds);
             if (i == 7 && warning_timer.ElapsedMilliseconds > 1000)
             {
                 if (warning_timer.ElapsedMilliseconds > 2000)

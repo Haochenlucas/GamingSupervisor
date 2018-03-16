@@ -41,10 +41,8 @@ namespace GamingSupervisor
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
                         gameStarted = true;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            overlay.ClearMessage(i);
-                        }
+
+                        overlay.ClearHeroSuggestion();
                         HandleGamePlay();
                         overlay.ShowIngameMessage();
                         break;
@@ -80,7 +78,7 @@ namespace GamingSupervisor
             }
             else
             {
-                overlay.ClearMessage(7);
+                //overlay.ClearMessage(7);
             }
         }
     }
