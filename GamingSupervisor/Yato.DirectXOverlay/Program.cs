@@ -27,7 +27,7 @@ namespace Yato.DirectXOverlay
                 {
                     if (Regex.IsMatch(line, heroPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
                     {
-                        int filler = 1;
+                        
 
                         if (teamfight.Count < currInd + 1)
                             teamfight.Add(new List<String>());

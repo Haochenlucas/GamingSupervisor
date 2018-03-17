@@ -79,7 +79,6 @@
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
-    <Fakes Include="Fakes\SharpDX.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
