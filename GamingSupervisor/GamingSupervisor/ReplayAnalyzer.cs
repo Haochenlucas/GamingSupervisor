@@ -302,11 +302,11 @@ namespace GamingSupervisor
             //maxHealth = (int)heroData.getMaxHealth(CurrentTick, heroID);
             //if (health <= 600)
 
-            //hpToSend[0] = health;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
-            //}
+            hpToSend[0] = health;
+            for (int i = 0; i < 4; i++)
+            {
+                hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
+            }
 
             //overlay.ToggleGraphForHeroHP();
             //overlay.AddHPs(hpToSend);
@@ -333,7 +333,7 @@ namespace GamingSupervisor
             //double closestHp = heroData.getHealth(CurrentTick, closestHeroId);
             //double closestMaxHp = heroData.getMaxHealth(CurrentTick, closestHeroId);
             //double closestHpPercen = closestHp / closestMaxHp;
-            
+
             overlay.ToggleGraphForHeroHP();
             overlay.AddHeroGraphIcons(teamIDGraph);
             overlay.AddHPs(hpToSend);
