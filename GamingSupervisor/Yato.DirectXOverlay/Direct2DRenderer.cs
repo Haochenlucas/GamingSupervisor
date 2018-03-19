@@ -2105,7 +2105,7 @@ namespace Yato.DirectXOverlay
         }
 
         static private Stopwatch button_timer = new Stopwatch();
-        public void Intructions_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
+        public void Intructions_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, float positionX, float positionY)
         {
             IntPtr fg = GetForegroundWindow();
 
@@ -2114,21 +2114,46 @@ namespace Yato.DirectXOverlay
                 BeginScene();
                 ClearScene();
 
-                if (button_timer.ElapsedMilliseconds < 2000)
+                //if (button_timer.ElapsedMilliseconds < 2000)
                 {
+                    float distanceFromDefaultHorizontal = instruction.box_pos.Item1 - positionX;
+                    float distanceFromDefaultVertical = instruction.box_pos.Item2 - positionY;
+                    Console.WriteLine(distanceFromDefaultHorizontal + " " + distanceFromDefaultVertical);
+                    Console.WriteLine(instruction.box_pos.Item1 + " " + instruction.box_pos.Item2);
+                    Console.WriteLine(positionX + " " + positionY);
+
                     // Draw hero selection suggestion box
                     Direct2DBrush color = CreateBrush(instruction.color.Item1, instruction.color.Item2, instruction.color.Item3, instruction.color.Item4);
                     Direct2DBrush background = CreateBrush(instruction.background.Item1, instruction.background.Item2, instruction.background.Item3, instruction.background.Item4);
                     Direct2DFont textFont = CreateFont(instruction.font.Item1, instruction.font.Item2);
                     Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
                     // The box
-                    device.FillRectangle(new RawRectangleF(instruction.box_pos.Item1, instruction.box_pos.Item2, instruction.box_pos.Item3, instruction.box_pos.Item4), box_background);
+                    device.FillRectangle(
+                        new RawRectangleF(
+                            left: instruction.box_pos.Item1 + distanceFromDefaultHorizontal,
+                            top: instruction.box_pos.Item2 + distanceFromDefaultVertical,
+                            right: instruction.box_pos.Item3 + distanceFromDefaultHorizontal,
+                            bottom: instruction.box_pos.Item4 + distanceFromDefaultVertical),
+                        box_background);
                     // Title of the box
-                    DrawTextWithBackground(instruction.title.Item1, instruction.title.Item2, instruction.title.Item3, textFont, color, background);
+                    DrawTextWithBackground(
+                        text: instruction.title.Item1,
+                        x: instruction.title.Item2 + distanceFromDefaultHorizontal,
+                        y: instruction.title.Item3 + distanceFromDefaultVertical,
+                        font: textFont,
+                        brush: color,
+                        backgroundBrush: background);
 
-                    showInstructionButtons();
+                    showInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                     float modifier;
-                    DrawTextWithBackground(instruction.instructions.text, instruction.instructions.x, instruction.instructions.y, instruction.instructions.font, instruction.instructions.color, instruction.instructions.background, out modifier);
+                    DrawTextWithBackground(
+                        text: instruction.instructions.text,
+                        x: instruction.instructions.x + distanceFromDefaultHorizontal,
+                        y: instruction.instructions.y + distanceFromDefaultVertical,
+                        tfont: instruction.instructions.font,
+                        tcolor: instruction.instructions.color,
+                        tbackground: instruction.instructions.background,
+                        modifier: out modifier);
 
                 }
                 EndScene();
@@ -2139,17 +2164,26 @@ namespace Yato.DirectXOverlay
             }
         }
         
-        private void showInstructionButtons()
+        private void showInstructionButtons(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
             var mouse_pos = Control.MousePosition;
-            if (mouse_pos.X > instruction.close_button_pos.Item1 && mouse_pos.X < instruction.close_button_pos.Item1 + instruction.close_button_pos.Item3 && mouse_pos.Y > instruction.close_button_pos.Item2 && mouse_pos.Y < instruction.close_button_pos.Item2 + instruction.close_button_pos.Item4)
+            if (mouse_pos.X > instruction.close_button_pos.Item1 + distanceFromDefaultHorizontal &&
+                mouse_pos.X < instruction.close_button_pos.Item1 + instruction.close_button_pos.Item3 + distanceFromDefaultHorizontal &&
+                mouse_pos.Y > instruction.close_button_pos.Item2 + distanceFromDefaultVertical &&
+                mouse_pos.Y < instruction.close_button_pos.Item2 + instruction.close_button_pos.Item4 + distanceFromDefaultVertical)
             {
                 button_timer.Start();
                 Direct2DBitmap close_button_red = new Direct2DBitmap(device, @"..\\..\\..\\GamingSupervisor\\buttons\" + instruction.close_button_red + ".png");
 
                 float scale = button_timer.ElapsedMilliseconds;
                 scale = scale / 2000;
-                DrawBitmap(close_button_red, scale, instruction.close_button_pos.Item1, instruction.close_button_pos.Item2, instruction.close_button_pos.Item3, instruction.close_button_pos.Item4);
+                DrawBitmap(
+                    bmp: close_button_red,
+                    opacity: scale,
+                    x: instruction.close_button_pos.Item1 + distanceFromDefaultHorizontal,
+                    y: instruction.close_button_pos.Item2 + distanceFromDefaultVertical,
+                    width: instruction.close_button_pos.Item3,
+                    height: instruction.close_button_pos.Item4);
                 close_button_red.SharpDXBitmap.Dispose();
 
             }
@@ -2157,7 +2191,13 @@ namespace Yato.DirectXOverlay
             {
                 button_timer.Reset();
                 Direct2DBitmap close_button_black = new Direct2DBitmap(device, @"..\\..\\..\\GamingSupervisor\\buttons\" + instruction.close_button_black + ".png");
-                DrawBitmap(close_button_black, 1, instruction.close_button_pos.Item1, instruction.close_button_pos.Item2, instruction.close_button_pos.Item3, instruction.close_button_pos.Item4);
+                DrawBitmap(
+                    bmp: close_button_black,
+                    opacity: 1,
+                    x: instruction.close_button_pos.Item1 + distanceFromDefaultHorizontal,
+                    y: instruction.close_button_pos.Item2 + distanceFromDefaultVertical,
+                    width: instruction.close_button_pos.Item3,
+                    height: instruction.close_button_pos.Item4);
                 close_button_black.SharpDXBitmap.Dispose();
             }
         }
@@ -2621,7 +2661,8 @@ namespace Yato.DirectXOverlay
 
         ~Direct2DFont()
         {
-            Font.Dispose();
+            if (Font != null)
+                Font.Dispose();
         }
 
         public static implicit operator TextFormat(Direct2DFont font)

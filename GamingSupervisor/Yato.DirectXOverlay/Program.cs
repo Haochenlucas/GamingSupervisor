@@ -162,7 +162,7 @@ namespace Yato.DirectXOverlay
                 if (Control.ModifierKeys == Keys.Alt)
                 {
                     //d2d.HeroSelection_Draw(VS_HWND, overlay);
-                    d2d.Intructions_Draw(VS_HWND, overlay);
+                    //d2d.Intructions_Draw(VS_HWND, overlay);
                 }
                 else
                 {

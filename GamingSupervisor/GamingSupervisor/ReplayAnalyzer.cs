@@ -3,6 +3,8 @@ using replayParse;
 using System.Threading;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace GamingSupervisor
 {
@@ -73,7 +75,15 @@ namespace GamingSupervisor
                 }
 
                 // draw instruction to watch the replay in dota2 client
-                overlay.ShowInstructionMessage();
+                double positionX = 0;
+                double positionY = 0;
+                Application.Current.Dispatcher.Invoke(
+                    () =>
+                    {
+                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.Width * visualCustomize.ScreenWidth;
+                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.Height * visualCustomize.ScreenHeight;
+                    });
+                overlay.ShowInstructionMessage(positionX, positionY);
             }
             tickTimer.Start();
 

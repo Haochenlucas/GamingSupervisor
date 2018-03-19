@@ -19,11 +19,16 @@ namespace GamingSupervisor
 
         public void Start()
         {
-            ParserHandler.StartFullParsing(GUISelection.fileName + ".dem");
+            switch (GUISelection.gameType)
+            {
+                case GUISelection.GameType.live:
+                    break;
+                case GUISelection.GameType.replay:
+                    ParserHandler.StartFullParsing(GUISelection.fileName + ".dem");
+                    break;
+            }
 
             bool isDotaAlreadyRunning = Process.GetProcessesByName("dota2").Length != 0;
-            string serverLog = Path.Combine(SteamAppsLocation.Get(), "server_log.txt");
-            var originalLastLine = File.ReadLines(serverLog).Last();
 
             if (!isDotaAlreadyRunning)
                 StartDota();
@@ -40,11 +45,7 @@ namespace GamingSupervisor
             }
 
             if (!isDotaAlreadyRunning)
-                while (originalLastLine != File.ReadLines(serverLog).Last())
-                    Thread.Sleep(1000);
-
-            // window dosent create after the process created
-            Thread.Sleep(5000);
+                WaitForDotaToOpen();
 
             switch (GUISelection.gameType)
             {
@@ -55,6 +56,24 @@ namespace GamingSupervisor
                     replayAnalyzer.Start();
                     break;
             }            
+        }
+
+        private void WaitForDotaToOpen()
+        {
+            string consoleLog = Path.Combine(SteamAppsLocation.Get(), "console.log");
+            using (FileStream fileStream = File.Open(consoleLog, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                fileStream.Seek(0, SeekOrigin.End);
+                using (StreamReader streamReader = new StreamReader(fileStream))
+                {
+                    while (true)
+                    {
+                        Thread.Sleep(500);
+                        if (streamReader.ReadToEnd().Contains("ChangeGameUIState: DOTA_GAME_UI_STATE_LOADING_SCREEN -> DOTA_GAME_UI_STATE_DASHBOARD"))
+                            break;
+                    }
+                }
+            }
         }
 
         private void StartDota()

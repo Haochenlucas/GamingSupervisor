@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace GamingSupervisor
 {
@@ -18,6 +21,24 @@ namespace GamingSupervisor
             gsi = GameStateIntegrationSingleton.Instance;
 
             gsi.StartListener();
+            Console.WriteLine("pre");
+            overlay.Intructions_setup("Start a game");
+            Console.WriteLine("post");
+            while (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
+            {
+                double positionX = 0;
+                double positionY = 0;
+                Application.Current.Dispatcher.Invoke(
+                    () =>
+                    {
+                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.Width * visualCustomize.ScreenWidth;
+                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.Height * visualCustomize.ScreenHeight;
+                    });
+
+                overlay.ShowInstructionMessage(positionX, positionY);
+
+                Thread.Sleep(10);
+            }
 
             bool gameStarted = false;
             bool keepLooping = true;
@@ -42,7 +63,7 @@ namespace GamingSupervisor
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
                         gameStarted = true;
 
-                        overlay.ClearHeroSuggestion();
+                        //overlay.ClearHeroSuggestion();
                         HandleGamePlay();
                         overlay.ShowIngameMessage();
                         break;
@@ -55,6 +76,8 @@ namespace GamingSupervisor
                 {
                     break;
                 }
+
+                Thread.Sleep(10);
             }
 
             overlay.Clear();

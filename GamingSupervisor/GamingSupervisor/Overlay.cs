@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Yato.DirectXOverlay;
 
 namespace GamingSupervisor
@@ -14,6 +15,11 @@ namespace GamingSupervisor
 
         public Overlay()
         {
+            while (Process.GetProcessesByName("dota2").Length == 0)
+            {
+                Thread.Sleep(500);
+            }
+
             dotaProcessHandle = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
             overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
             renderer.SetupHintSlots();
@@ -69,9 +75,9 @@ namespace GamingSupervisor
             renderer.Intructions_setup(content);
         }
 
-        public void ShowInstructionMessage()
+        public void ShowInstructionMessage(double positionX, double positionY)
         {
-            renderer.Intructions_Draw(dotaProcessHandle, window);
+            renderer.Intructions_Draw(dotaProcessHandle, window, (float)positionX, (float)positionY);
         }
 
         public void ToggleHighlight(bool tog = true)
