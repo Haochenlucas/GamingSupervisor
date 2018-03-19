@@ -95,12 +95,8 @@ namespace Yato.DirectXOverlay
         private float screen_width = Screen.PrimaryScreen.Bounds.Width;
 
         private float screen_height = Screen.PrimaryScreen.Bounds.Height;
-
-        private float base_width = 1920;
-
-        private float base_height = 1080;
         
-        static public float size_scale = Screen.PrimaryScreen.Bounds.Height / 1080;
+        static public float size_scale = Screen.PrimaryScreen.Bounds.Height / 1080f;
         private float maxTick;
 
         #endregion
@@ -1203,8 +1199,8 @@ namespace Yato.DirectXOverlay
         {
             Direct2DBrush color = CreateBrush(tcolor.Item1, tcolor.Item2, tcolor.Item3, tcolor.Item4);
             Direct2DBrush backgroundColor = CreateBrush(tbackground.Item1, tbackground.Item2, tbackground.Item3, tbackground.Item4);
-            Direct2DFont font = CreateFont(tfont.Item1, tfont.Item2 * size_scale);
-
+            Direct2DFont font = CreateFont(tfont.Item1, tfont.Item2 * Direct2DRenderer.size_scale);
+            
             var layout = new TextLayout(fontFactory, text, font, float.MaxValue, float.MaxValue);
 
             modifier = layout.FontSize / 4.0f;
@@ -2114,10 +2110,10 @@ namespace Yato.DirectXOverlay
                 BeginScene();
                 ClearScene();
 
-                //if (button_timer.ElapsedMilliseconds < 2000)
+                if (button_timer.ElapsedMilliseconds < 2000)
                 {
-                    float distanceFromDefaultHorizontal = instruction.box_pos.Item1 - positionX;
-                    float distanceFromDefaultVertical = instruction.box_pos.Item2 - positionY;
+                    float distanceFromDefaultHorizontal = positionX - instruction.box_pos.Item1;
+                    float distanceFromDefaultVertical = positionY - instruction.box_pos.Item2;
                     Console.WriteLine(distanceFromDefaultHorizontal + " " + distanceFromDefaultVertical);
                     Console.WriteLine(instruction.box_pos.Item1 + " " + instruction.box_pos.Item2);
                     Console.WriteLine(positionX + " " + positionY);

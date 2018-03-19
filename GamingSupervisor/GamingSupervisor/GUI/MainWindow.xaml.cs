@@ -1,8 +1,6 @@
-﻿using MahApps.Metro;
-using MahApps.Metro.Controls;
-using Microsoft.Win32;
+﻿using MahApps.Metro.Controls;
 using System;
-using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace GamingSupervisor
@@ -24,6 +22,13 @@ namespace GamingSupervisor
 
             DifficultySelection difficultySelection = new DifficultySelection();
             GUINavigation.Navigate(difficultySelection);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Application.Current.Shutdown();
         }
     }
 }

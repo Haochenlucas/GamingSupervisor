@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Yato.DirectXOverlay;
 
 namespace GamingSupervisor
 {
@@ -22,23 +24,34 @@ namespace GamingSupervisor
             Application.Current.Dispatcher.Invoke(
                 () =>
                 {
-
                     visualCustomize = new VisualCustomize();
                     visualCustomize.Show();
 
+                    // Calculations taken directly from Direct2DRenderer.cs
+                    // These should probably be changed
+                    double box_left = visualCustomize.ScreenWidth / 32 * 20 - Direct2DRenderer.size_scale * visualCustomize.ScreenWidth / 32 * 3 + visualCustomize.ScreenWidth / 32 * 2 * Direct2DRenderer.size_scale;
+                    double box_top = visualCustomize.ScreenHeight / 32 * 6 - visualCustomize.ScreenHeight / 32 * 4 * Direct2DRenderer.size_scale;
+                    double box_right = box_left + visualCustomize.ScreenWidth / 32 * 12 * Direct2DRenderer.size_scale;
+                    double box_bottom = box_top + visualCustomize.ScreenHeight / 32 * 12 * Direct2DRenderer.size_scale;
+
                     initialInstructions = new ContentControl
                     {
-                        Width = visualCustomize.ScreenWidth / 32 * 20,
+                        Width = box_right - box_left,
                         MinWidth = 1,
-                        Height = visualCustomize.ScreenHeight / 32 * 8,
+                        Height = box_bottom - box_top,
                         MinHeight = 1,
                     };
 
-                    double initialInstructionsX = visualCustomize.ScreenWidth / 32 * 20 - Yato.DirectXOverlay.Direct2DRenderer.size_scale * visualCustomize.ScreenWidth * 3 + visualCustomize.ScreenWidth * 2 * Yato.DirectXOverlay.Direct2DRenderer.size_scale;
-                    double initialInstructionsY = visualCustomize.ScreenHeight / 32 * 6 - visualCustomize.ScreenHeight * 4 * Yato.DirectXOverlay.Direct2DRenderer.size_scale;
+                    double initialInstructionsX = box_left;
+                    double initialInstructionsY = box_top;
 
                     visualCustomize.AddElement(initialInstructions, (int)initialInstructionsX, (int)initialInstructionsY);
                 });
+        }
+
+        protected bool IsDotaRunning()
+        {
+            return Process.GetProcessesByName("dota2").Length != 0;
         }
 
         public abstract void Start();

@@ -21,11 +21,18 @@ namespace GamingSupervisor
             gsi = GameStateIntegrationSingleton.Instance;
 
             gsi.StartListener();
-            Console.WriteLine("pre");
+
             overlay.Intructions_setup("Start a game");
-            Console.WriteLine("post");
+
             while (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 double positionX = 0;
                 double positionY = 0;
                 Application.Current.Dispatcher.Invoke(
@@ -46,6 +53,13 @@ namespace GamingSupervisor
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 switch (gsi.GameState)
                 {
                     case null:

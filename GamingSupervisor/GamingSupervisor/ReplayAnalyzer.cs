@@ -68,13 +68,19 @@ namespace GamingSupervisor
             overlay.Intructions_setup(instru_OpenReplay);
             while (!announcer.isReplayStarted())
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 if (Terminate)
                 {
                     overlay.Clear();
                     return;
                 }
 
-                // draw instruction to watch the replay in dota2 client
                 double positionX = 0;
                 double positionY = 0;
                 Application.Current.Dispatcher.Invoke(
@@ -83,7 +89,10 @@ namespace GamingSupervisor
                         positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.Width * visualCustomize.ScreenWidth;
                         positionY = Canvas.GetTop(initialInstructions) / visualCustomize.Height * visualCustomize.ScreenHeight;
                     });
+                // draw instruction to watch the replay in dota2 client
                 overlay.ShowInstructionMessage(positionX, positionY);
+
+                Thread.Sleep(10);
             }
             tickTimer.Start();
 
@@ -99,6 +108,13 @@ namespace GamingSupervisor
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 if (Terminate)
                 {
                     overlay.Clear();
