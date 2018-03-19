@@ -75,9 +75,9 @@ namespace GamingSupervisor
             renderer.Intructions_setup(content);
         }
 
-        public void ShowInstructionMessage(double positionX, double positionY)
+        public void ShowInstructionMessage(double positionX, double positionY, IntPtr visualCustomizeHandle)
         {
-            renderer.Intructions_Draw(dotaProcessHandle, window, (float)positionX, (float)positionY);
+            renderer.Intructions_Draw(dotaProcessHandle, window, (float)positionX, (float)positionY, visualCustomizeHandle);
         }
 
         public void ToggleHighlight(bool tog = true)

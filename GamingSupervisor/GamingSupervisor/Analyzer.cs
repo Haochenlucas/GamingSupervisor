@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using Yato.DirectXOverlay;
 
 namespace GamingSupervisor
@@ -16,6 +17,7 @@ namespace GamingSupervisor
 
         protected VisualCustomize visualCustomize;
         protected ContentControl initialInstructions;
+        protected IntPtr visualCustomizeHandle;
 
         public Analyzer()
         {
@@ -27,12 +29,14 @@ namespace GamingSupervisor
                     visualCustomize = new VisualCustomize();
                     visualCustomize.Show();
 
+                    visualCustomizeHandle = new WindowInteropHelper(visualCustomize).Handle;
+
                     // Calculations taken directly from Direct2DRenderer.cs
                     // These should probably be changed
-                    double box_left = visualCustomize.ScreenWidth / 32 * 20 - Direct2DRenderer.size_scale * visualCustomize.ScreenWidth / 32 * 3 + visualCustomize.ScreenWidth / 32 * 2 * Direct2DRenderer.size_scale;
-                    double box_top = visualCustomize.ScreenHeight / 32 * 6 - visualCustomize.ScreenHeight / 32 * 4 * Direct2DRenderer.size_scale;
-                    double box_right = box_left + visualCustomize.ScreenWidth / 32 * 12 * Direct2DRenderer.size_scale;
-                    double box_bottom = box_top + visualCustomize.ScreenHeight / 32 * 12 * Direct2DRenderer.size_scale;
+                    double box_left = visualCustomize.Width / 32 * 20 - Direct2DRenderer.size_scale * visualCustomize.Width / 32 * 3 + visualCustomize.Width / 32 * 2 * Direct2DRenderer.size_scale;
+                    double box_top = visualCustomize.Height / 32 * 6 - visualCustomize.Height / 32 * 4 * Direct2DRenderer.size_scale;
+                    double box_right = box_left + visualCustomize.Width / 32 * 12 * Direct2DRenderer.size_scale;
+                    double box_bottom = box_top + visualCustomize.Height / 32 * 12 * Direct2DRenderer.size_scale;
 
                     initialInstructions = new ContentControl
                     {

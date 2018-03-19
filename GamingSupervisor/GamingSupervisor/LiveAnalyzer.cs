@@ -42,7 +42,7 @@ namespace GamingSupervisor
                         positionY = Canvas.GetTop(initialInstructions) / visualCustomize.Height * visualCustomize.ScreenHeight;
                     });
 
-                overlay.ShowInstructionMessage(positionX, positionY);
+                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
 
                 Thread.Sleep(10);
             }

@@ -2101,11 +2101,13 @@ namespace Yato.DirectXOverlay
         }
 
         static private Stopwatch button_timer = new Stopwatch();
-        public void Intructions_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, float positionX, float positionY)
+        public void Intructions_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, float positionX, float positionY, IntPtr doNotIgnoreHandle)
         {
             IntPtr fg = GetForegroundWindow();
 
-            if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
+            if (fg == parentWindowHandle ||
+                GetDesktopWindow() == parentWindowHandle ||
+                fg == doNotIgnoreHandle)
             {
                 BeginScene();
                 ClearScene();
@@ -2114,9 +2116,6 @@ namespace Yato.DirectXOverlay
                 {
                     float distanceFromDefaultHorizontal = positionX - instruction.box_pos.Item1;
                     float distanceFromDefaultVertical = positionY - instruction.box_pos.Item2;
-                    Console.WriteLine(distanceFromDefaultHorizontal + " " + distanceFromDefaultVertical);
-                    Console.WriteLine(instruction.box_pos.Item1 + " " + instruction.box_pos.Item2);
-                    Console.WriteLine(positionX + " " + positionY);
 
                     // Draw hero selection suggestion box
                     Direct2DBrush color = CreateBrush(instruction.color.Item1, instruction.color.Item2, instruction.color.Item3, instruction.color.Item4);

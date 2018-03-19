@@ -90,7 +90,7 @@ namespace GamingSupervisor
                         positionY = Canvas.GetTop(initialInstructions) / visualCustomize.Height * visualCustomize.ScreenHeight;
                     });
                 // draw instruction to watch the replay in dota2 client
-                overlay.ShowInstructionMessage(positionX, positionY);
+                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
 
                 Thread.Sleep(10);
             }

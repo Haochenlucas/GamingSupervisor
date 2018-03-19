@@ -21,7 +21,7 @@ namespace GamingSupervisor
             InitializeComponent();
 
             aspectRatio = SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth;
-            ScreenHeight = SystemParameters.PrimaryScreenHeight;
+            ScreenHeight = SystemParameters.PrimaryScreenHeight + SystemParameters.WindowCaptionHeight;
             ScreenWidth = SystemParameters.PrimaryScreenWidth;
 
             Height = ScreenHeight * 3 / 4; // Arbitrarily assign the height of the window to 3/4 the height of the screen
@@ -43,25 +43,6 @@ namespace GamingSupervisor
 
             Canvas.SetLeft(contentControl, positionX);
             Canvas.SetTop(contentControl, positionY);
-
-            //contentControl.SizeChanged += ContentControl_SizeChanged;
-            //CustomizeCanvas.LayoutUpdated += CustomizeCanvas_LayoutUpdated;
         }
-        /*
-        private void CustomizeCanvas_LayoutUpdated(object sender, System.EventArgs e)
-        {
-            if (cc != null)
-                System.Console.WriteLine("H" + cc.ActualHeight);
-            else
-                System.Console.WriteLine("null");
-        }
-
-        private void ContentControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //if (cc != null)
-                //System.Console.WriteLine("H" + cc.ActualHeight);
-            //else
-                //System.Console.WriteLine("null");
-        }*/
     }
 }
