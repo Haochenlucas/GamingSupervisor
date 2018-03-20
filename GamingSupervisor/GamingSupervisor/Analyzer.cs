@@ -33,10 +33,10 @@ namespace GamingSupervisor
 
                     // Calculations taken directly from Direct2DRenderer.cs
                     // These should probably be changed
-                    double box_left = visualCustomize.Width / 32 * 20 - Direct2DRenderer.size_scale * visualCustomize.Width / 32 * 3 + visualCustomize.Width / 32 * 2 * Direct2DRenderer.size_scale;
-                    double box_top = visualCustomize.Height / 32 * 6 - visualCustomize.Height / 32 * 4 * Direct2DRenderer.size_scale;
-                    double box_right = box_left + visualCustomize.Width / 32 * 12 * Direct2DRenderer.size_scale;
-                    double box_bottom = box_top + visualCustomize.Height / 32 * 12 * Direct2DRenderer.size_scale;
+                    double box_left = visualCustomize.ActualWidth / 32 * 20 - Direct2DRenderer.size_scale * visualCustomize.ActualWidth / 32 * 3 + visualCustomize.ActualWidth / 32 * 2 * Direct2DRenderer.size_scale;
+                    double box_top = visualCustomize.ActualHeight / 32 * 6 - visualCustomize.ActualHeight / 32 * 4 * Direct2DRenderer.size_scale;
+                    double box_right = box_left + visualCustomize.ActualWidth / 32 * 12 * Direct2DRenderer.size_scale;
+                    double box_bottom = box_top + visualCustomize.ActualHeight / 32 * 12 * Direct2DRenderer.size_scale;
 
                     initialInstructions = new ContentControl
                     {
@@ -49,7 +49,10 @@ namespace GamingSupervisor
                     double initialInstructionsX = box_left;
                     double initialInstructionsY = box_top;
 
-                    visualCustomize.AddElement(initialInstructions, (int)initialInstructionsX, (int)initialInstructionsY);
+                    visualCustomize.AddElement(
+                        initialInstructions,
+                        (int)Math.Round(initialInstructionsX),
+                        (int)Math.Round(initialInstructionsY));
                 });
         }
 

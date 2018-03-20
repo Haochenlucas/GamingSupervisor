@@ -7,7 +7,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GamingSupervisor"
         mc:Ignorable="d"
-        Title="Overlay Customize" Height="300" Width="300" MinHeight="720" MinWidth="1280">
+        Title="Overlay Customize"
+        Background="Black">
     <Window.Resources>
         
         <!-- MoveThumb Template -->
@@ -49,5 +50,14 @@
 
     </Window.Resources>
 
-    <Canvas Name="CustomizeCanvas" />
+    <Canvas Name="CustomizeCanvas" Background="{StaticResource Background}">
+        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+            Margin="0,0,0,0" Canvas.Left="0" Canvas.Top="0"
+            Width="{Binding ActualWidth, ElementName=CustomizeCanvas}"
+            Height="{Binding ActualHeight, ElementName=CustomizeCanvas}">
+            <Viewbox Stretch="Uniform" Margin="0,0,20,0">
+                <TextBlock HorizontalAlignment="Center" Foreground="Black" FontStyle="Italic">GAMING SUPERVISOR</TextBlock>
+            </Viewbox>
+        </DockPanel>
+    </Canvas>
 </Window>

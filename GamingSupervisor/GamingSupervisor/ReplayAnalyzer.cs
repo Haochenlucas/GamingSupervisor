@@ -86,8 +86,8 @@ namespace GamingSupervisor
                 Application.Current.Dispatcher.Invoke(
                     () =>
                     {
-                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.Width * visualCustomize.ScreenWidth;
-                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.Height * visualCustomize.ScreenHeight;
+                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
+                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
                     });
                 // draw instruction to watch the replay in dota2 client
                 overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);

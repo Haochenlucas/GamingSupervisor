@@ -38,8 +38,8 @@ namespace GamingSupervisor
                 Application.Current.Dispatcher.Invoke(
                     () =>
                     {
-                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.Width * visualCustomize.ScreenWidth;
-                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.Height * visualCustomize.ScreenHeight;
+                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
+                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
                     });
 
                 overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
