@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace GamingSupervisor
 {
@@ -19,12 +22,44 @@ namespace GamingSupervisor
 
             gsi.StartListener();
 
+            overlay.Intructions_setup("Start a game");
+
+            while (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
+            {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
+                double positionX = 0;
+                double positionY = 0;
+                Application.Current.Dispatcher.Invoke(
+                    () =>
+                    {
+                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
+                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
+                    });
+
+                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+
+                Thread.Sleep(10);
+            }
+
             bool gameStarted = false;
             bool keepLooping = true;
 
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 switch (gsi.GameState)
                 {
                     case null:
@@ -42,7 +77,7 @@ namespace GamingSupervisor
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
                         gameStarted = true;
 
-                        overlay.ClearHeroSuggestion();
+                        //overlay.ClearHeroSuggestion();
                         HandleGamePlay();
                         overlay.ShowIngameMessage();
                         break;
@@ -55,6 +90,8 @@ namespace GamingSupervisor
                 {
                     break;
                 }
+
+                Thread.Sleep(10);
             }
 
             overlay.Clear();

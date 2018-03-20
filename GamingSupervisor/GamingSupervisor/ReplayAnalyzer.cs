@@ -3,6 +3,8 @@ using replayParse;
 using System.Threading;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace GamingSupervisor
 {
@@ -66,14 +68,31 @@ namespace GamingSupervisor
             overlay.Intructions_setup(instru_OpenReplay);
             while (!announcer.isReplayStarted())
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 if (Terminate)
                 {
                     overlay.Clear();
                     return;
                 }
 
+                double positionX = 0;
+                double positionY = 0;
+                Application.Current.Dispatcher.Invoke(
+                    () =>
+                    {
+                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
+                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
+                    });
                 // draw instruction to watch the replay in dota2 client
-                overlay.ShowInstructionMessage();
+                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+
+                Thread.Sleep(10);
             }
             tickTimer.Start();
 
@@ -89,6 +108,13 @@ namespace GamingSupervisor
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 if (Terminate)
                 {
                     overlay.Clear();

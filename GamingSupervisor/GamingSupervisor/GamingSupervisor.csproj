@@ -132,6 +132,8 @@
     <Compile Include="GUI\ReplaySelection.xaml.cs">
       <DependentUpon>ReplaySelection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\VisualCustomize\MoveThumb.cs" />
+    <Compile Include="GUI\VisualCustomize\ResizeThumb.cs" />
     <Compile Include="LiveAnalyzer.cs" />
     <Compile Include="Overlay.cs" />
     <Compile Include="OverlaySingleton.cs" />
@@ -146,6 +148,9 @@
       <DependentUpon>WaitForCompletion.xaml</DependentUpon>
     </Compile>
     <Compile Include="SteamAppsLocation.cs" />
+    <Compile Include="GUI\VisualCustomize\VisualCustomize.xaml.cs">
+      <DependentUpon>VisualCustomize.xaml</DependentUpon>
+    </Compile>
     <Page Include="GUI\ConfirmSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -201,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\ToolTip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\VisualCustomize\VisualCustomize.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
