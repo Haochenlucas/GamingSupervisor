@@ -37,6 +37,8 @@ namespace GamingSupervisor
         }
 
         private int heroID;
+        private bool ranHeroSelectionAtLeastOnce = false; // Hero selection has code other parts depend on
+        private string lastGameState;
 
 
         public ReplayAnalyzer() : base()
@@ -50,6 +52,8 @@ namespace GamingSupervisor
             replayHighlights = new ReplayHighlights(GUISelection.replayDataFolderLocation, GUISelection.heroName);
 
             heroID = heroIDData.getHeroID(GUISelection.heroName);
+
+            lastGameState = "";
         }
 
         public override void Start()
@@ -83,12 +87,7 @@ namespace GamingSupervisor
 
                 double positionX = 0;
                 double positionY = 0;
-                Application.Current.Dispatcher.Invoke(
-                    () =>
-                    {
-                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
-                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
-                    });
+                GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
                 // draw instruction to watch the replay in dota2 client
                 overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
 
@@ -120,13 +119,25 @@ namespace GamingSupervisor
                     overlay.Clear();
                     return;
                 }
-
-                Console.WriteLine(announcer.GetCurrentGameState());
+                
                 switch (announcer.GetCurrentGameState())
                 {
                     case null:
                     case "":
                     case "Undefined":
+                        if (lastGameState != "Undefined")
+                        {
+                            lastGameState = "Defined";
+                            Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Hidden;
+                                inGameMessagesBox.Visibility = Visibility.Hidden;
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
+                            });
+                        }
                         if (replayStarted)
                         {
                             tickTimer.Stop();
@@ -134,17 +145,55 @@ namespace GamingSupervisor
                         }
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
+                        if (lastGameState != "DOTA_GAMERULES_STATE_HERO_SELECTION")
+                        {
+                            lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
+                            Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Visible;
+                                inGameMessagesBox.Visibility = Visibility.Hidden;
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
+                            });
+                        }
                         replayStarted = true;
                         HandleHeroSelection();
                         ShowDraftHints();
+                        if (!ranHeroSelectionAtLeastOnce)
+                            ranHeroSelectionAtLeastOnce = true;
+                        break;
+                    case "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD":
+                        replayStarted = true;
+                        overlay.Clear();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        if (lastGameState != "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS")
+                        {
+                            if (!ranHeroSelectionAtLeastOnce)
+                            {
+                                ranHeroSelectionAtLeastOnce = true;
+                                HandleHeroSelection();
+                            overlay.ClearHeroSuggestion();
+                            }
+                            lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
+
+                            Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Hidden;
+                                inGameMessagesBox.Visibility = Visibility.Hidden; // What is this?
+                                highlightBarBox.Visibility = Visibility.Visible;
+                                healthGraphsBox.Visibility = Visibility.Visible;
+                            });
+                        }
                         replayStarted = true;
-                        overlay.ClearHeroSuggestion();
                         HandleGamePlay();
                         HandleHighlight();
-                        ShowIngameHints();
+                        UpdateInGameOverlay();
                         break;
                     default:
                         replayStarted = true;
@@ -191,14 +240,36 @@ namespace GamingSupervisor
             Console.WriteLine("Replay stopped!");
         }
 
-        private void ShowIngameHints()
+        private void UpdateInGameOverlay()
         {
-            overlay.ShowIngameMessage();
+            double messagesPositionX = 0;
+            double messagesPositionY = 0;
+            GetBoxPosition(inGameMessagesBox, out messagesPositionX, out messagesPositionY);
+
+            double highlightBarPositionX = 0;
+            double highlightBarPositionY = 0;
+            GetBoxPosition(highlightBarBox, out highlightBarPositionX, out highlightBarPositionY);
+            double highlightBarWidth = 0;
+            GetBoxWidth(highlightBarBox, out highlightBarWidth);
+
+            double healthGraphPositionX = 0;
+            double healthGraphPositionY = 0;
+            GetBoxPosition(healthGraphsBox, out healthGraphPositionX, out healthGraphPositionY);
+
+            overlay.ShowInGameOverlay(visualCustomizeHandle,
+                messagesPositionX, messagesPositionY,
+                highlightBarPositionX, highlightBarPositionY,
+                healthGraphPositionX, healthGraphPositionY,
+                highlightBarWidth);
         }
         
         private void ShowDraftHints()
         {
-            overlay.ShowDraftMessage();
+            double positionX = 0;
+            double positionY = 0;
+            GetBoxPosition(heroSelectionBox, out positionX, out positionY);
+
+            overlay.ShowDraftMessage(positionX, positionY, visualCustomizeHandle);
         }
 
         /*
@@ -322,9 +393,9 @@ namespace GamingSupervisor
 
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
-            Console.WriteLine(CurrentTick + " getting health " + heroID);
+            //Console.WriteLine(CurrentTick + " getting health " + heroID);
             health = heroData.getHealth(CurrentTick, heroID);
-            Console.WriteLine("Tick " + CurrentTick + " Health " + health);
+            //Console.WriteLine("Tick " + CurrentTick + " Health " + health);
             //maxHealth = (int)heroData.getMaxHealth(CurrentTick, heroID);
             //if (health <= 600)
 

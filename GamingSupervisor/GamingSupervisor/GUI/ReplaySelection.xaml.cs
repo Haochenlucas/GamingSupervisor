@@ -60,11 +60,10 @@ namespace GamingSupervisor
 
             using (ApiHandler api = new ApiHandler("8BFC2C10E3D1E95B85DCF6AAD861782D"))
             {
-                var leagues = await api.GetLeagueListings();
+                //var leagues = await api.GetLeagueListings();
 
                 replays = new List<ReplayListItem>();
-                foreach (string replay in
-                    Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "Parser")))
+                foreach (string replay in Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "Parser")))
                 {
                     var matchResult = await api.GetDetailedMatch(Path.GetFileName(replay));
 

@@ -8,6 +8,7 @@ namespace GamingSupervisor
     class LiveAnalyzer : Analyzer
     {
         private GameStateIntegration gsi;
+        private string lastGameState;
 
         public LiveAnalyzer() : base()
         {
@@ -35,12 +36,7 @@ namespace GamingSupervisor
 
                 double positionX = 0;
                 double positionY = 0;
-                Application.Current.Dispatcher.Invoke(
-                    () =>
-                    {
-                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
-                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
-                    });
+                GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
 
                 overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
 
@@ -69,17 +65,47 @@ namespace GamingSupervisor
                         {
                             keepLooping = false;
                         }
+                        if (lastGameState != "Undefined")
+                        {
+                            lastGameState = "Defined";
+                            Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Hidden;
+                                inGameMessagesBox.Visibility = Visibility.Hidden;
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
+                            });
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
+                        gameStarted = true;
+                        break;
+                    case "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD":
                         gameStarted = true;
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
                         gameStarted = true;
 
-                        //overlay.ClearHeroSuggestion();
+                        if (lastGameState != "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS")
+                        {
+                            lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
+
+                            Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Hidden;
+                                inGameMessagesBox.Visibility = Visibility.Hidden; // What is this?
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
+                            });
+                        }
+
                         HandleGamePlay();
-                        overlay.ShowIngameMessage();
+                        UpdateInGameOverlay();
                         break;
                     default:
                         gameStarted = true;
@@ -97,6 +123,29 @@ namespace GamingSupervisor
             overlay.Clear();
 
             Console.WriteLine("Game stopped!");
+        }
+
+        private void UpdateInGameOverlay()
+        {
+            double messagesPositionX = 0;
+            double messagesPositionY = 0;
+            GetBoxPosition(inGameMessagesBox, out messagesPositionX, out messagesPositionY);
+
+            double highlightBarPositionX = 0;
+            double highlightBarPositionY = 0;
+            GetBoxPosition(highlightBarBox, out highlightBarPositionX, out highlightBarPositionY);
+            double highlightBarWidth = 0;
+            GetBoxWidth(highlightBarBox, out highlightBarWidth);
+
+            double healthGraphPositionX = 0;
+            double healthGraphPositionY = 0;
+            GetBoxPosition(healthGraphsBox, out healthGraphPositionX, out healthGraphPositionY);
+
+            overlay.ShowInGameOverlay(visualCustomizeHandle,
+                messagesPositionX, messagesPositionY,
+                highlightBarPositionX, highlightBarPositionY,
+                healthGraphPositionX, healthGraphPositionY,
+                highlightBarWidth);
         }
 
         private void HandleGamePlay()

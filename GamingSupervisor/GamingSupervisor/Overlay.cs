@@ -90,14 +90,28 @@ namespace GamingSupervisor
             renderer.UpdateHighlightTime(ticks, maxTick);
         }
 
-        public void ShowIngameMessage()
+        public void ShowInGameOverlay(IntPtr visualCustomizeHandle,
+            double inGameMessagesPositionX, double inGameMessagesPositionY,
+            double highlightBarPositionX, double highlightBarPositionY,
+            double healthGraphsPositionX, double healthGraphsPositionY,
+            double highlightBarWidth)
         {
-            renderer.Ingame_Draw(dotaProcessHandle, window);
+            renderer.Ingame_Draw(
+                parentWindowHandle: dotaProcessHandle,
+                overlay: window,
+                doNotIgnoreHandle: visualCustomizeHandle,
+                inGameMessagesPositionX: (float)inGameMessagesPositionX,
+                inGameMessagesPositionY: (float)inGameMessagesPositionY,
+                highlightBarPositionX: (float)highlightBarPositionX,
+                highlightBarPositionY: (float)highlightBarPositionY,
+                healthGraphsPositionX: (float)healthGraphsPositionX,
+                healthGraphsPositionY: (float)healthGraphsPositionY,
+                highlightBarWidth: (float)highlightBarWidth);
         }
 
-        public void ShowDraftMessage()
+        public void ShowDraftMessage(double positionX, double positionY, IntPtr visualCustomizeHandle)
         {
-            renderer.HeroSelection_Draw(dotaProcessHandle, window);
+            renderer.HeroSelection_Draw(dotaProcessHandle, window, (float)positionX, (float)positionY, visualCustomizeHandle);
         }
 
         public void ClearMessage(Direct2DRenderer.hints hint)
