@@ -236,7 +236,7 @@ namespace GamingSupervisor
             }
 
             overlay.Clear();
-
+            Application.Current.Dispatcher.Invoke(() => { visualCustomize.Close(); });
             Console.WriteLine("Replay stopped!");
         }
 
