@@ -1547,7 +1547,7 @@ namespace Yato.DirectXOverlay
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
         {
             //Console.WriteLine(Directory.GetCurrentDirectory());
-            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\hero_difficulty_version_1.txt");
+            string path = "replayParse/Properties/hero_difficulty_version_1.txt";
 
             hero_difficulty dt = new hero_difficulty(path);
             string suggestion = dt.mainDiff(HeroID);
@@ -1714,7 +1714,7 @@ namespace Yato.DirectXOverlay
         // one of the five suggested heroes get banned by the other team
         public void SuggestedHeroBanned(int heroIndex)
         {
-            Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\red_cross.png");
+            Direct2DBitmap cross = new Direct2DBitmap(device, "other_images/red_cross.png");
 
             DrawBitmap(cross, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
             cross.SharpDXBitmap.Dispose();
@@ -1723,7 +1723,7 @@ namespace Yato.DirectXOverlay
         // one of the five suggested heroes get picked by our team
         public void SuggestedHeroPicked(int heroIndex)
         {
-            Direct2DBitmap check = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
+            Direct2DBitmap check = new Direct2DBitmap(device, "other_images/green_check.png");
             DrawBitmap(check, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
             check.SharpDXBitmap.Dispose();
         }
@@ -1737,15 +1737,15 @@ namespace Yato.DirectXOverlay
             {
                 // Hero selection slot1
                 case 6:
-                    path = @"..\\..\\items_icon\";
+                    path = "items_icon/";
                     break;
                 case int n when (n >= 7 && n <= 11):
-                    path = @"..\\..\\other_images\";
+                    path = "other_images/";
                     messages[i].img_width = 144 / 2;
                     messages[i].img_height = 144 / 2;
                     break;
                 case 12:
-                    path = @"..\\..\\hero_icon_images\";
+                    path = "hero_icon_images/";
                     break;
             }
             return path;
@@ -2165,7 +2165,7 @@ namespace Yato.DirectXOverlay
                 DrawTextWithBackground(messages[12].text, messages[12].x, messages[12].y, messages[12].font, messages[12].color, messages[12].background, out modifier);
                 if (messages[12].imgName != "")
                 {
-                    Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[12].imgName + ".png");
+                    Direct2DBitmap bmp = new Direct2DBitmap(device, "hero_icon_images/" + messages[12].imgName + ".png");
                     DrawBitmap(bmp, 1, messages[12].img_x, messages[12].img_y - modifier, messages[12].img_width, messages[12].img_height);
 
                     bmp.SharpDXBitmap.Dispose();
@@ -2258,7 +2258,7 @@ namespace Yato.DirectXOverlay
                 mouse_pos.Y < instruction.close_button_pos.Item2 + instruction.close_button_pos.Item4 + distanceFromDefaultVertical)
             {
                 button_timer.Start();
-                Direct2DBitmap close_button_red = new Direct2DBitmap(device, @"..\\..\\..\\GamingSupervisor\\buttons\" + instruction.close_button_red + ".png");
+                Direct2DBitmap close_button_red = new Direct2DBitmap(device, "buttons/" + instruction.close_button_red + ".png");
 
                 float scale = button_timer.ElapsedMilliseconds;
                 scale = scale / 2000;
@@ -2275,7 +2275,7 @@ namespace Yato.DirectXOverlay
             else
             {
                 button_timer.Reset();
-                Direct2DBitmap close_button_black = new Direct2DBitmap(device, @"..\\..\\..\\GamingSupervisor\\buttons\" + instruction.close_button_black + ".png");
+                Direct2DBitmap close_button_black = new Direct2DBitmap(device, "buttons/" + instruction.close_button_black + ".png");
                 DrawBitmap(
                     bmp: close_button_black,
                     opacity: 1,
