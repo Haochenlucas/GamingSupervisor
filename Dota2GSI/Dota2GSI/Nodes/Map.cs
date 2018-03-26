@@ -63,7 +63,12 @@
         /// <summary>
         /// Showing off heros before starting game
         /// </summary>
-        DOTA_GAMERULES_STATE_TEAM_SHOWCASE
+        DOTA_GAMERULES_STATE_TEAM_SHOWCASE,
+
+        /// <summary>
+        /// Wait for map to load after all players have selected heroes and joined
+        /// </summary>
+        DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD
     }
 
     /// <summary>
