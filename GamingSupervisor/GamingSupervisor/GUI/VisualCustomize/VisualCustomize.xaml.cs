@@ -46,6 +46,12 @@ namespace GamingSupervisor
             e.Cancel = true;
         }
 
+        public void CloseWindow()
+        {
+            Closing -= VisualCustomize_Closing;
+            Close();
+        }
+
         public void AddBox(OverlayBox box, int positionX, int positionY)
         {
             box.Template = FindResource("DesignerItemTemplate") as ControlTemplate;

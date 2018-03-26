@@ -121,7 +121,7 @@ namespace GamingSupervisor
             }
 
             overlay.Clear();
-
+            Application.Current.Dispatcher.Invoke(() => { visualCustomize.CloseWindow(); });
             Console.WriteLine("Game stopped!");
         }
 
