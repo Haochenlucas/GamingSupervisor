@@ -1198,7 +1198,7 @@ namespace Yato.DirectXOverlay
         public void DrawTextWithBackground(string text, float x, float y, Tuple<string, int> tfont, Tuple<int, int, int, int> tcolor, Tuple<int, int, int, int> tbackground, out float modifier)
         {
             Direct2DBrush color = CreateBrush(tcolor.Item1, tcolor.Item2, tcolor.Item3, tcolor.Item4);
-            Direct2DBrush backgroundColor = CreateBrush(tbackground.Item1, tbackground.Item2, tbackground.Item3, tbackground.Item4);
+            Direct2DBrush backgroundColor = CreateBrush(tbackground.Item1, tbackground.Item2, tbackground.Item3, 0.3f);
             Direct2DFont font = CreateFont(tfont.Item1, tfont.Item2 * Direct2DRenderer.size_scale);
             
             var layout = new TextLayout(fontFactory, text, font, float.MaxValue, float.MaxValue);
@@ -1568,7 +1568,7 @@ namespace Yato.DirectXOverlay
         public void Retreat(string text, string imgName)
         {
             warning_timer.Start();
-            low_hp = true;
+            //low_hp = true;
             AddMessage(hints.retreat, text, imgName);
         }
         public void AddMessage(hints type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
@@ -2341,7 +2341,6 @@ namespace Yato.DirectXOverlay
         }
     }
     #endregion
-
 
     #region Message struct
     public struct Message

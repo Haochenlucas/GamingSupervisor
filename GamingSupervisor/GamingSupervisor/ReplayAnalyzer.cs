@@ -307,7 +307,7 @@ namespace GamingSupervisor
             else
             {
                 overlay.ClearItemSuggestion();
-                overlay.ClearItemSuggestion();
+                overlay.ClearHeroInfo();
             }
 
             // Add item suggestion

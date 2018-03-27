@@ -60,6 +60,7 @@ namespace GamingSupervisor
 
         private void WaitForDotaToOpen()
         {
+            Console.WriteLine("WaitForDotaToOpen start");
             string consoleLog = Path.Combine(SteamAppsLocation.Get(), "console.log");
             using (FileStream fileStream = File.Open(consoleLog, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
@@ -74,6 +75,7 @@ namespace GamingSupervisor
                     }
                 }
             }
+            Console.WriteLine("WaitForDotaToOpen end");
         }
 
         private void StartDota()
@@ -90,7 +92,7 @@ namespace GamingSupervisor
             {
                 throw new Exception("Could not start DotA 2. Is Steam installed?");
             }
-            p.StartInfo.Arguments = "-applaunch 570";
+            p.StartInfo.Arguments = "-applaunch 570 -console -condebug";
             try
             {
                 p.Start();
