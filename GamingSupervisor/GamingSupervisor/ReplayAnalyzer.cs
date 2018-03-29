@@ -302,7 +302,7 @@ namespace GamingSupervisor
                 string temp = "Lycan is a remarkable pusher who can wear down buildings and force enemies to react quickly to his regular tower onslaughts; as towers melt incredibly fast under Lycan's and his units' pressure, boosted by their canine Feral Impulse. His only contribution to full-on team fights will be the bonus damage he grants with Howl to his allies, his allies' summons, his owns summons, and himself, as well as his formidable physical attacks. Else he can surge out of the woods for a quick gank or push after he transformed with Shapeshift, moving at a haste speed of 650. Finally, good players will make the best usage of his Summon Wolves ability and scout the enemies' position while remaining undetected with invisibility at level 4.";
                 
                 overlay.AddHeroInfoMessage(temp, "");
-                overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "");
+                overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "Necronomicon_1_icon");
             }
             else
             {

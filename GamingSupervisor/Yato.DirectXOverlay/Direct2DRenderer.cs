@@ -1728,6 +1728,32 @@ namespace Yato.DirectXOverlay
         }
         #endregion
 
+        #region Logo Draw
+        private void DrawLogo(Instruction instruction)
+        {
+            Direct2DBrush color = CreateBrush(255, 255, 255, 255);
+            Direct2DBrush backgroundColor = blackBrush;
+            Direct2DFont font = CreateFont("Times New Roman", 20);
+
+            var layout = new TextLayout(fontFactory, instruction.Logo.Item1, font, float.MaxValue, float.MaxValue);
+
+            float modifier = layout.FontSize / 8.0f;
+
+            sharedBrush.Color = backgroundColor;
+
+            float x = instruction.Logo.Item2;
+            float y = instruction.Logo.Item3;
+
+            device.FillRectangle(new RawRectangleF(x, y , x + layout.Metrics.Width + 2 * modifier, y + layout.Metrics.Height + 2 * modifier), sharedBrush);
+
+            sharedBrush.Color = color;
+
+            device.DrawTextLayout(new RawVector2(x + modifier, y + modifier), layout, sharedBrush, DrawTextOptions.NoSnap);
+
+            layout.Dispose();
+        }
+        #endregion
+
         #region Ingame Draw
         private string SelectFolder(int i)
         { 
@@ -1753,7 +1779,8 @@ namespace Yato.DirectXOverlay
         {
             this.heroIds = heroIds;
         }
-    static private Stopwatch warning_timer = new Stopwatch();
+
+        static private Stopwatch warning_timer = new Stopwatch();
         private Tuple<int, int, int> AveragePixelColor(System.Drawing.Bitmap bmp)
         {
             System.Drawing.Imaging.BitmapData scrData = bmp.LockBits(
@@ -2158,7 +2185,65 @@ namespace Yato.DirectXOverlay
                 clear();
             }
         }
-        
+        public void Intructions_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
+        {
+            IntPtr fg = GetForegroundWindow();
+            if (fg == parentWindowHandle ||
+                GetDesktopWindow() == parentWindowHandle)
+            {
+                BeginScene();
+                ClearScene();
+
+                if (button_timer.ElapsedMilliseconds < 2000)
+                {
+                    float distanceFromDefaultHorizontal = 0;
+                    float distanceFromDefaultVertical = 0;
+
+                    // Draw hero selection suggestion box
+                    Direct2DBrush color = CreateBrush(instruction.color.Item1, instruction.color.Item2, instruction.color.Item3, instruction.color.Item4);
+                    Direct2DBrush background = CreateBrush(instruction.background.Item1, instruction.background.Item2, instruction.background.Item3, instruction.background.Item4);
+                    Direct2DFont textFont = CreateFont(instruction.font.Item1, instruction.font.Item2);
+                    Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
+                    // The box
+                    device.FillRectangle(
+                        new RawRectangleF(
+                            left: instruction.box_pos.Item1 + distanceFromDefaultHorizontal,
+                            top: instruction.box_pos.Item2 + distanceFromDefaultVertical,
+                            right: instruction.box_pos.Item3 + distanceFromDefaultHorizontal,
+                            bottom: instruction.box_pos.Item4 + distanceFromDefaultVertical),
+                        box_background);
+                    // Title of the box
+                    DrawTextWithBackground(
+                        text: instruction.title.Item1,
+                        x: instruction.title.Item2 + distanceFromDefaultHorizontal,
+                        y: instruction.title.Item3 + distanceFromDefaultVertical,
+                        font: textFont,
+                        brush: color,
+                        backgroundBrush: background);
+                    // Draw LOGO
+                    DrawLogo(instruction);
+
+                    showInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
+                    float modifier;
+                    DrawTextWithBackground(
+                        text: instruction.instructions.text,
+                        x: instruction.instructions.x + distanceFromDefaultHorizontal,
+                        y: instruction.instructions.y + distanceFromDefaultVertical,
+                        tfont: instruction.instructions.font,
+                        tcolor: instruction.instructions.color,
+                        tbackground: instruction.instructions.background,
+                        modifier: out modifier);
+
+                }
+                EndScene();
+            }
+            else
+            {
+                clear();
+            }
+        }
+
+
         private void showInstructionButtons(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
             var mouse_pos = Control.MousePosition;
@@ -2204,7 +2289,6 @@ namespace Yato.DirectXOverlay
             ClearScene();
             EndScene();
         }
-
     }
 
     #region HeroSuggestion class
@@ -2307,6 +2391,8 @@ namespace Yato.DirectXOverlay
         public Message instructions;
         // text, left, top
         public Tuple<string, float, float> title;
+        // text, left, top
+        public Tuple<string, float, float> Logo;
         // left, top, right, bottem
         public Tuple<float, float, float, float> box_pos;
         // Tuple<red, green, blue, alpha>
@@ -2337,6 +2423,7 @@ namespace Yato.DirectXOverlay
             float title_left = instructions.x + modifier_x * 3 * Direct2DRenderer.size_scale;
             float title_top = instructions.y - modifier_y * 3 * Direct2DRenderer.size_scale;
             title = new Tuple<string, float, float>(_title, title_left, title_top);
+            Logo = new Tuple<string, float, float>("GamingSupervisor", box_left, box_top);
             close_button_pos = new Tuple<float, float, float, float>(box_right - modifier_x, title_top, (512 / 10) * Direct2DRenderer.size_scale, (512 / 10) * Direct2DRenderer.size_scale);
         }
     }
