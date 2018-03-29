@@ -1911,13 +1911,10 @@ namespace Yato.DirectXOverlay
                     {
                         {
                             Direct2DBitmap bmp = new Direct2DBitmap(device, @"hero_icon_images\" + heroIds[i] + ".png");
-
                             System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"hero_icon_images\" + heroIds[i] + ".png");
 
                             Tuple<int, int, int> rgb = AveragePixelColor(csb);
-
                             Direct2DBrush color = CreateBrush(rgb.Item1, rgb.Item2, rgb.Item3);
-
                             double barHeight = CalculateBarGraphHeight(maxHps[i], hps[i]);
 
                             DrawBox2D(
