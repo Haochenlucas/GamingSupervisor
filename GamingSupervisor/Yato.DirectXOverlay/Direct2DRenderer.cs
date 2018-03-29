@@ -1708,7 +1708,12 @@ namespace Yato.DirectXOverlay
                 killText.Reverse();
                 //killText = killText.TrimEnd('\r', '\n');
                 if (mX > xCurr - 2 && mX < xCurr + 2 && mY > (3 * y / 4) - 14 && mY < (3 * y / 4) + 10)
-                    DrawTextWithBackground(killText, xCurr, 3 * y / 4 - x / 80, font, background);
+                    DrawTextWithBackground(
+                        text: killText, 
+                        x: xCurr, 
+                        y: 3 * y / 4 - x / 80, 
+                        font: font, 
+                        backgroundBrush: background);
             }
         }
         #endregion
@@ -1838,12 +1843,22 @@ namespace Yato.DirectXOverlay
                     int y = Screen.PrimaryScreen.Bounds.Height;
                     float xInit = x / 4;
                     float xEnd = 3 * x / 4;
-                    DrawLine(xInit, 3 * y / 4, xEnd, 3 * y / 4, 2, lightRedBrush);
-                    foreach (var a in ticksInfo)
+                    DrawLine(
+                        start_x: xInit, start_y: 3 * y / 4, 
+                          end_x: xEnd,    end_y: 3 * y / 4, 
+                         stroke: 2,       brush: lightRedBrush);
+                    foreach (var a in ticksInfo) // TODO: change to struct for information
                     {
                         float percent = a.Key / (float)maxTick;
                         float xCurr = xInit + (xEnd - xInit) * percent;
-                        DrawBox2D(xCurr, (3 * y / 4) - 2, 4, 4, 2, blueBrush, blueBrush);
+                        DrawBox2D(
+                            x: xCurr, 
+                            y: (3 * y / 4) - 2, width: 
+                            4, 
+                            height: 4, 
+                            stroke: 2, 
+                            interiorBrush: blueBrush, 
+                            brush: blueBrush);
                     }
 
                     CheckToShowHighlightTime();
@@ -1851,7 +1866,12 @@ namespace Yato.DirectXOverlay
 
                 if (low_hp)
                 {
-                    DrawCircle(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
+                    DrawCircle(
+                        x: Screen.PrimaryScreen.Bounds.Width / 2, 
+                        y: Screen.PrimaryScreen.Bounds.Height / 2, 
+                        radius: Screen.PrimaryScreen.Bounds.Height / 5, 
+                        stroke: 2f, 
+                        brush: redBrush);
                 }
 
                 if (drawGraphs)
@@ -1892,12 +1912,14 @@ namespace Yato.DirectXOverlay
                                 brush: color
                                 );
 
-                            DrawBitmap(bmp,
-                                1,
-                                51 * i,
-                                currY - 108,
-                                50,
-                                28);
+                            DrawBitmap(
+                                bmp: bmp,
+                                opacity: 1,
+                                x: 51 * i,
+                                y: currY - 108,
+                                width: 50,
+                                height: 28
+                                );
 
                             bmp.SharpDXBitmap.Dispose();
                             csb.Dispose();
@@ -1905,31 +1927,37 @@ namespace Yato.DirectXOverlay
                     }
 
                     // vertical line
-                    DrawLine(250,           // start_x
-                            currY - 100 + 28,   // start_y
-                            250,                // end_x
-                            currY + 150 + 28,   // end_y
-                            2,                  // stroke
-                            redBrush);          // brush
+                    DrawLine(
+                        start_x: 250,           
+                        start_y: currY - 100 + 28,
+                        end_x: 250,               
+                        end_y: currY + 150 + 28,  
+                        stroke: 2,                
+                        brush: redBrush
+                        );              
 
                     // horizontal line
-                    DrawLine(0,             // start_x
-                        currY + 150 + 28,   // start_y
-                        250,                // end_x
-                        currY + 150 + 28,   // end_y
-                        2,                  // stroke
-                        redBrush);          // brush
+                    DrawLine(
+                        start_x: 0,             
+                        start_y: currY + 150 + 28,
+                        end_x: 250,               
+                        end_y: currY + 150 + 28,  
+                        stroke: 2,                
+                        brush: redBrush
+                        );                   
 
                     // line graph
                     for (int j = 0; j < currHp.Count - 1; j++)
                     {
                         double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(j,                                         // start_x
-                         (float)(currY - tempCurrHp[j]) / 6 + currY + 28,       // start_y
-                                 1 + j,                                          // end_x
-                         (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,   // end_y
-                                 1,                                              // stroke
-                                 redBrush);                                      // brush
+                        DrawLine(
+                            start_x: j,
+                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28,
+                            end_x: 1 + j,
+                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
+                            stroke: 1,
+                            brush: redBrush
+                            );
                     }
                 }
 
