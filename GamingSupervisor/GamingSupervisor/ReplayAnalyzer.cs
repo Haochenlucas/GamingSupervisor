@@ -321,6 +321,7 @@ namespace GamingSupervisor
             //int maxHealth = 0;
 
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
+            double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
             Console.WriteLine(CurrentTick + " getting health " + heroID);
             health = heroData.getHealth(CurrentTick, heroID);
@@ -329,8 +330,10 @@ namespace GamingSupervisor
             //if (health <= 600)
 
             hpToSend[0] = health;
+            maxHpToSend[0] = heroData.getMaxHealth(CurrentTick, heroID);
             for (int i = 0; i < 4; i++)
             {
+                maxHpToSend[i + 1] = heroData.getMaxHealth(CurrentTick, teamHeroIds[i]);
                 hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
 
@@ -362,7 +365,7 @@ namespace GamingSupervisor
 
             overlay.ToggleGraphForHeroHP();
             overlay.AddHeroGraphIcons(teamIDGraph);
-            overlay.AddHPs(hpToSend);
+            overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
 
             // The health at the start of the game is 0 so the retreat message will show up

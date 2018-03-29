@@ -29,6 +29,8 @@ namespace Yato.DirectXOverlay
 
         #region private vars
 
+        private int BAR_GRAPH_HEIGHT = Screen.PrimaryScreen.Bounds.Height / 2;
+
         private Direct2DRendererOptions rendererOptions;
 
         private WindowRenderTarget device;
@@ -76,6 +78,7 @@ namespace Yato.DirectXOverlay
 
         // Contains information about hero health
         private double[] hps = new double[5];
+        private double[] maxHps = new double[5];
 
         // Determins if graphs should be drawn
         private bool drawGraphs = false;
@@ -1626,9 +1629,10 @@ namespace Yato.DirectXOverlay
 
         // Updates (and overwrites the previous) the hero health
         // Currently holds 5 integers
-        public void UpdateHeroHPGraph(double[] newHps)
+        public void UpdateHeroHPGraph(double[] newHps, double[] newMaxHps)
         {
             hps = newHps;
+            maxHps = newMaxHps;
         }
 
         public void UpdateHeroHPQueue(double newhp)
@@ -1794,6 +1798,14 @@ namespace Yato.DirectXOverlay
 
             return new Tuple<int, int, int>(avgR, avgG, avgB); ;
         }
+
+        private double CalculateBarGraphHeight(double maxHP, double currHP)
+        {
+            return BAR_GRAPH_HEIGHT * currHP / maxHP;
+        }
+
+        
+
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
         {
             IntPtr fg = GetForegroundWindow();
@@ -1856,16 +1868,30 @@ namespace Yato.DirectXOverlay
 
                             Tuple<int, int, int> rgb = AveragePixelColor(csb);
 
+                            Direct2DBrush color = CreateBrush(rgb.Item1, rgb.Item2, rgb.Item3);
+
+                            double barHeight = CalculateBarGraphHeight(maxHps[i], hps[i]);
+
                             DrawBox2D(
-                            51 * i,                                                // x
-                            ((float)currY - (float)hps[i]) * .3f + currY / 2,      // y  
-                            50,                                                    // width
-                            (float)hps[i] * .3f,                                   // height
-                            1,                                                     // stroke
-                            CreateBrush(rgb.Item1,rgb.Item2,rgb.Item3),                     // int brush 
-                            blackBrush                                             // ext brush
-                            );
-                            
+                                x: 51 * i,                                               
+                                y: (currY - (float)barHeight) * .3f + currY / 2,     
+                                width: 50,                                               
+                                height: (float)barHeight * .3f,                             
+                                stroke: 1,                                               
+                                interiorBrush: color,
+                                brush: CreateBrush(r: 0, g: 0, b: 0, a: 1)               
+                                );
+
+                            DrawBox2D(
+                                x: 51 * i,
+                                y: (currY - BAR_GRAPH_HEIGHT) * .3f + currY / 2,
+                                width: 50,
+                                height: BAR_GRAPH_HEIGHT * .3f,
+                                stroke: 1,
+                                interiorBrush: CreateBrush(r: 0, g: 0, b: 0, a: 1),
+                                brush: color
+                                );
+
                             DrawBitmap(bmp,
                                 1,
                                 51 * i,
