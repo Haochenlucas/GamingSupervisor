@@ -1657,6 +1657,11 @@ namespace Yato.DirectXOverlay
         {
             this.drawHighlight = drawHighlight;
         }
+
+        public void test_hl()
+        {
+
+        }
         
         private void CheckToShowHighlightTime()
         {
@@ -1839,13 +1844,11 @@ namespace Yato.DirectXOverlay
 
                 if (drawHighlight)
                 {
-                    int x = Screen.PrimaryScreen.Bounds.Width;
-                    int y = Screen.PrimaryScreen.Bounds.Height;
-                    float xInit = x / 4;
-                    float xEnd = 3 * x / 4;
+                    float xInit = screen_width / 4;
+                    float xEnd = 3 * screen_width / 4;
                     DrawLine(
-                        start_x: xInit, start_y: 3 * y / 4, 
-                          end_x: xEnd,    end_y: 3 * y / 4, 
+                        start_x: xInit, start_y: 3 * screen_height / 4, 
+                          end_x: xEnd,    end_y: 3 * screen_height / 4, 
                          stroke: 2,       brush: lightRedBrush);
                     foreach (var a in ticksInfo) // TODO: change to struct for information
                     {
@@ -1853,7 +1856,7 @@ namespace Yato.DirectXOverlay
                         float xCurr = xInit + (xEnd - xInit) * percent;
                         DrawBox2D(
                             x: xCurr, 
-                            y: (3 * y / 4) - 2, width: 
+                            y: (3 * screen_height / 4) - 2, width: 
                             4, 
                             height: 4, 
                             stroke: 2, 
@@ -1876,7 +1879,7 @@ namespace Yato.DirectXOverlay
 
                 if (drawGraphs)
                 {
-                    int currY = Screen.PrimaryScreen.Bounds.Height / 2;
+                    float currY = screen_height / 2;
 
                     // bar graph
                     for (int i = 0; i < 5; i++)
