@@ -1,21 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-
+﻿using replayParse;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
-
-using FontFactory = SharpDX.DirectWrite.Factory;
-using Factory = SharpDX.Direct2D1.Factory;
-using System.Windows.Forms;
-using System.Text.RegularExpressions;
-using replayParse;
-using System.Threading;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using Factory = SharpDX.Direct2D1.Factory;
+using FontFactory = SharpDX.DirectWrite.Factory;
 
 namespace Yato.DirectXOverlay
 {
@@ -101,7 +97,7 @@ namespace Yato.DirectXOverlay
         
         static public float size_scale = Screen.PrimaryScreen.Bounds.Height / 1080f;
         private float maxTick;
-
+        
         #endregion
 
         #region public vars
@@ -139,6 +135,8 @@ namespace Yato.DirectXOverlay
             safe_farming = 11,
             heroinformation = 12,
         };
+
+        
 
         #endregion
 
@@ -1657,11 +1655,6 @@ namespace Yato.DirectXOverlay
         {
             this.drawHighlight = drawHighlight;
         }
-
-        public void test_hl()
-        {
-
-        }
         
         private void CheckToShowHighlightTime()
         {
@@ -1676,7 +1669,6 @@ namespace Yato.DirectXOverlay
 
 
             Direct2DFont font = CreateFont("Consolas", 12);
-            //Direct2DBrush brush = CreateBrush(0, 0, 0, 255);
             Direct2DBrush background = CreateBrush(109, 109, 109, 255);
 
             foreach (var a in ticksInfo)
@@ -1846,22 +1838,55 @@ namespace Yato.DirectXOverlay
                 {
                     float xInit = screen_width / 4;
                     float xEnd = 3 * screen_width / 4;
-                    DrawLine(
-                        start_x: xInit, start_y: 3 * screen_height / 4, 
-                          end_x: xEnd,    end_y: 3 * screen_height / 4, 
-                         stroke: 2,       brush: lightRedBrush);
+                    float yInput = 3 * screen_height / 4;
+                    Direct2DBrush gray = CreateBrush(109, 109, 109, 255);
+
+                    BorderedLine(
+                        start_x: xInit,
+                        start_y: yInput,
+                        end_x: xEnd,
+                        end_y: yInput,
+                        stroke: 5,
+                        brush: gray,
+                        borderBrush: gray
+                        );
                     foreach (var a in ticksInfo) // TODO: change to struct for information
                     {
                         float percent = a.Key / (float)maxTick;
                         float xCurr = xInit + (xEnd - xInit) * percent;
+
+                        Boolean redflag = false;
+                        Boolean greenflag = false;
+
+                        foreach (var k in a.Value)
+                        {
+                            if (k.Item3 == "R")
+                                redflag = true;
+                            else if (k.Item3 == "G")
+                                greenflag = true;
+                        }
+
+                        Direct2DBrush DarkGreenBrush = CreateBrush(0, 155, 0);
+
                         DrawBox2D(
-                            x: xCurr, 
-                            y: (3 * screen_height / 4) - 2, width: 
-                            4, 
-                            height: 4, 
-                            stroke: 2, 
-                            interiorBrush: blueBrush, 
-                            brush: blueBrush);
+                            x: xCurr,
+                            y: (3 * screen_height / 4) - 4,
+                            width: 8,
+                            height: 4,
+                            stroke: 0,
+                            interiorBrush: greenflag ? DarkGreenBrush : blackBrush,
+                            brush: greenflag ? DarkGreenBrush : blackBrush
+                            );
+
+
+                        DrawBox2D(
+                            x: xCurr,
+                            y: (3 * screen_height / 4),
+                            width: 8,
+                            height: 4,
+                            stroke: 0,
+                            interiorBrush: redflag ? redBrush : blackBrush,
+                            brush: redflag ? redBrush : blackBrush);
                     }
 
                     CheckToShowHighlightTime();
