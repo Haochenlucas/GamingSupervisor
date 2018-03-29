@@ -60,7 +60,10 @@ namespace GamingSupervisor
 
         private void WaitForDotaToOpen()
         {
-            Console.WriteLine("WaitForDotaToOpen start");
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return;
+#endif
             string consoleLog = Path.Combine(SteamAppsLocation.Get(), "console.log");
             using (FileStream fileStream = File.Open(consoleLog, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
@@ -75,11 +78,14 @@ namespace GamingSupervisor
                     }
                 }
             }
-            Console.WriteLine("WaitForDotaToOpen end");
         }
 
         private void StartDota()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return;
+#endif
             Console.WriteLine("Starting dota...");
             Process p = new Process();
 

@@ -15,6 +15,15 @@ namespace GamingSupervisor
 
         public Overlay()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+            {
+                dotaProcessHandle = Process.GetProcessesByName("notepad")[0].MainWindowHandle;
+                overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
+                renderer.SetupHintSlots();
+                return;
+            }
+#endif
             while (Process.GetProcessesByName("dota2").Length == 0)
             {
                 Thread.Sleep(500);
