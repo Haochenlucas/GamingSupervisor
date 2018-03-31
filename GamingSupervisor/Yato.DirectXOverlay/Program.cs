@@ -79,7 +79,7 @@ namespace Yato.DirectXOverlay
             }
 
             // For test use only. Show overlay on Visual Studio
-            var VS_HWND = Process.GetProcessesByName("notepad")[0].MainWindowHandle;
+            var VS_HWND = Process.GetProcessesByName("notepad++")[0].MainWindowHandle;
             manager = new OverlayManager(VS_HWND, out overlay, out d2d);
 
             /*
@@ -120,6 +120,9 @@ namespace Yato.DirectXOverlay
 
             //Thread.Sleep(2000);
             // Control FPS
+
+            
+
             Stopwatch watch = new Stopwatch();
             d2d.SetupHintSlots();
             
@@ -147,7 +150,7 @@ namespace Yato.DirectXOverlay
                 imgName[3] = "4";
                 imgName[4] = "6";
 
-                d2d.HeroSelectionHints(messages, imgName);
+                //d2d.HeroSelectionHints(messages, imgName);
                 string temp = "Lycan is a remarkable pusher who can wear down buildings and force enemies to react quickly to his regular tower onslaughts; as towers melt incredibly fast under Lycan's and his units' pressure, boosted by their canine Feral Impulse. His only contribution to full-on team fights will be the bonus damage he grants with Howl to his allies, his allies' summons, his owns summons, and himself, as well as his formidable physical attacks. Else he can surge out of the woods for a quick gank or push after he transformed with Shapeshift, moving at a haste speed of 650. Finally, good players will make the best usage of his Summon Wolves ability and scout the enemies' position while remaining undetected with invisibility at level 4.";
 
                 d2d.HeroInfoHints(temp, "");

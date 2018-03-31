@@ -101,11 +101,13 @@ namespace GamingSupervisor
 
         private void HandleGamePlay()
         {
+            // placeholders
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
+            double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
             int healthPercent = gsi.HealthPercent;
             
-            overlay.AddHPs(hpToSend);
+            overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
 
             if (true)//healthPercent < 25)

@@ -55,9 +55,9 @@ namespace GamingSupervisor
             renderer.ToggleGraph(tog);
         }
 
-        public void AddHPs(double[] newhps)
+        public void AddHPs(double[] newhps, double[] newmaxhps)
         {
-            renderer.UpdateHeroHPGraph(newhps);
+            renderer.UpdateHeroHPGraph(newhps, newmaxhps);
         }
 
         public void AddHp(double newhp)
