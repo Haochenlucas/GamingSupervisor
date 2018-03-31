@@ -1354,7 +1354,7 @@ namespace Yato.DirectXOverlay
         
         private string BreakText(string sentence, int partLength)
         {
-            string[] words = sentence.Split(' ');
+            string[] words = sentence.Split(new char[] { ' ' });
             string newString = string.Empty;
             string part = string.Empty;
             foreach (var word in words)
@@ -1551,10 +1551,12 @@ namespace Yato.DirectXOverlay
 
             hero_difficulty dt = new hero_difficulty(path);
             string suggestion = dt.mainDiff(HeroID);
+            suggestion = BreakText(suggestion, 60);
             string hero_rating = dt.getFinalLevel(HeroID)[0] + ": " + dt.getFinalLevel(HeroID)[1] + "\n\n";
+            hero_rating = BreakText(hero_rating, 60);
             // add a newline every 8 chars
             suggestion = hero_rating + suggestion;
-            suggestion = BreakText(suggestion, 50);
+            //suggestion = BreakText(suggestion, 50);
 
             Tuple<int, int, int, int> background = new Tuple<int, int, int, int>(109, 109, 109, 255);
             Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
