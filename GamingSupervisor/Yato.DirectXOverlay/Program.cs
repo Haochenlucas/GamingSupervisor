@@ -173,6 +173,7 @@ namespace Yato.DirectXOverlay
                 }
                 //Console.WriteLine(Direct2DRenderer.hits.hero_selection_1);
 
+                
                 watch.Restart();
             }
         }
