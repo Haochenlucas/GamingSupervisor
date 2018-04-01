@@ -140,6 +140,8 @@ namespace GamingSupervisor
                         ShowDraftHints();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
+                        overlay.ClearHeroSuggestion();
+                        break;
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
                         SetEnemiesHeroIDs();
                         replayStarted = true;

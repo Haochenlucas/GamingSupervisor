@@ -55,6 +55,10 @@ namespace replayParse
                                 return base[i];
                             }
                         }
+                        if (cachedValue.GetType() == typeof(Tuple<double, double, double>))
+                        {
+                            return (T)Convert.ChangeType(Tuple.Create(0, 0, 0), typeof(T));
+                        }
                         return default(T);
                     }
                 }
