@@ -1864,10 +1864,7 @@ namespace Yato.DirectXOverlay
                     CheckToShowHighlightTime();
                 }
 
-                if (low_hp)
-                {
-                    DrawCircle(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
-                }
+                DrawCircle((float)closestHero_X, (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
 
                 if (drawGraphs)
                 {
@@ -1875,6 +1872,7 @@ namespace Yato.DirectXOverlay
 
                     // bar graph
                     for (int i = 0; i < 5; i++)
+
                     {
                         {
                             Direct2DBitmap bmp = new Direct2DBitmap(device, @"hero_icon_images\" + heroIds[i] + ".png");
@@ -1940,6 +1938,14 @@ namespace Yato.DirectXOverlay
             {
                 clear();
             }
+        }
+
+        private double closestHero_X;
+        private double closestHero_Y;
+        public void SetClosetHeroPosition(double x, double y)
+        {
+            closestHero_X = x;
+            closestHero_Y = y;
         }
 
         private void ShowImage(string path, int i, float modifier)

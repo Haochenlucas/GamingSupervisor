@@ -29,6 +29,7 @@ namespace GamingSupervisor
         private int[,] table = cp.selectTable();
         private Dictionary<string, int> hero_table = h_ID.getIDHero();
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
+        private int[] enemiesHeroID;
 
         private int CurrentTick
         {
@@ -140,6 +141,7 @@ namespace GamingSupervisor
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        SetEnemiesHeroIDs();
                         replayStarted = true;
                         overlay.ClearHeroSuggestion();
                         HandleGamePlay();
@@ -189,6 +191,30 @@ namespace GamingSupervisor
             overlay.Clear();
 
             Console.WriteLine("Replay stopped!");
+        }
+
+        private void SetEnemiesHeroIDs()
+        {
+            string heroname = GUISelection.heroName;
+            int team_side = 0;
+            for (int i = 0; i < table.Length / 4; i++)
+            {
+                if (table[i, 0] == hero_table[heroname])
+                {
+                    team_side = table[i, 2];
+                    break;
+                }
+            }
+            int enemyTeam;
+            if (team_side == 2)
+            {
+                enemyTeam = 3;
+            }
+            else
+            {
+                enemyTeam = 2;
+            }
+            enemiesHeroID = cp.GetEnemiesHeroID(enemyTeam);
         }
 
         private void ShowIngameHints()
@@ -333,7 +359,31 @@ namespace GamingSupervisor
             {
                 hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
-
+            
+            // Get current hero position
+            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick, heroID);
+            Tuple<double, double, double> heroPosition = new Tuple<double, double, double>(x, y, z);
+            // Loop through all enemy heros and find the cloest one
+            Tuple<double, double, double> enemyHeroPosition = null;
+            double dis = Int32.MaxValue;
+            
+            foreach( int ID in enemiesHeroID)
+            {
+                (double x_temp, double y_temp, double z_temp) = heroData.getHeroPosition(CurrentTick, ID);
+                double temp = Math.Pow((Math.Pow(x-x_temp,2)+ Math.Pow(y-y_temp,2)),0.5);
+                if (temp < dis)
+                {
+                    enemyHeroPosition = new Tuple<double, double, double>(Math.Abs(x-x_temp), Math.Abs(y-y_temp), Math.Abs(z-z_temp));
+                }
+            }
+            if (enemyHeroPosition != null)
+            {
+                overlay.ShowCloestEnemy(enemyHeroPosition.Item1, enemyHeroPosition.Item2);
+            }
+            else
+            {
+                throw new Exception("Closet enemy not found.");
+            }
             //overlay.ToggleGraphForHeroHP();
             //overlay.AddHPs(hpToSend);
             //overlay.AddHp(hpToSend[0]);
