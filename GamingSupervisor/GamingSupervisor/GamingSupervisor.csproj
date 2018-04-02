@@ -127,6 +127,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analyzer.cs" />
+    <Compile Include="DotaConsoleParser.cs" />
     <Compile Include="GameStateIntegration.cs" />
     <Compile Include="GameStateIntegrationSingleton.cs" />
     <Compile Include="GUI\ReplaySelection.xaml.cs">

@@ -8,9 +8,11 @@ namespace GamingSupervisor
     class LiveAnalyzer : Analyzer
     {
         private GameStateIntegration gsi;
+        private DotaConsoleParser consoleData;
 
         public LiveAnalyzer() : base()
         {
+            consoleData = new DotaConsoleParser();
         }
 
         public override void Start()
@@ -60,6 +62,7 @@ namespace GamingSupervisor
                     return;
                 }
 
+                string lastGameState = "";
                 switch (gsi.GameState)
                 {
                     case null:
@@ -69,12 +72,19 @@ namespace GamingSupervisor
                         {
                             keepLooping = false;
                         }
+                        lastGameState = "Undefined";
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
                         gameStarted = true;
+                        if (lastGameState != "DOTA_GAMERULES_STATE_HERO_SELECTION")
+                        {
+                            lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
+                            consoleData.ReportHeroSelection();
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
                         gameStarted = true;
 
                         //overlay.ClearHeroSuggestion();
@@ -82,6 +92,7 @@ namespace GamingSupervisor
                         overlay.ShowIngameMessage();
                         break;
                     default:
+                        lastGameState = "Other";
                         gameStarted = true;
                         break;
                 }
