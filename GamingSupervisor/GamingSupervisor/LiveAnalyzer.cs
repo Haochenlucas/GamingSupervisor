@@ -1,16 +1,23 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace GamingSupervisor
 {
     class LiveAnalyzer : Analyzer
     {
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern IntPtr GetForegroundWindow();
+
         private GameStateIntegration gsi;
+        private DotaConsoleParser consoleData;
 
         public LiveAnalyzer() : base()
         {
+            consoleData = new DotaConsoleParser();
         }
 
         public override void Start()
@@ -35,7 +42,7 @@ namespace GamingSupervisor
 
                 double positionX = 0;
                 double positionY = 0;
-                Application.Current.Dispatcher.Invoke(
+                System.Windows.Application.Current.Dispatcher.Invoke(
                     () =>
                     {
                         positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
@@ -60,6 +67,7 @@ namespace GamingSupervisor
                     return;
                 }
 
+                string lastGameState = "";
                 switch (gsi.GameState)
                 {
                     case null:
@@ -69,12 +77,19 @@ namespace GamingSupervisor
                         {
                             keepLooping = false;
                         }
+                        lastGameState = "Undefined";
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
                         gameStarted = true;
+                        if (lastGameState != "DOTA_GAMERULES_STATE_HERO_SELECTION")
+                        {
+                            lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
+                            consoleData.StartHeroSelectionParsing();
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
                         gameStarted = true;
 
                         //overlay.ClearHeroSuggestion();
@@ -82,6 +97,7 @@ namespace GamingSupervisor
                         overlay.ShowIngameMessage();
                         break;
                     default:
+                        lastGameState = "Other";
                         gameStarted = true;
                         break;
                 }
@@ -99,8 +115,22 @@ namespace GamingSupervisor
             Console.WriteLine("Game stopped!");
         }
 
+        private long timeSinceLastKeyPress_ms = 0;
+        private void SendCommandsToDota()
+        {
+            long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            if (now_ms - timeSinceLastKeyPress_ms >= 500)
+            {
+                timeSinceLastKeyPress_ms = now_ms;
+                if (GetForegroundWindow() == overlay.GetOverlayHandle())
+                    SendKeys.SendWait("{F12}");
+            }
+        }
+
         private void HandleGamePlay()
         {
+            SendCommandsToDota();
+
             // placeholders
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
             double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
