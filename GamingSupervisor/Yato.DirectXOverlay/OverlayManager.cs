@@ -35,14 +35,14 @@ namespace Yato.DirectXOverlay
             overlay = Window;
             d2d = Graphics;
 
-            d2d.whiteSmoke = d2d.CreateBrush(0xF5, 0xF5, 0xF5, 100);
+            d2d.WhiteSmoke = d2d.CreateBrush(0xF5, 0xF5, 0xF5, 100);
 
-            d2d.blackBrush = d2d.CreateBrush(0, 0, 0, 255);
-            d2d.redBrush = d2d.CreateBrush(255, 0, 0, 255);
-            d2d.lightRedBrush = d2d.CreateBrush(255, 100, 100, 255);
-            d2d.greenBrush = d2d.CreateBrush(0, 255, 0, 255);
-            d2d.blueBrush = d2d.CreateBrush(0, 0, 255, 255);
-            d2d.font = d2d.CreateFont("Consolas", 22);
+            d2d.BlackBrush = d2d.CreateBrush(0, 0, 0, 255);
+            d2d.RedBrush = d2d.CreateBrush(255, 0, 0, 255);
+            d2d.LightRedBrush = d2d.CreateBrush(255, 100, 100, 255);
+            d2d.GreenBrush = d2d.CreateBrush(0, 255, 0, 255);
+            d2d.BlueBrush = d2d.CreateBrush(0, 0, 255, 255);
+            d2d.Font = d2d.CreateFont("Consolas", 22);
         }
 
         public OverlayManager(IntPtr parentWindowHandle, bool vsync = false, bool measurefps = false, bool antialiasing = true)

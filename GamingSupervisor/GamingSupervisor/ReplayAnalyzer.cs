@@ -42,7 +42,7 @@ namespace GamingSupervisor
         public ReplayAnalyzer() : base()
         {
             tickTimer = new System.Timers.Timer(1000.0 / 30.0);
-            tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(tickCallback);
+            tickTimer.Elapsed += new System.Timers.ElapsedEventHandler(TickCallback);
 
             heroData = new HeroParser(GUISelection.replayDataFolderLocation);
             heroIDData = new ReplayHeroID(GUISelection.replayDataFolderLocation);
@@ -381,7 +381,7 @@ namespace GamingSupervisor
             }
         }
 
-        private void tickCallback(object sender, EventArgs e)
+        private void TickCallback(object sender, EventArgs e)
         {
             CurrentTick++;
         }

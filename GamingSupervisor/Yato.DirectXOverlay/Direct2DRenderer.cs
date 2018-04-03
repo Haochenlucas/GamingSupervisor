@@ -110,14 +110,14 @@ namespace Yato.DirectXOverlay
 
         public int Width { get; private set; }
         public int Height { get; private set; }
-        public Direct2DBrush whiteSmoke { get; set; }
-        public Direct2DBrush blackBrush { get; set; }
-        public Direct2DBrush redBrush { get; set; }
-        public Direct2DBrush lightRedBrush { get; set; }
-        public Direct2DBrush greenBrush { get; set; }
-        public Direct2DBrush blueBrush { get; set; }
-        public Direct2DFont font { get; set; }
-        public enum hints : int
+        public Direct2DBrush WhiteSmoke { get; set; }
+        public Direct2DBrush BlackBrush { get; set; }
+        public Direct2DBrush RedBrush { get; set; }
+        public Direct2DBrush LightRedBrush { get; set; }
+        public Direct2DBrush GreenBrush { get; set; }
+        public Direct2DBrush BlueBrush { get; set; }
+        public Direct2DFont Font { get; set; }
+        public enum Hints : int
         {
             hero_selection_1 = 0,
             hero_selection_2 = 1,
@@ -156,7 +156,7 @@ namespace Yato.DirectXOverlay
                 MeasureFps = false,
                 AntiAliasing = false
             };
-            setupInstance(options);
+            SetupInstance(options);
         }
 
         public Direct2DRenderer(IntPtr hwnd, bool vsync)
@@ -168,7 +168,7 @@ namespace Yato.DirectXOverlay
                 MeasureFps = false,
                 AntiAliasing = false
             };
-            setupInstance(options);
+            SetupInstance(options);
         }
 
         public Direct2DRenderer(IntPtr hwnd, bool vsync, bool measureFps)
@@ -180,7 +180,7 @@ namespace Yato.DirectXOverlay
                 MeasureFps = measureFps,
                 AntiAliasing = false
             };
-            setupInstance(options);
+            SetupInstance(options);
         }
 
         public Direct2DRenderer(IntPtr hwnd, bool vsync, bool measureFps, bool antiAliasing)
@@ -192,12 +192,12 @@ namespace Yato.DirectXOverlay
                 MeasureFps = measureFps,
                 AntiAliasing = antiAliasing
             };
-            setupInstance(options);
+            SetupInstance(options);
         }
 
         public Direct2DRenderer(Direct2DRendererOptions options)
         {
-            setupInstance(options);
+            SetupInstance(options);
         }
 
         ~Direct2DRenderer()
@@ -209,7 +209,7 @@ namespace Yato.DirectXOverlay
 
         #region init & delete
 
-        private void setupInstance(Direct2DRendererOptions options)
+        private void SetupInstance(Direct2DRendererOptions options)
         {
             rendererOptions = options;
 
@@ -244,16 +244,17 @@ namespace Yato.DirectXOverlay
             factory = new Factory();
             fontFactory = new FontFactory();
 
-            device = new WindowRenderTarget(factory, renderProperties, deviceProperties);
-
-            device.AntialiasMode = AntialiasMode.Aliased; // AntialiasMode.PerPrimitive fails rendering some objects
-            // other than in the documentation: Cleartype is much faster for me than GrayScale
-            device.TextAntialiasMode = options.AntiAliasing ? SharpDX.Direct2D1.TextAntialiasMode.Cleartype : SharpDX.Direct2D1.TextAntialiasMode.Aliased;
+            device = new WindowRenderTarget(factory, renderProperties, deviceProperties)
+            {
+                AntialiasMode = AntialiasMode.Aliased, // AntialiasMode.PerPrimitive fails rendering some objects
+                                                       // other than in the documentation: Cleartype is much faster for me than GrayScale
+                TextAntialiasMode = options.AntiAliasing ? SharpDX.Direct2D1.TextAntialiasMode.Cleartype : SharpDX.Direct2D1.TextAntialiasMode.Aliased
+            };
 
             sharedBrush = new SolidColorBrush(device, default(RawColor4));
         }
 
-        private void deleteInstance()
+        private void DeleteInstance()
         {
             try
             {
@@ -318,13 +319,13 @@ namespace Yato.DirectXOverlay
             {
                 result = device.TryEndDraw(out tag_0, out tag_1);
             }
-            catch (System.ArgumentOutOfRangeException e) { return; }
-            catch (System.InvalidCastException e) { return; }
+            catch (System.ArgumentOutOfRangeException) { return; }
+            catch (System.InvalidCastException) { return; }
 
             if (result.Failure)
             {
-                deleteInstance();
-                setupInstance(rendererOptions);
+                DeleteInstance();
+                SetupInstance(rendererOptions);
             }
 
             if (MeasureFPS && stopwatch.IsRunning)
@@ -363,8 +364,10 @@ namespace Yato.DirectXOverlay
 
         public void SetSharedFont(string fontFamilyName, float size, bool bold = false, bool italic = false)
         {
-            sharedFont = new TextFormat(fontFactory, fontFamilyName, bold ? FontWeight.Bold : FontWeight.Normal, italic ? FontStyle.Italic : FontStyle.Normal, size);
-            sharedFont.WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap;
+            sharedFont = new TextFormat(fontFactory, fontFamilyName, bold ? FontWeight.Bold : FontWeight.Normal, italic ? FontStyle.Italic : FontStyle.Normal, size)
+            {
+                WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap
+            };
         }
 
         public Direct2DBrush CreateBrush(Direct2DColor color)
@@ -389,8 +392,10 @@ namespace Yato.DirectXOverlay
 
         public Direct2DFont CreateFont(Direct2DFontCreationOptions options)
         {
-            TextFormat font = new TextFormat(fontFactory, options.FontFamilyName, options.Bold ? FontWeight.Bold : FontWeight.Normal, options.GetStyle(), options.FontSize);
-            font.WordWrapping = options.WordWrapping ? WordWrapping.Wrap : WordWrapping.NoWrap;
+            TextFormat font = new TextFormat(fontFactory, options.FontFamilyName, options.Bold ? FontWeight.Bold : FontWeight.Normal, options.GetStyle(), options.FontSize)
+            {
+                WordWrapping = options.WordWrapping ? WordWrapping.Wrap : WordWrapping.NoWrap
+            };
             return new Direct2DFont(font);
         }
 
@@ -1340,7 +1345,7 @@ namespace Yato.DirectXOverlay
                     // Free managed objects
                 }
 
-                deleteInstance();
+                DeleteInstance();
 
                 disposedValue = true;
             }
@@ -1510,19 +1515,19 @@ namespace Yato.DirectXOverlay
                 switch (i)
                 {
                     case 0:
-                        AddMessage(hints.hero_selection_1, heros[i], img[i]);
+                        AddMessage(Hints.hero_selection_1, heros[i], img[i]);
                         break;
                     case 1:
-                        AddMessage(hints.hero_selection_2, heros[i], img[i]);
+                        AddMessage(Hints.hero_selection_2, heros[i], img[i]);
                         break;
                     case 2:
-                        AddMessage(hints.hero_selection_3, heros[i], img[i]);
+                        AddMessage(Hints.hero_selection_3, heros[i], img[i]);
                         break;
                     case 3:
-                        AddMessage(hints.hero_selection_4, heros[i], img[i]);
+                        AddMessage(Hints.hero_selection_4, heros[i], img[i]);
                         break;
                     case 4:
-                        AddMessage(hints.hero_selection_5, heros[i], img[i]);
+                        AddMessage(Hints.hero_selection_5, heros[i], img[i]);
                         break;
 
                     default:
@@ -1535,13 +1540,13 @@ namespace Yato.DirectXOverlay
         public void ItemSelectionHints(string item, string img)
         {
             string temp = BreakText(item, 50);
-             AddMessage(hints.items_selection, temp, img);
+             AddMessage(Hints.items_selection, temp, img);
         }
 
         public void HeroInfoHints(string info, string img)
         {
             string temp = BreakText(info, 50);
-            AddMessage(hints.heroinformation, temp, img);
+            AddMessage(Hints.heroinformation, temp, img);
         }
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
@@ -1563,8 +1568,8 @@ namespace Yato.DirectXOverlay
             Tuple<string, int> font = new Tuple<string, int>("Consolas", 18);
 
 
-            AddMessage(hints.hero_introduction, suggestion, "", color, background, font);
-            messages[Convert.ToInt32(hints.hero_introduction)].y = mouse_Y;
+            AddMessage(Hints.hero_introduction, suggestion, "", color, background, font);
+            messages[Convert.ToInt32(Hints.hero_introduction)].y = mouse_Y;
         }
 
         // 7: retreat
@@ -1572,9 +1577,9 @@ namespace Yato.DirectXOverlay
         {
             warning_timer.Start();
             //low_hp = true;
-            AddMessage(hints.retreat, text, imgName);
+            AddMessage(Hints.retreat, text, imgName);
         }
-        public void AddMessage(hints type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
+        public void AddMessage(Hints type, string text, [Optional] string imgName, [Optional] Tuple<int, int, int, int> color, [Optional] Tuple<int, int, int, int> background, [Optional]  Tuple<string, int> font)
         {
             int idx = Convert.ToInt32(type);
             messages[idx].text = text;
@@ -1603,13 +1608,13 @@ namespace Yato.DirectXOverlay
         #endregion
 
         #region Delete messages
-        public void DeleteMessage(hints type)
+        public void DeleteMessage(Hints type)
         {
-            if (type == hints.retreat)
+            if (type == Hints.retreat)
             {
                 low_hp = false;
             }
-            messages[Convert.ToInt32(type)].clear();
+            messages[Convert.ToInt32(type)].Clear();
         }
         #endregion
 
@@ -1825,8 +1830,7 @@ namespace Yato.DirectXOverlay
                 {
                     if (messages[i].on)
                     {
-                        float modifier;
-                        DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background, out modifier);
+                        DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background, out float modifier);
                         if (messages[i].imgName != "")
                         {
                             string path = SelectFolder(i);
@@ -1876,8 +1880,8 @@ namespace Yato.DirectXOverlay
                             width: 8,
                             height: 4,
                             stroke: 0,
-                            interiorBrush: greenflag ? DarkGreenBrush : blackBrush,
-                            brush: greenflag ? DarkGreenBrush : blackBrush
+                            interiorBrush: greenflag ? DarkGreenBrush : BlackBrush,
+                            brush: greenflag ? DarkGreenBrush : BlackBrush
                             );
 
 
@@ -1887,8 +1891,8 @@ namespace Yato.DirectXOverlay
                             width: 8,
                             height: 4,
                             stroke: 0,
-                            interiorBrush: redflag ? redBrush : blackBrush,
-                            brush: redflag ? redBrush : blackBrush);
+                            interiorBrush: redflag ? RedBrush : BlackBrush,
+                            brush: redflag ? RedBrush : BlackBrush);
                     }
 
                     CheckToShowHighlightTime();
@@ -1901,7 +1905,7 @@ namespace Yato.DirectXOverlay
                         y: Screen.PrimaryScreen.Bounds.Height / 2, 
                         radius: Screen.PrimaryScreen.Bounds.Height / 5, 
                         stroke: 2f, 
-                        brush: redBrush);
+                        brush: RedBrush);
                 }
 
                 if (drawGraphs)
@@ -1960,7 +1964,7 @@ namespace Yato.DirectXOverlay
                         end_x: 250,               
                         end_y: currY + 150 + 28,  
                         stroke: 2,                
-                        brush: redBrush
+                        brush: RedBrush
                         );              
 
                     // horizontal line
@@ -1970,7 +1974,7 @@ namespace Yato.DirectXOverlay
                         end_x: 250,               
                         end_y: currY + 150 + 28,  
                         stroke: 2,                
-                        brush: redBrush
+                        brush: RedBrush
                         );                   
 
                     // line graph
@@ -1983,7 +1987,7 @@ namespace Yato.DirectXOverlay
                             end_x: 1 + j,
                             end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
                             stroke: 1,
-                            brush: redBrush
+                            brush: RedBrush
                             );
                     }
                 }
@@ -1992,7 +1996,7 @@ namespace Yato.DirectXOverlay
             }
             else
             {
-                clear();
+                Clear();
             }
         }
 
@@ -2086,8 +2090,7 @@ namespace Yato.DirectXOverlay
                 {
                     if (messages[i].on)
                     {
-                        float modifier;
-                        DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background, out modifier);
+                        DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background, out float modifier);
                         if (messages[i].imgName != "")
                         {
                             Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
@@ -2104,7 +2107,7 @@ namespace Yato.DirectXOverlay
             }
             else
             {
-                clear();
+                Clear();
             }
         }
         #endregion
@@ -2117,13 +2120,13 @@ namespace Yato.DirectXOverlay
             Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
 
 
-            AddMessage(hints.heroinformation, HeroID.ToString(), HeroID.ToString(), color, background);
+            AddMessage(Hints.heroinformation, HeroID.ToString(), HeroID.ToString(), color, background);
 
-            string content = getHeroInfo(HeroID);
+            string content = GetHeroInfo(HeroID);
             heroInfo = new HeroInfo(messages[12], content);
         }
 
-        public string getHeroInfo(int HeroID)
+        public string GetHeroInfo(int HeroID)
         {
             string content = "You are not good enough to play this hero. You can try but you will fail.";
 
@@ -2151,9 +2154,8 @@ namespace Yato.DirectXOverlay
                 // Title of the box
                 DrawTextWithBackground(heroInfo.title.Item1, heroInfo.title.Item2, heroInfo.title.Item3, textFont, color, background);
                 DrawTextWithBackground(heroInfo.content.Item1, heroInfo.content.Item2, heroInfo.content.Item3, textFont, color, background);
-
-                float modifier;
-                DrawTextWithBackground(messages[12].text, messages[12].x, messages[12].y, messages[12].font, messages[12].color, messages[12].background, out modifier);
+                
+                DrawTextWithBackground(messages[12].text, messages[12].x, messages[12].y, messages[12].font, messages[12].color, messages[12].background, out float modifier);
                 if (messages[12].imgName != "")
                 {
                     Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[12].imgName + ".png");
@@ -2165,7 +2167,7 @@ namespace Yato.DirectXOverlay
             }
             else
             {
-                clear();
+                Clear();
             }
         }
         #endregion
@@ -2220,8 +2222,7 @@ namespace Yato.DirectXOverlay
                         brush: color,
                         backgroundBrush: background);
 
-                    showInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
-                    float modifier;
+                    ShowInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                     DrawTextWithBackground(
                         text: instruction.instructions.text,
                         x: instruction.instructions.x + distanceFromDefaultHorizontal,
@@ -2229,18 +2230,18 @@ namespace Yato.DirectXOverlay
                         tfont: instruction.instructions.font,
                         tcolor: instruction.instructions.color,
                         tbackground: instruction.instructions.background,
-                        modifier: out modifier);
+                        modifier: out float modifier);
 
                 }
                 EndScene();
             }
             else
             {
-                clear();
+                Clear();
             }
         }
         
-        private void showInstructionButtons(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
+        private void ShowInstructionButtons(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
             var mouse_pos = Control.MousePosition;
             if (mouse_pos.X > instruction.close_button_pos.Item1 + distanceFromDefaultHorizontal &&
@@ -2279,7 +2280,7 @@ namespace Yato.DirectXOverlay
         }
         #endregion
         
-        public void clear()
+        public void Clear()
         {
             BeginScene();
             ClearScene();
@@ -2462,7 +2463,7 @@ namespace Yato.DirectXOverlay
             img_height = 144 / 2;
         }
 
-        public void clear()
+        public void Clear()
         {
             on = false;
         }
@@ -2640,8 +2641,10 @@ namespace Yato.DirectXOverlay
 
                 Font.Dispose();
 
-                Font = new TextFormat(factory, value, bold ? FontWeight.Bold : FontWeight.Normal, style, size);
-                Font.WordWrapping = wordWrapping ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap;
+                Font = new TextFormat(factory, value, bold ? FontWeight.Bold : FontWeight.Normal, style, size)
+                {
+                    WordWrapping = wordWrapping ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap
+                };
             }
         }
 
@@ -2660,8 +2663,10 @@ namespace Yato.DirectXOverlay
 
                 Font.Dispose();
 
-                Font = new TextFormat(factory, familyName, bold ? FontWeight.Bold : FontWeight.Normal, style, value);
-                Font.WordWrapping = wordWrapping ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap;
+                Font = new TextFormat(factory, familyName, bold ? FontWeight.Bold : FontWeight.Normal, style, value)
+                {
+                    WordWrapping = wordWrapping ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap
+                };
             }
         }
 
@@ -2680,8 +2685,10 @@ namespace Yato.DirectXOverlay
 
                 Font.Dispose();
 
-                Font = new TextFormat(factory, familyName, value ? FontWeight.Bold : FontWeight.Normal, style, size);
-                Font.WordWrapping = wordWrapping ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap;
+                Font = new TextFormat(factory, familyName, value ? FontWeight.Bold : FontWeight.Normal, style, size)
+                {
+                    WordWrapping = wordWrapping ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap
+                };
             }
         }
 
@@ -2700,8 +2707,10 @@ namespace Yato.DirectXOverlay
 
                 Font.Dispose();
 
-                Font = new TextFormat(factory, familyName, bold ? FontWeight.Bold : FontWeight.Normal, value ? FontStyle.Italic : FontStyle.Normal, size);
-                Font.WordWrapping = wordWrapping ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap;
+                Font = new TextFormat(factory, familyName, bold ? FontWeight.Bold : FontWeight.Normal, value ? FontStyle.Italic : FontStyle.Normal, size)
+                {
+                    WordWrapping = wordWrapping ? SharpDX.DirectWrite.WordWrapping.Wrap : SharpDX.DirectWrite.WordWrapping.NoWrap
+                };
             }
         }
 
@@ -2730,8 +2739,10 @@ namespace Yato.DirectXOverlay
         public Direct2DFont(FontFactory factory, string fontFamilyName, float size, bool bold = false, bool italic = false)
         {
             this.factory = factory;
-            Font = new TextFormat(factory, fontFamilyName, bold ? FontWeight.Bold : FontWeight.Normal, italic ? FontStyle.Italic : FontStyle.Normal, size);
-            Font.WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap;
+            Font = new TextFormat(factory, fontFamilyName, bold ? FontWeight.Bold : FontWeight.Normal, italic ? FontStyle.Italic : FontStyle.Normal, size)
+            {
+                WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap
+            };
         }
 
         ~Direct2DFont()
@@ -2814,12 +2825,12 @@ namespace Yato.DirectXOverlay
 
         public Direct2DBitmap(RenderTarget device, byte[] bytes)
         {
-            loadBitmap(device, bytes);
+            LoadBitmap(device, bytes);
         }
 
         public Direct2DBitmap(RenderTarget device, string file)
         {
-            loadBitmap(device, File.ReadAllBytes(file));
+            LoadBitmap(device, File.ReadAllBytes(file));
         }
 
         ~Direct2DBitmap()
@@ -2827,7 +2838,7 @@ namespace Yato.DirectXOverlay
             SharpDXBitmap.Dispose();
         }
 
-        private void loadBitmap(RenderTarget device, byte[] bytes)
+        private void LoadBitmap(RenderTarget device, byte[] bytes)
         {
             var stream = new MemoryStream(bytes);
             SharpDX.WIC.BitmapDecoder decoder = new SharpDX.WIC.BitmapDecoder(factory, stream, SharpDX.WIC.DecodeOptions.CacheOnDemand);

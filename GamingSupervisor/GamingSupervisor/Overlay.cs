@@ -42,7 +42,7 @@ namespace GamingSupervisor
 
         public void Clear()
         {
-            renderer.clear();
+            renderer.Clear();
         }
 
         public void AddRetreatMessage(string message, string img)
@@ -114,33 +114,33 @@ namespace GamingSupervisor
             renderer.HeroSelection_Draw(dotaProcessHandle, window);
         }
 
-        public void ClearMessage(Direct2DRenderer.hints hint)
+        public void ClearMessage(Direct2DRenderer.Hints hint)
         {
             renderer.DeleteMessage(hint);
         }
 
         public void ClearHeroSuggestion()
         {
-            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_1);
-            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_2);
-            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_3);
-            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_4);
-            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_5);
+            renderer.DeleteMessage(Direct2DRenderer.Hints.hero_selection_1);
+            renderer.DeleteMessage(Direct2DRenderer.Hints.hero_selection_2);
+            renderer.DeleteMessage(Direct2DRenderer.Hints.hero_selection_3);
+            renderer.DeleteMessage(Direct2DRenderer.Hints.hero_selection_4);
+            renderer.DeleteMessage(Direct2DRenderer.Hints.hero_selection_5);
         }
 
         public void ClearItemSuggestion()
         {
-            renderer.DeleteMessage(Direct2DRenderer.hints.items_selection);
+            renderer.DeleteMessage(Direct2DRenderer.Hints.items_selection);
         }
 
         public void ClearHeroInfo()
         {
-            renderer.DeleteMessage(Direct2DRenderer.hints.heroinformation);
+            renderer.DeleteMessage(Direct2DRenderer.Hints.heroinformation);
         }
 
         public void ClearRetreat()
         {
-            renderer.DeleteMessage(Direct2DRenderer.hints.retreat);
+            renderer.DeleteMessage(Direct2DRenderer.Hints.retreat);
         }
 
         public void XorCheck(int code)
