@@ -1,4 +1,6 @@
-﻿using System;
+﻿using replayParse;
+using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
@@ -14,6 +16,17 @@ namespace GamingSupervisor
 
         private GameStateIntegration gsi;
         private DotaConsoleParser consoleData;
+
+        // the object for the selection analyzer.
+        private static counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
+        private static heroID h_ID = new heroID();
+        private int[,] table = cp.selectTable();
+        private Dictionary<string, int> hero_table = h_ID.getIDHero();
+        private Dictionary<int, string> ID_table = h_ID.getHeroID();
+        private List<int> teamHeroIds = new List<int>(4);
+        private List<int> teamIDGraph = new List<int>();
+        private ReplayHeroID heroIDData;
+
 
         public LiveAnalyzer() : base()
         {
@@ -86,6 +99,7 @@ namespace GamingSupervisor
                             lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
                             consoleData.StartHeroSelectionParsing();
                         }
+                        HandleHeroSelection();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
@@ -149,6 +163,89 @@ namespace GamingSupervisor
             {
                 //overlay.ClearMessage(7);
             }
+        }
+
+        private void HandleHeroSelection()
+        {
+            string heroname = GUISelection.heroName;
+
+            int team_side = 0;
+            for (int i = 0; i < table.Length / 4; i++)
+            {
+                if (table[i, 0] == hero_table[heroname])
+                {
+                    team_side = table[i, 2];
+                }
+            }
+            int[,] suggestiontable = cp.suggestionTable_1(team_side, 3);
+            int[,] table_checkmark = cp.checkMark();
+            for (int i = 0; i < 30; i++)
+            {
+                if (table[i, 2] == team_side)
+                {
+                    teamIDGraph.Add(table[i, 0]);
+                    heroID id = new heroID();
+                    Dictionary<int, string> id_string = id.getHeroID();
+                    string name = id_string[table[i, 0]];
+                    int index_id = heroIDData.getHeroID(name);
+                    if (!teamHeroIds.Contains(index_id))
+                        teamHeroIds.Add(index_id);
+                }
+            }
+            int ticLast = 0;
+            int ticNext = Int32.MaxValue;
+            int mark_index = 0;
+            int index = 0;
+            while (mark_index < 25 && suggestiontable[mark_index, 0] < CurrentTick)
+            {
+                if (suggestiontable[mark_index, 0] == 0 && suggestiontable[mark_index, 1] == 0)
+                {
+                    break;
+                }
+                mark_index++;
+            }
+
+            if (mark_index > 0 && mark_index < 25)
+            {
+                ticNext = suggestiontable[mark_index, 0];
+                ticLast = suggestiontable[mark_index - 1, 0];
+                index = mark_index - 1;
+            }
+            else if (mark_index == 0)
+            {
+                ticNext = suggestiontable[mark_index, 0];
+                ticLast = ticNext;
+                index = mark_index;
+            }
+            else
+            {
+                ticNext = suggestiontable[mark_index - 1, 0];
+                ticLast = ticNext;
+                index = mark_index - 1;
+            }
+
+            string[] heroes = new string[5];
+            string[] heroesimg = new string[5];
+
+            int counter = 0;
+            if (CurrentTick > table_checkmark[counter, 0] && CurrentTick < table_checkmark[counter, 1])
+            {
+                overlay.XorCheck(table_checkmark[counter, 2]);
+                index = index - 1;
+                counter++;
+            }
+            else
+            {
+                overlay.XorCheck(0);
+            }
+
+            for (int j = 1; j < 6; j++)
+            {
+                heroesimg[j - 1] = suggestiontable[index, j].ToString();
+                heroes[j - 1] = ID_table[suggestiontable[index, j]];
+            }
+
+            overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
         }
     }
 }
