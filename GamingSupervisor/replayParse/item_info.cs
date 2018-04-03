@@ -13,7 +13,7 @@ namespace replayParse
 {
     public class item_info
     {
-        private string[,] item_table_info = new string[155, 117];
+        private string[,] item_table_info = new string[157, 120]; // start at [3,1] with ID of first item.
         private int[,] item_KB = new int[116, 3];
         public item_info()
         {
@@ -29,7 +29,7 @@ namespace replayParse
 
             //iterate over the rows and columns and print to the console as it appears in the file
             //excel is not zero based!!
-            for (int i = 1; i <= rowCount; i++)
+            for (int i = 1; i <= 157; i++)
             {
                 for (int j = 1; j <= colCount; j++)
                 {
