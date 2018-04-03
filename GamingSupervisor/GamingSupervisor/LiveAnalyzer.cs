@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,8 +21,9 @@ namespace GamingSupervisor
         // the object for the selection analyzer.
         private static counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
         private static heroID h_ID = new heroID();
+
         private int[,] table = cp.selectTable();
-        private Dictionary<string, int> hero_table = h_ID.getIDHero();
+        private Dictionary<string, int> hero_table = h_ID.getIDfromLowercaseHeroname();
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
         private List<int> teamHeroIds = new List<int>(4);
         private List<int> teamIDGraph = new List<int>();
@@ -165,87 +167,138 @@ namespace GamingSupervisor
             }
         }
 
+        /*
+         * take real time picks and give 5 suggested hero.
+         */
         private void HandleHeroSelection()
         {
-            string heroname = GUISelection.heroName;
-
+            string[] heroesSelected = consoleData.HeroesSelected;
             int team_side = 0;
-            for (int i = 0; i < table.Length / 4; i++)
-            {
-                if (table[i, 0] == hero_table[heroname])
-                {
-                    team_side = table[i, 2];
-                }
-            }
-            int[,] suggestiontable = cp.suggestionTable_1(team_side, 3);
-            int[,] table_checkmark = cp.checkMark();
-            for (int i = 0; i < 30; i++)
-            {
-                if (table[i, 2] == team_side)
-                {
-                    teamIDGraph.Add(table[i, 0]);
-                    heroID id = new heroID();
-                    Dictionary<int, string> id_string = id.getHeroID();
-                    string name = id_string[table[i, 0]];
-                    int index_id = heroIDData.getHeroID(name);
-                    if (!teamHeroIds.Contains(index_id))
-                        teamHeroIds.Add(index_id);
-                }
-            }
-            int ticLast = 0;
-            int ticNext = Int32.MaxValue;
-            int mark_index = 0;
-            int index = 0;
-            while (mark_index < 25 && suggestiontable[mark_index, 0] < CurrentTick)
-            {
-                if (suggestiontable[mark_index, 0] == 0 && suggestiontable[mark_index, 1] == 0)
-                {
-                    break;
-                }
-                mark_index++;
-            }
 
-            if (mark_index > 0 && mark_index < 25)
+            if (gsi.Name == "null")
             {
-                ticNext = suggestiontable[mark_index, 0];
-                ticLast = suggestiontable[mark_index - 1, 0];
-                index = mark_index - 1;
-            }
-            else if (mark_index == 0)
-            {
-                ticNext = suggestiontable[mark_index, 0];
-                ticLast = ticNext;
-                index = mark_index;
+                string teamname = gsi.Team;
+               
+                if (teamname == "Dire")
+                {
+                    team_side = 3;
+                }
+                else if (teamname == "Radiant")
+                {
+                    team_side = 2;
+                }
+                if (team_side != 0)
+                {
+                    int[] hero_sequence_enemy = new int[5];
+                    int[] hero_sequence_teammate = new int[5];
+                    int flagEnemy = 0;
+                    int flagTeam = 0;
+                    int heroID;
+                    string curHeroName;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (heroesSelected[i] == "null")
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            curHeroName = heroesSelected[i];
+                            var r = new Regex(@"(?<=[A-Z])(?=[A-Z][a-z]) | (?<=[^A-Z])(?=[A-Z]) | (?<=[A-Za-z])(?=[^A-Za-z])",
+            RegexOptions.IgnorePatternWhitespace);
+                            string name = r.Replace(curHeroName, "");
+                            name = string.Join("", name.Split(new string[] { "_" }, StringSplitOptions.None));
+                            name = name.ToLower();
+                            if (name.Contains("never"))
+                            {
+                                name = "shadowfiend";
+                            }
+                            if (name.Contains("obsidian"))
+                            {
+                                name = "outworlddevourer";
+                            }
+                            if (name.Contains("wisp"))
+                            {
+                                name = "io";
+                            }
+                            if (name.Contains("magnataur"))
+                            {
+                                name = "magnus";
+                            }
+                            if (name.Contains("treant"))
+                            {
+                                name = "treantprotector";
+                            }
+                            if (name.Contains("Rattletrap"))
+                            {
+                                name = "Clockwerk";
+                            }
+                            if (name.Contains("skele"))
+                            {
+                                name = "wraithking";
+                            }
+                            heroID = hero_table[name];
+
+                        }
+
+                        if (i < 5 && team_side == 2)
+                        {
+                            hero_sequence_teammate[flagTeam] = heroID;
+                            flagTeam++;
+                        }
+                        else if (i < 5 && team_side == 3)
+                        {
+                            hero_sequence_enemy[flagEnemy] = heroID;
+                            flagEnemy++;
+                        }
+                        else if (i >= 5 && team_side == 2)
+                        {
+                            hero_sequence_enemy[flagEnemy] = heroID;
+                            flagEnemy++;
+                        }
+                        else if (i >= 5 && team_side == 3)
+                        {
+                            hero_sequence_teammate[flagTeam] = heroID;
+                            flagTeam++;
+                        }
+                    }
+                    string[] heroes = new string[5];
+                    string[] heroesimg = new string[5];
+                    int diff = 3;
+                    int[] sugHeroID = counter_pick_logic.logic_counter_1(hero_sequence_enemy, hero_sequence_teammate, new int[0], diff);
+
+
+                    // Check mark update version;
+                    //int counter = 0;
+                    //if (CurrentTick > table_checkmark[counter, 0] && CurrentTick < table_checkmark[counter, 1])
+                    //{
+                    //    overlay.XorCheck(table_checkmark[counter, 2]);
+                    //    index = index - 1;
+                    //    counter++;
+                    //}
+                    //else
+                    //{
+                    //    overlay.XorCheck(0);
+                    //}
+
+                    for (int j = 0; j < 5; j++)
+                    {
+                        heroesimg[j] = sugHeroID[j].ToString();
+                        heroes[j] = ID_table[sugHeroID[j]];
+                    }
+
+                    overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
+                }
+                else
+                {
+                    Console.WriteLine(teamname);
+                }
             }
             else
             {
-                ticNext = suggestiontable[mark_index - 1, 0];
-                ticLast = ticNext;
-                index = mark_index - 1;
+                Console.WriteLine("Picked"+ gsi.Name);
             }
-
-            string[] heroes = new string[5];
-            string[] heroesimg = new string[5];
-
-            int counter = 0;
-            if (CurrentTick > table_checkmark[counter, 0] && CurrentTick < table_checkmark[counter, 1])
-            {
-                overlay.XorCheck(table_checkmark[counter, 2]);
-                index = index - 1;
-                counter++;
-            }
-            else
-            {
-                overlay.XorCheck(0);
-            }
-
-            for (int j = 1; j < 6; j++)
-            {
-                heroesimg[j - 1] = suggestiontable[index, j].ToString();
-                heroes[j - 1] = ID_table[suggestiontable[index, j]];
-            }
-
-            overlay.AddHeroesSuggestionMessage(heroes, heroesimg);
+            
         }
     }
 }
