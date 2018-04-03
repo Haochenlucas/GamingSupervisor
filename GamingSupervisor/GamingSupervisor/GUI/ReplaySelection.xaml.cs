@@ -38,14 +38,14 @@ namespace GamingSupervisor
             GoBackButton.Visibility = Visibility.Hidden;
 
             worker = new BackgroundWorker();
-            worker.DoWork += new DoWorkEventHandler(WaitForAsync);
+            worker.DoWork += new DoWorkEventHandler(waitForAsync);
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(FinishedParsing);
             worker.WorkerReportsProgress = true;
 
             worker.RunWorkerAsync();
         }
 
-        private void WaitForAsync(object sender, DoWorkEventArgs e)
+        private void waitForAsync(object sender, DoWorkEventArgs e)
         {
             Task task = WaitForParsingAsync();
             task.Wait();
