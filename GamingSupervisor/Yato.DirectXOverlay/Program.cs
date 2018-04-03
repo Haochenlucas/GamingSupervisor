@@ -127,7 +127,6 @@ namespace Yato.DirectXOverlay
             string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is\n        "
                  + ", click Watch to start.\n\nHint: Hover over the X icon for 2 seconds\n        to close";
             d2d.Intructions_setup(instru_OpenReplay);
-            d2d.HeroIntro_setup(38);
             while (true)
             {
                 if (watch.ElapsedMilliseconds < 15)
