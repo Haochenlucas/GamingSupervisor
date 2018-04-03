@@ -35,6 +35,11 @@ namespace GamingSupervisor
             Console.WriteLine("Overlay running!");
         }
 
+        public IntPtr GetOverlayHandle()
+        {
+            return dotaProcessHandle;
+        }
+
         public void Clear()
         {
             renderer.clear();

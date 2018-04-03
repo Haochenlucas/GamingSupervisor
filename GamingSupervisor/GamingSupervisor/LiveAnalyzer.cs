@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace GamingSupervisor
 {
     class LiveAnalyzer : Analyzer
     {
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern IntPtr GetForegroundWindow();
+
         private GameStateIntegration gsi;
         private DotaConsoleParser consoleData;
 
@@ -37,7 +42,7 @@ namespace GamingSupervisor
 
                 double positionX = 0;
                 double positionY = 0;
-                Application.Current.Dispatcher.Invoke(
+                System.Windows.Application.Current.Dispatcher.Invoke(
                     () =>
                     {
                         positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
@@ -79,7 +84,7 @@ namespace GamingSupervisor
                         if (lastGameState != "DOTA_GAMERULES_STATE_HERO_SELECTION")
                         {
                             lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
-                            consoleData.ReportHeroSelection();
+                            consoleData.StartHeroSelectionParsing();
                         }
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
@@ -110,8 +115,22 @@ namespace GamingSupervisor
             Console.WriteLine("Game stopped!");
         }
 
+        private long timeSinceLastKeyPress_ms = 0;
+        private void SendCommandsToDota()
+        {
+            long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            if (now_ms - timeSinceLastKeyPress_ms >= 500)
+            {
+                timeSinceLastKeyPress_ms = now_ms;
+                if (GetForegroundWindow() == overlay.GetOverlayHandle())
+                    SendKeys.SendWait("{F12}");
+            }
+        }
+
         private void HandleGamePlay()
         {
+            SendCommandsToDota();
+
             // placeholders
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
             double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
