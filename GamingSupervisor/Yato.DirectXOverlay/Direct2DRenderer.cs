@@ -1729,11 +1729,11 @@ namespace Yato.DirectXOverlay
         #endregion
 
         #region Logo Draw
-        private void DrawLogo(Instruction instruction)
+        private void DrawLogo(MessageBox messageBox, float Horizontal, float Vertical)
         {
             Direct2DBrush color = CreateBrush(255, 255, 255, 255);
             Direct2DBrush backgroundColor = blackBrush;
-            Direct2DFont font = CreateFont("Times New Roman", 20);
+            Direct2DFont font = CreateFont(messageBox.Logo.Item2, messageBox.Logo.Item3);
 
             var layout = new TextLayout(fontFactory, instruction.Logo.Item1, font, float.MaxValue, float.MaxValue);
 
@@ -1741,14 +1741,14 @@ namespace Yato.DirectXOverlay
 
             sharedBrush.Color = backgroundColor;
 
-            float x = instruction.Logo.Item2;
-            float y = instruction.Logo.Item3;
+            float x = messageBox.Logo.Item4;
+            float y = messageBox.Logo.Item5;
 
-            device.FillRectangle(new RawRectangleF(x, y , x + layout.Metrics.Width + 2 * modifier, y + layout.Metrics.Height + 2 * modifier), sharedBrush);
+            device.FillRectangle(new RawRectangleF(x + Horizontal, y + Vertical, x + layout.Metrics.Width + 2 * modifier + Horizontal, y + layout.Metrics.Height + 2 * modifier + Vertical), sharedBrush);
 
             sharedBrush.Color = color;
 
-            device.DrawTextLayout(new RawVector2(x + modifier, y + modifier), layout, sharedBrush, DrawTextOptions.NoSnap);
+            device.DrawTextLayout(new RawVector2(x + modifier + Horizontal, y + modifier + Vertical), layout, sharedBrush, DrawTextOptions.NoSnap);
 
             layout.Dispose();
         }
@@ -1864,6 +1864,7 @@ namespace Yato.DirectXOverlay
                     CheckToShowHighlightTime();
                 }
 
+                // Circle out the closet enemy hero
                 DrawCircle((float)closestHero_X, (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
 
                 if (drawGraphs)
@@ -2144,17 +2145,14 @@ namespace Yato.DirectXOverlay
             {
                 BeginScene();
                 ClearScene();
-
-                if (button_timer.ElapsedMilliseconds < 2000)
+                int button_time = 1000;
+                if (button_timer.ElapsedMilliseconds < button_time)
                 {
                     float distanceFromDefaultHorizontal = positionX - instruction.box_pos.Item1;
                     float distanceFromDefaultVertical = positionY - instruction.box_pos.Item2;
 
-                    // Draw hero selection suggestion box
-                    Direct2DBrush color = CreateBrush(instruction.color.Item1, instruction.color.Item2, instruction.color.Item3, instruction.color.Item4);
-                    Direct2DBrush background = CreateBrush(instruction.background.Item1, instruction.background.Item2, instruction.background.Item3, instruction.background.Item4);
-                    Direct2DFont textFont = CreateFont(instruction.font.Item1, instruction.font.Item2);
-                    Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
+                    // Draw instruction box
+                    Direct2DBrush box_background = CreateBrush(r: instruction.box_background.Item1, g: instruction.box_background.Item2, b: instruction.box_background.Item3, a: instruction.box_background.Item4);
                     // The box
                     device.FillRectangle(
                         new RawRectangleF(
@@ -2163,83 +2161,32 @@ namespace Yato.DirectXOverlay
                             right: instruction.box_pos.Item3 + distanceFromDefaultHorizontal,
                             bottom: instruction.box_pos.Item4 + distanceFromDefaultVertical),
                         box_background);
+
                     // Title of the box
+                    Direct2DBrush color = CreateBrush(instruction.tColor.Item1, instruction.tColor.Item2, instruction.tColor.Item3, instruction.tColor.Item4);
+                    Direct2DBrush background = CreateBrush(instruction.tBackColor.Item1, instruction.tBackColor.Item2, instruction.tBackColor.Item3, instruction.tBackColor.Item4);
+                    Direct2DFont textFont = CreateFont(instruction.title.Item2, instruction.title.Item3);
                     DrawTextWithBackground(
                         text: instruction.title.Item1,
-                        x: instruction.title.Item2 + distanceFromDefaultHorizontal,
-                        y: instruction.title.Item3 + distanceFromDefaultVertical,
+                        x: instruction.title.Item4 + distanceFromDefaultHorizontal,
+                        y: instruction.title.Item5 + distanceFromDefaultVertical,
                         font: textFont,
                         brush: color,
                         backgroundBrush: background);
 
-                    showInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
+                    showInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical, button_time);
                     float modifier;
                     DrawTextWithBackground(
-                        text: instruction.instructions.text,
-                        x: instruction.instructions.x + distanceFromDefaultHorizontal,
-                        y: instruction.instructions.y + distanceFromDefaultVertical,
-                        tfont: instruction.instructions.font,
-                        tcolor: instruction.instructions.color,
-                        tbackground: instruction.instructions.background,
+                        text: instruction.message.text,
+                        x: instruction.message.x + distanceFromDefaultHorizontal,
+                        y: instruction.message.y + distanceFromDefaultVertical,
+                        tfont: instruction.message.font,
+                        tcolor: instruction.message.color,
+                        tbackground: instruction.message.background,
                         modifier: out modifier);
 
-                }
-                EndScene();
-            }
-            else
-            {
-                clear();
-            }
-        }
-        public void Intructions_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
-        {
-            IntPtr fg = GetForegroundWindow();
-            if (fg == parentWindowHandle ||
-                GetDesktopWindow() == parentWindowHandle)
-            {
-                BeginScene();
-                ClearScene();
-
-                if (button_timer.ElapsedMilliseconds < 2000)
-                {
-                    float distanceFromDefaultHorizontal = 0;
-                    float distanceFromDefaultVertical = 0;
-
-                    // Draw hero selection suggestion box
-                    Direct2DBrush color = CreateBrush(instruction.color.Item1, instruction.color.Item2, instruction.color.Item3, instruction.color.Item4);
-                    Direct2DBrush background = CreateBrush(instruction.background.Item1, instruction.background.Item2, instruction.background.Item3, instruction.background.Item4);
-                    Direct2DFont textFont = CreateFont(instruction.font.Item1, instruction.font.Item2);
-                    Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
-                    // The box
-                    device.FillRectangle(
-                        new RawRectangleF(
-                            left: instruction.box_pos.Item1 + distanceFromDefaultHorizontal,
-                            top: instruction.box_pos.Item2 + distanceFromDefaultVertical,
-                            right: instruction.box_pos.Item3 + distanceFromDefaultHorizontal,
-                            bottom: instruction.box_pos.Item4 + distanceFromDefaultVertical),
-                        box_background);
-                    // Title of the box
-                    DrawTextWithBackground(
-                        text: instruction.title.Item1,
-                        x: instruction.title.Item2 + distanceFromDefaultHorizontal,
-                        y: instruction.title.Item3 + distanceFromDefaultVertical,
-                        font: textFont,
-                        brush: color,
-                        backgroundBrush: background);
                     // Draw LOGO
-                    DrawLogo(instruction);
-
-                    showInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
-                    float modifier;
-                    DrawTextWithBackground(
-                        text: instruction.instructions.text,
-                        x: instruction.instructions.x + distanceFromDefaultHorizontal,
-                        y: instruction.instructions.y + distanceFromDefaultVertical,
-                        tfont: instruction.instructions.font,
-                        tcolor: instruction.instructions.color,
-                        tbackground: instruction.instructions.background,
-                        modifier: out modifier);
-
+                    DrawLogo(instruction, distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                 }
                 EndScene();
             }
@@ -2248,9 +2195,10 @@ namespace Yato.DirectXOverlay
                 clear();
             }
         }
+        
 
 
-        private void showInstructionButtons(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
+        private void showInstructionButtons(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical, int button_time)
         {
             var mouse_pos = Control.MousePosition;
             if (mouse_pos.X > instruction.close_button_pos.Item1 + distanceFromDefaultHorizontal &&
@@ -2262,7 +2210,7 @@ namespace Yato.DirectXOverlay
                 Direct2DBitmap close_button_red = new Direct2DBitmap(device, @"..\\..\\..\\GamingSupervisor\\buttons\" + instruction.close_button_red + ".png");
 
                 float scale = button_timer.ElapsedMilliseconds;
-                scale = scale / 2000;
+                scale = scale / button_time;
                 DrawBitmap(
                     bmp: close_button_red,
                     opacity: scale,
@@ -2392,21 +2340,8 @@ namespace Yato.DirectXOverlay
     #endregion
 
     #region Instruction class
-    public class Instruction
+    public class Instruction: MessageBox
     {
-        public Message instructions;
-        // text, left, top
-        public Tuple<string, float, float> title;
-        // text, left, top
-        public Tuple<string, float, float> Logo;
-        // left, top, right, bottem
-        public Tuple<float, float, float, float> box_pos;
-        // Tuple<red, green, blue, alpha>
-        public Tuple<int, int, int, int> background = new Tuple<int, int, int, int>(109, 109, 109, 255);
-        public Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
-        // Tuple<font, size>
-        public Tuple<string, int> font = new Tuple<string, int>("Consolas", 32);
-
         public string close_button_red = "close_button_red";
         public string close_button_black = "close_button_black";
         // x, y, width, height
@@ -2416,27 +2351,60 @@ namespace Yato.DirectXOverlay
         {
         }
 
-        public Instruction(Message _instructions, string _title)
+        public Instruction(Message _message, string _title):base(_message, _title)
         {
-            float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
-            float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
-            instructions = _instructions;
-            float box_left = instructions.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
-            float box_top = instructions.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
-            float box_right = box_left + modifier_x * 12 * Direct2DRenderer.size_scale;
-            float box_bottem = box_top + modifier_y * 12* Direct2DRenderer.size_scale;
-            box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
-            float title_left = instructions.x + modifier_x * 3 * Direct2DRenderer.size_scale;
-            float title_top = instructions.y - modifier_y * 3 * Direct2DRenderer.size_scale;
-            title = new Tuple<string, float, float>(_title, title_left, title_top);
-            Logo = new Tuple<string, float, float>("GamingSupervisor", box_left, box_top);
+            message = _message;
+            float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 10 * Direct2DRenderer.size_scale;
+            float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
             close_button_pos = new Tuple<float, float, float, float>(box_right - modifier_x, title_top, (512 / 10) * Direct2DRenderer.size_scale, (512 / 10) * Direct2DRenderer.size_scale);
         }
     }
     #endregion
 
+    #region MessageBox class
+    public class MessageBox
+    {
+        public Message message;
+        // text, front, size, left, top
+        public Tuple<string, string, float, float, float> title;
+        public Tuple<int, int, int, int> tColor;
+        public Tuple<int, int, int, int> tBackColor;
+        // text, left, top
+        public Tuple<string, string, float, float, float> Logo { get; }
+        // left, top, right, bottem
+        public Tuple<float, float, float, float> box_pos;
+        // Tuple<red, green, blue, alpha>
+        public Tuple<int, int, int, int> box_background = new Tuple<int, int, int, int>(109, 109, 109, 150);
+        protected float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
+        protected float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
+
+        public MessageBox()
+        {
+        }
+
+        public MessageBox(Message _message, string _title)
+        {
+            message = _message;
+            tColor = new Tuple<int, int, int, int>(message.color.Item1, message.color.Item2, message.color.Item3, message.color.Item4);
+            tBackColor = new Tuple<int, int, int, int>(message.background.Item1, message.background.Item2, message.background.Item3, message.background.Item4);
+            // Message box position setup
+            float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
+            float box_top = message.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 10 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 10 * Direct2DRenderer.size_scale;
+            box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
+            // Title setup
+            float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
+            float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
+            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
+            Logo = new Tuple<string, string, float, float, float>("GamingSupervisor", "Times New Roman", 20, box_left, box_top);
+        }
+    }
+    #endregion
+
     #region Message struct
-    public struct Message
+    public class Message
     {
         public bool on;
 
@@ -2455,7 +2423,9 @@ namespace Yato.DirectXOverlay
         public float img_y;
         public float img_width;
         public float img_height;
-
+        public Message()
+        {
+        }
         public Message(string _text, string _imgName, float _x, float _y)
         {
             float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
@@ -2465,9 +2435,10 @@ namespace Yato.DirectXOverlay
             x = _x;
             y = _y;
             on = true;
-            background = new Tuple<int, int, int, int>(109, 109, 109, 255);
+            background = new Tuple<int, int, int, int>(109, 109, 109, 150);
             color = new Tuple<int, int, int, int>(255, 255, 255, 255);
-            font = new Tuple<string, int>("Consolas", 32);
+            int font_size = 32 * (int)Direct2DRenderer.size_scale;
+            font = new Tuple<string, int>("Consolas", font_size);
             img_x = x - Direct2DRenderer.size_scale * modifier_x * 3;
             img_y = y;
             img_width = 254 / 2;

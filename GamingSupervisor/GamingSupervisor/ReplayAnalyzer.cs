@@ -63,9 +63,8 @@ namespace GamingSupervisor
             overlay = OverlaySingleton.Instance;
 
             CurrentTick = 0;
-            string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is\n        "
-                + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName)
-                + ", click Watch to start.\n\nHint: Hover over the X icon for 2 seconds\n        to close";
+            string instru_OpenReplay = "1: Click Watch on the top.\n2: Click Downloads\n3: Click Watch to start\n   the replay "
+                + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName);
             overlay.Intructions_setup(instru_OpenReplay);
             while (!announcer.isReplayStarted())
             {
@@ -140,8 +139,6 @@ namespace GamingSupervisor
                         ShowDraftHints();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
-                        overlay.ClearHeroSuggestion();
-                        break;
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
                         SetEnemiesHeroIDs();
                         replayStarted = true;
@@ -361,7 +358,7 @@ namespace GamingSupervisor
             {
                 hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
-            
+            /*
             // Get current hero position
             (double x, double y, double z) = heroData.getHeroPosition(CurrentTick, heroID);
             Tuple<double, double, double> heroPosition = new Tuple<double, double, double>(x, y, z);
@@ -386,6 +383,7 @@ namespace GamingSupervisor
             {
                 throw new Exception("Closet enemy not found.");
             }
+            */
             //overlay.ToggleGraphForHeroHP();
             //overlay.AddHPs(hpToSend);
             //overlay.AddHp(hpToSend[0]);
