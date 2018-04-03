@@ -3,6 +3,8 @@ using replayParse;
 using System.Threading;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace GamingSupervisor
 {
@@ -11,6 +13,7 @@ namespace GamingSupervisor
         private HeroParser heroData;
         private ReplayHeroID heroIDData;
         private List<int> teamHeroIds = new List<int>(4);
+        private List<int> teamIDGraph = new List<int>();
         private ReplayTick replayTick;
         private ReplayHighlights replayHighlights;
 
@@ -59,18 +62,37 @@ namespace GamingSupervisor
             overlay = OverlaySingleton.Instance;
 
             CurrentTick = 0;
-            string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is\n     " + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName) + ", click Watch to start.";
+            string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is\n        "
+                + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName)
+                + ", click Watch to start.\n\nHint: Hover over the X icon for 2 seconds\n        to close";
             overlay.Intructions_setup(instru_OpenReplay);
             while (!announcer.isReplayStarted())
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 if (Terminate)
                 {
                     overlay.Clear();
                     return;
                 }
 
+                double positionX = 0;
+                double positionY = 0;
+                Application.Current.Dispatcher.Invoke(
+                    () =>
+                    {
+                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
+                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
+                    });
                 // draw instruction to watch the replay in dota2 client
-                overlay.ShowInstructionMessage();
+                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+
+                Thread.Sleep(10);
             }
             tickTimer.Start();
 
@@ -86,6 +108,13 @@ namespace GamingSupervisor
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
                 if (Terminate)
                 {
                     overlay.Clear();
@@ -112,10 +141,7 @@ namespace GamingSupervisor
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
                         replayStarted = true;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            overlay.ClearMessage(i);
-                        }
+                        overlay.ClearHeroSuggestion();
                         HandleGamePlay();
                         HandleHighlight();
                         ShowIngameHints();
@@ -196,6 +222,7 @@ namespace GamingSupervisor
             {
                 if (table[i, 2] == team_side)
                 {
+                    teamIDGraph.Add(table[i, 0]);
                     heroID id = new heroID();
                     Dictionary<int, string> id_string = id.getHeroID();
                     string name = id_string[table[i, 0]];
@@ -268,27 +295,19 @@ namespace GamingSupervisor
 
         private void HandleGamePlay()
         {
-            // TODO:
-
-            //// if first 10 sec, show camer setting instruction
-            //if (announcer.GetCurrentGameTime() < 10)
-            //{
-            //    string instru_OpenReplay = "Step 1: Change the camera mode to Hero Chase\nStep 2: Click on the hero you choose.";
-            //    overlay.Intructions_setup(instru_OpenReplay);
-            //    overlay.ShowInstructionMessage();
-            //}
-            Console.WriteLine("announcer.GetCurrentGameTime(): " + announcer.GetCurrentGameTime());
-             if (announcer.GetCurrentGameTime() >= 750 && announcer.GetCurrentGameTime() <= 760)
+            // TODO: Set this to be the beginning of the time
+            if (announcer.GetCurrentGameTime() >= 750 && announcer.GetCurrentGameTime() <= 760)
             {
+                // TODO: Replace with the true intruction
                 string temp = "Lycan is a remarkable pusher who can wear down buildings and force enemies to react quickly to his regular tower onslaughts; as towers melt incredibly fast under Lycan's and his units' pressure, boosted by their canine Feral Impulse. His only contribution to full-on team fights will be the bonus damage he grants with Howl to his allies, his allies' summons, his owns summons, and himself, as well as his formidable physical attacks. Else he can surge out of the woods for a quick gank or push after he transformed with Shapeshift, moving at a haste speed of 650. Finally, good players will make the best usage of his Summon Wolves ability and scout the enemies' position while remaining undetected with invisibility at level 4.";
-
-                temp = Regex.Replace(temp, ".{50}", "$0\n");
-                // after that, show hero information
+                
                 overlay.AddHeroInfoMessage(temp, "");
+                overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "");
             }
             else
             {
-                overlay.ClearMessage(6);
+                overlay.ClearItemSuggestion();
+                overlay.ClearHeroInfo();
             }
 
             // Add item suggestion
@@ -302,6 +321,7 @@ namespace GamingSupervisor
             //int maxHealth = 0;
 
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
+            double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
             Console.WriteLine(CurrentTick + " getting health " + heroID);
             health = heroData.getHealth(CurrentTick, heroID);
@@ -310,23 +330,54 @@ namespace GamingSupervisor
             //if (health <= 600)
 
             hpToSend[0] = health;
+            maxHpToSend[0] = heroData.getMaxHealth(CurrentTick, heroID);
             for (int i = 0; i < 4; i++)
             {
+                maxHpToSend[i + 1] = heroData.getMaxHealth(CurrentTick, teamHeroIds[i]);
                 hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
 
+            //overlay.ToggleGraphForHeroHP();
+            //overlay.AddHPs(hpToSend);
+            //overlay.AddHp(hpToSend[0]);
+
+            //double myHp = heroData.getHealth(CurrentTick, heroID);
+            //double myMaxHp = heroData.getMaxHealth(CurrentTick, heroID);
+            //double myHpPercen = myHp / myMaxHp;
+            //int closestHeroId = -1;
+
+            //double min = 0;
+            //Get closest hero
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    Tuple<int, int, int> pos = heroData.getHeroPosition(CurrentTick, teamHeroIds[i]);
+            //    double dis = Math.Pow((Math.Pow((x - x), 2) + Math.Pow((y - y), 2)), 0.5);
+            //    if (dis < min)
+            //    {
+            //        closestHeroId = i;
+            //        min = dis;
+            //    }
+            //}
+
+            //double closestHp = heroData.getHealth(CurrentTick, closestHeroId);
+            //double closestMaxHp = heroData.getMaxHealth(CurrentTick, closestHeroId);
+            //double closestHpPercen = closestHp / closestMaxHp;
+
             overlay.ToggleGraphForHeroHP();
-            overlay.AddHPs(hpToSend);
+            overlay.AddHeroGraphIcons(teamIDGraph);
+            overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
 
+            // The health at the start of the game is 0 so the retreat message will show up
+            // TODO: logic
             if (health < 600)
             {
-                overlay.AddRetreatMessage("Low health warning! " + "Current Health: " + health, "");
+                overlay.AddRetreatMessage("Low health warning! " + "Current Health: " + health, "exclamation_mark");
 
             }
             else
             {
-                overlay.ClearMessage(7);
+                overlay.ClearRetreat();
             }
         }
 

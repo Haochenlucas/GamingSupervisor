@@ -163,6 +163,7 @@ namespace Yato.DirectXOverlay
 
                 if (Graphics != null)
                     Graphics.Dispose();
+                    
                 Window.Dispose();
 
                 disposedValue = true;

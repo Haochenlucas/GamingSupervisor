@@ -1,13 +1,23 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace GamingSupervisor
 {
     class LiveAnalyzer : Analyzer
     {
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern IntPtr GetForegroundWindow();
+
         private GameStateIntegration gsi;
+        private DotaConsoleParser consoleData;
 
         public LiveAnalyzer() : base()
         {
+            consoleData = new DotaConsoleParser();
         }
 
         public override void Start()
@@ -19,12 +29,45 @@ namespace GamingSupervisor
 
             gsi.StartListener();
 
+            overlay.Intructions_setup("Start a game");
+
+            while (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
+            {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
+                double positionX = 0;
+                double positionY = 0;
+                System.Windows.Application.Current.Dispatcher.Invoke(
+                    () =>
+                    {
+                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
+                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
+                    });
+
+                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+
+                Thread.Sleep(10);
+            }
+
             bool gameStarted = false;
             bool keepLooping = true;
 
             Console.WriteLine("Currently analyzing...");
             while (keepLooping)
             {
+                if (!IsDotaRunning())
+                {
+                    overlay.Clear();
+                    Console.WriteLine("Dota ended");
+                    return;
+                }
+
+                string lastGameState = "";
                 switch (gsi.GameState)
                 {
                     case null:
@@ -34,21 +77,27 @@ namespace GamingSupervisor
                         {
                             keepLooping = false;
                         }
+                        lastGameState = "Undefined";
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
                         gameStarted = true;
+                        if (lastGameState != "DOTA_GAMERULES_STATE_HERO_SELECTION")
+                        {
+                            lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
+                            consoleData.StartHeroSelectionParsing();
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
                         gameStarted = true;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            overlay.ClearMessage(i);
-                        }
+
+                        //overlay.ClearHeroSuggestion();
                         HandleGamePlay();
                         overlay.ShowIngameMessage();
                         break;
                     default:
+                        lastGameState = "Other";
                         gameStarted = true;
                         break;
                 }
@@ -57,6 +106,8 @@ namespace GamingSupervisor
                 {
                     break;
                 }
+
+                Thread.Sleep(10);
             }
 
             overlay.Clear();
@@ -64,13 +115,29 @@ namespace GamingSupervisor
             Console.WriteLine("Game stopped!");
         }
 
+        private long timeSinceLastKeyPress_ms = 0;
+        private void SendCommandsToDota()
+        {
+            long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            if (now_ms - timeSinceLastKeyPress_ms >= 500)
+            {
+                timeSinceLastKeyPress_ms = now_ms;
+                if (GetForegroundWindow() == overlay.GetOverlayHandle())
+                    SendKeys.SendWait("{F12}");
+            }
+        }
+
         private void HandleGamePlay()
         {
+            SendCommandsToDota();
+
+            // placeholders
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
+            double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
             int healthPercent = gsi.HealthPercent;
             
-            overlay.AddHPs(hpToSend);
+            overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
 
             if (true)//healthPercent < 25)
@@ -80,7 +147,7 @@ namespace GamingSupervisor
             }
             else
             {
-                overlay.ClearMessage(7);
+                //overlay.ClearMessage(7);
             }
         }
     }

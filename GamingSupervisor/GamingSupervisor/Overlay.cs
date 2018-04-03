@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Yato.DirectXOverlay;
 
 namespace GamingSupervisor
@@ -14,10 +15,29 @@ namespace GamingSupervisor
 
         public Overlay()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+            {
+                dotaProcessHandle = Process.GetProcessesByName("notepad")[0].MainWindowHandle;
+                overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
+                renderer.SetupHintSlots();
+                return;
+            }
+#endif
+            while (Process.GetProcessesByName("dota2").Length == 0)
+            {
+                Thread.Sleep(500);
+            }
+
             dotaProcessHandle = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
             overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
             renderer.SetupHintSlots();
             Console.WriteLine("Overlay running!");
+        }
+
+        public IntPtr GetOverlayHandle()
+        {
+            return dotaProcessHandle;
         }
 
         public void Clear()
@@ -43,20 +63,25 @@ namespace GamingSupervisor
         {
             renderer.HeroInfoHints(message, img);
         }
-
+        
         public void ToggleGraphForHeroHP(bool tog = true)
         {
             renderer.ToggleGraph(tog);
         }
 
-        public void AddHPs(double[] newhps)
+        public void AddHPs(double[] newhps, double[] newmaxhps)
         {
-            renderer.UpdateHeroHPGraph(newhps);
+            renderer.UpdateHeroHPGraph(newhps, newmaxhps);
         }
 
         public void AddHp(double newhp)
         {
             renderer.UpdateHeroHPQueue(newhp);
+        }
+
+        public void AddHeroGraphIcons(List<int> graphsIds)
+        {
+            renderer.UpdateHeroHpGraphIcons(graphsIds);
         }
         
         public void Intructions_setup(string content)
@@ -64,9 +89,9 @@ namespace GamingSupervisor
             renderer.Intructions_setup(content);
         }
 
-        public void ShowInstructionMessage()
+        public void ShowInstructionMessage(double positionX, double positionY, IntPtr visualCustomizeHandle)
         {
-            renderer.Intructions_Draw(dotaProcessHandle, window);
+            renderer.Intructions_Draw(dotaProcessHandle, window, (float)positionX, (float)positionY, visualCustomizeHandle);
         }
 
         public void ToggleHighlight(bool tog = true)
@@ -74,7 +99,7 @@ namespace GamingSupervisor
             renderer.ToggleHightlight(tog);
         }
 
-        public void UpdateHighlight(Dictionary<int, List<Tuple<String, String, String>>> ticks, int maxTick)
+        public void UpdateHighlight(Dictionary<int, List<Tuple<String, String, String>>> ticks, float maxTick)
         {
             renderer.UpdateHighlightTime(ticks, maxTick);
         }
@@ -89,9 +114,33 @@ namespace GamingSupervisor
             renderer.HeroSelection_Draw(dotaProcessHandle, window);
         }
 
-        public void ClearMessage(int MessageNum)
+        public void ClearMessage(Direct2DRenderer.hints hint)
         {
-            renderer.DeleteMessage(MessageNum);
+            renderer.DeleteMessage(hint);
+        }
+
+        public void ClearHeroSuggestion()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_1);
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_2);
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_3);
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_4);
+            renderer.DeleteMessage(Direct2DRenderer.hints.hero_selection_5);
+        }
+
+        public void ClearItemSuggestion()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.items_selection);
+        }
+
+        public void ClearHeroInfo()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.heroinformation);
+        }
+
+        public void ClearRetreat()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.retreat);
         }
 
         public void XorCheck(int code)

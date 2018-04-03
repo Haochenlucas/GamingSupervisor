@@ -82,10 +82,13 @@ namespace GamingSupervisor
                     TimeSpan time = TimeSpan.FromSeconds(matchResult.Duration);
                     string timeString = time.ToString(@"hh\:mm\:ss");
 
-                    string leagueName =
-                        (from league in leagues.Leagues
-                         where league.LeagueId == matchResult.LeagueId
-                         select league.Name).Single();
+                    string leagueName = "";
+                    /*if (leagues.Leagues.Count != 0)
+                    {
+                        leagueName = (from league in leagues.Leagues
+                                      where league.LeagueId == matchResult.LeagueId
+                                      select league.Name).Single();
+                    }*/
 
                     leagueName = leagueName.Replace("#DOTA_Item", "");
                     leagueName = leagueName.Replace("_", " ");

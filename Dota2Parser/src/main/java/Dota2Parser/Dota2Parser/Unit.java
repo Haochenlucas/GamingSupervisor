@@ -7,9 +7,12 @@ public class Unit
 {
     public final int itemCount = 17; // Clarity analyzer has 17 spots for items
     
-	public FieldPath x;
-    public FieldPath y;
-    public FieldPath z;
+	public FieldPath cellX;
+    public FieldPath cellY;
+    public FieldPath cellZ;
+    public FieldPath vecX;
+    public FieldPath vecY;
+    public FieldPath vecZ;
     public FieldPath health;
     public FieldPath playerID;
     public FieldPath level;
@@ -32,9 +35,12 @@ public class Unit
     
     public Unit(Entity e)
     {
-    	x = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellX");
-        y = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellY");
-        z = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellZ");
+    	cellX = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellX");
+        cellY = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellY");
+        cellZ = e.getDtClass().getFieldPathForName("CBodyComponent.m_cellZ");
+        vecX = e.getDtClass().getFieldPathForName("CBodyComponent.m_vecX");
+        vecY = e.getDtClass().getFieldPathForName("CBodyComponent.m_vecY");
+        vecZ = e.getDtClass().getFieldPathForName("CBodyComponent.m_vecZ");
         health = e.getDtClass().getFieldPathForName("m_iHealth");
         playerID = e.getDtClass().getFieldPathForName("m_iPlayerID");
         level = e.getDtClass().getFieldPathForName("m_iCurrentLevel");
@@ -66,7 +72,8 @@ public class Unit
     
     public boolean isPosition(FieldPath path)
     {
-        return (path.equals(x) || path.equals(y) || path.equals(z));
+        return (path.equals(cellX) || path.equals(cellY) || path.equals(cellZ) ||
+        		path.equals(vecX) || path.equals(vecY) || path.equals(vecZ));
     }
     
     public boolean isHealth(FieldPath path)

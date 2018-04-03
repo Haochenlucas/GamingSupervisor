@@ -19,11 +19,18 @@ namespace GamingSupervisor
 
         public void Start()
         {
-            ParserHandler.StartFullParsing(GUISelection.fileName + ".dem");
+            CreateAutoExecFile();
+
+            switch (GUISelection.gameType)
+            {
+                case GUISelection.GameType.live:
+                    break;
+                case GUISelection.GameType.replay:
+                    ParserHandler.StartFullParsing(GUISelection.fileName + ".dem");
+                    break;
+            }
 
             bool isDotaAlreadyRunning = Process.GetProcessesByName("dota2").Length != 0;
-            string serverLog = Path.Combine(SteamAppsLocation.Get(), "server_log.txt");
-            var originalLastLine = File.ReadLines(serverLog).Last();
 
             if (!isDotaAlreadyRunning)
                 StartDota();
@@ -40,8 +47,7 @@ namespace GamingSupervisor
             }
 
             if (!isDotaAlreadyRunning)
-                while (originalLastLine != File.ReadLines(serverLog).Last())
-                    Thread.Sleep(1000);
+                WaitForDotaToOpen();
 
             switch (GUISelection.gameType)
             {
@@ -54,8 +60,47 @@ namespace GamingSupervisor
             }            
         }
 
+        private void CreateAutoExecFile()
+        {
+            string lineToWrite = "bind \"F12\" \"dota_player_status\"";
+
+            string autoExecPath = Path.Combine(SteamAppsLocation.Get(), "cfg/autoexec.cfg");
+
+            if (File.Exists(autoExecPath))
+                if (File.ReadAllText(autoExecPath).Contains(lineToWrite))
+                    return;
+
+            File.AppendAllText(autoExecPath, "\r\n" + lineToWrite + "\r\n");
+        }
+
+        private void WaitForDotaToOpen()
+        {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return;
+#endif
+            string consoleLog = Path.Combine(SteamAppsLocation.Get(), "console.log");
+            using (FileStream fileStream = File.Open(consoleLog, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                fileStream.Seek(0, SeekOrigin.End);
+                using (StreamReader streamReader = new StreamReader(fileStream))
+                {
+                    while (true)
+                    {
+                        Thread.Sleep(500);
+                        if (streamReader.ReadToEnd().Contains("ChangeGameUIState: DOTA_GAME_UI_STATE_LOADING_SCREEN -> DOTA_GAME_UI_STATE_DASHBOARD"))
+                            break;
+                    }
+                }
+            }
+        }
+
         private void StartDota()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return;
+#endif
             Console.WriteLine("Starting dota...");
             Process p = new Process();
 
@@ -68,7 +113,7 @@ namespace GamingSupervisor
             {
                 throw new Exception("Could not start DotA 2. Is Steam installed?");
             }
-            p.StartInfo.Arguments = "-applaunch 570";
+            p.StartInfo.Arguments = "-applaunch 570 -console -condebug +exec autoexec";
             try
             {
                 p.Start();

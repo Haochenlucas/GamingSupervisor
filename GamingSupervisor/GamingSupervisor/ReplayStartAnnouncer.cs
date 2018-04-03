@@ -40,6 +40,10 @@ namespace GamingSupervisor
 
         public bool isReplayStarted()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return false;
+#endif
             if (!listenerStarted)
             {
                 gameStateIntegration.StartListener();
