@@ -55,6 +55,10 @@ namespace replayParse
                                 return base[i];
                             }
                         }
+                        if (typeof(T) == typeof(Tuple<double, double, double>))
+                        {
+                            return (T)(object)Tuple.Create(0.0, 0.0, 0.0);
+                        }
                         return default(T);
                     }
                 }

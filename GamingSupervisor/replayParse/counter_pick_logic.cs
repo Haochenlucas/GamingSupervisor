@@ -406,10 +406,21 @@ namespace replayParse
             return checkTable;
         }
 
-
-
-
-
+        
+        public int[] GetEnemiesHeroID(int team_name)
+        {
+            int[] team_list = new int[5];
+            int team_count = 0;
+            for (int i = 0; i < hero_ID_Client_Team.Length / 4; i++)
+            {
+                if (hero_ID_Client_Team[i, 2] == team_name)
+                {
+                    team_list[team_count] = hero_ID_Client_Team[i, 0];
+                    team_count++;
+                }
+            }
+            return team_list;
+        }
 
         /*
          * team_name is come from the selectionTable. So proper input is 2 and 3.

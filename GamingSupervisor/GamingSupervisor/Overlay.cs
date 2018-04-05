@@ -64,6 +64,11 @@ namespace GamingSupervisor
             renderer.HeroInfoHints(message, img);
         }
         
+        public void ShowCloestEnemy(double x, double y)
+        {
+            renderer.SetClosetHeroPosition(x, y);
+        }
+
         public void ToggleGraphForHeroHP(bool tog = true)
         {
             renderer.ToggleGraph(tog);

@@ -127,8 +127,9 @@ namespace Yato.DirectXOverlay
             d2d.SetupHintSlots();
             
             watch.Start();
-            d2d.Intructions_setup("ABCD");
-            d2d.HeroIntro_setup(38);
+            string instru_OpenReplay = "Step 1: Click Watch on the top.\nStep 2: Click Downloads\nStep 3: The replay you selected is\n        "
+                 + ", click Watch to start.\n\nHint: Hover over the X icon for 2 seconds\n        to close";
+            d2d.Intructions_setup(instru_OpenReplay);
             while (true)
             {
                 if (watch.ElapsedMilliseconds < 15)
@@ -157,8 +158,6 @@ namespace Yato.DirectXOverlay
                 d2d.ItemSelectionHints("You need to wear boots", "Boots_of_Speed_icon");
                 //d2d.ToggleHightlight(true);
                 //d2d.UpdateHighlightTime(tickInfo, (int)totalTick);
-
-                d2d.Retreat("Run", "exclamation_mark");
 
                 //d2d.SelectedHeroSuggestion(38, Cursor.Position.Y);
 
