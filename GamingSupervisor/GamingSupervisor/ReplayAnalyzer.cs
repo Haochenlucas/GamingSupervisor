@@ -415,7 +415,7 @@ namespace GamingSupervisor
         private void DrawOnClosestEnemy()
         {
             // Get current hero position
-            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick, heroID);
+            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick+10, heroID);
             Tuple<double, double, double> heroPosition = new Tuple<double, double, double>(x, y, z);
 
             // Loop through all enemy heros and find the cloest one
@@ -433,7 +433,7 @@ namespace GamingSupervisor
             }
             foreach (int ID in enemyHeroIDs)
             {
-                (double x_temp, double y_temp, double z_temp) = heroData.getHeroPosition(CurrentTick, ID);
+                (double x_temp, double y_temp, double z_temp) = heroData.getHeroPosition(CurrentTick+10, ID);
                 double temp = Math.Pow((Math.Pow(x - x_temp, 2) + Math.Pow(y - y_temp, 2)), 0.5);
                 if (temp < dis)
                 {
