@@ -366,7 +366,7 @@ namespace GamingSupervisor
                 hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
 
-            DrawOnClosestEnemy();
+            int closestEnemyID = DrawOnClosestEnemy();
 
             //overlay.ToggleGraphForHeroHP();
             //overlay.AddHPs(hpToSend);
@@ -412,7 +412,7 @@ namespace GamingSupervisor
             }
         }
 
-        private void DrawOnClosestEnemy()
+        private int DrawOnClosestEnemy()
         {
             // Get current hero position
             (double x, double y, double z) = heroData.getHeroPosition(CurrentTick+10, heroID);
@@ -450,6 +450,7 @@ namespace GamingSupervisor
             {
                 throw new Exception("Closet enemy not found.");
             }
+            return enemyHeroID;
         }
 
         private void tickCallback(object sender, EventArgs e)
