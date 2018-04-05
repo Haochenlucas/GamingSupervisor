@@ -66,7 +66,8 @@ namespace GamingSupervisor
                 foreach (string replay in
                     Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "Parser")))
                 {
-                    var matchResult = await api.GetDetailedMatch(Path.GetFileName(replay));
+                    string[] replayID = replay.Split('_');
+                    var matchResult = await api.GetDetailedMatch(Path.GetFileName(replayID[0]));
 
                     string winner = "";
                     switch (matchResult.WinningFaction)

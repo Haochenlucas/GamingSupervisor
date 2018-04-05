@@ -153,6 +153,10 @@ namespace GamingSupervisor
                     {
                         name = "doom";
                     }
+                    if (name.Contains("antimage"))
+                    {
+                        name = "anti-mage";
+                    }
                     int key = hero_table[name];
 
                     heroNameList.Add(ID_table[key]);

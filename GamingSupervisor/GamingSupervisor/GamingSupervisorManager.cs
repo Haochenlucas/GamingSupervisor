@@ -19,6 +19,8 @@ namespace GamingSupervisor
 
         public void Start()
         {
+            CreateAutoExecFile();
+
             switch (GUISelection.gameType)
             {
                 case GUISelection.GameType.live:
@@ -58,9 +60,25 @@ namespace GamingSupervisor
             }            
         }
 
+        private void CreateAutoExecFile()
+        {
+            string lineToWrite = "bind \"F12\" \"dota_player_status\"";
+
+            string autoExecPath = Path.Combine(SteamAppsLocation.Get(), "cfg/autoexec.cfg");
+
+            if (File.Exists(autoExecPath))
+                if (File.ReadAllText(autoExecPath).Contains(lineToWrite))
+                    return;
+
+            File.AppendAllText(autoExecPath, "\r\n" + lineToWrite + "\r\n");
+        }
+
         private void WaitForDotaToOpen()
         {
-            Console.WriteLine("WaitForDotaToOpen start");
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return;
+#endif
             string consoleLog = Path.Combine(SteamAppsLocation.Get(), "console.log");
             using (FileStream fileStream = File.Open(consoleLog, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
@@ -75,11 +93,14 @@ namespace GamingSupervisor
                     }
                 }
             }
-            Console.WriteLine("WaitForDotaToOpen end");
         }
 
         private void StartDota()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return;
+#endif
             Console.WriteLine("Starting dota...");
             Process p = new Process();
 
@@ -92,7 +113,7 @@ namespace GamingSupervisor
             {
                 throw new Exception("Could not start DotA 2. Is Steam installed?");
             }
-            p.StartInfo.Arguments = "-applaunch 570 -console -condebug";
+            p.StartInfo.Arguments = "-applaunch 570 -console -condebug +exec autoexec";
             try
             {
                 p.Start();

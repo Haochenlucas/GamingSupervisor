@@ -58,6 +58,10 @@ namespace GamingSupervisor
 
         protected bool IsDotaRunning()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return true;
+#endif
             return Process.GetProcessesByName("dota2").Length != 0;
         }
 

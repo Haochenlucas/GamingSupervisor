@@ -25,6 +25,10 @@ namespace GamingSupervisor
                 return FindPath(regKey);
             }
 
+#if DEBUG
+            return "./../../debug";
+#endif
+
             throw new Exception("No registry entry for Steam. Is Steam installed?");
         }
 

@@ -15,6 +15,15 @@ namespace GamingSupervisor
 
         public Overlay()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+            {
+                dotaProcessHandle = Process.GetProcessesByName("notepad")[0].MainWindowHandle;
+                overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
+                renderer.SetupHintSlots();
+                return;
+            }
+#endif
             while (Process.GetProcessesByName("dota2").Length == 0)
             {
                 Thread.Sleep(500);
@@ -24,6 +33,11 @@ namespace GamingSupervisor
             overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
             renderer.SetupHintSlots();
             Console.WriteLine("Overlay running!");
+        }
+
+        public IntPtr GetOverlayHandle()
+        {
+            return dotaProcessHandle;
         }
 
         public void Clear()
@@ -60,9 +74,9 @@ namespace GamingSupervisor
             renderer.ToggleGraph(tog);
         }
 
-        public void AddHPs(double[] newhps)
+        public void AddHPs(double[] newhps, double[] newmaxhps)
         {
-            renderer.UpdateHeroHPGraph(newhps);
+            renderer.UpdateHeroHPGraph(newhps, newmaxhps);
         }
 
         public void AddHp(double newhp)

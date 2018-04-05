@@ -88,6 +88,10 @@ namespace GamingSupervisor
 
         public GameStateIntegration()
         {
+#if DEBUG
+            if (SteamAppsLocation.Get() == "./../../debug")
+                return;
+#endif
             CreateGameStateIntegrationFile();
 
             while (true)
