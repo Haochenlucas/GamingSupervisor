@@ -156,8 +156,6 @@ namespace Yato.DirectXOverlay
                 //d2d.ToggleHightlight(true);
                 //d2d.UpdateHighlightTime(tickInfo, (int)totalTick);
 
-                d2d.Retreat("Run", "test");
-
                 //d2d.SelectedHeroSuggestion(38, Cursor.Position.Y);
 
                 if (Control.ModifierKeys == Keys.Alt)

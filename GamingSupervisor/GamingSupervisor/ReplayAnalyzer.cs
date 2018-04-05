@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace GamingSupervisor
 {
@@ -31,13 +32,16 @@ namespace GamingSupervisor
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
         private int[] enemiesHeroID;
 
+        private float screen_width = Screen.PrimaryScreen.Bounds.Width;
+        private float screen_height = Screen.PrimaryScreen.Bounds.Height;
+
         private int CurrentTick
         {
             get { lock (tickLock) { return currentTick; } }
             set { lock (tickLock) { currentTick = value; } }
         }
 
-        private int heroID;
+        private readonly int heroID;
 
 
         public ReplayAnalyzer() : base()
@@ -83,7 +87,7 @@ namespace GamingSupervisor
 
                 double positionX = 0;
                 double positionY = 0;
-                Application.Current.Dispatcher.Invoke(
+                System.Windows.Application.Current.Dispatcher.Invoke(
                     () =>
                     {
                         positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
@@ -325,7 +329,7 @@ namespace GamingSupervisor
             {
                 // TODO: Replace with the true intruction
                 string temp = "Lycan is a remarkable pusher who can wear down buildings and force enemies to react quickly to his regular tower onslaughts; as towers melt incredibly fast under Lycan's and his units' pressure, boosted by their canine Feral Impulse. His only contribution to full-on team fights will be the bonus damage he grants with Howl to his allies, his allies' summons, his owns summons, and himself, as well as his formidable physical attacks. Else he can surge out of the woods for a quick gank or push after he transformed with Shapeshift, moving at a haste speed of 650. Finally, good players will make the best usage of his Summon Wolves ability and scout the enemies' position while remaining undetected with invisibility at level 4.";
-                
+
                 overlay.AddHeroInfoMessage(temp, "");
                 overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "Necronomicon_1_icon");
             }
@@ -358,32 +362,9 @@ namespace GamingSupervisor
             {
                 hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
-            /*
-            // Get current hero position
-            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick, heroID);
-            Tuple<double, double, double> heroPosition = new Tuple<double, double, double>(x, y, z);
-            // Loop through all enemy heros and find the cloest one
-            Tuple<double, double, double> enemyHeroPosition = null;
-            double dis = Int32.MaxValue;
-            
-            foreach( int ID in enemiesHeroID)
-            {
-                (double x_temp, double y_temp, double z_temp) = heroData.getHeroPosition(CurrentTick, ID);
-                double temp = Math.Pow((Math.Pow(x-x_temp,2)+ Math.Pow(y-y_temp,2)),0.5);
-                if (temp < dis)
-                {
-                    enemyHeroPosition = new Tuple<double, double, double>(Math.Abs(x-x_temp), Math.Abs(y-y_temp), Math.Abs(z-z_temp));
-                }
-            }
-            if (enemyHeroPosition != null)
-            {
-                overlay.ShowCloestEnemy(enemyHeroPosition.Item1, enemyHeroPosition.Item2);
-            }
-            else
-            {
-                throw new Exception("Closet enemy not found.");
-            }
-            */
+
+            DrawOnClosestEnemy();
+
             //overlay.ToggleGraphForHeroHP();
             //overlay.AddHPs(hpToSend);
             //overlay.AddHp(hpToSend[0]);
@@ -425,6 +406,46 @@ namespace GamingSupervisor
             else
             {
                 overlay.ClearRetreat();
+            }
+        }
+
+        private void DrawOnClosestEnemy()
+        {
+            // Get current hero position
+            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick, heroID);
+            Tuple<double, double, double> heroPosition = new Tuple<double, double, double>(x, y, z);
+
+            // Loop through all enemy heros and find the cloest one
+            int enemyHeroID = -1;
+            Tuple<double, double, double> enemyHeroPosition = null;
+            double dis = Int32.MaxValue;
+            int[] enemyHeroIDs;
+            if (heroID >= 0 && heroID <= 4)
+            {
+                enemyHeroIDs = new int[] { 5, 6, 7, 8, 9 };
+            }
+            else
+            {
+                enemyHeroIDs = new int[] { 0, 1, 2, 3, 4 };
+            }
+            foreach (int ID in enemyHeroIDs)
+            {
+                (double x_temp, double y_temp, double z_temp) = heroData.getHeroPosition(CurrentTick, ID);
+                double temp = Math.Pow((Math.Pow(x - x_temp, 2) + Math.Pow(y - y_temp, 2)), 0.5);
+                if (temp < dis)
+                {
+                    dis = temp;
+                    enemyHeroPosition = new Tuple<double, double, double>(x_temp - x, y_temp - y, z_temp - z);
+                    enemyHeroID = ID;
+                }
+            }
+            if (enemyHeroPosition != null)
+            {
+                overlay.ShowCloestEnemy(enemyHeroPosition.Item1, enemyHeroPosition.Item2);
+            }
+            else
+            {
+                throw new Exception("Closet enemy not found.");
             }
         }
 
