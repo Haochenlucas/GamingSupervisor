@@ -160,7 +160,11 @@ namespace GamingSupervisor
                 while (HeroCount < 10 || !stopHeroSelection)
                 {
                     Thread.Sleep(500);
-                    readSoFar += streamReader.ReadToEnd();
+                    try
+                    {
+                        readSoFar += streamReader.ReadToEnd();
+                    }
+                    catch { }
 
                     var matches = Regex.Matches(readSoFar, @"PR:SetSelectedHero (?<ID>\d):\[I:0:0\] npc_dota_hero_(?<Name>.*?)\(");
                     if (matches.Count == 0)

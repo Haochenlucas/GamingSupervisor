@@ -19,7 +19,7 @@ namespace GamingSupervisor
         private DotaConsoleParser consoleData;
 
         // the object for the selection analyzer.
-        private static counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
+        private static counter_pick_logic cp = new counter_pick_logic();
         private static heroID h_ID = new heroID();
 
         private int[,] table = cp.selectTable();
@@ -27,7 +27,6 @@ namespace GamingSupervisor
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
         private List<int> teamHeroIds = new List<int>(4);
         private List<int> teamIDGraph = new List<int>();
-        private ReplayHeroID heroIDData;
 
 
         public LiveAnalyzer() : base()
@@ -91,6 +90,7 @@ namespace GamingSupervisor
                         if (gameStarted)
                         {
                             keepLooping = false;
+                            consoleData.StopHeroDataParsing();
                         }
                         lastGameState = "Undefined";
                         break;
@@ -102,13 +102,20 @@ namespace GamingSupervisor
                             consoleData.StartHeroSelectionParsing();
                         }
                         HandleHeroSelection();
+                        overlay.ShowDraftMessage();
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        if (lastGameState != "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS")
+                        {
+                            lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
+                            consoleData.StopHeroSelectionParsing();
+                            consoleData.StartHeroDataParsing();
+                        }
                         lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
                         gameStarted = true;
 
-                        //overlay.ClearHeroSuggestion();
+                        overlay.ClearHeroSuggestion();
                         HandleGamePlay();
                         overlay.ShowIngameMessage();
                         break;
@@ -175,7 +182,7 @@ namespace GamingSupervisor
             string[] heroesSelected = consoleData.HeroesSelected;
             int team_side = 0;
 
-            if (gsi.Name == "null")
+            if (gsi.Name != "null")
             {
                 string teamname = gsi.Team;
                
@@ -229,13 +236,25 @@ namespace GamingSupervisor
                             {
                                 name = "treantprotector";
                             }
-                            if (name.Contains("Rattletrap"))
-                            {
-                                name = "Clockwerk";
-                            }
                             if (name.Contains("skele"))
                             {
                                 name = "wraithking";
+                            }
+                            if (name.Contains("rattletrap"))
+                            {
+                                name = "clockwerk";
+                            }
+                            if (name.Contains("doombringer"))
+                            {
+                                name = "doom";
+                            }
+                            if (name.Contains("antimage"))
+                            {
+                                name = "anti-mage";
+                            }
+                            if (name.Contains("necrolyte"))
+                            {
+                                name = "necrolyte";
                             }
                             heroID = hero_table[name];
 
@@ -291,7 +310,7 @@ namespace GamingSupervisor
                 }
                 else
                 {
-                    Console.WriteLine(teamname);
+                    Console.WriteLine("here" + teamname);
                 }
             }
             else

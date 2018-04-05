@@ -45,13 +45,25 @@ namespace replayParse
                 {
                     name = "treantprotector";
                 }
-                if (name.Contains("Rattletrap"))
-                {
-                    name = "Clockwerk";
-                }
                 if (name.Contains("skele"))
                 {
                     name = "wraithking";
+                }
+                if (name.Contains("rattletrap"))
+                {
+                    name = "clockwerk";
+                }
+                if (name.Contains("doombringer"))
+                {
+                    name = "doom";
+                }
+                if (name.Contains("antimage"))
+                {
+                    name = "anti-mage";
+                }
+                if (name.Contains("necrolyte"))
+                {
+                    name = "necrolyte";
                 }
                 int heroID = Int32.Parse(words[0]);
                 heroNameToID[name] = heroID;

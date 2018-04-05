@@ -157,6 +157,10 @@ namespace GamingSupervisor
                     {
                         name = "anti-mage";
                     }
+                    if (name.Contains("necrolyte"))
+                    {
+                        name = "necrolyte";
+                    }
                     int key = hero_table[name];
 
                     heroNameList.Add(ID_table[key]);
