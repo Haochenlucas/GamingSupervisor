@@ -204,6 +204,22 @@ namespace replayParse
             {
                 name = "wraithking";
             }
+            if (name.Contains("rattletrap"))
+            {
+                name = "clockwerk";
+            }
+            if (name.Contains("doombringer"))
+            {
+                name = "doom";
+            }
+            if (name.Contains("antimage"))
+            {
+                name = "anti-mage";
+            }
+            if (name.Contains("necrolyte"))
+            {
+                name = "necrolyte";
+            }
 
             return name;
         }
