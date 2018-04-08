@@ -189,7 +189,7 @@ namespace GamingSupervisor
                 IntPtr dotaHandle = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
                 if (GetForegroundWindow() == dotaHandle)
                 {
-                    Console.WriteLine(dotaHandle + " " + Process.GetProcessesByName("dota2")[0].Handle + " " + Process.GetProcessesByName("dota2").Length);
+                    //Console.WriteLine(dotaHandle + " " + Process.GetProcessesByName("dota2")[0].Handle + " " + Process.GetProcessesByName("dota2").Length);
                     //SetActiveWindow(dotaHandle);
                     //SetForegroundWindow(Process.GetProcessesByName("dota2")[0].Handle);
                     //SendKeys.SendWait("{F11}");

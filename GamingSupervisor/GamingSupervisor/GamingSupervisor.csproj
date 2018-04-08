@@ -92,9 +92,6 @@
     <Reference Include="Selen.Wpf.SystemStyles, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dc472ed4b6daaa58, processorArchitecture=MSIL">
       <HintPath>..\packages\Selen.Wpf.1.0.0\lib\net45\Selen.Wpf.SystemStyles.dll</HintPath>
     </Reference>
-    <Reference Include="SimWinKeyboard, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimWinKeyboard.1.0.0\lib\net20\SimWinKeyboard.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
