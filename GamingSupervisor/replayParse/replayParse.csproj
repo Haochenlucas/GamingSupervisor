@@ -79,6 +79,7 @@
     <Compile Include="heroIDClient.cs" />
     <Compile Include="hero_difficulty.cs" />
     <Compile Include="item_info.cs" />
+    <Compile Include="LastHitCalculator.cs" />
     <Compile Include="makeup_difficulty-table.cs" />
     <Compile Include="replayHighlights.cs" />
     <Compile Include="replayParse.cs" />
