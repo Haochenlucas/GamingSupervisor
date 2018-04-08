@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -66,8 +67,16 @@ namespace GamingSupervisor
                 foreach (string replay in
                     Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "Parser")))
                 {
-                    string[] replayID = replay.Split('_');
-                    var matchResult = await api.GetDetailedMatch(Path.GetFileName(replayID[0]));
+                    if (!File.Exists(Path.Combine(replay, "info.txt")))
+                        continue;
+
+                    string info = File.ReadAllText(Path.Combine(replay, "info.txt"));
+                    var matches = Regex.Matches(info, @"match_id: (?<MatchID>\d+)");
+                    if (matches.Count == 0)
+                        continue;
+                    string replayID = matches[0].Groups["MatchID"].Value;
+                    Console.WriteLine(replayID);
+                    var matchResult = await api.GetDetailedMatch(replayID);
 
                     string winner = "";
                     switch (matchResult.WinningFaction)

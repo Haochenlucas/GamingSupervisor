@@ -29,6 +29,11 @@ namespace GamingSupervisor
                 Thread.Sleep(500);
             }
 
+            while (Process.GetProcessesByName("dota2")[0].MainWindowHandle == IntPtr.Zero)
+            {
+                Thread.Sleep(500);
+            }
+
             dotaProcessHandle = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
             overlayManager = new OverlayManager(dotaProcessHandle, out window, out renderer);
             renderer.SetupHintSlots();

@@ -24,47 +24,7 @@ namespace replayParse
                     RegexOptions.IgnorePatternWhitespace);
                 string name = r.Replace(substrings[1], "");
                 name = string.Join("", name.Split(new string[] { "_" }, StringSplitOptions.None));
-                name = name.ToLower();
-                if (name.Contains("never"))
-                {
-                    name = "shadowfiend";
-                }
-                if (name.Contains("obsidian"))
-                {
-                    name = "outworlddevourer";
-                }
-                if (name.Contains("wisp"))
-                {
-                    name = "io";
-                }
-                if (name.Contains("magnataur"))
-                {
-                    name = "magnus";
-                }
-                if (name.Contains("treant"))
-                {
-                    name = "treantprotector";
-                }
-                if (name.Contains("skele"))
-                {
-                    name = "wraithking";
-                }
-                if (name.Contains("rattletrap"))
-                {
-                    name = "clockwerk";
-                }
-                if (name.Contains("doombringer"))
-                {
-                    name = "doom";
-                }
-                if (name.Contains("antimage"))
-                {
-                    name = "anti-mage";
-                }
-                if (name.Contains("necrolyte"))
-                {
-                    name = "necrolyte";
-                }
+                name = ConvertedHeroName.Get(name);                
                 int heroID = Int32.Parse(words[0]);
                 heroNameToID[name] = heroID;
                 heroIDToName[heroID] = name;

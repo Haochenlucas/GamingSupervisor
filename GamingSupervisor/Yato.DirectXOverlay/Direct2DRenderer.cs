@@ -2551,8 +2551,8 @@ namespace Yato.DirectXOverlay
             on = true;
             background = new Tuple<int, int, int, int>(109, 109, 109, 0);
             color = new Tuple<int, int, int, int>(255, 255, 255, 255);
-            int font_size = 32 * (int)Direct2DRenderer.size_scale;
-            font = new Tuple<string, int>("Arial", font_size);
+            int font_size = Math.Max(32 * (int)Direct2DRenderer.size_scale, 16);
+            font = new Tuple<string, int>("Consolas", font_size);
             img_x = x - Direct2DRenderer.size_scale * modifier_x * 3;
             img_y = y;
             img_width = Direct2DRenderer.size_scale * 254 / 2;
