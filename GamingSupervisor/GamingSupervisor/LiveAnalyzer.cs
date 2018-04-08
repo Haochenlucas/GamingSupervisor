@@ -1,9 +1,12 @@
-﻿using replayParse;
+﻿using Dota2Api;
+using replayParse;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -12,8 +15,35 @@ namespace GamingSupervisor
 {
     class LiveAnalyzer : Analyzer
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        public static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern int SetForegroundWindow(IntPtr point);
+        
+        [DllImport("user32.dll")]
+        static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, uint wParam, int lParam);
+
+        [DllImport("user32.dll")]
+        static extern uint MapVirtualKey(uint uCode, uint uMapType);
+
+        private const int KEYEVENTF_EXTENDEDKEY = 0x0001; // Key down flag
+        private const int KEYEVENTF_KEYUP = 0x0002; // Key up flag
+
+        private const ushort WM_KEYDOWN = 0x0100;
+        private const ushort WM_KEYUP = 0x0101;
+
+        private const int VK_F11 = 0x7A; // F11 key code
+        private const int VK_OEM_5 = 0xDC;
+        private const int VK_OEM_3 = 0xC0;
+        private const int VK_HOME = 0x24;
+        private const int VK_A = 0x41;
 
         private GameStateIntegration gsi;
         private DotaConsoleParser consoleData;
@@ -27,6 +57,8 @@ namespace GamingSupervisor
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
         private List<int> teamHeroIds = new List<int>(4);
         private List<int> teamIDGraph = new List<int>();
+
+        private string playerName = null;
 
 
         public LiveAnalyzer() : base()
@@ -43,7 +75,8 @@ namespace GamingSupervisor
 
             gsi.StartListener();
 
-            overlay.Intructions_setup("Start a game");
+            if (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
+                overlay.Intructions_setup("Start a game");
 
             while (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
             {
@@ -67,11 +100,11 @@ namespace GamingSupervisor
 
                 Thread.Sleep(10);
             }
-
-            bool gameStarted = false;
+            
             bool keepLooping = true;
 
             Console.WriteLine("Currently analyzing...");
+            string lastGameState = "";
             while (keepLooping)
             {
                 if (!IsDotaRunning())
@@ -81,21 +114,13 @@ namespace GamingSupervisor
                     return;
                 }
 
-                string lastGameState = "";
                 switch (gsi.GameState)
                 {
                     case null:
                     case "":
                     case "Undefined":
-                        if (gameStarted)
-                        {
-                            keepLooping = false;
-                            consoleData.StopHeroDataParsing();
-                        }
-                        lastGameState = "Undefined";
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
-                        gameStarted = true;
                         if (lastGameState != "DOTA_GAMERULES_STATE_HERO_SELECTION")
                         {
                             lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
@@ -104,24 +129,39 @@ namespace GamingSupervisor
                         HandleHeroSelection();
                         overlay.ShowDraftMessage();
                         break;
+                    case "DOTA_GAMERULES_STATE_STRATEGY_TIME":
+                        if (lastGameState != "DOTA_GAMERULES_STATE_STRATEGY_TIME")
+                        {
+                            if (playerName == null)
+                                playerName = GetPlayerName();
+
+                            lastGameState = "DOTA_GAMERULES_STATE_STRATEGY_TIME";
+
+                            consoleData.StopHeroSelectionParsing();
+
+                            overlay.ClearHeroSuggestion();
+                        }
+                        break;
+                    case "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD":
+                        break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
                         if (lastGameState != "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS")
                         {
                             lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
-                            consoleData.StopHeroSelectionParsing();
+
                             consoleData.StartHeroDataParsing();
                         }
-                        lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
-                        gameStarted = true;
+                        
+                        SendCommandsToDota();
 
-                        overlay.ClearHeroSuggestion();
                         HandleGamePlay();
+                        HandleHeroGraph();
+
                         overlay.ShowIngameMessage();
                         break;
                     default:
                         lastGameState = "Other";
-                        gameStarted = true;
                         break;
                 }
 
@@ -145,21 +185,39 @@ namespace GamingSupervisor
             if (now_ms - timeSinceLastKeyPress_ms >= 500)
             {
                 timeSinceLastKeyPress_ms = now_ms;
-                if (GetForegroundWindow() == overlay.GetOverlayHandle())
-                    SendKeys.SendWait("{F12}");
+                
+                IntPtr dotaHandle = Process.GetProcessesByName("dota2")[0].MainWindowHandle;
+                if (GetForegroundWindow() == dotaHandle)
+                {
+                    Console.WriteLine(dotaHandle + " " + Process.GetProcessesByName("dota2")[0].Handle + " " + Process.GetProcessesByName("dota2").Length);
+                    //SetActiveWindow(dotaHandle);
+                    //SetForegroundWindow(Process.GetProcessesByName("dota2")[0].Handle);
+                    //SendKeys.SendWait("{F11}");
+                    //SimWinInput.SimKeyboard.Press(VK_F11);
+                    keybd_event(VK_HOME, 0, 0, (UIntPtr)0);
+                    Thread.Sleep(100);
+                    keybd_event(VK_HOME, 0, KEYEVENTF_KEYUP, (UIntPtr)0);
+
+                    /*INPUT inp[2] = { 0 };
+                    inp[0].type = INPUT_KEYBOARD;
+                    inp[0].ki.wVk = VK_F5;
+                    inp[1].type = INPUT_KEYBOARD;
+                    inp[1].ki.wVk = VK_F5;
+                    inp[1].ki.dwFlags = KEYEVENTF_KEYUP;
+
+                    SendInput(2, inp, sizeof(INPUT));*/
+                }
             }
         }
 
         private void HandleGamePlay()
         {
-            SendCommandsToDota();
-
             // placeholders
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
             double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
             int healthPercent = gsi.HealthPercent;
-            
+
             overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
 
@@ -185,7 +243,7 @@ namespace GamingSupervisor
             if (gsi.Name != "null")
             {
                 string teamname = gsi.Team;
-               
+
                 if (teamname == "Dire")
                 {
                     team_side = 3;
@@ -212,52 +270,11 @@ namespace GamingSupervisor
                         {
                             curHeroName = heroesSelected[i];
                             var r = new Regex(@"(?<=[A-Z])(?=[A-Z][a-z]) | (?<=[^A-Z])(?=[A-Z]) | (?<=[A-Za-z])(?=[^A-Za-z])",
-            RegexOptions.IgnorePatternWhitespace);
+                                RegexOptions.IgnorePatternWhitespace);
                             string name = r.Replace(curHeroName, "");
                             name = string.Join("", name.Split(new string[] { "_" }, StringSplitOptions.None));
-                            name = name.ToLower();
-                            if (name.Contains("never"))
-                            {
-                                name = "shadowfiend";
-                            }
-                            if (name.Contains("obsidian"))
-                            {
-                                name = "outworlddevourer";
-                            }
-                            if (name.Contains("wisp"))
-                            {
-                                name = "io";
-                            }
-                            if (name.Contains("magnataur"))
-                            {
-                                name = "magnus";
-                            }
-                            if (name.Contains("treant"))
-                            {
-                                name = "treantprotector";
-                            }
-                            if (name.Contains("skele"))
-                            {
-                                name = "wraithking";
-                            }
-                            if (name.Contains("rattletrap"))
-                            {
-                                name = "clockwerk";
-                            }
-                            if (name.Contains("doombringer"))
-                            {
-                                name = "doom";
-                            }
-                            if (name.Contains("antimage"))
-                            {
-                                name = "anti-mage";
-                            }
-                            if (name.Contains("necrolyte"))
-                            {
-                                name = "necrolyte";
-                            }
+                            name = ConvertedHeroName.Get(name);
                             heroID = hero_table[name];
-
                         }
 
                         if (i < 5 && team_side == 2)
@@ -310,14 +327,83 @@ namespace GamingSupervisor
                 }
                 else
                 {
-                    Console.WriteLine("here" + teamname);
+                    //Console.WriteLine(teamname);
                 }
             }
             else
             {
-                Console.WriteLine("Picked"+ gsi.Name);
+                //Console.WriteLine("Picked"+ gsi.Name);
             }
-            
+
+        }
+
+        void HandleHeroGraph()
+        {
+            Player[] heroes = consoleData.Heroes;
+            foreach (var hero in heroes)
+                if (hero.HeroName == "")
+                    return;
+
+            List<double> teamHealth = new List<double> { 0, 0, 0, 0, 0 };
+            List<double> teamMaxHealth = new List<double> { 0, 0, 0, 0, 0 };
+
+            List<int> heroIDs = new List<int>();
+
+            teamHealth.Add(gsi.Health);
+            teamMaxHealth.Add(gsi.MaxHealth);
+
+            heroIDs.Add(hero_table[ConvertedHeroName.Get(gsi.Name)]);
+
+            int indexStart = 0;
+            string playerTeam = gsi.Team;
+            switch (playerTeam) // Player always 0, Radiant next, Dire last
+            {
+                case "Radiant":
+                    indexStart = 1;
+                    break;
+                case "Dire":
+                    indexStart = 6;
+                    break;
+            }
+
+            foreach (string name in heroID.heroName)
+            {
+                if (name == null)
+                    continue;
+
+                for (int i = indexStart; i < indexStart + 4; i++)
+                {
+                    if (ConvertedHeroName.Get(name).Contains(ConvertedHeroName.Get(heroes[i].HeroName)))
+                    {
+                        teamHealth.Add(heroes[i].Health);
+                        teamMaxHealth.Add(heroes[i].MaxHealth);
+                        
+                        heroIDs.Add(hero_table[ConvertedHeroName.Get(name)]);
+
+                        break;
+                    }
+                }
+            }
+
+            overlay.ToggleGraphForHeroHP();
+            overlay.AddHeroGraphIcons(heroIDs);
+            overlay.AddHPs(teamHealth.ToArray(), teamMaxHealth.ToArray());
+            overlay.AddHp(teamHealth[0]);
+        }
+
+        private string GetPlayerName()
+        {
+            return WaitForGetPlayerNameAsync().Result;
+        }
+
+        private async Task<string> WaitForGetPlayerNameAsync()
+        {
+            // Need to use api handler because game state integration is returning wrong player name in bot games
+            using (ApiHandler api = new ApiHandler("8BFC2C10E3D1E95B85DCF6AAD861782D"))
+            {
+                var summary = await api.GetPlayerSummary(new string[] { gsi.SteamID });
+                return summary.Players[0].DisplayName;
+            }
         }
     }
 }

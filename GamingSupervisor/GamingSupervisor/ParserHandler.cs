@@ -111,57 +111,7 @@ namespace GamingSupervisor
             {
                 if (line.Contains("hero_name"))
                 {
-                    String parsedHeroName = line.Split(new string[] { "hero_" }, StringSplitOptions.None).Last();
-                    parsedHeroName = parsedHeroName.Split(new char[] { '\"' }).First();
-                    String[] temp = parsedHeroName.Split(new char[] { '_' });
-                    String[] upperCase = new String[temp.Length];
-                    for (int i = 0; i < temp.Length; i++)
-                    {
-                        upperCase[i] = temp[i].First().ToString().ToUpper() + temp[i].Substring(1);
-                    }
-                    parsedHeroName = string.Join("", upperCase);
-                    string name = parsedHeroName.ToLower();
-                    if (name.Contains("never"))
-                    {
-                        name = "shadowfiend";
-                    }
-                    if (name.Contains("obsidian"))
-                    {
-                        name = "outworlddevourer";
-                    }
-                    if (name.Contains("wisp"))
-                    {
-                        name = "io";
-                    }
-                    if (name.Contains("magnataur"))
-                    {
-                        name = "magnus";
-                    }
-                    if (name.Contains("treant"))
-                    {
-                        name = "treantprotector";
-                    }
-                    if (name.Contains("skele"))
-                    {
-                        name = "wraithking";
-                    }
-                    if (name.Contains("rattletrap"))
-                    {
-                        name = "clockwerk";
-                    }
-                    if (name.Contains("doombringer"))
-                    {
-                        name = "doom";
-                    }
-                    if (name.Contains("antimage"))
-                    {
-                        name = "anti-mage";
-                    }
-                    if (name.Contains("necrolyte"))
-                    {
-                        name = "necrolyte";
-                    }
-                    int key = hero_table[name];
+                    int key = hero_table[ConvertedHeroName.Get(line)];
 
                     heroNameList.Add(ID_table[key]);
                 }
