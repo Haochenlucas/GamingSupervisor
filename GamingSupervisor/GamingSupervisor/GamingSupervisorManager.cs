@@ -62,7 +62,7 @@ namespace GamingSupervisor
 
         private void CreateAutoExecFile()
         {
-            string lineToWrite = "bind \"F11\" \"dota_player_status\"";
+            string lineToWrite = "bind \"HOME\" \"dota_player_status\"";
 
             string autoExecPath = Path.Combine(SteamAppsLocation.Get(), "cfg/autoexec.cfg");
 
