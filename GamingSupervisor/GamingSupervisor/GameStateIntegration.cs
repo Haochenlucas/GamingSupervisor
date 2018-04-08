@@ -12,6 +12,7 @@ namespace GamingSupervisor
     {
         private void OnNewGameState(GameState gs)
         {
+            SteamID = gs.Player.SteamID;
             GameTime = gs.Map.GameTime;
             IsDayTime = gs.Map.IsDaytime;
             IsNightstalkerNight = gs.Map.IsNightstalker_Night;
@@ -153,6 +154,14 @@ namespace GamingSupervisor
                 };
 
             File.WriteAllLines(gsifile, contentofgsifile);
+        }
+
+        private readonly object steamIDLock = new object();
+        private string steamID;
+        public string SteamID
+        {
+            get { lock (steamIDLock) { return steamID; } }
+            private set { lock (steamIDLock) { steamID = value; } }
         }
 
         private readonly object gameTimeLock = new object();

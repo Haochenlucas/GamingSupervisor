@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConvertedHeroName.cs" />
     <Compile Include="counterpick_info.cs" />
     <Compile Include="counter_pick_logic.cs" />
     <Compile Include="demo.cs" />
