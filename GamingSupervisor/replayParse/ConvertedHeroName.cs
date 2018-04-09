@@ -70,6 +70,10 @@ namespace replayParse
             {
                 name = "underlord";
             }
+            else if (name.Contains("furion"))
+            {
+                name = "nature'sprophet";
+            }
 
             return name;
         }
