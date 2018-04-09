@@ -71,6 +71,14 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dota2Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dota2Api\Dota2Api\bin\Debug\Dota2Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Dota2GSI, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dota2GSI\Dota2GSI\bin\Debug\Dota2GSI.dll</HintPath>
+    </Reference>
     <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
     </Reference>
@@ -231,6 +239,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -257,14 +266,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dota2Api\Dota2Api.csproj">
-      <Project>{28b291ec-3eea-4afb-a48a-449c6dde8e41}</Project>
-      <Name>Dota2Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dota2GSI\Dota2GSI.csproj">
-      <Project>{ed6f76c6-a3fc-40f2-9b9b-3c47093a4b6f}</Project>
-      <Name>Dota2GSI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\replayParse\replayParse.csproj">
       <Project>{ebdb3153-80d6-4709-bd02-f58ad8407465}</Project>
       <Name>replayParse</Name>
