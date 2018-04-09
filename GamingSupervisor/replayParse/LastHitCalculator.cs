@@ -29,7 +29,7 @@ namespace replayParse
             return damage > hpLeft;
         }
 
-        public bool CanLastHit(double time, double baseAtk, double primaryAtr, double armor, double hpLeft)
+        public bool CanLastHit(double baseAtk, double primaryAtr, double armor, double hpLeft)
         {
             double damage = (baseAtk + primaryAtr) * ArmorCalculation(armor);
 

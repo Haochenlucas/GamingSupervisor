@@ -17,6 +17,7 @@ namespace GamingSupervisor
         private List<int> teamIDGraph = new List<int>();
         private ReplayTick replayTick;
         private ReplayHighlights replayHighlights;
+        private LastHitCalculator lastHitCalculator;
 
         private ReplayStartAnnouncer announcer = null;
 
@@ -394,6 +395,36 @@ namespace GamingSupervisor
             //double closestMaxHp = heroData.getMaxHealth(CurrentTick, closestHeroId);
             //double closestHpPercen = closestHp / closestMaxHp;
 
+            List<Creep> creeps = heroData.getLaneCreeps(CurrentTick);
+            string prim = lastHitCalculator.GetPrimaryAttribute(heroID);
+            double attr = 0;
+            switch (prim)
+            {
+                case "Strength":
+                    attr = heroData.getStrength(CurrentTick, heroID);
+                    break;
+                case "Agility":
+                    attr = heroData.getAgility(CurrentTick, heroID);
+                    break;
+                case "Intelligence":
+                    attr = heroData.getIntellect(CurrentTick, heroID);
+                    break;
+                default:
+                    break;
+            }
+            double minAtk = heroData.getDamageMin(currentTick, heroID);
+            foreach (var c in creeps)
+            {
+                double cArmor = c.armor;
+                double cHp = c.health;
+                bool canKill = lastHitCalculator.CanLastHit(baseAtk: minAtk, primaryAtr: attr, armor: cArmor, hpLeft: cHp);
+
+                if (canKill && cHp > 0)
+                {
+                    overlay.CreepLowEnough();
+                }
+
+            }
             overlay.ToggleGraphForHeroHP();
             overlay.AddHeroGraphIcons(teamIDGraph);
             overlay.AddHPs(hpToSend, maxHpToSend);
