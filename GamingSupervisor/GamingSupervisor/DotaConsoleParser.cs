@@ -89,7 +89,7 @@ namespace GamingSupervisor
                 string readSoFar = "";
                 while (true || !stopHeroData)
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(250);
                     readSoFar += streamReader.ReadToEnd();
 
                     if (!readSoFar.Contains("Lv Name         Player        K/ D/ A/ LH/ DN/ Gold Health    Mana"))
@@ -109,7 +109,8 @@ namespace GamingSupervisor
                         @"(?<MaxHealth>\d+)\s+" +
                         @"(?<Mana>\d+)\/\s*" +
                         @"(?<MaxMana>\d+)(\n|\r|\r\n)");
-                    if (matches.Count == 0)
+
+                    if (matches.Count < 10)
                         continue;
 
                     int count = 0;
@@ -130,6 +131,9 @@ namespace GamingSupervisor
                         heroes[count].MaxMana = Int32.Parse(match.Groups["MaxMana"].Value);
 
                         count++;
+
+                        if (count >= 10)
+                            break;
                     }
 
                     readSoFar = "";
@@ -147,7 +151,8 @@ namespace GamingSupervisor
         public void StopHeroSelectionParsing()
         {
             stopHeroSelection = true;
-            heroSelectionThread.Join();
+            if (heroSelectionThread != null)
+                heroSelectionThread.Join();
             stopHeroSelection = false;
         }
 
