@@ -510,72 +510,86 @@ public class App
     {
     	initializeNeutralMonster(e);
     	
-        boolean updatePosition = false;
-        boolean updateMaxHealth = false;
-        boolean updatePhysicalArmor = false;
-        boolean updateMagicalResistance = false;
+        boolean update = false;
+        //boolean updateMaxHealth = false;
+        //boolean updatePhysicalArmor = false;
+        //boolean updateMagicalResistance = false;
         for (int i = 0; i < updateCount; i++)
         {
-            if (neutralMonster.isPosition(updatedPaths[i]))
-                updatePosition = true;
-            if (neutralMonster.isMaxHealth(updatedPaths[i]))
-                updateMaxHealth = true;
-            if (neutralMonster.isPhysicalArmor(updatedPaths[i]))
-                updatePhysicalArmor = true;
-            if (neutralMonster.isMagicalResistance(updatedPaths[i]))
-                updateMagicalResistance = true;
+            if (neutralMonster.isPosition(updatedPaths[i]) ||
+            	neutralMonster.isHealth(updatedPaths[i]) ||
+            	neutralMonster.isMaxHealth(updatedPaths[i]))
+            {
+            	update = true;
+            	break;
+            }
+            //if (neutralMonster.isMaxHealth(updatedPaths[i]))
+            //    updateMaxHealth = true;
+            //if (neutralMonster.isPhysicalArmor(updatedPaths[i]))
+            //    updatePhysicalArmor = true;
+            //if (neutralMonster.isMagicalResistance(updatedPaths[i]))
+            //    updateMagicalResistance = true;
         }
 
-        if (updatePosition || forceUpdate)
-        	neutralMonsterWriter.format("%d [POSITION] %d %s %s %s\n",
+        if (update || forceUpdate)
+        	neutralMonsterWriter.format("%d [HEALTH_POSITION] %d %s %s %s %s %s\n",
     				ctx.getTick(),
     				e.getHandle(),
     				e.getPropertyForFieldPath(neutralMonster.cellX),
 					e.getPropertyForFieldPath(neutralMonster.cellY),
-					e.getPropertyForFieldPath(neutralMonster.cellZ));
-        if (updateMaxHealth || forceUpdate)
-        	neutralMonsterWriter.format("%d [MAXHEALTH] %d %s\n",
-    				ctx.getTick(),
-    				e.getHandle(),
-    				e.getPropertyForFieldPath(neutralMonster.maxHealth));
-        if (updatePhysicalArmor || forceUpdate)
-        	neutralMonsterWriter.format("%d [ARMOR] %d %s\n",
-    				ctx.getTick(),
-    				e.getHandle(),
-    				e.getPropertyForFieldPath(neutralMonster.physicalArmor));
-        if (updateMagicalResistance || forceUpdate)
-	    	neutralMonsterWriter.format("%d [RESISTANCE] %d %s\n",
-					ctx.getTick(),
-					e.getHandle(),
-					e.getPropertyForFieldPath(neutralMonster.magicalResistance));
+					e.getPropertyForFieldPath(neutralMonster.cellZ),
+					e.getPropertyForFieldPath(neutralMonster.health),
+					e.getPropertyForFieldPath(neutralMonster.maxHealth));
+        //if (updateMaxHealth || forceUpdate)
+        //	neutralMonsterWriter.format("%d [MAXHEALTH] %d %s\n",
+    	//			ctx.getTick(),
+    	//			e.getHandle(),
+    	//			e.getPropertyForFieldPath(neutralMonster.maxHealth));
+        //if (updatePhysicalArmor || forceUpdate)
+        //	neutralMonsterWriter.format("%d [ARMOR] %d %s\n",
+    	//			ctx.getTick(),
+    	//			e.getHandle(),
+    	//			e.getPropertyForFieldPath(neutralMonster.physicalArmor));
+        //if (updateMagicalResistance || forceUpdate)
+	    //	neutralMonsterWriter.format("%d [RESISTANCE] %d %s\n",
+		//			ctx.getTick(),
+		//			e.getHandle(),
+		//			e.getPropertyForFieldPath(neutralMonster.magicalResistance));
     }
     
     private void handleLaneCreep(Context ctx, Entity e, FieldPath[] updatedPaths, int updateCount, boolean forceUpdate)
     {
     	initializeLaneCreep(e);
     	
-        boolean updatePosition = false;
-        boolean updateHealth = false;
+        boolean update = false;
+        //boolean updateHealth = false;
         for (int i = 0; i < updateCount; i++)
         {
-            if (hero.isPosition(updatedPaths[i]))
-                updatePosition = true;
-            if (hero.isHealth(updatedPaths[i]))
-                updateHealth = true; 
+            if (laneCreep.isPosition(updatedPaths[i]) ||
+        		laneCreep.isHealth(updatedPaths[i]) ||
+        		laneCreep.isMaxHealth(updatedPaths[i]))
+            {
+                update = true;
+                break;
+            }
+            //if (hero.isHealth(updatedPaths[i]))
+            //    updateHealth = true; 
         }
         
-        if (updatePosition || forceUpdate)
-        	laneCreepWriter.format("%d [POSITION] %d %s %s %s\n",
+        if (update || forceUpdate)
+        	laneCreepWriter.format("%d [HEALTH_POSITION] %d %s %s %s %s %s\n",
     				ctx.getTick(),
     				e.getHandle(),
     				e.getPropertyForFieldPath(laneCreep.cellX),
 					e.getPropertyForFieldPath(laneCreep.cellY),
-					e.getPropertyForFieldPath(laneCreep.cellZ));
-        if (updateHealth || forceUpdate)
-        	laneCreepWriter.format("%d [HEALTH] %d %s\n",
-    				ctx.getTick(),
-    				e.getHandle(),
-    				e.getPropertyForFieldPath(laneCreep.health));
+					e.getPropertyForFieldPath(laneCreep.cellZ),
+					e.getPropertyForFieldPath(laneCreep.health),
+					e.getPropertyForFieldPath(laneCreep.maxHealth));
+        //if (updateHealth || forceUpdate)
+        //	laneCreepWriter.format("%d [HEALTH] %d %s\n",
+    	//			ctx.getTick(),
+    	//			e.getHandle(),
+    	//			e.getPropertyForFieldPath(laneCreep.health));
     }
     
     public void run(String[] args) throws Exception
