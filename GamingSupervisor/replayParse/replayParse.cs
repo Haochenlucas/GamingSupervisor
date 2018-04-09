@@ -70,6 +70,11 @@ namespace replayParse
                             return (T)(object)Tuple.Create(0.0, 0.0, 0.0);
                         }
 
+                        if (typeof(T) == typeof(List<Creep>))
+                        {
+                            return (T)(object)(new List<Creep>());
+                        }
+
                         return default(T);
                     }
                 }
@@ -93,8 +98,8 @@ namespace replayParse
         private static TickEntries<double>[] damageMin = new TickEntries<double>[NUMBER_OF_PLAYERS];
         private static TickEntries<double>[] damageMax = new TickEntries<double>[NUMBER_OF_PLAYERS];
 
-        private static TickEntries<Creep> laneCreep;
-        private static TickEntries<Creep> neutralCreep;
+        private static TickEntries<List<Creep>> laneCreep;
+        private static TickEntries<List<Creep>> neutralCreep;
 
         public HeroParser(string dataFolderLocation)
         {
@@ -115,8 +120,8 @@ namespace replayParse
                 damageMax[i] = new TickEntries<double>();
             }
 
-            laneCreep = new TickEntries<Creep>();
-            neutralCreep = new TickEntries<Creep>();
+            laneCreep = new TickEntries<List<Creep>>();
+            neutralCreep = new TickEntries<List<Creep>>();
 
             FirstTick = -1;
             foreach (string line in File.ReadLines(dataFolderLocation + "hero.txt"))
@@ -203,14 +208,17 @@ namespace replayParse
                 switch (words[1])
                 {
                     case "[HEALTH_POSITION]":
-                        laneCreep[tick] = new Creep()
+                        if (!laneCreep.ContainsKey(tick))
+                            laneCreep[tick] = new List<Creep>();
+
+                        laneCreep[tick].Add(new Creep()
                         {
                             x = Int32.Parse(words[3]),
                             y = Int32.Parse(words[4]),
                             z = Int32.Parse(words[5]),
                             health = Int32.Parse(words[6]),
                             maxHealth = Int32.Parse(words[7])
-                        };
+                        });
                         break;
                 }
             }
@@ -223,25 +231,28 @@ namespace replayParse
                 switch (words[1])
                 {
                     case "[HEALTH_POSITION]":
-                        neutralCreep[tick] = new Creep()
+                        if (!neutralCreep.ContainsKey(tick))
+                            neutralCreep[tick] = new List<Creep>();
+
+                        neutralCreep[tick].Add(new Creep()
                         {
                             x = Int32.Parse(words[3]),
                             y = Int32.Parse(words[4]),
                             z = Int32.Parse(words[5]),
                             health = Int32.Parse(words[6]),
                             maxHealth = Int32.Parse(words[7])
-                        };
+                        });
                         break;
                 }
             }
         }
 
-        public Creep getLaneCreep(int tick)
+        public List<Creep> getLaneCreeps(int tick)
         {
             return laneCreep[tick];
         }
 
-        public Creep getNeutralCreep(int tick)
+        public List<Creep> getNeutralCreeps(int tick)
         {
             return neutralCreep[tick];
         }
