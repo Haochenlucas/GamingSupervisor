@@ -18,6 +18,7 @@ namespace GamingSupervisor
         private ReplayTick replayTick;
         private ReplayHighlights replayHighlights;
         private LastHitCalculator lastHitCalculator;
+        private Retreat retreat;
 
         private ReplayStartAnnouncer announcer = null;
 
@@ -30,6 +31,7 @@ namespace GamingSupervisor
         private static heroID h_ID = new heroID();
         private int[,] table = cp.selectTable();
         private Dictionary<string, int> hero_table = h_ID.getIDHero();
+        private Dictionary<string, int> lower_hero_table = h_ID.getIDfromLowercaseHeroname();
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
         private int[] enemiesHeroID;
 
@@ -54,6 +56,7 @@ namespace GamingSupervisor
             heroIDData = new ReplayHeroID(GUISelection.replayDataFolderLocation);
             replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
             replayHighlights = new ReplayHighlights(GUISelection.replayDataFolderLocation, GUISelection.heroName);
+            lastHitCalculator = new LastHitCalculator();
 
             heroID = heroIDData.getHeroID(GUISelection.heroName);
         }
@@ -369,6 +372,19 @@ namespace GamingSupervisor
 
             int closestEnemyID = DrawOnClosestEnemy();
 
+            int fEID = lower_hero_table[heroIDData.getHeroName(closestEnemyID)];
+            int fHID = lower_hero_table[heroIDData.getHeroName(heroID)];
+
+            bool shouldRetreat = Retreat.CreateInputFile(myID: fHID,
+                myLvl: heroData.getLevel(CurrentTick, heroID),
+                myHP: health,
+                myMana: heroData.getMana(CurrentTick, heroID),
+                enemyID: fEID,
+                enemyLvl: heroData.getLevel(CurrentTick, closestEnemyID),
+                enemyHP: heroData.getHealth(CurrentTick, closestEnemyID),
+                enemyMana: heroData.getMana(CurrentTick, closestEnemyID));
+            
+
             //overlay.ToggleGraphForHeroHP();
             //overlay.AddHPs(hpToSend);
             //overlay.AddHp(hpToSend[0]);
@@ -396,7 +412,7 @@ namespace GamingSupervisor
             //double closestHpPercen = closestHp / closestMaxHp;
 
             List<Creep> creeps = heroData.getLaneCreeps(CurrentTick);
-            string prim = lastHitCalculator.GetPrimaryAttribute(heroID);
+            string prim = lastHitCalculator.GetPrimaryAttribute(fHID);
             double attr = 0;
             switch (prim)
             {
@@ -432,7 +448,7 @@ namespace GamingSupervisor
 
             // The health at the start of the game is 0 so the retreat message will show up
             // TODO: logic
-            if (health < 600)
+            if (true)
             {
                 overlay.AddRetreatMessage("Low health warning! " + "Current Health: " + health, "exclamation_mark");
 

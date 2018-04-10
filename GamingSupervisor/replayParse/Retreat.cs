@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace replayParse
 {
-    class Retreat
+    public class Retreat
     {
-        public bool CreateInputFile(float myID, float myLvl, float myHP, float myMana,
-        float enemyID, float enemyLvl, float enemyHP, float enemyMana)
+        public static bool CreateInputFile(float myID, float myLvl, float myHP, double myMana,
+        float enemyID, float enemyLvl, float enemyHP, double enemyMana)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -42,7 +42,7 @@ namespace replayParse
             return prediction.Contains("1");
         }
 
-        public void Predict(out string prediction)
+        private static void Predict(out string prediction)
         {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
@@ -52,8 +52,6 @@ namespace replayParse
             p.Start();
 
             prediction = p.StandardOutput.ReadLine();
-
-            p.WaitForExit();
         }
     }
 
