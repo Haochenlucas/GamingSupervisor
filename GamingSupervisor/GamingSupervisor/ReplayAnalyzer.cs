@@ -448,7 +448,7 @@ namespace GamingSupervisor
 
             // The health at the start of the game is 0 so the retreat message will show up
             // TODO: logic
-            if (true)
+            if (shouldRetreat)
             {
                 overlay.AddRetreatMessage("Low health warning! " + "Current Health: " + health, "exclamation_mark");
 
