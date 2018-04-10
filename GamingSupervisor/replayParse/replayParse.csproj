@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConvertedHeroName.cs" />
     <Compile Include="counterpick_info.cs" />
     <Compile Include="counter_pick_logic.cs" />
     <Compile Include="demo.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="ingame_analysis.cs" />
     <Compile Include="itemInfo.cs" />
     <Compile Include="item_info.cs" />
+    <Compile Include="LastHitCalculator.cs" />
     <Compile Include="makeup_difficulty-table.cs" />
     <Compile Include="replayHighlights.cs" />
     <Compile Include="replayParse.cs" />

@@ -70,7 +70,10 @@ namespace Yato.DirectXOverlay
         // 12: hero information
         private Message[] messages = new Message[13];
 
+        private Instruction instruction;
         private HeroSuggestion HeroSugg = new HeroSuggestion();
+        private HeroInfo HeroInfo = new HeroInfo();
+        private ItemSuggestion ItemSugg = new ItemSuggestion();
 
         // Contains information about hero health
         private double[] hps = new double[5];
@@ -1199,7 +1202,7 @@ namespace Yato.DirectXOverlay
         public void DrawTextWithBackground(string text, float x, float y, Tuple<string, int> tfont, Tuple<int, int, int, int> tcolor, Tuple<int, int, int, int> tbackground, out float modifier)
         {
             Direct2DBrush color = CreateBrush(tcolor.Item1, tcolor.Item2, tcolor.Item3, tcolor.Item4);
-            Direct2DBrush backgroundColor = CreateBrush(tbackground.Item1, tbackground.Item2, tbackground.Item3, 0.3f);
+            Direct2DBrush backgroundColor = CreateBrush(tbackground.Item1, tbackground.Item2, tbackground.Item3, tbackground.Item4);
             Direct2DFont font = CreateFont(tfont.Item1, tfont.Item2 * Direct2DRenderer.size_scale);
             
             var layout = new TextLayout(fontFactory, text, font, float.MaxValue, float.MaxValue);
@@ -1479,7 +1482,7 @@ namespace Yato.DirectXOverlay
                     // 12: hero info
                     case 12:
                         string hero_info = "Hero information message slot";
-                        messages[i] = new Message(hero_info, "", width_unit * 16, height_unit * 6);
+                        messages[i] = new Message(hero_info, "", width_unit * 18, height_unit * 6);
                         break;
 
                     default:
@@ -1488,7 +1491,7 @@ namespace Yato.DirectXOverlay
                 }
                 messages[i].on = false;
             }
-            HeroSugg = new HeroSuggestion(heroes_sugg);
+            HeroSugg = new HeroSuggestion(heroes_sugg, "Draft Suggestion");
         }
         #endregion
 
@@ -1535,13 +1538,15 @@ namespace Yato.DirectXOverlay
         public void ItemSelectionHints(string item, string img)
         {
             string temp = BreakText(item, 50);
-             AddMessage(hints.items_selection, temp, img);
+            AddMessage(hints.items_selection, temp, img);
+            ItemSugg = new ItemSuggestion(messages[(int)hints.items_selection], "Item Suggestion");
         }
 
         public void HeroInfoHints(string info, string img)
         {
             string temp = BreakText(info, 50);
             AddMessage(hints.heroinformation, temp, img);
+            HeroInfo = new HeroInfo(messages[(int)hints.heroinformation], "Tutorial");
         }
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
@@ -1736,6 +1741,32 @@ namespace Yato.DirectXOverlay
         }
         #endregion
 
+        #region Logo Draw
+        private void DrawLogo(MessageBox messageBox, float Horizontal, float Vertical)
+        {
+            Direct2DBrush color = CreateBrush(255, 255, 255, 255);
+            Direct2DBrush backgroundColor = blackBrush;
+            Direct2DFont font = CreateFont(messageBox.Logo.Item2, messageBox.Logo.Item3);
+
+            var layout = new TextLayout(fontFactory, instruction.Logo.Item1, font, float.MaxValue, float.MaxValue);
+
+            float modifier = layout.FontSize / 8.0f;
+
+            sharedBrush.Color = backgroundColor;
+
+            float x = messageBox.Logo.Item4;
+            float y = messageBox.Logo.Item5;
+
+            device.FillRectangle(new RawRectangleF(x + Horizontal, y + Vertical, x + layout.Metrics.Width + 2 * modifier + Horizontal, y + layout.Metrics.Height + 2 * modifier + Vertical), sharedBrush);
+
+            sharedBrush.Color = color;
+
+            device.DrawTextLayout(new RawVector2(x + modifier + Horizontal, y + modifier + Vertical), layout, sharedBrush, DrawTextOptions.NoSnap);
+
+            layout.Dispose();
+        }
+        #endregion
+
         #region Ingame Draw
         private string SelectFolder(int i)
         { 
@@ -1748,8 +1779,8 @@ namespace Yato.DirectXOverlay
                     break;
                 case int n when (n >= 7 && n <= 11):
                     path = @"..\\..\\other_images\";
-                    messages[i].img_width = 144 / 2;
-                    messages[i].img_height = 144 / 2;
+                    messages[i].img_width = (144 / 2) * Direct2DRenderer.size_scale;
+                    messages[i].img_height = (144 / 2) * Direct2DRenderer.size_scale;
                     break;
                 case 12:
                     path = @"..\\..\\hero_icon_images\";
@@ -1761,7 +1792,8 @@ namespace Yato.DirectXOverlay
         {
             this.heroIds = heroIds;
         }
-    static private Stopwatch warning_timer = new Stopwatch();
+
+        static private Stopwatch warning_timer = new Stopwatch();
         private Tuple<int, int, int> AveragePixelColor(System.Drawing.Bitmap bmp)
         {
             System.Drawing.Imaging.BitmapData scrData = bmp.LockBits(
@@ -1820,9 +1852,17 @@ namespace Yato.DirectXOverlay
                 ClearScene();
 
                 // Loop through all the messages (not include: hero information and two instructions)
-
+                // 6: items selection
+                // 7: retreat
+                // 8: press on
+                // 9: last hit
+                // 10: jungle
+                // 11: safe farming
+                // 12: hero information
+                /*
                 for (int i = 6; i < 13; i++)
                 {
+                    // REDO this part
                     if (messages[i].on)
                     {
                         float modifier;
@@ -1835,7 +1875,18 @@ namespace Yato.DirectXOverlay
                         }
                     }
                 }
+                */
 
+                // Hero information
+                DrawItemSelection();
+
+                // Hero information
+                DrawHeroInformation();
+
+                // Circle out the closet enemy hero
+                DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
+
+                // Move these two parts down for item suggestion
                 if (drawHighlight)
                 {
                     float xInit = screen_width / 4;
@@ -1893,23 +1944,14 @@ namespace Yato.DirectXOverlay
 
                     CheckToShowHighlightTime();
                 }
-
-                if (low_hp)
-                {
-                    DrawCircle(
-                        x: Screen.PrimaryScreen.Bounds.Width / 2, 
-                        y: Screen.PrimaryScreen.Bounds.Height / 2, 
-                        radius: Screen.PrimaryScreen.Bounds.Height / 5, 
-                        stroke: 2f, 
-                        brush: redBrush);
-                }
-
+                
                 if (drawGraphs)
                 {
                     float currY = screen_height / 2;
 
                     // bar graph
                     for (int i = 0; i < 5; i++)
+
                     {
                         {
                             Direct2DBitmap bmp = new Direct2DBitmap(device, @"hero_icon_images\" + heroIds[i] + ".png");
@@ -1996,6 +2038,110 @@ namespace Yato.DirectXOverlay
             }
         }
 
+        private void DrawItemSelection()
+        {
+            if (messages[(int)hints.items_selection].on)
+            {
+                // Draw ItemSugg box
+                Direct2DBrush box_background = CreateBrush(r: ItemSugg.box_background.Item1, g: ItemSugg.box_background.Item2, b: ItemSugg.box_background.Item3, a: ItemSugg.box_background.Item4);
+                // The box
+                device.FillRectangle(
+                    new RawRectangleF(
+                        left: ItemSugg.box_pos.Item1,
+                        top: ItemSugg.box_pos.Item2,
+                        right: ItemSugg.box_pos.Item3,
+                        bottom: ItemSugg.box_pos.Item4),
+                    box_background);
+
+                // Title of the box
+                Tuple<string, int> textFont = new Tuple<string, int>(ItemSugg.title.Item2, (int)ItemSugg.title.Item3);
+                DrawTextWithBackground(
+                    text: ItemSugg.title.Item1,
+                    x: ItemSugg.title.Item4,
+                    y: ItemSugg.title.Item5,
+                    tfont: textFont,
+                    tcolor: ItemSugg.tColor,
+                    tbackground: ItemSugg.tBackColor);
+
+                // Text of the content
+                float modifier;
+                DrawTextWithBackground(
+                    text: ItemSugg.message.text,
+                    x: ItemSugg.message.x,
+                    y: ItemSugg.message.y,
+                    tfont: ItemSugg.message.font,
+                    tcolor: ItemSugg.message.color,
+                    tbackground: ItemSugg.message.background,
+                    modifier: out modifier);
+
+                // Draw LOGO
+                DrawLogo(ItemSugg, 0, 0);
+                // Draw image
+                if (messages[(int)hints.items_selection].imgName != "")
+                {
+                    string path = SelectFolder((int)hints.items_selection);
+                    if (path == "") { throw new Exception("path not initialized"); }
+                    ShowImage(path, (int)hints.items_selection, modifier);
+                }
+            }
+        }
+
+        private void DrawHeroInformation()
+        {
+            if (messages[(int)hints.heroinformation].on)
+            {
+                // Draw HeroInfo box
+                Direct2DBrush box_background = CreateBrush(r: HeroInfo.box_background.Item1, g: HeroInfo.box_background.Item2, b: HeroInfo.box_background.Item3, a: HeroInfo.box_background.Item4);
+                // The box
+                device.FillRectangle(
+                    new RawRectangleF(
+                        left: HeroInfo.box_pos.Item1,
+                        top: HeroInfo.box_pos.Item2,
+                        right: HeroInfo.box_pos.Item3,
+                        bottom: HeroInfo.box_pos.Item4),
+                    box_background);
+
+                // Title of the box
+                Tuple<string, int> textFont = new Tuple<string, int>(HeroInfo.title.Item2, (int)HeroInfo.title.Item3);
+                DrawTextWithBackground(
+                    text: HeroInfo.title.Item1,
+                    x: HeroInfo.title.Item4,
+                    y: HeroInfo.title.Item5,
+                    tfont: textFont,
+                    tcolor: HeroInfo.tColor,
+                    tbackground: HeroInfo.tBackColor);
+
+                // Text of the content
+                float modifier;
+                DrawTextWithBackground(
+                    text: HeroInfo.message.text,
+                    x: HeroInfo.message.x,
+                    y: HeroInfo.message.y,
+                    tfont: HeroInfo.message.font,
+                    tcolor: HeroInfo.message.color,
+                    tbackground: HeroInfo.message.background,
+                    modifier: out modifier);
+
+                // Draw LOGO
+                DrawLogo(HeroInfo, 0, 0);
+                // Draw image
+                if (messages[(int)hints.heroinformation].imgName != "")
+                {
+                    string path = SelectFolder((int)hints.heroinformation);
+                    if (path == "") { throw new Exception("path not initialized"); }
+                    ShowImage(path, (int)hints.heroinformation, modifier);
+                }
+            }
+        }
+
+        private double closestHero_X;
+        private double closestHero_Y;
+        public void SetClosetHeroPosition(double x, double y)
+        {
+            closestHero_X = x;
+            closestHero_Y = y;
+        }
+
         private void ShowImage(string path, int i, float modifier)
         {
             if (i == 7 && warning_timer.ElapsedMilliseconds > 1000)
@@ -2045,6 +2191,8 @@ namespace Yato.DirectXOverlay
                 }
             }
         }
+
+        // TODO: optimize this function cuz it is really slow now
         private void CheckToShowHeroSuggestion()
         {
             for (int i = 0; i < 5; i++)
@@ -2052,7 +2200,7 @@ namespace Yato.DirectXOverlay
                 var mouse_pos = Control.MousePosition;
                 if (mouse_pos.X > messages[i].img_x && mouse_pos.X < messages[i].img_x + messages[i].img_width && mouse_pos.Y > messages[i].img_y && mouse_pos.Y < messages[i].img_y + messages[i].img_height)
                 {
-                    SelectedHeroSuggestion(Int32.Parse(messages[i].imgName), mouse_pos.Y);
+                    SelectedHeroSuggestion(Int32.Parse(messages[i].imgName), messages[i].img_y);
                     return;
                 }
                 else
@@ -2079,7 +2227,7 @@ namespace Yato.DirectXOverlay
                 // The box
                 device.FillRectangle(new RawRectangleF(HeroSugg.box_pos.Item1, HeroSugg.box_pos.Item2, HeroSugg.box_pos.Item3, HeroSugg.box_pos.Item4), box_background);
                 // Title of the box
-                DrawTextWithBackground(HeroSugg.title.Item1, HeroSugg.title.Item2, HeroSugg.title.Item3, textFont, color, background);
+                DrawTextWithBackground(HeroSugg.title.Item1, HeroSugg.title.Item4, HeroSugg.title.Item5, textFont, color, background);
 
                 // Loop through all 5 the suggestions and hero intro
                 for (int i = 0; i < 6; i++)
@@ -2098,6 +2246,7 @@ namespace Yato.DirectXOverlay
                     }
                     // Green Check or Red X
                     CheckBanPick();
+                    DrawLogo(HeroSugg,0,0);
                 }
                 CheckToShowHeroSuggestion();
                 EndScene();
@@ -2109,138 +2258,84 @@ namespace Yato.DirectXOverlay
         }
         #endregion
 
-        #region HeroInfo Draw
-        public HeroInfo heroInfo;
-        public void HeroIntro_setup(int HeroID)
-        {
-            Tuple<int, int, int, int> background = new Tuple<int, int, int, int>(109, 109, 109, 255);
-            Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
-
-
-            AddMessage(hints.heroinformation, HeroID.ToString(), HeroID.ToString(), color, background);
-
-            string content = getHeroInfo(HeroID);
-            heroInfo = new HeroInfo(messages[12], content);
-        }
-
-        public string getHeroInfo(int HeroID)
-        {
-            string content = "You are not good enough to play this hero. You can try but you will fail.";
-
-            content = BreakText(content, 50);
-
-            return content;
-        }
-
-        public void HeroInfo_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
-        {
-            IntPtr fg = GetForegroundWindow();
-
-            if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
-            {
-                BeginScene();
-                ClearScene();
-
-                // Draw hero selection suggestion box
-                Direct2DBrush color = CreateBrush(heroInfo.Info.color.Item1, heroInfo.Info.color.Item2, heroInfo.Info.color.Item3, heroInfo.Info.color.Item4);
-                Direct2DBrush background = CreateBrush(heroInfo.Info.background.Item1, heroInfo.Info.background.Item2, heroInfo.Info.background.Item3, heroInfo.Info.background.Item4);
-                Direct2DFont textFont = CreateFont(heroInfo.Info.font.Item1, heroInfo.Info.font.Item2);
-                Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
-                // The box
-                device.FillRectangle(new RawRectangleF(heroInfo.box_pos.Item1, heroInfo.box_pos.Item2, heroInfo.box_pos.Item3, heroInfo.box_pos.Item4), box_background);
-                // Title of the box
-                DrawTextWithBackground(heroInfo.title.Item1, heroInfo.title.Item2, heroInfo.title.Item3, textFont, color, background);
-                DrawTextWithBackground(heroInfo.content.Item1, heroInfo.content.Item2, heroInfo.content.Item3, textFont, color, background);
-
-                float modifier;
-                DrawTextWithBackground(messages[12].text, messages[12].x, messages[12].y, messages[12].font, messages[12].color, messages[12].background, out modifier);
-                if (messages[12].imgName != "")
-                {
-                    Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[12].imgName + ".png");
-                    DrawBitmap(bmp, 1, messages[12].img_x, messages[12].img_y - modifier, messages[12].img_width, messages[12].img_height);
-
-                    bmp.SharpDXBitmap.Dispose();
-                }
-                EndScene();
-            }
-            else
-            {
-                clear();
-            }
-        }
-        #endregion
-
         #region instruction draw
-        public Instruction instruction;
         public void Intructions_setup(string content)
         {
             float width_unit = Screen.PrimaryScreen.Bounds.Width / 32;
             float height_unit = Screen.PrimaryScreen.Bounds.Height / 32;
             string text = content;
             Message instructions = new Message(text, "", width_unit * 20, height_unit * 6);
-            instruction = new Instruction(instructions, "Instructions");
+            instruction = new Instruction(instructions, "Open Replay");
         }
 
         static private Stopwatch button_timer = new Stopwatch();
         public void Intructions_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, float positionX, float positionY, IntPtr doNotIgnoreHandle)
         {
             IntPtr fg = GetForegroundWindow();
-
-            if (fg == parentWindowHandle ||
-                GetDesktopWindow() == parentWindowHandle ||
-                fg == doNotIgnoreHandle)
+            if (instruction.show)
             {
-                BeginScene();
-                ClearScene();
-
-                if (button_timer.ElapsedMilliseconds < 2000)
+                if (fg == parentWindowHandle ||
+                    GetDesktopWindow() == parentWindowHandle ||
+                    fg == doNotIgnoreHandle)
                 {
-                    float distanceFromDefaultHorizontal = positionX - instruction.box_pos.Item1;
-                    float distanceFromDefaultVertical = positionY - instruction.box_pos.Item2;
+                    BeginScene();
+                    ClearScene();
+                    int button_time = 1000;
+                    if (button_timer.ElapsedMilliseconds < button_time)
+                    {
+                        float distanceFromDefaultHorizontal = positionX - instruction.box_pos.Item1;
+                        float distanceFromDefaultVertical = positionY - instruction.box_pos.Item2;
 
-                    // Draw hero selection suggestion box
-                    Direct2DBrush color = CreateBrush(instruction.color.Item1, instruction.color.Item2, instruction.color.Item3, instruction.color.Item4);
-                    Direct2DBrush background = CreateBrush(instruction.background.Item1, instruction.background.Item2, instruction.background.Item3, instruction.background.Item4);
-                    Direct2DFont textFont = CreateFont(instruction.font.Item1, instruction.font.Item2);
-                    Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
-                    // The box
-                    device.FillRectangle(
-                        new RawRectangleF(
-                            left: instruction.box_pos.Item1 + distanceFromDefaultHorizontal,
-                            top: instruction.box_pos.Item2 + distanceFromDefaultVertical,
-                            right: instruction.box_pos.Item3 + distanceFromDefaultHorizontal,
-                            bottom: instruction.box_pos.Item4 + distanceFromDefaultVertical),
-                        box_background);
-                    // Title of the box
-                    DrawTextWithBackground(
-                        text: instruction.title.Item1,
-                        x: instruction.title.Item2 + distanceFromDefaultHorizontal,
-                        y: instruction.title.Item3 + distanceFromDefaultVertical,
-                        font: textFont,
-                        brush: color,
-                        backgroundBrush: background);
+                        // Draw instruction box
+                        Direct2DBrush box_background = CreateBrush(r: instruction.box_background.Item1, g: instruction.box_background.Item2, b: instruction.box_background.Item3, a: instruction.box_background.Item4);
+                        // The box
+                        device.FillRectangle(
+                            new RawRectangleF(
+                                left: instruction.box_pos.Item1 + distanceFromDefaultHorizontal,
+                                top: instruction.box_pos.Item2 + distanceFromDefaultVertical,
+                                right: instruction.box_pos.Item3 + distanceFromDefaultHorizontal,
+                                bottom: instruction.box_pos.Item4 + distanceFromDefaultVertical),
+                            box_background);
 
-                    showInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
-                    float modifier;
-                    DrawTextWithBackground(
-                        text: instruction.instructions.text,
-                        x: instruction.instructions.x + distanceFromDefaultHorizontal,
-                        y: instruction.instructions.y + distanceFromDefaultVertical,
-                        tfont: instruction.instructions.font,
-                        tcolor: instruction.instructions.color,
-                        tbackground: instruction.instructions.background,
-                        modifier: out modifier);
+                        // Title of the box
+                        Tuple<string, int> textFont = new Tuple<string, int>(instruction.title.Item2, (int)instruction.title.Item3);
+                        DrawTextWithBackground(
+                            text: instruction.title.Item1,
+                            x: instruction.title.Item4 + distanceFromDefaultHorizontal,
+                            y: instruction.title.Item5 + distanceFromDefaultVertical,
+                            tfont: textFont,
+                            tcolor: instruction.tColor,
+                            tbackground: instruction.tBackColor);
 
+                        showInstructionButtons(distanceFromDefaultHorizontal, distanceFromDefaultVertical, button_time);
+                        float modifier;
+                        DrawTextWithBackground(
+                            text: instruction.message.text,
+                            x: instruction.message.x + distanceFromDefaultHorizontal,
+                            y: instruction.message.y + distanceFromDefaultVertical,
+                            tfont: instruction.message.font,
+                            tcolor: instruction.message.color,
+                            tbackground: instruction.message.background,
+                            modifier: out modifier);
+
+                        // Draw LOGO
+                        DrawLogo(instruction, distanceFromDefaultHorizontal, distanceFromDefaultVertical);
+                    }
+                    else
+                    {
+                        instruction.show = false;
+                        button_timer.Stop();
+                    }
+                    EndScene();
                 }
-                EndScene();
-            }
-            else
-            {
-                clear();
+                else
+                {
+                    clear();
+                }
             }
         }
-        
-        private void showInstructionButtons(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
+
+        private void showInstructionButtons(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical, int button_time)
         {
             var mouse_pos = Control.MousePosition;
             if (mouse_pos.X > instruction.close_button_pos.Item1 + distanceFromDefaultHorizontal &&
@@ -2252,7 +2347,7 @@ namespace Yato.DirectXOverlay
                 Direct2DBitmap close_button_red = new Direct2DBitmap(device, @"..\\..\\..\\GamingSupervisor\\buttons\" + instruction.close_button_red + ".png");
 
                 float scale = button_timer.ElapsedMilliseconds;
-                scale = scale / 2000;
+                scale = scale / button_time;
                 DrawBitmap(
                     bmp: close_button_red,
                     opacity: scale,
@@ -2261,7 +2356,6 @@ namespace Yato.DirectXOverlay
                     width: instruction.close_button_pos.Item3,
                     height: instruction.close_button_pos.Item4);
                 close_button_red.SharpDXBitmap.Dispose();
-
             }
             else
             {
@@ -2285,117 +2379,82 @@ namespace Yato.DirectXOverlay
             ClearScene();
             EndScene();
         }
-
     }
 
     #region HeroSuggestion class
 
-    public class HeroSuggestion
+    public class HeroSuggestion: MessageBox
     {
         Message[] heroes = new Message[5];
-        // text, left, top
-        public Tuple<string, float, float> title;
-        // left, top, right, bottem
-        public Tuple<float, float, float, float> box_pos;
 
         public HeroSuggestion()
         {
         }
 
-        public HeroSuggestion(Message[] _heroes)
+        public HeroSuggestion(Message[] _heroes, string _title) : base(_heroes[0], _title)
         {
-            float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
-            float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
             heroes = _heroes;
-            float box_left = heroes[0].img_x - modifier_x;
-            float box_top = heroes[0].img_y - modifier_y * 4;
-            float box_right = box_left + modifier_x * 10;
-            float box_bottem = box_top + modifier_y * 24;
+            float box_left = heroes[0].img_x - modifier_x * Direct2DRenderer.size_scale;
+            float box_top = heroes[0].img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 10 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 24 * Direct2DRenderer.size_scale;
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
-            float title_left = heroes[0].x - modifier_x;
-            float title_top = heroes[0].y - modifier_y * 3;
-            title = new Tuple<string, float, float>("Hero Suggestion:", title_left, title_top);
+            float title_left = heroes[0].x - modifier_x * Direct2DRenderer.size_scale;
+            float title_top = heroes[0].y - modifier_y * 3 * Direct2DRenderer.size_scale;
+            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
+            Logo = new Tuple<string, string, float, float, float>("GamingSupervisor", "Times New Roman", 20, box_left, box_top);
         }
     }
     #endregion
 
     #region HeroInfo class
-    public class HeroInfo
+    public class HeroInfo: MessageBox
     {
-        public Message Info = new Message();
-        // text, left, top
-        public Tuple<string, float, float> title;
-        // text, left, top
-        public Tuple<string, float, float> content;
-        // left, top, right, bottem
-        public Tuple<float, float, float, float> box_pos;
-
         public HeroInfo()
         {
         }
 
-        public HeroInfo(Message _hero, string _content)
+        public HeroInfo(Message _hero, string _title) : base(_hero, _title)
         {
-            float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
-            float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
-            Info = _hero;
-            float box_left = Info.img_x - modifier_x;
-            float box_top = Info.img_y - modifier_y * 4;
-            float box_right = box_left + modifier_x * 12;
-            float box_bottem = box_top + modifier_y * 24;
+            float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
+            float box_top = message.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 14 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 22 * Direct2DRenderer.size_scale;
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
-            float title_left = Info.x - modifier_x;
-            float title_top = Info.y - modifier_y * 3;
-            title = new Tuple<string, float, float>("Hero tutorial:", title_left, title_top);
-            content = new Tuple<string, float, float>(_content, Info.img_x, Info.img_y + modifier_y * 4);
+            // Title setup
+            float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
+            float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
+            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
         }
     }
     #endregion
 
     #region ItemSuggestion class
-    //public class ItemSuggestion
-    //{
-    //    Message[] heroes = new Message[5];
-    //    // text, left, top
-    //    public Tuple<string, float, float> title;
-    //    // left, top, right, bottem
-    //    public Tuple<float, float, float, float> box_pos;
+    public class ItemSuggestion: MessageBox
+    {
+        public ItemSuggestion()
+        {
+        }
 
-    //    public ItemSuggestion()
-    //    {
-    //    }
+        public ItemSuggestion(Message _message, string _title):base(_message, _title)
+        {
 
-    //    public ItemSuggestion(Message[] _heroes)
-    //    {
-    //        float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
-    //        float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
-    //        heroes = _heroes;
-    //        float box_left = heroes[0].img_x - modifier_x;
-    //        float box_top = heroes[0].img_y - modifier_y * 4;
-    //        float box_right = box_left + modifier_x * 12;
-    //        float box_bottem = box_top + modifier_y * 24;
-    //        box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
-    //        float title_left = heroes[0].x - modifier_x;
-    //        float title_top = heroes[0].y - modifier_y * 3;
-    //        title = new Tuple<string, float, float>("Item Suggestion:", title_left, title_top);
-    //    }
-    //}
+            float box_left = _message.img_x - modifier_x * 0.5f * Direct2DRenderer.size_scale;
+            float box_top = _message.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 10 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 8 * Direct2DRenderer.size_scale;
+            box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
+            float title_left = _message.x - modifier_x * Direct2DRenderer.size_scale;
+            float title_top = _message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
+            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
+            Logo = new Tuple<string, string, float, float, float>("GamingSupervisor", "Times New Roman", 20, box_left, box_top);
+        }
+    }
     #endregion
 
     #region Instruction class
-    public class Instruction
+    public class Instruction: MessageBox
     {
-        public Message instructions;
-        // text, left, top
-        public Tuple<string, float, float> title;
-        // left, top, right, bottem
-        public Tuple<float, float, float, float> box_pos;
-        // Tuple<red, green, blue, alpha>
-        public Tuple<int, int, int, int> background = new Tuple<int, int, int, int>(109, 109, 109, 255);
-        public Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
-        // Tuple<font, size>
-        public Tuple<string, int> font = new Tuple<string, int>("Consolas", 32);
-
         public string close_button_red = "close_button_red";
         public string close_button_black = "close_button_black";
         // x, y, width, height
@@ -2405,26 +2464,61 @@ namespace Yato.DirectXOverlay
         {
         }
 
-        public Instruction(Message _instructions, string _title)
+        public Instruction(Message _message, string _title):base(_message, _title)
         {
-            float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
-            float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
-            instructions = _instructions;
-            float box_left = instructions.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
-            float box_top = instructions.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
-            float box_right = box_left + modifier_x * 12 * Direct2DRenderer.size_scale;
-            float box_bottem = box_top + modifier_y * 12* Direct2DRenderer.size_scale;
-            box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
-            float title_left = instructions.x + modifier_x * 3 * Direct2DRenderer.size_scale;
-            float title_top = instructions.y - modifier_y * 3 * Direct2DRenderer.size_scale;
-            title = new Tuple<string, float, float>(_title, title_left, title_top);
+            message = _message;
+            float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 10 * Direct2DRenderer.size_scale;
+            float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
             close_button_pos = new Tuple<float, float, float, float>(box_right - modifier_x, title_top, (512 / 10) * Direct2DRenderer.size_scale, (512 / 10) * Direct2DRenderer.size_scale);
         }
     }
     #endregion
 
+    #region MessageBox class
+    public class MessageBox
+    {
+        public bool show = true;
+        public Message message;
+        // text, front, size, left, top
+        public Tuple<string, string, float, float, float> title;
+        public Tuple<int, int, int, int> tColor;
+        public Tuple<int, int, int, int> tBackColor;
+        // text, left, top
+        public Tuple<string, string, float, float, float> Logo;
+        // left, top, right, bottem
+        public Tuple<float, float, float, float> box_pos;
+        // Tuple<red, green, blue, alpha>
+        public Tuple<int, int, int, int> box_background = new Tuple<int, int, int, int>(109, 109, 109, 150);
+        protected float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
+        protected float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
+
+        public MessageBox()
+        {
+        }
+
+        public MessageBox(Message _message, string _title)
+        {
+            message = _message;
+            tColor = new Tuple<int, int, int, int>(message.color.Item1, message.color.Item2, message.color.Item3, message.color.Item4);
+            tBackColor = new Tuple<int, int, int, int>(message.background.Item1, message.background.Item2, message.background.Item3, message.background.Item4);
+            // Message box position setup
+            float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
+            float box_top = message.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 10 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 10 * Direct2DRenderer.size_scale;
+            box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
+            // Title setup
+            float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
+            float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
+            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
+            Logo = new Tuple<string, string, float, float, float>("GamingSupervisor", "Times New Roman", 20, box_left, box_top);
+        }
+    }
+    #endregion
+
     #region Message struct
-    public struct Message
+    public class Message
     {
         public bool on;
 
@@ -2443,7 +2537,9 @@ namespace Yato.DirectXOverlay
         public float img_y;
         public float img_width;
         public float img_height;
-
+        public Message()
+        {
+        }
         public Message(string _text, string _imgName, float _x, float _y)
         {
             float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
@@ -2453,13 +2549,14 @@ namespace Yato.DirectXOverlay
             x = _x;
             y = _y;
             on = true;
-            background = new Tuple<int, int, int, int>(109, 109, 109, 255);
+            background = new Tuple<int, int, int, int>(109, 109, 109, 0);
             color = new Tuple<int, int, int, int>(255, 255, 255, 255);
-            font = new Tuple<string, int>("Consolas", 32);
+            int font_size = Math.Max(32 * (int)Direct2DRenderer.size_scale, 16);
+            font = new Tuple<string, int>("Consolas", font_size);
             img_x = x - Direct2DRenderer.size_scale * modifier_x * 3;
             img_y = y;
-            img_width = 254 / 2;
-            img_height = 144 / 2;
+            img_width = Direct2DRenderer.size_scale * 254 / 2;
+            img_height = Direct2DRenderer.size_scale * 144 / 2;
         }
 
         public void clear()

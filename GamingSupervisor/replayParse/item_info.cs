@@ -150,8 +150,8 @@ namespace replayParse
                 for (int i = 1; i < kills.Count; i++)
                 {
                     string[] cont = kills[i].Split(new char[] { ' ' });
-                    string killed = ID_table[hero_table[parseHeroName(cont[0])]];
-                    string killer = ID_table[hero_table[parseHeroName(cont[1])]];
+                    string killed = ID_table[hero_table[ConvertedHeroName.Get(cont[0])]];
+                    string killer = ID_table[hero_table[ConvertedHeroName.Get(cont[1])]];
 
                     string color = "we";
                     if (killed == myHero)
@@ -166,49 +166,7 @@ namespace replayParse
                 }
             }
             return item_ID;
-        }
-
-        public static string parseHeroName(string unparsed)
-        {
-            String parsedHeroName = unparsed.Split(new string[] { "hero_" }, StringSplitOptions.None).Last();
-            parsedHeroName = parsedHeroName.Split(new char[] { '\"' }).First();
-            String[] temp = parsedHeroName.Split(new char[] { '_' });
-            String[] upperCase = new String[temp.Length];
-            for (int i = 0; i < temp.Length; i++)
-            {
-                upperCase[i] = temp[i].First().ToString().ToUpper() + temp[i].Substring(1);
-            }
-            parsedHeroName = string.Join("", upperCase);
-            string name = parsedHeroName.ToLower();
-            if (name.Contains("never"))
-            {
-                name = "shadowfiend";
-            }
-            if (name.Contains("obsidian"))
-            {
-                name = "outworlddevourer";
-            }
-            if (name.Contains("wisp"))
-            {
-                name = "io";
-            }
-            if (name.Contains("magnataur"))
-            {
-                name = "magnus";
-            }
-            if (name.Contains("treant"))
-            {
-                name = "treantprotector";
-            }
-            if (name.Contains("skele"))
-            {
-                name = "wraithking";
-            }
-
-            return name;
-        }
-
-
+        }        
     }
 
 }

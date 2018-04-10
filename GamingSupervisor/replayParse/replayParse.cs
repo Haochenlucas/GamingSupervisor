@@ -4,6 +4,15 @@ using System.IO;
 
 namespace replayParse
 {
+    public struct Creep
+    {
+        public int x;
+        public int y;
+        public int z;
+        public int health;
+        public int maxHealth;
+    }
+
     public class HeroParser
     {
         private static int FirstTick { get; set; }
@@ -55,6 +64,17 @@ namespace replayParse
                                 return base[i];
                             }
                         }
+
+                        if (typeof(T) == typeof(Tuple<double, double, double>))
+                        {
+                            return (T)(object)Tuple.Create(0.0, 0.0, 0.0);
+                        }
+
+                        if (typeof(T) == typeof(List<Creep>))
+                        {
+                            return (T)(object)(new List<Creep>());
+                        }
+
                         return default(T);
                     }
                 }
@@ -78,6 +98,9 @@ namespace replayParse
         private static TickEntries<double>[] damageMin = new TickEntries<double>[NUMBER_OF_PLAYERS];
         private static TickEntries<double>[] damageMax = new TickEntries<double>[NUMBER_OF_PLAYERS];
 
+        private static TickEntries<List<Creep>> laneCreep;
+        private static TickEntries<List<Creep>> neutralCreep;
+
         public HeroParser(string dataFolderLocation)
         {
             for (int i = 0; i < NUMBER_OF_PLAYERS; i++)
@@ -96,6 +119,9 @@ namespace replayParse
                 damageMin[i] = new TickEntries<double>();
                 damageMax[i] = new TickEntries<double>();
             }
+
+            laneCreep = new TickEntries<List<Creep>>();
+            neutralCreep = new TickEntries<List<Creep>>();
 
             FirstTick = -1;
             foreach (string line in File.ReadLines(dataFolderLocation + "hero.txt"))
@@ -173,6 +199,62 @@ namespace replayParse
                         break;
                 }
             }
+
+            foreach (string line in File.ReadLines(dataFolderLocation + "lane_creep.txt"))
+            {
+                string[] words = line.Split(' ');
+                int tick = Int32.Parse(words[0]);
+
+                switch (words[1])
+                {
+                    case "[HEALTH_POSITION]":
+                        if (!laneCreep.ContainsKey(tick))
+                            laneCreep[tick] = new List<Creep>();
+
+                        laneCreep[tick].Add(new Creep()
+                        {
+                            x = Int32.Parse(words[3]),
+                            y = Int32.Parse(words[4]),
+                            z = Int32.Parse(words[5]),
+                            health = Int32.Parse(words[6]),
+                            maxHealth = Int32.Parse(words[7])
+                        });
+                        break;
+                }
+            }
+
+            foreach (string line in File.ReadLines(dataFolderLocation + "neutral_creep.txt"))
+            {
+                string[] words = line.Split(' ');
+                int tick = Int32.Parse(words[0]);
+
+                switch (words[1])
+                {
+                    case "[HEALTH_POSITION]":
+                        if (!neutralCreep.ContainsKey(tick))
+                            neutralCreep[tick] = new List<Creep>();
+
+                        neutralCreep[tick].Add(new Creep()
+                        {
+                            x = Int32.Parse(words[3]),
+                            y = Int32.Parse(words[4]),
+                            z = Int32.Parse(words[5]),
+                            health = Int32.Parse(words[6]),
+                            maxHealth = Int32.Parse(words[7])
+                        });
+                        break;
+                }
+            }
+        }
+
+        public List<Creep> getLaneCreeps(int tick)
+        {
+            return laneCreep[tick];
+        }
+
+        public List<Creep> getNeutralCreeps(int tick)
+        {
+            return neutralCreep[tick];
         }
 
         public int getHealth(int tick, int heroID)
