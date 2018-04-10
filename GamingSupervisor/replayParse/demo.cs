@@ -20,6 +20,7 @@ namespace GamingSupervisor
             Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
             Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
             //hero_intro h_Intro = new hero_intro();
+            heroAttribute hA = new heroAttribute();
             item_info i_info = new item_info();
 
             //string[] heroName = h_ID.getHeroName();
