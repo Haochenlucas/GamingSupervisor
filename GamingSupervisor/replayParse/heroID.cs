@@ -11,7 +11,7 @@ namespace replayParse
         public static string[] heroName = new string[116]; // make the index be the ID value, so the first string is empty
         public heroID()
         {
-            string s = Path.Combine(Environment.CurrentDirectory, "../../Properties/dota_hero_info_1.txt");
+            string s = Path.Combine(Environment.CurrentDirectory, "../../../replayParse/Properties/dota_hero_info_1.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
             string[] second_lines = lines;
             int key = 0;

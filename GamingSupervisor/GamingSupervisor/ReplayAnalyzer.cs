@@ -27,9 +27,11 @@ namespace GamingSupervisor
         // the object for the selection analyzer.
         private static counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
         private static heroID h_ID = new heroID();
+
         private int[,] table = cp.selectTable();
         private Dictionary<string, int> hero_table = h_ID.getIDHero();
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
+        private hero_intro hero_Intro = new hero_intro();
         private int[] enemiesHeroID;
 
         private float screen_width = Screen.PrimaryScreen.Bounds.Width;
@@ -328,16 +330,18 @@ namespace GamingSupervisor
             if (announcer.GetCurrentGameTime() >= 750 && announcer.GetCurrentGameTime() <= 760)
             {
                 // TODO: Replace with the true intruction
-                string temp = "Lycan is a remarkable pusher who can wear down buildings and force enemies to react quickly to his regular tower onslaughts; as towers melt incredibly fast under Lycan's and his units' pressure, boosted by their canine Feral Impulse. His only contribution to full-on team fights will be the bonus damage he grants with Howl to his allies, his allies' summons, his owns summons, and himself, as well as his formidable physical attacks. Else he can surge out of the woods for a quick gank or push after he transformed with Shapeshift, moving at a haste speed of 650. Finally, good players will make the best usage of his Summon Wolves ability and scout the enemies' position while remaining undetected with invisibility at level 4.";
-
-                overlay.AddHeroInfoMessage(temp, "");
-                overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "Necronomicon_1_icon");
+                Dictionary<int, string> hero_Intro_Dic = hero_Intro.getHeroIntro();
+                string hero_Intro_String = hero_Intro_Dic[hero_table[GUISelection.heroName]];
+                overlay.AddHeroInfoMessage(hero_Intro_String, "");
             }
             else
             {
-                overlay.ClearItemSuggestion();
                 overlay.ClearHeroInfo();
             }
+
+            // show on death or enough gold
+            //overlay.ClearItemSuggestion();
+            //overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "Necronomicon_1_icon");
 
             // Add item suggestion
             //if (announcer.GetCurrentGameTime() >= 1380 && announcer.GetCurrentGameTime() <= 1390)
@@ -362,6 +366,7 @@ namespace GamingSupervisor
             maxHpToSend[0] = heroData.getMaxHealth(CurrentTick, heroID);
             for (int i = 0; i < 4; i++)
             {
+                // Repley start right after hero selection will cause index out of range error
                 maxHpToSend[i + 1] = heroData.getMaxHealth(CurrentTick, teamHeroIds[i]);
                 hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
             }
@@ -423,7 +428,7 @@ namespace GamingSupervisor
             Tuple<double, double, double> enemyHeroPosition = null;
             double dis = Int32.MaxValue;
             int[] enemyHeroIDs;
-            if (heroID >= 0 && heroID <= 4)
+            if (heroID <= 4)
             {
                 enemyHeroIDs = new int[] { 5, 6, 7, 8, 9 };
             }

@@ -317,12 +317,13 @@ namespace Yato.DirectXOverlay
             long tag_0 = 0L, tag_1 = 0L;
             
             Result result;
+            // shadow object cast exception
             try
             {
                 result = device.TryEndDraw(out tag_0, out tag_1);
             }
             catch (System.ArgumentOutOfRangeException e) { return; }
-            catch (System.InvalidCastException e) { return; }
+            //catch (System.InvalidCastException e) { return; }
 
             if (result.Failure)
             {
@@ -1544,7 +1545,7 @@ namespace Yato.DirectXOverlay
 
         public void HeroInfoHints(string info, string img)
         {
-            string temp = BreakText(info, 50);
+            string temp = BreakText(info, 42);
             AddMessage(hints.heroinformation, temp, img);
             HeroInfo = new HeroInfo(messages[(int)hints.heroinformation], "Tutorial");
         }
@@ -2419,7 +2420,7 @@ namespace Yato.DirectXOverlay
             float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
             float box_top = message.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
             float box_right = box_left + modifier_x * 14 * Direct2DRenderer.size_scale;
-            float box_bottem = box_top + modifier_y * 22 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 24 * Direct2DRenderer.size_scale;
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             // Title setup
             float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
