@@ -1890,145 +1890,12 @@ namespace Yato.DirectXOverlay
                 // Move these two parts down for item suggestion
                 if (drawHighlight)
                 {
-                    float xInit = screen_width / 4;
-                    float xEnd = 3 * screen_width / 4;
-                    float yInput = 3 * screen_height / 4;
-                    Direct2DBrush gray = CreateBrush(109, 109, 109, 255);
-
-                    BorderedLine(
-                        start_x: xInit,
-                        start_y: yInput,
-                        end_x: xEnd,
-                        end_y: yInput,
-                        stroke: 5,
-                        brush: gray,
-                        borderBrush: gray
-                        );
-                    foreach (var a in ticksInfo) // TODO: change to struct for information
-                    {
-                        float percent = a.Key / (float)maxTick;
-                        float xCurr = xInit + (xEnd - xInit) * percent;
-
-                        Boolean redflag = false;
-                        Boolean greenflag = false;
-
-                        foreach (var k in a.Value)
-                        {
-                            if (k.Item3 == "R")
-                                redflag = true;
-                            else if (k.Item3 == "G")
-                                greenflag = true;
-                        }
-
-                        Direct2DBrush DarkGreenBrush = CreateBrush(0, 155, 0);
-
-                        DrawBox2D(
-                            x: xCurr,
-                            y: (3 * screen_height / 4) - 4,
-                            width: 8,
-                            height: 4,
-                            stroke: 0,
-                            interiorBrush: greenflag ? DarkGreenBrush : blackBrush,
-                            brush: greenflag ? DarkGreenBrush : blackBrush
-                            );
-
-
-                        DrawBox2D(
-                            x: xCurr,
-                            y: (3 * screen_height / 4),
-                            width: 8,
-                            height: 4,
-                            stroke: 0,
-                            interiorBrush: redflag ? redBrush : blackBrush,
-                            brush: redflag ? redBrush : blackBrush);
-                    }
-
-                    CheckToShowHighlightTime();
+                    DrawHighlight();
                 }
-                
+
                 if (drawGraphs)
                 {
-                    float currY = screen_height / 2;
-
-                    // bar graph
-                    for (int i = 0; i < 5; i++)
-
-                    {
-                        {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"hero_icon_images\" + heroIds[i] + ".png");
-                            System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"hero_icon_images\" + heroIds[i] + ".png");
-
-                            Tuple<int, int, int> rgb = AveragePixelColor(csb);
-                            Direct2DBrush color = CreateBrush(rgb.Item1, rgb.Item2, rgb.Item3);
-                            double barHeight = CalculateBarGraphHeight(maxHps[i], hps[i]);
-
-                            DrawBox2D(
-                                x: 51 * i,                                               
-                                y: (currY - (float)barHeight) * .3f + currY / 2,     
-                                width: 50,                                               
-                                height: (float)barHeight * .3f,                             
-                                stroke: 1,                                               
-                                interiorBrush: color,
-                                brush: CreateBrush(r: 0, g: 0, b: 0, a: 1)               
-                                );
-
-                            DrawBox2D(
-                                x: 51 * i,
-                                y: (currY - BAR_GRAPH_HEIGHT) * .3f + currY / 2,
-                                width: 50,
-                                height: BAR_GRAPH_HEIGHT * .3f,
-                                stroke: 1,
-                                interiorBrush: CreateBrush(r: 0, g: 0, b: 0, a: 1),
-                                brush: color
-                                );
-
-                            DrawBitmap(
-                                bmp: bmp,
-                                opacity: 1,
-                                x: 51 * i,
-                                y: currY - 108,
-                                width: 50,
-                                height: 28
-                                );
-
-                            bmp.SharpDXBitmap.Dispose();
-                            csb.Dispose();
-                        }
-                    }
-
-                    // vertical line
-                    DrawLine(
-                        start_x: 250,           
-                        start_y: currY - 100 + 28,
-                        end_x: 250,               
-                        end_y: currY + 150 + 28,  
-                        stroke: 2,                
-                        brush: redBrush
-                        );              
-
-                    // horizontal line
-                    DrawLine(
-                        start_x: 0,             
-                        start_y: currY + 150 + 28,
-                        end_x: 250,               
-                        end_y: currY + 150 + 28,  
-                        stroke: 2,                
-                        brush: redBrush
-                        );                   
-
-                    // line graph
-                    for (int j = 0; j < currHp.Count - 1; j++)
-                    {
-                        double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(
-                            start_x: j,
-                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28,
-                            end_x: 1 + j,
-                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
-                            stroke: 1,
-                            brush: redBrush
-                            );
-                    }
+                    DrawGraphs();
                 }
 
                 EndScene();
@@ -2037,6 +1904,149 @@ namespace Yato.DirectXOverlay
             {
                 clear();
             }
+        }
+
+        private void DrawGraphs()
+        {
+            float currY = screen_height / 2;
+
+            // bar graph
+            for (int i = 0; i < 5; i++)
+
+            {
+                {
+                    Direct2DBitmap bmp = new Direct2DBitmap(device, @"hero_icon_images\" + heroIds[i] + ".png");
+                    System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"hero_icon_images\" + heroIds[i] + ".png");
+
+                    Tuple<int, int, int> rgb = AveragePixelColor(csb);
+                    Direct2DBrush color = CreateBrush(rgb.Item1, rgb.Item2, rgb.Item3);
+                    double barHeight = CalculateBarGraphHeight(maxHps[i], hps[i]);
+
+                    DrawBox2D(
+                        x: 51 * i,
+                        y: (currY - (float)barHeight) * .3f + currY / 2,
+                        width: 50,
+                        height: (float)barHeight * .3f,
+                        stroke: 1,
+                        interiorBrush: color,
+                        brush: CreateBrush(r: 0, g: 0, b: 0, a: 1)
+                        );
+
+                    DrawBox2D(
+                        x: 51 * i,
+                        y: (currY - BAR_GRAPH_HEIGHT) * .3f + currY / 2,
+                        width: 50,
+                        height: BAR_GRAPH_HEIGHT * .3f,
+                        stroke: 1,
+                        interiorBrush: CreateBrush(r: 0, g: 0, b: 0, a: 1),
+                        brush: color
+                        );
+
+                    DrawBitmap(
+                        bmp: bmp,
+                        opacity: 1,
+                        x: 51 * i,
+                        y: currY - 108,
+                        width: 50,
+                        height: 28
+                        );
+
+                    bmp.SharpDXBitmap.Dispose();
+                    csb.Dispose();
+                }
+            }
+
+            // vertical line
+            DrawLine(
+                start_x: 250,
+                start_y: currY - 100 + 28,
+                end_x: 250,
+                end_y: currY + 150 + 28,
+                stroke: 2,
+                brush: redBrush
+                );
+
+            // horizontal line
+            DrawLine(
+                start_x: 0,
+                start_y: currY + 150 + 28,
+                end_x: 250,
+                end_y: currY + 150 + 28,
+                stroke: 2,
+                brush: redBrush
+                );
+
+            // line graph
+            for (int j = 0; j < currHp.Count - 1; j++)
+            {
+                double[] tempCurrHp = currHp.ToArray();
+                DrawLine(
+                    start_x: j,
+                    start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28,
+                    end_x: 1 + j,
+                    end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
+                    stroke: 1,
+                    brush: redBrush
+                    );
+            }
+        }
+
+        private void DrawHighlight()
+        {
+            float xInit = screen_width / 4;
+            float xEnd = 3 * screen_width / 4;
+            float yInput = 3 * screen_height / 4;
+            Direct2DBrush gray = CreateBrush(109, 109, 109, 255);
+
+            BorderedLine(
+                start_x: xInit,
+                start_y: yInput,
+                end_x: xEnd,
+                end_y: yInput,
+                stroke: 5,
+                brush: gray,
+                borderBrush: gray
+                );
+            foreach (var a in ticksInfo) // TODO: change to struct for information
+            {
+                float percent = a.Key / (float)maxTick;
+                float xCurr = xInit + (xEnd - xInit) * percent;
+
+                Boolean redflag = false;
+                Boolean greenflag = false;
+
+                foreach (var k in a.Value)
+                {
+                    if (k.Item3 == "R")
+                        redflag = true;
+                    else if (k.Item3 == "G")
+                        greenflag = true;
+                }
+
+                Direct2DBrush DarkGreenBrush = CreateBrush(0, 155, 0);
+
+                DrawBox2D(
+                    x: xCurr,
+                    y: (3 * screen_height / 4) - 4,
+                    width: 8,
+                    height: 4,
+                    stroke: 0,
+                    interiorBrush: greenflag ? DarkGreenBrush : blackBrush,
+                    brush: greenflag ? DarkGreenBrush : blackBrush
+                    );
+
+
+                DrawBox2D(
+                    x: xCurr,
+                    y: (3 * screen_height / 4),
+                    width: 8,
+                    height: 4,
+                    stroke: 0,
+                    interiorBrush: redflag ? redBrush : blackBrush,
+                    brush: redflag ? redBrush : blackBrush);
+            }
+
+            CheckToShowHighlightTime();
         }
 
         private void DrawItemSelection()
