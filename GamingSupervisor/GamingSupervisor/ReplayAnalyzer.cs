@@ -376,7 +376,7 @@ namespace GamingSupervisor
                     }
                 }
             }
-            if (announcer.GetCurrentGameTime() >= item_Time_Mark && announcer.GetCurrentGameTime() <= (item_Time_Mark + 10))
+            if (flag == 1 && announcer.GetCurrentGameTime() >= item_Time_Mark && announcer.GetCurrentGameTime() <= (item_Time_Mark + 10))
             {
                 string item_name = item_Info_Table[i_suggestion[closestTic] + 2, 2];
                 string item_tip = item_Info_Table[i_suggestion[closestTic] + 2, 117];
@@ -384,6 +384,7 @@ namespace GamingSupervisor
             }
             else
             {
+                flag =0;
                 overlay.ClearItemSuggestion();
             }
 
