@@ -34,8 +34,14 @@ namespace GamingSupervisor
         private hero_intro hero_Intro = new hero_intro();
         private int[] enemiesHeroID;
 
+        private static item_info i_info = new item_info();
+        private string[,] item_Info_Table = i_info.get_Info_Table();
+        private Dictionary<int, int> i_suggestion = i_info.item_suggestion(0, GUISelection.replayDataFolderLocation, GUISelection.heroName);
+
         private float screen_width = Screen.PrimaryScreen.Bounds.Width;
         private float screen_height = Screen.PrimaryScreen.Bounds.Height;
+        private int itemflag = 0;
+        private int item_Time_Mark = 0;
 
         private int CurrentTick
         {
@@ -348,10 +354,48 @@ namespace GamingSupervisor
             //{
             //    overlay.AddItemSuggestionMessage("Necronomicon", "");
             //}
-
+            
+           
             int health = 0;
+            int closestTic = 0;
+            if (itemflag == 0)
+            {
+                item_Time_Mark = 0;
+                health = heroData.getHealth(CurrentTick, heroID);
+                
+                foreach (KeyValuePair<int, int> pair in i_suggestion)
+                {
+                    if (closestTic < pair.Key && pair.Key < CurrentTick)
+                    {
+                        closestTic = pair.Key;
+                    }
+                    else if (pair.Key == CurrentTick)
+                    {
+                        closestTic = pair.Key;
+                    }
+                    else
+                    {
+                        itemflag = 1;
+                        item_Time_Mark = announcer.GetCurrentGameTime();
+                        break;
+                    }
+                }
+            }
+            if (flag == 1 && announcer.GetCurrentGameTime() >= item_Time_Mark && announcer.GetCurrentGameTime() <= (item_Time_Mark + 10))
+            {
+                string item_name = item_Info_Table[i_suggestion[closestTic] + 2, 2];
+                string item_tip = item_Info_Table[i_suggestion[closestTic] + 2, 117];
+                overlay.AddItemSuggestionMessage(item_name, item_tip);
+            }
+            else
+            {
+                flag =0;
+                overlay.ClearItemSuggestion();
+            }
 
-            //int maxHealth = 0;
+
+
+            // bar graph
 
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
             double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };

@@ -84,6 +84,11 @@ namespace replayParse
             }
         }
 
+        public string[,] get_Info_Table()
+        {
+            return item_table_info;
+        }
+
         public Dictionary<int,int> item_suggestion(int money, string dataFolderLocation, string myHero)
         {
             Dictionary<int, int> item_ID = new Dictionary<int, int>();
@@ -124,7 +129,6 @@ namespace replayParse
                         if (prevTime == currTime)
                         {
                             teamfight[currInd].Add(contents[0]);
-                            //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
                             teamfight[currInd].Add(contents[2] + " " + contents[3]);
                         }
                         else if (prevTime.Add(thirty) > currTime)
@@ -137,7 +141,6 @@ namespace replayParse
                             teamfight.Add(new List<String>());
                             prevTime = currTime;
                             teamfight[currInd].Add(contents[0]);
-                            //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
                             teamfight[currInd].Add(contents[2] + " " + contents[3]);
                         }
 
@@ -152,17 +155,10 @@ namespace replayParse
                     string[] cont = kills[i].Split(new char[] { ' ' });
                     string killed = ID_table[hero_table[ConvertedHeroName.Get(cont[0])]];
                     string killer = ID_table[hero_table[ConvertedHeroName.Get(cont[1])]];
-
-                    string color = "we";
                     if (killed == myHero)
                     {
                         item_ID.Add((int)Double.Parse(kills[0]),item_KB[hero_table[killed],0]);
                     }
-                    else if (killer == myHero)
-                    {
-                        item_ID.Add((int)Double.Parse(kills[0]), item_KB[hero_table[killer], 2]);
-                    }
-                    tickInfo[(int)Double.Parse(kills[0])].Add(new Tuple<string, string, string>(killer, killed, color));
                 }
             }
             return item_ID;

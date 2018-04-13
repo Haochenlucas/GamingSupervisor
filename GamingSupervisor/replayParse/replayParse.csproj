@@ -82,7 +82,6 @@
     <Compile Include="hero_difficulty.cs" />
     <Compile Include="hero_intro.cs" />
     <Compile Include="ingame_analysis.cs" />
-    <Compile Include="itemInfo.cs" />
     <Compile Include="item_info.cs" />
     <Compile Include="LastHitCalculator.cs" />
     <Compile Include="makeup_difficulty-table.cs" />
