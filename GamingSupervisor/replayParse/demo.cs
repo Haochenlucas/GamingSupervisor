@@ -23,7 +23,6 @@ namespace GamingSupervisor
             Dictionary<string, int> h_Intro_dic = h_Intro.getIntroHero();
             heroAttribute hA = new heroAttribute();
             item_info i_info = new item_info();
-
             //string[] heroName = h_ID.getHeroName();
             //foreach (KeyValuePair<int, string> kvp in ID_table)
             //{
