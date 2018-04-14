@@ -34,6 +34,8 @@ namespace GamingSupervisor
         private hero_intro hero_Intro = new hero_intro();
         private int[] enemiesHeroID;
 
+        private JungleCampData JungleCamps = new JungleCampData();
+
         private float screen_width = Screen.PrimaryScreen.Bounds.Width;
         private float screen_height = Screen.PrimaryScreen.Bounds.Height;
 
@@ -326,6 +328,8 @@ namespace GamingSupervisor
 
         private void HandleGamePlay()
         {
+            #region Hero introduction
+            /*
             // TODO: Set this to be the beginning of the time
             if (announcer.GetCurrentGameTime() >= 750 && announcer.GetCurrentGameTime() <= 760)
             {
@@ -338,7 +342,10 @@ namespace GamingSupervisor
             {
                 overlay.ClearHeroInfo();
             }
+            */
+            #endregion
 
+            #region Item
             // show on death or enough gold
             //overlay.ClearItemSuggestion();
             //overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "Necronomicon_1_icon");
@@ -348,6 +355,16 @@ namespace GamingSupervisor
             //{
             //    overlay.AddItemSuggestionMessage("Necronomicon", "");
             //}
+            #endregion
+
+            #region Jungle Stacking
+            int currentGameTime = announcer.GetCurrentGameTime();
+            // if timer is right, check for every 50 sec mark
+            if (true)
+            {
+                AnalizeJungleCamps();
+            }
+            #endregion
 
             int health = 0;
 
@@ -364,11 +381,14 @@ namespace GamingSupervisor
 
             hpToSend[0] = health;
             maxHpToSend[0] = heroData.getMaxHealth(CurrentTick, heroID);
-            for (int i = 0; i < 4; i++)
+            if (teamHeroIds.Count != 0)
             {
-                // Repley start right after hero selection will cause index out of range error
-                maxHpToSend[i + 1] = heroData.getMaxHealth(CurrentTick, teamHeroIds[i]);
-                hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
+                for (int i = 0; i < 4; i++)
+                {
+                    // Repley start right after hero selection will cause index out of range error
+                    maxHpToSend[i + 1] = heroData.getMaxHealth(CurrentTick, teamHeroIds[i]);
+                    hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
+                }
             }
 
             int closestEnemyID = DrawOnClosestEnemy();
@@ -417,10 +437,41 @@ namespace GamingSupervisor
             }
         }
 
+        private void AnalizeJungleCamps()
+        {
+            // Get current hero position
+            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick+6, heroID);
+            Tuple<double, double, double> heroPosition = new Tuple<double, double, double>(x, y, z);
+            int closestJungleCamp = -1;
+            double closest = Int32.MaxValue;
+            Tuple<double, double> closestCampPos;
+
+            for (int i = 1; i < 19; i++)
+            {
+                Tuple<double, double> campPos = JungleCamps.GetCampPos(i);
+                double dis = Math.Pow((Math.Pow(x - campPos.Item1, 2) + Math.Pow(y - campPos.Item2, 2)), 0.5);
+                if (dis < closest)
+                {
+                    closest = dis;
+                    closestJungleCamp = i;
+                }
+            }
+
+            if (closestJungleCamp != -1)
+            {
+                closestCampPos = JungleCamps.GetCampPos(closestJungleCamp);
+                overlay.AddJungleStackingMessage(announcer.GetCurrentGameTime().ToString(), "", closestCampPos.Item1-x, closestCampPos.Item2-y);
+            }
+            else
+            {
+                throw new Exception("Closest camp position not found.");
+            }
+        }
+
         private int DrawOnClosestEnemy()
         {
             // Get current hero position
-            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick+10, heroID);
+            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick+6, heroID);
             Tuple<double, double, double> heroPosition = new Tuple<double, double, double>(x, y, z);
 
             // Loop through all enemy heros and find the cloest one
@@ -443,13 +494,13 @@ namespace GamingSupervisor
                 if (temp < dis)
                 {
                     dis = temp;
-                    enemyHeroPosition = new Tuple<double, double, double>(x_temp - x, y_temp - y, z_temp - z);
+                    enemyHeroPosition = new Tuple<double, double, double>(x_temp, y_temp, z_temp);
                     enemyHeroID = ID;
                 }
             }
             if (enemyHeroPosition != null)
             {
-                overlay.ShowCloestEnemy(enemyHeroPosition.Item1, enemyHeroPosition.Item2);
+                overlay.ShowCloestEnemy(enemyHeroPosition.Item1 - x, enemyHeroPosition.Item2 - y);
             }
             else
             {
