@@ -42,6 +42,9 @@ namespace GamingSupervisor
         private float screen_height = Screen.PrimaryScreen.Bounds.Height;
         private int itemflag = 0;
         private int item_Time_Mark = 0;
+        private int team_side;
+        private int[,] suggestiontable;
+        private int[,] table_checkmark;
 
         private int CurrentTick
         {
@@ -63,6 +66,18 @@ namespace GamingSupervisor
             replayHighlights = new ReplayHighlights(GUISelection.replayDataFolderLocation, GUISelection.heroName);
 
             heroID = heroIDData.getHeroID(GUISelection.heroName);
+            string heroname = GUISelection.heroName;
+
+            team_side = 0;
+            for (int i = 0; i < table.Length / 4; i++)
+            {
+                if (table[i, 0] == hero_table[heroname])
+                {
+                    team_side = table[i, 2];
+                }
+            }
+            suggestiontable = cp.suggestionTable_1(team_side, 3);
+            table_checkmark = cp.checkMark();
         }
 
         public override void Start()
@@ -243,18 +258,7 @@ namespace GamingSupervisor
          */
         private void HandleHeroSelection()
         {
-            string heroname = GUISelection.heroName;
 
-            int team_side = 0;
-            for (int i = 0; i < table.Length / 4; i++)
-            {
-                if (table[i, 0] == hero_table[heroname])
-                {
-                    team_side = table[i, 2];
-                }
-            }
-            int[,] suggestiontable = cp.suggestionTable_1(team_side,3);
-            int[,] table_checkmark = cp.checkMark();
             for (int i = 0; i < 30; i++)
             {
                 if (table[i, 2] == team_side)
