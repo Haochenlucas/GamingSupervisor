@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace GamingSupervisor
 {
@@ -39,6 +40,8 @@ namespace GamingSupervisor
         private float screen_width = Screen.PrimaryScreen.Bounds.Width;
         private float screen_height = Screen.PrimaryScreen.Bounds.Height;
 
+        // Remove after game time is available
+        private Stopwatch fakeGameTime= new Stopwatch();
         private int CurrentTick
         {
             get { lock (tickLock) { return currentTick; } }
@@ -100,7 +103,7 @@ namespace GamingSupervisor
                 // draw instruction to watch the replay in dota2 client
                 overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
 
-                Thread.Sleep(10);
+                //Thread.Sleep(10);
             }
             tickTimer.Start();
 
@@ -114,6 +117,7 @@ namespace GamingSupervisor
             lastTickWhenGameTimeChanged = CurrentTick;
 
             Console.WriteLine("Currently analyzing...");
+
             while (keepLooping)
             {
                 if (!IsDotaRunning())
@@ -148,6 +152,10 @@ namespace GamingSupervisor
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        if (!fakeGameTime.IsRunning)
+                        {
+                            fakeGameTime.Start();
+                        }
                         SetEnemiesHeroIDs();
                         replayStarted = true;
                         overlay.ClearHeroSuggestion();
@@ -440,7 +448,7 @@ namespace GamingSupervisor
         private void AnalizeJungleCamps()
         {
             // Get current hero position
-            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick+6, heroID);
+            (double x, double y, double z) = heroData.getHeroPosition(CurrentTick, heroID);
             Tuple<double, double, double> heroPosition = new Tuple<double, double, double>(x, y, z);
             int closestJungleCamp = -1;
             double closest = Int32.MaxValue;
@@ -450,7 +458,7 @@ namespace GamingSupervisor
             {
                 Tuple<double, double> campPos = JungleCamps.GetCampPos(i);
                 double dis = Math.Pow((Math.Pow(x - campPos.Item1, 2) + Math.Pow(y - campPos.Item2, 2)), 0.5);
-                if (dis < closest)
+                if (dis < closest && dis <= 600)
                 {
                     closest = dis;
                     closestJungleCamp = i;
@@ -460,11 +468,22 @@ namespace GamingSupervisor
             if (closestJungleCamp != -1)
             {
                 closestCampPos = JungleCamps.GetCampPos(closestJungleCamp);
-                overlay.AddJungleStackingMessage(announcer.GetCurrentGameTime().ToString(), "", closestCampPos.Item1-x, closestCampPos.Item2-y);
+                string content = "";
+                int totalsecond = (int) fakeGameTime.ElapsedMilliseconds / 1000;
+                content += "Fake Game Time: " + totalsecond.ToString() + "\n";
+                int secondMark = JungleCamps.GetCampSecMark(closestJungleCamp);
+                int second = totalsecond % 60;
+                int countdown = secondMark - second;
+                if (countdown < 5)
+                {
+                    content += "Count down: " + countdown + "\n";
+                }
+                content += JungleCamps.GetDirection(closestJungleCamp);
+                overlay.AddJungleStackingMessage(content, "", 0.8 * (closestCampPos.Item1-x), 0.9 * (closestCampPos.Item2-y));
             }
             else
             {
-                throw new Exception("Closest camp position not found.");
+                overlay.ClearJungle();
             }
         }
 

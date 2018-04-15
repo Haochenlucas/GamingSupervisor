@@ -127,7 +127,7 @@ namespace GamingSupervisor
             renderer.HeroSelection_Draw(dotaProcessHandle, window);
         }
 
-        public void ClearMessage(Direct2DRenderer.hints hint)
+        private void ClearMessage(Direct2DRenderer.hints hint)
         {
             renderer.DeleteMessage(hint);
         }
@@ -154,6 +154,10 @@ namespace GamingSupervisor
         public void ClearRetreat()
         {
             renderer.DeleteMessage(Direct2DRenderer.hints.retreat);
+        }
+        public void ClearJungle()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.jungle);
         }
 
         public void XorCheck(int code)

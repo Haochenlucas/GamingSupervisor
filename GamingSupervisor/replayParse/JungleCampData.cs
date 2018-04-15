@@ -18,6 +18,8 @@ namespace replayParse
         // DrawBitmap(bmp, 0.2f, messages[i].img_x, messages[i].img_y - modifier, messages[i].img_width, messages[i].img_height);
         private Tuple<string, float, float, float, float>[] DirectionImg = new Tuple<string, float, float, float, float>[18];
 
+        private string[] pullMethod = new string[18];
+
         public JungleCampData()
         {
             // Order the camps by difficulties
@@ -50,74 +52,92 @@ namespace replayParse
                     case 1:
                         jungleCampPos[i-1] = new Tuple<double, double>(19361.625, 11711.03125);
                         campMinMark[i-1] = 54;
+                        pullMethod[i - 1] = "Lure the creeps Down";
                         break;
                     case 2:
                         jungleCampPos[i-1] = new Tuple<double, double>(13715.0625, 21044.125);
                         campMinMark[i-1] = 55;
+                        pullMethod[i - 1] = "Lure the creeps Up";
                         break;
                     case 3:
                         jungleCampPos[i-1] = new Tuple<double, double>(12666.59375,17087.375);
                         campMinMark[i-1] = 55;
+                        pullMethod[i - 1] = "Lure the creeps Left then Up";
                         break;
                     case 4:
                         jungleCampPos[i-1] = new Tuple<double, double>(14574.1875, 12179.6875);
                         campMinMark[i-1] = 56;
+                        pullMethod[i - 1] = "Lure the creeps Up";
                         break;
                     case 5:
                         jungleCampPos[i-1] = new Tuple<double, double>(16756.4375, 11678.78125);
                         campMinMark[i-1] = 55;
+                        pullMethod[i - 1] = "Lure the creeps Up";
                         break;
                     case 6:
                         jungleCampPos[i-1] = new Tuple<double, double>(18824.9375, 16441.4375);
                         campMinMark[i-1] = 53;
+                        pullMethod[i - 1] = "Lure the creeps Right";
                         break;
                     case 7:
                         jungleCampPos[i-1] = new Tuple<double, double>(17643.625, 19610);
                         campMinMark[i-1] = 53;
+                        pullMethod[i - 1] = "Lure the creeps Up then Right";
                         break;
                     case 8:
                         jungleCampPos[i-1] = new Tuple<double, double>(14362.34375, 20633.09375);
                         campMinMark[i-1] = 55;
+                        pullMethod[i - 1] = "Lure the creeps Up";
                         break;
                     case 9:
                         jungleCampPos[i-1] = new Tuple<double, double>(11445.28125, 15938.59375);
                         campMinMark[i-1] = 56;
+                        pullMethod[i - 1] = "Lure the creeps Up";
                         break;
                     case 10:
                         jungleCampPos[i-1] = new Tuple<double, double>(15970.03125, 13066.40625);
                         campMinMark[i-1] = 54;
+                        pullMethod[i - 1] = "Lure the creeps Up then Right";
                         break;
                     case 11:
                         jungleCampPos[i-1] = new Tuple<double, double>(20957.84375, 11969.15625);
                         campMinMark[i-1] = 54;
+                        pullMethod[i - 1] = "Lure the creeps Left";
                         break;
                     case 12:
                         jungleCampPos[i-1] = new Tuple<double, double>(20774.59375, 17135.125);
                         campMinMark[i-1] = 55;
+                        pullMethod[i - 1] = "Lure the creeps Left then Down";
                         break;
                     case 13:
                         jungleCampPos[i-1] = new Tuple<double, double>(16215.125, 19781.46875);
                         campMinMark[i-1] = 54;
+                        pullMethod[i - 1] = "Lure the creeps Up then Right";
                         break;
                     case 14:
                         jungleCampPos[i-1] = new Tuple<double, double>(12158.1875, 19853.21875);
                         campMinMark[i-1] = 55;
+                        pullMethod[i - 1] = "Lure the creeps Right";
                         break;
                     case 15:
                         jungleCampPos[i-1] = new Tuple<double, double>(13275.84375, 16273.71875);
                         campMinMark[i-1] = 53;
+                        pullMethod[i - 1] = "Lure the creeps Down";
                         break;
                     case 16:
                         jungleCampPos[i-1] = new Tuple<double, double>(16495.28125, 14516.40625);
                         campMinMark[i-1] = 54;
+                        pullMethod[i - 1] = "Lure the creeps Down";
                         break;
                     case 17:
                         jungleCampPos[i-1] = new Tuple<double, double>(20385.5, 15999.28125);
                         campMinMark[i-1] = 54;
+                        pullMethod[i - 1] = "Lure the creeps Left";
                         break;
                     case 18:
                         jungleCampPos[i-1] = new Tuple<double, double>(15574.5, 18544.53125);
                         campMinMark[i-1] = 53;
+                        pullMethod[i - 1] = "Lure the creeps Right";
                         break;
                     default:
                         break;
@@ -130,7 +150,7 @@ namespace replayParse
             return jungleCampPos[index - 1];
         }
 
-        public int GetCampMinMark(int index)
+        public int GetCampSecMark(int index)
         {
             return campMinMark[index - 1];
         }
@@ -171,6 +191,10 @@ namespace replayParse
                 default:
                     throw new Exception("Index not between 1 and 18.");
             }
+        }
+        public string GetDirection(int index)
+        {
+            return pullMethod[index - 1];
         }
     }
 }
