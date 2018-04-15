@@ -50,6 +50,16 @@ namespace GamingSupervisor
             renderer.clear();
         }
 
+        public void CreepLowEnough()
+        {
+            renderer.LastHit();
+        }
+
+        public void CreepDied()
+        {
+            renderer.LastHitted();
+        }
+
         public void AddRetreatMessage(string message, string img)
         {
             renderer.Retreat(message, img);

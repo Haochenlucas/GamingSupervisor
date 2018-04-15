@@ -577,14 +577,15 @@ public class App
         }
         
         if (update || forceUpdate)
-        	laneCreepWriter.format("%d [HEALTH_POSITION] %d %s %s %s %s %s\n",
+        	laneCreepWriter.format("%d [HEALTH_POSITION] %d %s %s %s %s %s %s\n",
     				ctx.getTick(),
     				e.getHandle(),
     				e.getPropertyForFieldPath(laneCreep.cellX),
 					e.getPropertyForFieldPath(laneCreep.cellY),
 					e.getPropertyForFieldPath(laneCreep.cellZ),
 					e.getPropertyForFieldPath(laneCreep.health),
-					e.getPropertyForFieldPath(laneCreep.maxHealth));
+					e.getPropertyForFieldPath(laneCreep.maxHealth),
+					e.getPropertyForFieldPath(laneCreep.physicalArmor));
         //if (updateHealth || forceUpdate)
         //	laneCreepWriter.format("%d [HEALTH] %d %s\n",
     	//			ctx.getTick(),

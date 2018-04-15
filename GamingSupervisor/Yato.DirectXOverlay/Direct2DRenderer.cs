@@ -25,6 +25,7 @@ namespace Yato.DirectXOverlay
 
         #region private vars
 
+        private Stopwatch creepTimer = new Stopwatch();
         private int BAR_GRAPH_HEIGHT = Screen.PrimaryScreen.Bounds.Height / 2;
 
         private Direct2DRendererOptions rendererOptions;
@@ -1841,7 +1842,17 @@ namespace Yato.DirectXOverlay
             return BAR_GRAPH_HEIGHT * currHP / maxHP;
         }
 
-        
+        public void LastHit()
+        {
+            creepTimer = Stopwatch.StartNew();
+        }
+
+        public void LastHitted()
+        {
+
+        }
+
+
 
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
         {
@@ -1886,6 +1897,18 @@ namespace Yato.DirectXOverlay
 
                 // Circle out the closet enemy hero
                 DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
+
+                if (creepTimer.ElapsedMilliseconds > 7000)
+                {
+                    creepTimer.Reset();
+                }
+                else if (creepTimer.IsRunning)
+                {
+                    Direct2DFont font = CreateFont("Consolas", 12);
+                    Direct2DBrush background = CreateBrush(109, 109, 109, 255);
+                    Direct2DBrush brush = CreateBrush(200, 200, 200);
+                    DrawTextWithBackground("There's a creep to last hit", 100, 100, font, brush, background);
+                }
 
                 // Move these two parts down for item suggestion
                 if (drawHighlight)
@@ -1964,7 +1987,7 @@ namespace Yato.DirectXOverlay
 
                             DrawBox2D(
                                 x: 51 * i,                                               
-                                y: (currY - (float)barHeight) * .3f + currY / 2,     
+                                y: 50 + (currY - (float)barHeight) * .3f + currY / 2,     
                                 width: 50,                                               
                                 height: (float)barHeight * .3f,                             
                                 stroke: 1,                                               
@@ -1974,7 +1997,7 @@ namespace Yato.DirectXOverlay
 
                             DrawBox2D(
                                 x: 51 * i,
-                                y: (currY - BAR_GRAPH_HEIGHT) * .3f + currY / 2,
+                                y: 50 + (currY - BAR_GRAPH_HEIGHT) * .3f + currY / 2,
                                 width: 50,
                                 height: BAR_GRAPH_HEIGHT * .3f,
                                 stroke: 1,
@@ -1986,7 +2009,7 @@ namespace Yato.DirectXOverlay
                                 bmp: bmp,
                                 opacity: 1,
                                 x: 51 * i,
-                                y: currY - 108,
+                                y: 50 + currY - 108,
                                 width: 50,
                                 height: 28
                                 );
@@ -1996,39 +2019,39 @@ namespace Yato.DirectXOverlay
                         }
                     }
 
-                    // vertical line
-                    DrawLine(
-                        start_x: 250,           
-                        start_y: currY - 100 + 28,
-                        end_x: 250,               
-                        end_y: currY + 150 + 28,  
-                        stroke: 2,                
-                        brush: redBrush
-                        );              
+                    //// vertical line
+                    //DrawLine(
+                    //    start_x: 250,           
+                    //    start_y: currY - 100 + 28,
+                    //    end_x: 250,               
+                    //    end_y: currY + 150 + 28,  
+                    //    stroke: 2,                
+                    //    brush: redBrush
+                    //    );              
 
-                    // horizontal line
-                    DrawLine(
-                        start_x: 0,             
-                        start_y: currY + 150 + 28,
-                        end_x: 250,               
-                        end_y: currY + 150 + 28,  
-                        stroke: 2,                
-                        brush: redBrush
-                        );                   
+                    //// horizontal line
+                    //DrawLine(
+                    //    start_x: 0,             
+                    //    start_y: currY + 150 + 28,
+                    //    end_x: 250,               
+                    //    end_y: currY + 150 + 28,  
+                    //    stroke: 2,                
+                    //    brush: redBrush
+                    //    );                   
 
-                    // line graph
-                    for (int j = 0; j < currHp.Count - 1; j++)
-                    {
-                        double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(
-                            start_x: j,
-                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28,
-                            end_x: 1 + j,
-                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
-                            stroke: 1,
-                            brush: redBrush
-                            );
-                    }
+                    //// line graph
+                    //for (int j = 0; j < currHp.Count - 1; j++)
+                    //{
+                    //    double[] tempCurrHp = currHp.ToArray();
+                    //    DrawLine(
+                    //        start_x: j,
+                    //        start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28,
+                    //        end_x: 1 + j,
+                    //        end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
+                    //        stroke: 1,
+                    //        brush: redBrush
+                    //        );
+                    //}
                 }
 
                 EndScene();
