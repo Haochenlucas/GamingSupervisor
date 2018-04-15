@@ -16,6 +16,9 @@ namespace GamingSupervisor
         {
             InitializeComponent();
 
+            HideInstructions();
+            DescriptionToggle.IsChecked = false;
+
             Description = GUIDescription;
 
             ParserHandler.StartInfoParsing();
@@ -29,6 +32,28 @@ namespace GamingSupervisor
             base.OnClosed(e);
 
             Application.Current.Shutdown();
+        }
+
+        private void HideInstructions()
+        {
+            this.Width = 360;
+            GUIDescriptionGrid.Visibility = Visibility.Hidden;
+        }
+
+        private void ShowInstructions()
+        {
+            this.Width = 960;
+            GUIDescriptionGrid.Visibility = Visibility.Visible;
+        }
+
+        private void DescriptionToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            ShowInstructions();
+        }
+
+        private void DescriptionToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            HideInstructions();
         }
     }
 }
