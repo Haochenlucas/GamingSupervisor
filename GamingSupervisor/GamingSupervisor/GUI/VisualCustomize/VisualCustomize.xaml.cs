@@ -8,6 +8,16 @@ namespace GamingSupervisor
 {
     public class OverlayBox : ContentControl
     {
+        public bool IsOverlayVisible
+        {
+            get;
+            set;
+        }
+
+        public OverlayBox() : base()
+        {
+            IsOverlayVisible = true;
+        }
     }
 
     /// <summary>
@@ -62,11 +72,21 @@ namespace GamingSupervisor
                 IsHitTestVisible = false
             };
             box.Content = rectangle;
+            box.MouseDoubleClick += Box_MouseDoubleClick;
 
             CustomizeCanvas.Children.Add(box);
 
             Canvas.SetLeft(box, positionX);
             Canvas.SetTop(box, positionY);
+        }
+
+        private void Box_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            OverlayBox box = sender as OverlayBox;
+            if (box.IsOverlayVisible)
+                box.IsOverlayVisible = false;
+            else
+                box.IsOverlayVisible = true;
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)

@@ -26,11 +26,13 @@ namespace GamingSupervisor
 #endif
             while (Process.GetProcessesByName("dota2").Length == 0)
             {
+                Console.WriteLine("Waiting for dota to start...");
                 Thread.Sleep(500);
             }
 
             while (Process.GetProcessesByName("dota2")[0].MainWindowHandle == IntPtr.Zero)
             {
+                Console.WriteLine("Waiting for dota window handle to appear...");
                 Thread.Sleep(500);
             }
 
@@ -108,6 +110,26 @@ namespace GamingSupervisor
         public void HideInitialInstructions()
         {
             renderer.HideInitialInstructions();
+        }
+
+        public void ShowHealthGraphs()
+        {
+            renderer.ToggleGraph(true);
+        }
+
+        public void HideHealthGraphs()
+        {
+            renderer.ToggleGraph(false);
+        }
+
+        public void ShowItemSuggestions()
+        {
+            renderer.ShowItemSuggestions();
+        }
+
+        public void HideItemSuggestions()
+        {
+            renderer.HideItemSuggestions();
         }
 
         public void ToggleHighlight(bool tog = true)

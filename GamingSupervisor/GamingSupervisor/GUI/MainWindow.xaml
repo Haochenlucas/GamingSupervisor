@@ -12,10 +12,26 @@
                       WindowState="Normal"
                       ShowMaxRestoreButton="False">
     <DockPanel>
-        <local:Frame Name="GUINavigation" NavigationUIVisibility="Hidden" Height="640" Width="360" Foreground="{StaticResource Foreground}"/>
+        <StackPanel Height="640" Width="360">
+            <Controls:ToggleSwitch Name="DescriptionToggle" FontSize="16" Content="Show description" Width="200" Margin="10"
+                                   Unchecked="DescriptionToggle_Unchecked" Checked="DescriptionToggle_Checked"/>
+            <local:Frame Name="GUINavigation" NavigationUIVisibility="Hidden" Height="590" Width="360" Foreground="{StaticResource Foreground}"/>
+        </StackPanel>
         <Rectangle VerticalAlignment="Stretch" Width="1" Margin="2" Stroke="WhiteSmoke" />
-        <Grid Width="530" Height="640">
+        <Grid Name="GUIDescriptionGrid" Width="530" Height="640">
             <TextBlock Name="GUIDescription" TextWrapping="Wrap" FontSize="16" Padding="50" />
+            <StackPanel VerticalAlignment="Center" >
+                <ItemsControl Name="HeroNameItemsControl" FontSize="16" Padding="0" BorderThickness="0" Margin="5" Width="250" Foreground="{StaticResource Foreground}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <TextBlock x:Name="Tb" Text="{Binding Title}" FontSize="20"/>
+                                <Image HorizontalAlignment="Right" Height="{Binding ActualHeight, ElementName=Tb}" Source="{Binding ImagePath}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
         </Grid>
     </DockPanel>
 </Controls:MetroWindow>

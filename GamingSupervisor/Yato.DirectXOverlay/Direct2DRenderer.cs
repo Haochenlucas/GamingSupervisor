@@ -88,6 +88,7 @@ namespace Yato.DirectXOverlay
         private Dictionary<int, List<Tuple<String, String, String>>> ticksInfo;
 
         private bool drawHighlight = false;
+        private bool drawItemSuggestions = false;
         
         
         private float width_unit = Screen.PrimaryScreen.Bounds.Width / 32;
@@ -1853,7 +1854,15 @@ namespace Yato.DirectXOverlay
             return BAR_GRAPH_HEIGHT * currHP / maxHP;
         }
 
+        public void ShowItemSuggestions()
+        {
+            drawItemSuggestions = true;
+        }
 
+        public void HideItemSuggestions()
+        {
+            drawItemSuggestions = false;
+        }
 
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, IntPtr doNotIgnoreHandle,
             float highlightBarPositionX, float highlightBarPositionY,
@@ -1897,7 +1906,10 @@ namespace Yato.DirectXOverlay
                 */
 
                 // Hero information
-                DrawItemSelection(itemPositionX, itemPositionY);
+                if (drawItemSuggestions)
+                {
+                    DrawItemSelection(itemPositionX, itemPositionY);
+                }
 
                 // Hero information
                 DrawHeroInformation();

@@ -6,7 +6,7 @@
       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:local="clr-namespace:GamingSupervisor"
       mc:Ignorable="d" 
-      d:DesignHeight="640" d:DesignWidth="480"
+      d:DesignHeight="590" d:DesignWidth="480"
       Title="CustomizeSelection">
     <Grid Margin="50" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <StackPanel>
