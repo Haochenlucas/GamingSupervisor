@@ -364,11 +364,16 @@ namespace GamingSupervisor
             //if (health <= 600)
 
             hpToSend[0] = health;
-            maxHpToSend[0] = heroData.getMaxHealth(CurrentTick, heroID);
-            for (int i = 0; i < 4; i++)
+            //maxHpToSend[0] = heroData.getMaxHealth(CurrentTick, heroID);
+            for (int i = 0; i < 5; i++)
             {
-                maxHpToSend[i + 1] = heroData.getMaxHealth(CurrentTick, teamHeroIds[i]);
-                hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
+                heroID id = new heroID();
+                Dictionary<int, string> id_string = id.getHeroID();
+                string name = id_string[teamIDGraph[i]];
+                int index_id = heroIDData.getHeroID(name);
+
+                maxHpToSend[i] = heroData.getMaxHealth(CurrentTick, index_id);
+                hpToSend[i] = heroData.getHealth(CurrentTick, index_id);
             }
 
             int closestEnemyID = DrawOnClosestEnemy();

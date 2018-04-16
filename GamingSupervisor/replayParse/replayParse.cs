@@ -11,7 +11,7 @@ namespace replayParse
         public int z;
         public int health;
         public int maxHealth;
-        public int armor;
+        public float armor;
     }
 
     public class HeroParser
@@ -219,7 +219,7 @@ namespace replayParse
                             z = Int32.Parse(words[5]),
                             health = Int32.Parse(words[6]),
                             maxHealth = Int32.Parse(words[7]),
-                            armor = Int32.Parse(words[8])
+                            armor = float.Parse(words[8])
                         });
                         break;
                 }
