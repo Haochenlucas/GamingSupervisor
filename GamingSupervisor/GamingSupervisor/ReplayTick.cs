@@ -20,11 +20,29 @@ namespace GamingSupervisor
                 string[] entries = line.Split(' ');
                 gameTimeToTick[(int)Convert.ToDouble(entries[2])] = Convert.ToInt32(entries[0]);
             }
+
+            string startTimeLine = File.ReadAllText(dataFolderLocation + "startTime.txt");
+            string[] startTimeEntries = startTimeLine.Split(' ');
+
+            GameStartTick = Convert.ToInt32(startTimeEntries[0]);
+            GameStartTime = Convert.ToInt32(startTimeEntries[2]);
         }
 
         public int this[int i]
         {
             get => gameTimeToTick[i];
+        }
+
+        public int GameStartTick
+        {
+            get;
+            private set;
+        }
+
+        public int GameStartTime
+        {
+            get;
+            private set;
         }
     }
 }

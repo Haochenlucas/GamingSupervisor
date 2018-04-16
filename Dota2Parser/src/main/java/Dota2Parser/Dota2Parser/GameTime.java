@@ -5,15 +5,22 @@ import skadistats.clarity.model.FieldPath;
 
 public class GameTime
 {
-    public FieldPath time;
+    public FieldPath realTime;
+    public FieldPath replayTime;
     
     public GameTime(Entity e)
     {
-    	time = e.getDtClass().getFieldPathForName("m_pGameRules.m_fGameTime");
+    	realTime = e.getDtClass().getFieldPathForName("m_pGameRules.m_fGameTime");
+    	replayTime = e.getDtClass().getFieldPathForName("m_pGameRules.m_flGameStartTime");
+    }
+
+    public boolean isRealTime(FieldPath path)
+    {
+        return path.equals(realTime);
     }
     
-    public boolean isTime(FieldPath path)
+    public boolean isReplayTime(FieldPath path)
     {
-        return path.equals(time);
+        return path.equals(replayTime);
     }
 }
