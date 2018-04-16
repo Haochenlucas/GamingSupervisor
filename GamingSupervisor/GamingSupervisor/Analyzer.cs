@@ -25,7 +25,6 @@ namespace GamingSupervisor
 
         public Analyzer()
         {
-            Console.WriteLine("Analyzer1");
             Terminate = false;
 
             Application.Current.Dispatcher.Invoke(

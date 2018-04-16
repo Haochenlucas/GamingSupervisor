@@ -87,16 +87,28 @@ namespace GamingSupervisor
                     return;
                 }
 
-                double positionX = 0;
-                double positionY = 0;
-                GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
+                bool isInitialInstructionsBoxVisible = true;
+                System.Windows.Application.Current.Dispatcher.Invoke(
+                    () =>
+                    {
+                        isInitialInstructionsBoxVisible = initialInstructionsBox.IsOverlayVisible;
+                    });
 
-                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+                if (isInitialInstructionsBoxVisible)
+                {
+                    double positionX = 0;
+                    double positionY = 0;
+                    GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
 
-                Thread.Sleep(10);
+                    overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+                }
+                else
+                {
+                    overlay.Clear();
+                }
             }
 
-            overlay.HideInitialInstructions();
+            overlay.Clear();
 
             bool keepLooping = true;
 
@@ -146,8 +158,24 @@ namespace GamingSupervisor
                                 itemBox.Visibility = Visibility.Hidden;
                             });
                         }
+
+                        bool isHeroSelectionBoxVisible = true;
+                        System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                isHeroSelectionBoxVisible = heroSelectionBox.IsOverlayVisible;
+                            });
+
                         HandleHeroSelection();
-                        ShowHeroSelectionSuggestions();
+
+                        if (isHeroSelectionBoxVisible)
+                        {
+                            ShowHeroSelectionSuggestions();
+                        }
+                        else
+                        {
+                            overlay.Clear();
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_STRATEGY_TIME":
                         if (lastGameState != "DOTA_GAMERULES_STATE_STRATEGY_TIME")
@@ -185,6 +213,25 @@ namespace GamingSupervisor
                         }
                         
                         SendCommandsToDota();
+
+                        bool isHealthGraphsBoxVisible = true;
+                        bool isItemSuggestionsBoxVisible = true;
+                        System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                isHealthGraphsBoxVisible = healthGraphsBox.IsOverlayVisible;
+                                isItemSuggestionsBoxVisible = itemBox.IsOverlayVisible;
+                            });
+
+                        if (isHealthGraphsBoxVisible)
+                            overlay.ShowHealthGraphs();
+                        else
+                            overlay.HideHealthGraphs();
+
+                        if (isItemSuggestionsBoxVisible)
+                            overlay.ShowItemSuggestions();
+                        else
+                            overlay.HideItemSuggestions();
 
                         HandleGamePlay();
                         HandleHeroGraph();
@@ -448,7 +495,6 @@ namespace GamingSupervisor
                 }
             }
 
-            overlay.ToggleGraphForHeroHP();
             overlay.AddHeroGraphIcons(heroIDs);
             overlay.AddHPs(teamHealth.ToArray(), teamMaxHealth.ToArray());
             overlay.AddHp(teamHealth[0]);

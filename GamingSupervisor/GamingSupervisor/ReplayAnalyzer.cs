@@ -94,6 +94,7 @@ namespace GamingSupervisor
             string instru_OpenReplay = "1: Click Watch on the top.\n2: Click Downloads\n3: Click Watch to start\n   the replay "
                 + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName);
             overlay.Intructions_setup(instru_OpenReplay);
+
             while (!announcer.isReplayStarted())
             {
                 if (!IsDotaRunning())
@@ -109,16 +110,28 @@ namespace GamingSupervisor
                     return;
                 }
 
-                double positionX = 0;
-                double positionY = 0;
-                GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
-                // draw instruction to watch the replay in dota2 client
-                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+                bool isInitialInstructionsBoxVisible = true;
+                System.Windows.Application.Current.Dispatcher.Invoke(
+                    () =>
+                    {
+                        isInitialInstructionsBoxVisible = initialInstructionsBox.IsOverlayVisible;
+                    });
 
-                Thread.Sleep(10);
+                if (isInitialInstructionsBoxVisible)
+                {
+                    double positionX = 0;
+                    double positionY = 0;
+                    GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
+                    // draw instruction to watch the replay in dota2 client
+                    overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+                }
+                else
+                {
+                    overlay.Clear();
+                }
             }
 
-            overlay.HideInitialInstructions();
+            overlay.Clear();
 
             tickTimer.Start();
 
@@ -189,8 +202,24 @@ namespace GamingSupervisor
                             replayStarted = true;
                         }
 
+                        bool isHeroSelectionBoxVisible = true;
+                        System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                isHeroSelectionBoxVisible = heroSelectionBox.IsOverlayVisible;
+                            });
+
                         HandleHeroSelection();
-                        ShowHeroSelectionSuggestions();
+
+                        if (isHeroSelectionBoxVisible)
+                        {
+                            ShowHeroSelectionSuggestions();
+                        }
+                        else
+                        {
+                            overlay.Clear();
+                        }
+
                         if (!ranHeroSelectionAtLeastOnce)
                             ranHeroSelectionAtLeastOnce = true;
 
@@ -232,11 +261,38 @@ namespace GamingSupervisor
                                 healthGraphsBox.Visibility = Visibility.Visible;
                                 itemBox.Visibility = Visibility.Visible;
                             });
+                            replayStarted = true;
                         }
+
+                        bool isHighlightBarBoxVisible = true;
+                        bool isHealthGraphsBoxVisible = true;
+                        bool isItemSuggestionsBoxVisible = true;
+                        System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                isHighlightBarBoxVisible = highlightBarBox.IsOverlayVisible;
+                                isHealthGraphsBoxVisible = healthGraphsBox.IsOverlayVisible;
+                                isItemSuggestionsBoxVisible = itemBox.IsOverlayVisible;
+                            });
+
                         SetEnemiesHeroIDs();
-                        replayStarted = true;
+
+                        if (isHighlightBarBoxVisible)
+                            HandleHighlight();
+                        else
+                            overlay.ToggleHighlight(false);
+
+                        if (isHealthGraphsBoxVisible)
+                            overlay.ShowHealthGraphs();
+                        else
+                            overlay.HideHealthGraphs();
+
+                        if (isItemSuggestionsBoxVisible)
+                            overlay.ShowItemSuggestions();
+                        else
+                            overlay.HideItemSuggestions();
+
                         HandleGamePlay();
-                        HandleHighlight();
                         UpdateInGameOverlay();
                         break;
                     default:
@@ -417,7 +473,7 @@ namespace GamingSupervisor
 
         private void HandleHighlight()
         {
-            overlay.ToggleHighlight();
+            overlay.ToggleHighlight(true);
             overlay.UpdateHighlight(replayHighlights.tickInfo, replayHighlights.lastTick);
         }
 
@@ -534,7 +590,6 @@ namespace GamingSupervisor
             //double closestMaxHp = heroData.getMaxHealth(CurrentTick, closestHeroId);
             //double closestHpPercen = closestHp / closestMaxHp;
 
-            overlay.ToggleGraphForHeroHP();
             overlay.AddHeroGraphIcons(teamIDGraph);
             overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
