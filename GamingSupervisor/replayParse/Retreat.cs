@@ -10,7 +10,20 @@ namespace replayParse
 {
     public class Retreat
     {
-        public static bool CreateInputFile(float myID, float myLvl, float myHP, double myMana,
+        private Process p;
+
+        public Retreat()
+        {
+            p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.FileName = "retreat_predict.exe";
+
+            p.Start();
+        }
+
+        public bool CreateInput(float myID, float myLvl, float myHP, double myMana,
         float enemyID, float enemyLvl, float enemyHP, double enemyMana)
         {
             StringBuilder sb = new StringBuilder();
@@ -32,26 +45,17 @@ namespace replayParse
             sb.Append(" ");
             sb.Append(enemyMana.ToString());
 
-            using (StreamWriter file = new StreamWriter(Path.Combine(Environment.CurrentDirectory, "input.txt")))
-            {
-                file.WriteLine(sb.ToString());
-            }
 
-            Predict(out string prediction);
+            Predict(sb.ToString(), out string prediction);
 
             return prediction.Contains("1");
         }
 
-        private static void Predict(out string prediction)
+        private void Predict(string input, out string prediction)
         {
-            Process p = new Process();
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = "retreat_predict.exe";
+            p.StandardInput.WriteLine(input);
 
-            p.Start();
-
-            prediction = p.StandardOutput.ReadLine();
+           prediction = p.StandardOutput.ReadLine();
         }
     }
 

@@ -57,6 +57,7 @@ namespace GamingSupervisor
             replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
             replayHighlights = new ReplayHighlights(GUISelection.replayDataFolderLocation, GUISelection.heroName);
             lastHitCalculator = new LastHitCalculator();
+            retreat = new Retreat();
 
             heroID = heroIDData.getHeroID(GUISelection.heroName);
         }
@@ -375,7 +376,7 @@ namespace GamingSupervisor
             int fEID = lower_hero_table[heroIDData.getHeroName(closestEnemyID)];
             int fHID = lower_hero_table[heroIDData.getHeroName(heroID)];
 
-            bool shouldRetreat = Retreat.CreateInputFile(myID: fHID,
+            bool shouldRetreat = retreat.CreateInput(myID: fHID,
                 myLvl: heroData.getLevel(CurrentTick, heroID),
                 myHP: health,
                 myMana: heroData.getMana(CurrentTick, heroID),
