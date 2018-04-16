@@ -20,6 +20,18 @@
         <Rectangle VerticalAlignment="Stretch" Width="1" Margin="2" Stroke="WhiteSmoke" />
         <Grid Name="GUIDescriptionGrid" Width="530" Height="640">
             <TextBlock Name="GUIDescription" TextWrapping="Wrap" FontSize="16" Padding="50" />
+            <StackPanel VerticalAlignment="Center" >
+                <ItemsControl Name="HeroNameItemsControl" FontSize="16" Padding="0" BorderThickness="0" Margin="5" Width="250" Foreground="{StaticResource Foreground}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <TextBlock x:Name="Tb" Text="{Binding Title}" FontSize="20"/>
+                                <Image HorizontalAlignment="Right" Height="{Binding ActualHeight, ElementName=Tb}" Source="{Binding ImagePath}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
         </Grid>
     </DockPanel>
 </Controls:MetroWindow>

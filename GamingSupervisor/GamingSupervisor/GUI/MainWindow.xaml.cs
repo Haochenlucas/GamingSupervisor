@@ -11,6 +11,7 @@ namespace GamingSupervisor
     public partial class MainWindow : MetroWindow
     {
         public static TextBlock Description;
+        public static ItemsControl HeroList;
 
         public MainWindow()
         {
@@ -20,6 +21,8 @@ namespace GamingSupervisor
             DescriptionToggle.IsChecked = false;
 
             Description = GUIDescription;
+            HeroList = HeroNameItemsControl;
+            HeroList.Visibility = Visibility.Collapsed;
 
             ParserHandler.StartInfoParsing();
 

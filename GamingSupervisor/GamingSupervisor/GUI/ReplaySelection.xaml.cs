@@ -17,6 +17,12 @@ namespace GamingSupervisor
     /// </summary>
     public partial class ReplaySelection : Page
     {
+        private class HeroListItem
+        {
+            public string ImagePath { get; set; }
+            public string Title { get; set; }
+        }
+
         private class ReplayListItem
         {
             public string Title { get; set; }
@@ -123,6 +129,9 @@ namespace GamingSupervisor
             LoadingIcon.Visibility = Visibility.Hidden;
             ConfirmButton.Visibility = Visibility.Visible;
             GoBackButton.Visibility = Visibility.Visible;
+
+            MainWindow.HeroList.Visibility = Visibility.Visible;
+            MainWindow.Description.Visibility = Visibility.Collapsed;
         }
 
         private void ListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -132,6 +141,20 @@ namespace GamingSupervisor
                 ConfirmButton.IsEnabled = true;
                 string[] words = (ReplayNameListBox.SelectedItem as ReplayListItem).Title.Split(' ');
                 GUISelection.fileName = words[words.Length - 1];
+
+                List<string> heroNameList = ParserHandler.GetHeroNameList(Path.Combine("Parser", GUISelection.fileName + "/"));
+
+                List<HeroListItem> heros = new List<HeroListItem>();
+                foreach (string heroName in heroNameList)
+                {
+                    heros.Add(new HeroListItem()
+                    {
+                        ImagePath = Path.Combine(Environment.CurrentDirectory, "hero_icon_images/" + replayParse.heroID.ID_heroDictionary[heroName].ToString() + ".png"),
+                        Title = heroName
+                    });
+                }
+
+                MainWindow.HeroList.ItemsSource = heros;
             }
             else
             {
