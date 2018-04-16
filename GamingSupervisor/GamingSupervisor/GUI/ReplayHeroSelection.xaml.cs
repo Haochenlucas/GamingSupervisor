@@ -40,6 +40,8 @@ namespace GamingSupervisor
             }
 
             HeroNameListBox.ItemsSource = heros;
+            
+            ConfirmButton.IsEnabled = false;
         }
 
         private void ListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
