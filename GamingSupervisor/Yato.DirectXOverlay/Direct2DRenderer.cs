@@ -2018,39 +2018,39 @@ namespace Yato.DirectXOverlay
                         }
                     }
 
-                    //// vertical line
-                    //DrawLine(
-                    //    start_x: 250,           
-                    //    start_y: currY - 100 + 28,
-                    //    end_x: 250,               
-                    //    end_y: currY + 150 + 28,  
-                    //    stroke: 2,                
-                    //    brush: redBrush
-                    //    );              
+                    // vertical line
+                    DrawLine(
+                        start_x: 250,           
+                        start_y: currY - 100 + 28,
+                        end_x: 250,               
+                        end_y: currY + 150 + 28,  
+                        stroke: 2,                
+                        brush: redBrush
+                        );              
 
-                    //// horizontal line
-                    //DrawLine(
-                    //    start_x: 0,             
-                    //    start_y: currY + 150 + 28,
-                    //    end_x: 250,               
-                    //    end_y: currY + 150 + 28,  
-                    //    stroke: 2,                
-                    //    brush: redBrush
-                    //    );                   
+                    // horizontal line
+                    DrawLine(
+                        start_x: 0,             
+                        start_y: currY + 150 + 28,
+                        end_x: 250,               
+                        end_y: currY + 150 + 28,  
+                        stroke: 2,                
+                        brush: redBrush
+                        );                   
 
-                    //// line graph
-                    //for (int j = 0; j < currHp.Count - 1; j++)
-                    //{
-                    //    double[] tempCurrHp = currHp.ToArray();
-                    //    DrawLine(
-                    //        start_x: j,
-                    //        start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28,
-                    //        end_x: 1 + j,
-                    //        end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
-                    //        stroke: 1,
-                    //        brush: redBrush
-                    //        );
-                    //}
+                    // line graph
+                    for (int j = 0; j < currHp.Count - 1; j++)
+                    {
+                        double[] tempCurrHp = currHp.ToArray();
+                        DrawLine(
+                            start_x: j,
+                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28,
+                            end_x: 1 + j,
+                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
+                            stroke: 1,
+                            brush: redBrush
+                            );
+                    }
                 }
 
                 EndScene();
