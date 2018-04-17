@@ -1846,6 +1846,8 @@ namespace Yato.DirectXOverlay
             int avgG = (int)totals[1] / (w * h);
             int avgR = (int)totals[2] / (w * h);
 
+            bmp.UnlockBits(scrData);
+
             return new Tuple<int, int, int>(avgR, avgG, avgB); ;
         }
 
@@ -1995,6 +1997,8 @@ namespace Yato.DirectXOverlay
                             System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"hero_icon_images\" + heroIds[i] + ".png");
 
                             Tuple<int, int, int> rgb = AveragePixelColor(csb);
+                            csb.Dispose();
+
                             Direct2DBrush color = CreateBrush(rgb.Item1, rgb.Item2, rgb.Item3);
                             double barHeight = CalculateBarGraphHeight(maxHps[i], hps[i]);
 
@@ -2028,7 +2032,6 @@ namespace Yato.DirectXOverlay
                                 );
 
                             bmp.SharpDXBitmap.Dispose();
-                            csb.Dispose();
                         }
                     }
 
