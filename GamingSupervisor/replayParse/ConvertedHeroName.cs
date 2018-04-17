@@ -66,6 +66,10 @@ namespace replayParse
             {
                 name = "zeus";
             }
+            else if (name.Contains("underload"))
+            {
+                name = "underload";
+            }
 
             return name;
         }

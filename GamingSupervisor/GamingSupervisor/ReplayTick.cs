@@ -25,7 +25,7 @@ namespace GamingSupervisor
             string[] startTimeEntries = startTimeLine.Split(' ');
 
             GameStartTick = Convert.ToInt32(startTimeEntries[0]);
-            GameStartTime = Convert.ToInt32(startTimeEntries[2]);
+            GameStartTime = (int)Convert.ToDouble(startTimeEntries[2]);
         }
 
         public int this[int i]
