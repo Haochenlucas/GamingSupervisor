@@ -2077,18 +2077,18 @@ namespace Yato.DirectXOverlay
                         );                   
 
                     // line graph
-                    for (int j = 0; j < currHp.Count - 1; j++)
-                    {
-                        double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(
-                            start_x: j + healthGraphsDistanceFromDefaultHorizontal,
-                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
-                            end_x: 1 + j + healthGraphsDistanceFromDefaultHorizontal,
-                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
-                            stroke: 1,
-                            brush: redBrush
-                            );
-                    }
+                    //for (int j = 0; j < currHp.Count - 1; j++)
+                    //{
+                    //    double[] tempCurrHp = currHp.ToArray();
+                    //    DrawLine(
+                    //        start_x: j + healthGraphsDistanceFromDefaultHorizontal,
+                    //        start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
+                    //        end_x: 1 + j + healthGraphsDistanceFromDefaultHorizontal,
+                    //        end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
+                    //        stroke: 1,
+                    //        brush: redBrush
+                    //        );
+                    //}
                 }
 
                 EndScene();
