@@ -19,6 +19,8 @@ namespace GamingSupervisor
         private ReplayTick replayTick;
         private ReplayHighlights replayHighlights;
         private int closestGaming = 0;
+        private LastHitCalculator lastHitCalculator;
+        private Retreat retreat;
 
         private ReplayStartAnnouncer announcer = null;
 
@@ -32,6 +34,7 @@ namespace GamingSupervisor
 
         private int[,] table = cp.selectTable();
         private Dictionary<string, int> hero_table = h_ID.getIDHero();
+        private Dictionary<string, int> lower_hero_table = h_ID.getIDfromLowercaseHeroname();
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
         private hero_intro hero_Intro = new hero_intro();
         private int[] enemiesHeroID;
@@ -71,7 +74,10 @@ namespace GamingSupervisor
             heroIDData = new ReplayHeroID(GUISelection.replayDataFolderLocation);
             replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
             replayHighlights = new ReplayHighlights(GUISelection.replayDataFolderLocation, GUISelection.heroName);
-
+            replayHighlights.ConstructTickInfo(replayTick);
+            lastHitCalculator = new LastHitCalculator();
+            retreat = new Retreat();
+            
             heroID = heroIDData.getHeroID(GUISelection.heroName);
             string heroname = GUISelection.heroName;
 
@@ -414,7 +420,6 @@ namespace GamingSupervisor
          */
         private void HandleHeroSelection()
         {
-
             for (int i = 0; i < 30; i++)
             {
                 if (table[i, 2] == team_side)
@@ -580,18 +585,34 @@ namespace GamingSupervisor
             //if (health <= 600)
 
             hpToSend[0] = health;
-            maxHpToSend[0] = heroData.getMaxHealth(CurrentTick, heroID);
-            if (teamHeroIds.Count != 0)
+
+            //maxHpToSend[0] = heroData.getMaxHealth(CurrentTick, heroID);
+            for (int i = 0; i < 5; i++)
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    // Repley start right after hero selection will cause index out of range error
-                    maxHpToSend[i + 1] = heroData.getMaxHealth(CurrentTick, teamHeroIds[i]);
-                    hpToSend[i + 1] = heroData.getHealth(CurrentTick, teamHeroIds[i]);
-                }
+                heroID id = new heroID();
+                Dictionary<int, string> id_string = id.getHeroID();
+                string name = id_string[teamIDGraph[i]];
+                int index_id = heroIDData.getHeroID(name);
+
+                maxHpToSend[i] = heroData.getMaxHealth(CurrentTick, index_id);
+                hpToSend[i] = heroData.getHealth(CurrentTick, index_id);
+
             }
 
             int closestEnemyID = DrawOnClosestEnemy();
+
+            int fEID = lower_hero_table[heroIDData.getHeroName(closestEnemyID)];
+            int fHID = lower_hero_table[heroIDData.getHeroName(heroID)];
+
+            bool shouldRetreat = retreat.CreateInput(myID: fHID,
+                myLvl: heroData.getLevel(CurrentTick, heroID),
+                myHP: health,
+                myMana: heroData.getMana(CurrentTick, heroID),
+                enemyID: fEID,
+                enemyLvl: heroData.getLevel(CurrentTick, closestEnemyID),
+                enemyHP: heroData.getHealth(CurrentTick, closestEnemyID),
+                enemyMana: heroData.getMana(CurrentTick, closestEnemyID));
+            
 
             //overlay.ToggleGraphForHeroHP();
             //overlay.AddHPs(hpToSend);
@@ -619,13 +640,43 @@ namespace GamingSupervisor
             //double closestMaxHp = heroData.getMaxHealth(CurrentTick, closestHeroId);
             //double closestHpPercen = closestHp / closestMaxHp;
 
+            List<Creep> creeps = heroData.getLaneCreeps(CurrentTick);
+            string prim = lastHitCalculator.GetPrimaryAttribute(fHID);
+            double attr = 0;
+            switch (prim)
+            {
+                case "Strength":
+                    attr = heroData.getStrength(CurrentTick, heroID);
+                    break;
+                case "Agility":
+                    attr = heroData.getAgility(CurrentTick, heroID);
+                    break;
+                case "Intelligence":
+                    attr = heroData.getIntellect(CurrentTick, heroID);
+                    break;
+                default:
+                    break;
+            }
+            double minAtk = heroData.getDamageMin(currentTick, heroID);
+            foreach (var c in creeps)
+            {
+                double cArmor = c.armor;
+                double cHp = c.health;
+                bool canKill = lastHitCalculator.CanLastHit(baseAtk: minAtk, primaryAtr: attr, armor: cArmor, hpLeft: cHp);
+
+                if (canKill && cHp > 0)
+                {
+                    overlay.CreepLowEnough();
+                }
+
+            }
             overlay.AddHeroGraphIcons(teamIDGraph);
             overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
 
             // The health at the start of the game is 0 so the retreat message will show up
             // TODO: logic
-            if (health < 600)
+            if (shouldRetreat)
             {
                 overlay.AddRetreatMessage("Low health warning! " + "Current Health: " + health, "exclamation_mark");
 

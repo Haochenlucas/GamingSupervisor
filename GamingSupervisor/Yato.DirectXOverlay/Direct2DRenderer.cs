@@ -25,6 +25,7 @@ namespace Yato.DirectXOverlay
 
         #region private vars
 
+        private Stopwatch creepTimer = new Stopwatch();
         private int BAR_GRAPH_HEIGHT = Screen.PrimaryScreen.Bounds.Height / 2;
 
         private Direct2DRendererOptions rendererOptions;
@@ -85,7 +86,7 @@ namespace Yato.DirectXOverlay
         private Queue<double> currHp = new Queue<double>(250);
 
         private List<int> heroIds;
-        private Dictionary<int, List<Tuple<String, String, String>>> ticksInfo;
+        private Dictionary<int, Tuple<String, List<Tuple<String, String, String>>>> ticksInfo;
 
         private bool drawHighlight = false;
         private bool drawItemSuggestions = false;
@@ -1656,7 +1657,7 @@ namespace Yato.DirectXOverlay
         #endregion
 
         #region High Light
-        public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, float maxTick)
+        public void UpdateHighlightTime(Dictionary<int, Tuple<String, List<Tuple<String, String, String>>>> ticks, float maxTick)
 
         {
             this.ticksInfo = ticks;
@@ -1689,10 +1690,10 @@ namespace Yato.DirectXOverlay
                 float xCurr = xInit + (xEnd - xInit) * percent;
 
                 List<Tuple<String, Direct2DBrush>> killText = new List<Tuple<String, Direct2DBrush>>();
-                foreach (var k in a.Value)
+                foreach (var k in a.Value.Item2)
                 {
                     if (killText.Count == 0)
-                        killText.Add(new Tuple<string, Direct2DBrush>(TimeSpan.FromSeconds(a.Key).ToString(@"hh\:mm\:ss"), CreateBrush(200, 200, 200)));
+                        killText.Add(new Tuple<string, Direct2DBrush>(a.Value.Item1, CreateBrush(200, 200, 200)));
                     Direct2DBrush brush = null;
                     switch (k.Item3)
                     {
@@ -1859,16 +1860,24 @@ namespace Yato.DirectXOverlay
             return BAR_GRAPH_HEIGHT * currHP / maxHP;
         }
 
+        public void LastHit()
+        {
+        creepTimer = Stopwatch.StartNew();
+        }
         public void ShowItemSuggestions()
         {
+            
             drawItemSuggestions = true;
+        }
+
+        public void LastHitted()
+        {
         }
 
         public void HideItemSuggestions()
         {
             drawItemSuggestions = false;
         }
-
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, IntPtr doNotIgnoreHandle,
             float highlightBarPositionX, float highlightBarPositionY,
             float healthGraphsPositionX, float healthGraphsPositionY,
@@ -1922,8 +1931,22 @@ namespace Yato.DirectXOverlay
                 // Circle out the closet enemy hero
                 DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
 
+
+                if (creepTimer.ElapsedMilliseconds > 7000)
+                {
+                    creepTimer.Reset();
+                }
+                else if (creepTimer.IsRunning)
+                {
+                    Direct2DFont font = CreateFont("Consolas", 12);
+                    Direct2DBrush background = CreateBrush(109, 109, 109, 255);
+                    Direct2DBrush brush = CreateBrush(200, 200, 200);
+                    DrawTextWithBackground("There's a creep to last hit", 100, 100, font, brush, background);
+                }
+
                 // Jungle Stacking
                 DrawJungleStacking();
+
 
                 // Move these two parts down for item suggestion
                 if (drawHighlight)
@@ -1953,7 +1976,7 @@ namespace Yato.DirectXOverlay
                         Boolean redflag = false;
                         Boolean greenflag = false;
 
-                        foreach (var k in a.Value)
+                        foreach (var k in a.Value.Item2)
                         {
                             if (k.Item3 == "R")
                                 redflag = true;
@@ -2062,18 +2085,18 @@ namespace Yato.DirectXOverlay
                         );
 
                     // line graph
-                    for (int j = 0; j < currHp.Count - 1; j++)
-                    {
-                        double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(
-                            start_x: j + healthGraphsDistanceFromDefaultHorizontal,
-                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
-                            end_x: 1 + j + healthGraphsDistanceFromDefaultHorizontal,
-                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
-                            stroke: 1,
-                            brush: redBrush
-                            );
-                    }
+                    //for (int j = 0; j < currHp.Count - 1; j++)
+                    //{
+                    //    double[] tempCurrHp = currHp.ToArray();
+                    //    DrawLine(
+                    //        start_x: j + healthGraphsDistanceFromDefaultHorizontal,
+                    //        start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
+                    //        end_x: 1 + j + healthGraphsDistanceFromDefaultHorizontal,
+                    //        end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
+                    //        stroke: 1,
+                    //        brush: redBrush
+                    //        );
+                    //}
                 }
 
                 EndScene();
