@@ -75,10 +75,7 @@ namespace GamingSupervisor
             overlay = OverlaySingleton.Instance;
             gsi = GameStateIntegrationSingleton.Instance;
 
-            gsi.StartListener();
-
-            if (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
-                overlay.Intructions_setup("Start a game");
+            gsi.StartListener();                
 
             while (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
             {
@@ -102,6 +99,8 @@ namespace GamingSupervisor
                     double positionY = 0;
                     GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
 
+                    overlay.UpdateWindowHandler();
+                    overlay.Intructions_setup("Start a game");
                     overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
                 }
                 else
