@@ -1571,7 +1571,7 @@ namespace Yato.DirectXOverlay
 
             Tuple<int, int, int, int> background = new Tuple<int, int, int, int>(109, 109, 109, 255);
             Tuple<int, int, int, int> color = new Tuple<int, int, int, int>(255, 255, 255, 255);
-            Tuple<string, int> font = new Tuple<string, int>("Consolas", 18);
+            Tuple<string, int> font = new Tuple<string, int>("Century Gothic", 18);
 
 
             AddMessage(hints.hero_introduction, suggestion, "", color, background, font);
@@ -1681,7 +1681,7 @@ namespace Yato.DirectXOverlay
             float xEnd = xInit + highlightBarWidth;// 3 * x / 4;
 
 
-            Direct2DFont font = CreateFont("Consolas", 12);
+            Direct2DFont font = CreateFont("Century Gothic", 12);
             Direct2DBrush background = CreateBrush(109, 109, 109, 255);
 
             foreach (var a in ticksInfo)
@@ -1938,7 +1938,7 @@ namespace Yato.DirectXOverlay
                 }
                 else if (creepTimer.IsRunning)
                 {
-                    Direct2DFont font = CreateFont("Consolas", 12);
+                    Direct2DFont font = CreateFont("Century Gothic", 12);
                     Direct2DBrush background = CreateBrush(109, 109, 109, 255);
                     Direct2DBrush brush = CreateBrush(200, 200, 200);
                     DrawTextWithBackground("There's a creep to last hit", 100, 100, font, brush, background);
@@ -2553,8 +2553,8 @@ namespace Yato.DirectXOverlay
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             float title_left = heroes[0].x - modifier_x * Direct2DRenderer.size_scale;
             float title_top = heroes[0].y - modifier_y * 3 * Direct2DRenderer.size_scale;
-            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
-            Logo = new Tuple<string, string, float, float, float>("GamingSupervisor", "Times New Roman", 20, box_left, box_top);
+            title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
+            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan", 20, box_left, box_top);
         }
     }
     #endregion
@@ -2576,7 +2576,7 @@ namespace Yato.DirectXOverlay
             // Title setup
             float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
             float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
-            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
+            title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
         }
     }
     #endregion
@@ -2598,8 +2598,8 @@ namespace Yato.DirectXOverlay
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             float title_left = _message.x - modifier_x * Direct2DRenderer.size_scale;
             float title_top = _message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
-            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
-            Logo = new Tuple<string, string, float, float, float>("GamingSupervisor", "Times New Roman", 20, box_left, box_top);
+            title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
+            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan", 20, box_left, box_top);
         }
     }
     #endregion
@@ -2663,8 +2663,8 @@ namespace Yato.DirectXOverlay
             // Title setup
             float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
             float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
-            title = new Tuple<string, string, float, float, float>(_title, "Consolas", 32, title_left, title_top);
-            Logo = new Tuple<string, string, float, float, float>("GamingSupervisor", "Times New Roman", 20, box_left, box_top);
+            title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
+            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan", 20, box_left, box_top);
         }
     }
     #endregion
@@ -2704,7 +2704,7 @@ namespace Yato.DirectXOverlay
             background = new Tuple<int, int, int, int>(109, 109, 109, 0);
             color = new Tuple<int, int, int, int>(255, 255, 255, 255);
             int font_size = Math.Max(32 * (int)Direct2DRenderer.size_scale, 16);
-            font = new Tuple<string, int>("Consolas", font_size);
+            font = new Tuple<string, int>("Century Gothic", font_size);
             img_x = x - Direct2DRenderer.size_scale * modifier_x * 3;
             img_y = y;
             img_width = Direct2DRenderer.size_scale * 254 / 2;

@@ -124,7 +124,7 @@ namespace replayParse
                     if (killed == myHero)
                     {
                         int killedID = hero_table[ConvertedHeroName.Get(killed)];
-                        int itemInfo = item_KB[killedID, 0];
+                        int itemInfo = item_KB[killedID, 1];
                         item_ID.Add((int)(Double.Parse(kills[0])), itemInfo);
                     }
                 }

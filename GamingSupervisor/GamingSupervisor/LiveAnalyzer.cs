@@ -59,6 +59,7 @@ namespace GamingSupervisor
         private List<int> teamIDGraph = new List<int>();
         private static item_info i_info = new item_info();
         private string[,] item_Info_Table = i_info.get_Info_Table();
+        private hero_intro hero_Intro = new hero_intro();
 
         private string playerName = null;
 
@@ -212,6 +213,7 @@ namespace GamingSupervisor
                                 healthGraphsBox.Visibility = Visibility.Visible;
                                 itemBox.Visibility = Visibility.Visible;
                             });
+
                         }
                         
                         SendCommandsToDota();
@@ -323,9 +325,35 @@ namespace GamingSupervisor
         }
 
         private long timeSinceItemSuggestion_ms = 0;
+        private long timeSinceheroInfo_ms = 0;
         private int itemflag = 0;
+        private int heroInfoflag = 0;
         private void HandleGamePlay()
         {
+            long item_now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            if (heroInfoflag == 0)
+            {
+                heroInfoflag = 1;
+                timeSinceheroInfo_ms = item_now_ms;
+            }
+            if (item_now_ms - timeSinceheroInfo_ms <= 20000 && heroInfoflag == 1)
+            {
+                Dictionary<int, string> hero_Intro_Dic = hero_Intro.getHeroIntro();
+                string name = gsi.Name.Replace("hero_","*");
+                string[] namestr = name.Split('*');
+                name = string.Join("", namestr[namestr.Length-1].Split(new string[] { "_" }, StringSplitOptions.None));
+                name = ConvertedHeroName.Get(name);
+                string hero_Intro_String = hero_Intro_Dic[hero_table[name]];
+                overlay.AddHeroInfoMessage(hero_Intro_String, "");
+            }
+            else
+            {
+                overlay.ClearHeroInfo();
+            }
+            
+
+
+
             // placeholders
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
             double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
@@ -334,6 +362,7 @@ namespace GamingSupervisor
 
             overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
+            
 
             if (true)//healthPercent < 25)
             {
@@ -347,7 +376,7 @@ namespace GamingSupervisor
             // For suggestion for tango and Healing_Salve.
             if (gsi.Health < (gsi.MaxHealth - 130) && gsi.Health != 0)
             {
-                if (gsi.Health < (gsi.MaxHealth - 430) && gsi.Health != 0 && gsi.Items.Contains("Healing_Salve"))
+                if (gsi.Health < (gsi.MaxHealth - 430) && gsi.Health != 0 && gsi.Items.Contains("item_flask"))
                 {
                     long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     if (itemflag == 0)
@@ -355,7 +384,7 @@ namespace GamingSupervisor
                         itemflag = 1;
                         timeSinceItemSuggestion_ms = now_ms;
                     }
-                    if (now_ms - timeSinceItemSuggestion_ms <= 5000)
+                    if (now_ms - timeSinceItemSuggestion_ms <= 10000)
                     {
                         string item_name = item_Info_Table[8 + 2, 2];
                         string item_tip = item_Info_Table[8 + 2, 117];
@@ -381,7 +410,7 @@ namespace GamingSupervisor
                         overlay.ClearItemSuggestion();
                     }
                 }
-                else if (gsi.Items.Contains("Tango"))
+                else if (gsi.Items.Contains("item_tango"))
                 {
                     long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     if (itemflag == 0)
@@ -389,7 +418,7 @@ namespace GamingSupervisor
                         itemflag = 1;
                         timeSinceItemSuggestion_ms = now_ms;
                     }
-                    if (now_ms - timeSinceItemSuggestion_ms <= 5000)
+                    if (now_ms - timeSinceItemSuggestion_ms <= 10000)
                     {
                         string item_name = item_Info_Table[9 + 2, 2];
                         string item_tip = item_Info_Table[9 + 2, 117];
@@ -416,7 +445,7 @@ namespace GamingSupervisor
                     }
                 }
             }
-            else if (gsi.Health == 0)
+            if (gsi.Health == 0)
             {
                 itemflag = 0;
                 overlay.ClearItemSuggestion();

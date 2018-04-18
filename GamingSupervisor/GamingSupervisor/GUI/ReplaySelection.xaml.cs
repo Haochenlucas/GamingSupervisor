@@ -91,7 +91,7 @@ namespace GamingSupervisor
                             winner = "Dire";
                             break;
                         case Dota2Api.Enums.Faction.Radiant:
-                            winner = "Radient";
+                            winner = "Radiant";
                             break;
                     }
 
