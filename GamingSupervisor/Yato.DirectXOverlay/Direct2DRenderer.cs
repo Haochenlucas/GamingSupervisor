@@ -89,6 +89,7 @@ namespace Yato.DirectXOverlay
         private Dictionary<int, List<Tuple<String, String, String>>> ticksInfo;
 
         private bool drawHighlight = false;
+        private bool drawItemSuggestions = false;
         
         
         private float width_unit = Screen.PrimaryScreen.Bounds.Width / 32;
@@ -318,12 +319,13 @@ namespace Yato.DirectXOverlay
             long tag_0 = 0L, tag_1 = 0L;
             
             Result result;
+            // shadow object cast exception
             try
             {
                 result = device.TryEndDraw(out tag_0, out tag_1);
             }
             catch (System.ArgumentOutOfRangeException e) { return; }
-            catch (System.InvalidCastException e) { return; }
+            //catch (System.InvalidCastException e) { return; }
 
             if (result.Failure)
             {
@@ -1545,7 +1547,7 @@ namespace Yato.DirectXOverlay
 
         public void HeroInfoHints(string info, string img)
         {
-            string temp = BreakText(info, 50);
+            string temp = BreakText(info, 42);
             AddMessage(hints.heroinformation, temp, img);
             HeroInfo = new HeroInfo(messages[(int)hints.heroinformation], "Tutorial");
         }
@@ -1664,7 +1666,7 @@ namespace Yato.DirectXOverlay
             this.drawHighlight = drawHighlight;
         }
         
-        private void CheckToShowHighlightTime()
+        private void CheckToShowHighlightTime(float highlightBarDistanceFromDefaultHorizontal, float hightlightBarDistanceFromDefaultVertical, float highlightBarWidth)
         {
             var mousePosition = Control.MousePosition;
             var mX = mousePosition.X;
@@ -1673,7 +1675,7 @@ namespace Yato.DirectXOverlay
             int x = Screen.PrimaryScreen.Bounds.Width;
             int y = Screen.PrimaryScreen.Bounds.Height;
             float xInit = x / 4;
-            float xEnd = 3 * x / 4;
+            float xEnd = xInit + highlightBarWidth;// 3 * x / 4;
 
 
             Direct2DFont font = CreateFont("Consolas", 12);
@@ -1715,8 +1717,8 @@ namespace Yato.DirectXOverlay
                 if (mX > xCurr - 2 && mX < xCurr + 2 && mY > (3 * y / 4) - 14 && mY < (3 * y / 4) + 10)
                     DrawTextWithBackground(
                         text: killText, 
-                        x: xCurr, 
-                        y: 3 * y / 4 - x / 80, 
+                        x: xCurr + highlightBarDistanceFromDefaultHorizontal, 
+                        y: 3 * y / 4 - x / 80 + hightlightBarDistanceFromDefaultVertical, 
                         font: font, 
                         backgroundBrush: background);
             }
@@ -1725,19 +1727,31 @@ namespace Yato.DirectXOverlay
 
         #region Ban&Pick feedback
         // one of the five suggested heroes get banned by the other team
-        public void SuggestedHeroBanned(int heroIndex)
+        public void SuggestedHeroBanned(int heroIndex, float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
             Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\red_cross.png");
 
-            DrawBitmap(cross, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
+            DrawBitmap(
+                bmp: cross,
+                opacity: 1,
+                x: messages[heroIndex].img_x + distanceFromDefaultHorizontal,
+                y: messages[heroIndex].img_y + distanceFromDefaultVertical,
+                width: messages[heroIndex].img_width,
+                height: messages[heroIndex].img_height);
             cross.SharpDXBitmap.Dispose();
         }
 
         // one of the five suggested heroes get picked by our team
-        public void SuggestedHeroPicked(int heroIndex)
+        public void SuggestedHeroPicked(int heroIndex, float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
             Direct2DBitmap check = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
-            DrawBitmap(check, 1, messages[heroIndex].img_x, messages[heroIndex].img_y, messages[heroIndex].img_width, messages[heroIndex].img_height);
+            DrawBitmap(
+                bmp: check,
+                opacity: 1,
+                x: messages[heroIndex].img_x + distanceFromDefaultHorizontal,
+                y: messages[heroIndex].img_y + distanceFromDefaultVertical,
+                width: messages[heroIndex].img_width,
+                height: messages[heroIndex].img_height);
             check.SharpDXBitmap.Dispose();
         }
         #endregion
@@ -1833,6 +1847,8 @@ namespace Yato.DirectXOverlay
             int avgG = (int)totals[1] / (w * h);
             int avgR = (int)totals[2] / (w * h);
 
+            bmp.UnlockBits(scrData);
+
             return new Tuple<int, int, int>(avgR, avgG, avgB); ;
         }
 
@@ -1841,6 +1857,15 @@ namespace Yato.DirectXOverlay
             return BAR_GRAPH_HEIGHT * currHP / maxHP;
         }
 
+        public void ShowItemSuggestions()
+        {
+            drawItemSuggestions = true;
+        }
+
+        public void HideItemSuggestions()
+        {
+            drawItemSuggestions = false;
+        }
         public void LastHit()
         {
             creepTimer = Stopwatch.StartNew();
@@ -1848,16 +1873,19 @@ namespace Yato.DirectXOverlay
 
         public void LastHitted()
         {
-
         }
 
-
-
-        public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
+        public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, IntPtr doNotIgnoreHandle,
+            float highlightBarPositionX, float highlightBarPositionY,
+            float healthGraphsPositionX, float healthGraphsPositionY,
+            float itemPositionX, float itemPositionY,
+            float highlightBarWidth)
         {
             IntPtr fg = GetForegroundWindow();
 
-            if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
+            if (fg == parentWindowHandle ||
+                (GetDesktopWindow() == parentWindowHandle) ||
+                fg == doNotIgnoreHandle)
             {
                 BeginScene();
                 ClearScene();
@@ -1889,7 +1917,10 @@ namespace Yato.DirectXOverlay
                 */
 
                 // Hero information
-                DrawItemSelection();
+                if (drawItemSuggestions)
+                {
+                    DrawItemSelection(itemPositionX, itemPositionY);
+                }
 
                 // Hero information
                 DrawHeroInformation();
@@ -1913,15 +1944,18 @@ namespace Yato.DirectXOverlay
                 if (drawHighlight)
                 {
                     float xInit = screen_width / 4;
-                    float xEnd = 3 * screen_width / 4;
+                    float xEnd = xInit + highlightBarWidth;// 3 * screen_width / 4;
                     float yInput = 3 * screen_height / 4;
                     Direct2DBrush gray = CreateBrush(109, 109, 109, 255);
 
+                    float highlightBarDistanceFromDefaultHorizontal = highlightBarPositionX - xInit;
+                    float hightlightBarDistanceFromDefaultVertical = highlightBarPositionY - yInput;
+
                     BorderedLine(
-                        start_x: xInit,
-                        start_y: yInput,
-                        end_x: xEnd,
-                        end_y: yInput,
+                        start_x: xInit + highlightBarDistanceFromDefaultHorizontal,
+                        start_y: yInput + hightlightBarDistanceFromDefaultVertical,
+                        end_x: xEnd + highlightBarDistanceFromDefaultHorizontal,
+                        end_y: yInput + hightlightBarDistanceFromDefaultVertical,
                         stroke: 5,
                         brush: gray,
                         borderBrush: gray
@@ -1945,8 +1979,8 @@ namespace Yato.DirectXOverlay
                         Direct2DBrush DarkGreenBrush = CreateBrush(0, 155, 0);
 
                         DrawBox2D(
-                            x: xCurr,
-                            y: (3 * screen_height / 4) - 4,
+                            x: xCurr + highlightBarDistanceFromDefaultHorizontal,
+                            y: (3 * screen_height / 4) - 4 + hightlightBarDistanceFromDefaultVertical,
                             width: 8,
                             height: 4,
                             stroke: 0,
@@ -1956,8 +1990,8 @@ namespace Yato.DirectXOverlay
 
 
                         DrawBox2D(
-                            x: xCurr,
-                            y: (3 * screen_height / 4),
+                            x: xCurr + highlightBarDistanceFromDefaultHorizontal,
+                            y: (3 * screen_height / 4) + hightlightBarDistanceFromDefaultVertical,
                             width: 8,
                             height: 4,
                             stroke: 0,
@@ -1965,12 +1999,15 @@ namespace Yato.DirectXOverlay
                             brush: redflag ? redBrush : blackBrush);
                     }
 
-                    CheckToShowHighlightTime();
+                    CheckToShowHighlightTime(highlightBarDistanceFromDefaultHorizontal, hightlightBarDistanceFromDefaultVertical, highlightBarWidth);
                 }
                 
                 if (drawGraphs)
                 {
                     float currY = screen_height / 2;
+
+                    float healthGraphsDistanceFromDefaultHorizontal = healthGraphsPositionX - 0;
+                    float healthGraphsDistanceFromDefaultVertical = healthGraphsPositionY - currY;
 
                     // bar graph
                     for (int i = 0; i < 5; i++)
@@ -1981,12 +2018,14 @@ namespace Yato.DirectXOverlay
                             System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"hero_icon_images\" + heroIds[i] + ".png");
 
                             Tuple<int, int, int> rgb = AveragePixelColor(csb);
+                            csb.Dispose();
+
                             Direct2DBrush color = CreateBrush(rgb.Item1, rgb.Item2, rgb.Item3);
                             double barHeight = CalculateBarGraphHeight(maxHps[i], hps[i]);
 
                             DrawBox2D(
-                                x: 51 * i,                                               
-                                y: 50 + (currY - (float)barHeight) * .3f + currY / 2,     
+                                x: 51 * i + healthGraphsDistanceFromDefaultHorizontal,                                               
+                                y: (currY - (float)barHeight) * .3f + currY / 2 + healthGraphsDistanceFromDefaultVertical,     
                                 width: 50,                                               
                                 height: (float)barHeight * .3f,                             
                                 stroke: 1,                                               
@@ -1995,8 +2034,8 @@ namespace Yato.DirectXOverlay
                                 );
 
                             DrawBox2D(
-                                x: 51 * i,
-                                y: 50 + (currY - BAR_GRAPH_HEIGHT) * .3f + currY / 2,
+                                x: 51 * i + healthGraphsDistanceFromDefaultHorizontal,
+                                y: (currY - BAR_GRAPH_HEIGHT) * .3f + currY / 2 + healthGraphsDistanceFromDefaultVertical,
                                 width: 50,
                                 height: BAR_GRAPH_HEIGHT * .3f,
                                 stroke: 1,
@@ -2007,33 +2046,32 @@ namespace Yato.DirectXOverlay
                             DrawBitmap(
                                 bmp: bmp,
                                 opacity: 1,
-                                x: 51 * i,
-                                y: 50 + currY - 108,
+                                x: 51 * i + healthGraphsDistanceFromDefaultHorizontal,
+                                y: currY - 108 + healthGraphsDistanceFromDefaultVertical,
                                 width: 50,
                                 height: 28
                                 );
 
                             bmp.SharpDXBitmap.Dispose();
-                            csb.Dispose();
                         }
                     }
 
                     // vertical line
                     DrawLine(
-                        start_x: 250,           
-                        start_y: currY - 100 + 28,
-                        end_x: 250,               
-                        end_y: currY + 150 + 28,  
+                        start_x: 250 + healthGraphsDistanceFromDefaultHorizontal,           
+                        start_y: currY - 100 + 28 + healthGraphsDistanceFromDefaultVertical,
+                        end_x: 250 + healthGraphsDistanceFromDefaultHorizontal,               
+                        end_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,  
                         stroke: 2,                
                         brush: redBrush
                         );              
 
                     // horizontal line
                     DrawLine(
-                        start_x: 0,             
-                        start_y: currY + 150 + 28,
-                        end_x: 250,               
-                        end_y: currY + 150 + 28,  
+                        start_x: 0 + healthGraphsDistanceFromDefaultHorizontal,             
+                        start_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,
+                        end_x: 250 + healthGraphsDistanceFromDefaultHorizontal,               
+                        end_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,  
                         stroke: 2,                
                         brush: redBrush
                         );                   
@@ -2043,10 +2081,10 @@ namespace Yato.DirectXOverlay
                     {
                         double[] tempCurrHp = currHp.ToArray();
                         DrawLine(
-                            start_x: j,
-                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28,
-                            end_x: 1 + j,
-                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28,
+                            start_x: j + healthGraphsDistanceFromDefaultHorizontal,
+                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
+                            end_x: 1 + j + healthGraphsDistanceFromDefaultHorizontal,
+                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
                             stroke: 1,
                             brush: redBrush
                             );
@@ -2061,27 +2099,34 @@ namespace Yato.DirectXOverlay
             }
         }
 
-        private void DrawItemSelection()
+        private void DrawItemSelection(float itemPositionX, float itemPositionY)
         {
             if (messages[(int)hints.items_selection].on)
             {
+                float itemDistanceFromDefaultHorizontal = itemPositionX - ItemSugg.box_pos.Item1;
+                float itemDistanceFromDefaultVertical = itemPositionY - ItemSugg.box_pos.Item2;
+
                 // Draw ItemSugg box
-                Direct2DBrush box_background = CreateBrush(r: ItemSugg.box_background.Item1, g: ItemSugg.box_background.Item2, b: ItemSugg.box_background.Item3, a: ItemSugg.box_background.Item4);
+                Direct2DBrush box_background = CreateBrush(
+                    r: ItemSugg.box_background.Item1,
+                    g: ItemSugg.box_background.Item2,
+                    b: ItemSugg.box_background.Item3,
+                    a: ItemSugg.box_background.Item4);
                 // The box
                 device.FillRectangle(
                     new RawRectangleF(
-                        left: ItemSugg.box_pos.Item1,
-                        top: ItemSugg.box_pos.Item2,
-                        right: ItemSugg.box_pos.Item3,
-                        bottom: ItemSugg.box_pos.Item4),
+                        left: ItemSugg.box_pos.Item1 + itemDistanceFromDefaultHorizontal,
+                        top: ItemSugg.box_pos.Item2 + itemDistanceFromDefaultHorizontal,
+                        right: ItemSugg.box_pos.Item3 + itemDistanceFromDefaultVertical,
+                        bottom: ItemSugg.box_pos.Item4 + itemDistanceFromDefaultVertical),
                     box_background);
 
                 // Title of the box
                 Tuple<string, int> textFont = new Tuple<string, int>(ItemSugg.title.Item2, (int)ItemSugg.title.Item3);
                 DrawTextWithBackground(
                     text: ItemSugg.title.Item1,
-                    x: ItemSugg.title.Item4,
-                    y: ItemSugg.title.Item5,
+                    x: ItemSugg.title.Item4 + itemDistanceFromDefaultHorizontal,
+                    y: ItemSugg.title.Item5 + itemDistanceFromDefaultVertical,
                     tfont: textFont,
                     tcolor: ItemSugg.tColor,
                     tbackground: ItemSugg.tBackColor);
@@ -2090,21 +2135,21 @@ namespace Yato.DirectXOverlay
                 float modifier;
                 DrawTextWithBackground(
                     text: ItemSugg.message.text,
-                    x: ItemSugg.message.x,
-                    y: ItemSugg.message.y,
+                    x: ItemSugg.message.x + itemDistanceFromDefaultHorizontal,
+                    y: ItemSugg.message.y + itemDistanceFromDefaultVertical,
                     tfont: ItemSugg.message.font,
                     tcolor: ItemSugg.message.color,
                     tbackground: ItemSugg.message.background,
                     modifier: out modifier);
 
                 // Draw LOGO
-                DrawLogo(ItemSugg, 0, 0);
+                DrawLogo(ItemSugg, itemDistanceFromDefaultHorizontal, itemDistanceFromDefaultVertical);
                 // Draw image
                 if (messages[(int)hints.items_selection].imgName != "")
                 {
                     string path = SelectFolder((int)hints.items_selection);
                     if (path == "") { throw new Exception("path not initialized"); }
-                    ShowImage(path, (int)hints.items_selection, modifier);
+                    ShowImage(path, (int)hints.items_selection, modifier, itemDistanceFromDefaultHorizontal, itemDistanceFromDefaultVertical);
                 }
             }
         }
@@ -2165,7 +2210,7 @@ namespace Yato.DirectXOverlay
             closestHero_Y = y;
         }
 
-        private void ShowImage(string path, int i, float modifier)
+        private void ShowImage(string path, int i, float modifier, float distanceFromDefaultHorizontal = 0, float distanceFromDefaultVertical = 0)
         {
             if (i == 7 && warning_timer.ElapsedMilliseconds > 1000)
             {
@@ -2174,13 +2219,25 @@ namespace Yato.DirectXOverlay
                     warning_timer.Reset();
                 }
                 Direct2DBitmap bmp = new Direct2DBitmap(device, path + messages[i].imgName + ".png");
-                DrawBitmap(bmp, 0.2f, messages[i].img_x, messages[i].img_y - modifier, messages[i].img_width, messages[i].img_height);
+                DrawBitmap(
+                    bmp: bmp,
+                    opacity: 0.2f,
+                    x: messages[i].img_x + distanceFromDefaultHorizontal,
+                    y: messages[i].img_y - modifier + distanceFromDefaultVertical,
+                    width: messages[i].img_width,
+                    height: messages[i].img_height);
                 bmp.SharpDXBitmap.Dispose();
             }
             else
             {
                 Direct2DBitmap bmp = new Direct2DBitmap(device, path + messages[i].imgName + ".png");
-                DrawBitmap(bmp, 1, messages[i].img_x, messages[i].img_y - modifier, messages[i].img_width, messages[i].img_height);
+                DrawBitmap(
+                    bmp: bmp,
+                    opacity: 1,
+                    x: messages[i].img_x + distanceFromDefaultHorizontal,
+                    y: messages[i].img_y - modifier + distanceFromDefaultVertical,
+                    width: messages[i].img_width,
+                    height: messages[i].img_height);
                 bmp.SharpDXBitmap.Dispose();
             }
         }
@@ -2196,17 +2253,17 @@ namespace Yato.DirectXOverlay
             ban_and_pick = code;
         }
 
-        private void CheckBanPick()
+        private void CheckBanPick(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
             if (ban_and_pick != 0)
             {
                 if (ban_and_pick > 0 && ban_and_pick <= 5)
                 {
-                    SuggestedHeroPicked(ban_and_pick - 1);
+                    SuggestedHeroPicked(ban_and_pick - 1, distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                 }
                 else if (ban_and_pick < 0 && ban_and_pick >= -5)
                 {
-                    SuggestedHeroBanned(-ban_and_pick - 1);
+                    SuggestedHeroBanned(-ban_and_pick - 1, distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                 }
                 else
                 {
@@ -2232,15 +2289,20 @@ namespace Yato.DirectXOverlay
                 }
             }
         }
-        
-        public void HeroSelection_Draw(IntPtr parentWindowHandle, OverlayWindow overlay)
+
+        public void HeroSelection_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, float positionX, float positionY, IntPtr doNotIgnoreHandle)
         {
             IntPtr fg = GetForegroundWindow();
 
-            if (fg == parentWindowHandle || (GetDesktopWindow() == parentWindowHandle))
+            if (fg == parentWindowHandle ||
+                (GetDesktopWindow() == parentWindowHandle) ||
+                fg == doNotIgnoreHandle)
             {
                 BeginScene();
                 ClearScene();
+
+                float distanceFromDefaultHorizontal = positionX - HeroSugg.box_pos.Item1;
+                float distanceFromDefaultVertical = positionY - HeroSugg.box_pos.Item2;
 
                 // Draw hero selection suggestion box
                 Direct2DBrush color = CreateBrush(messages[0].color.Item1, messages[0].color.Item2, messages[0].color.Item3, messages[0].color.Item4);
@@ -2248,9 +2310,21 @@ namespace Yato.DirectXOverlay
                 Direct2DFont textFont = CreateFont(messages[0].font.Item1, messages[0].font.Item2);
                 Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
                 // The box
-                device.FillRectangle(new RawRectangleF(HeroSugg.box_pos.Item1, HeroSugg.box_pos.Item2, HeroSugg.box_pos.Item3, HeroSugg.box_pos.Item4), box_background);
+                device.FillRectangle(
+                    new RawRectangleF(
+                        left: HeroSugg.box_pos.Item1 + distanceFromDefaultHorizontal,
+                        top: HeroSugg.box_pos.Item2 + distanceFromDefaultVertical,
+                        right: HeroSugg.box_pos.Item3 + distanceFromDefaultHorizontal,
+                        bottom: HeroSugg.box_pos.Item4 + distanceFromDefaultVertical),
+                    box_background);
                 // Title of the box
-                DrawTextWithBackground(HeroSugg.title.Item1, HeroSugg.title.Item4, HeroSugg.title.Item5, textFont, color, background);
+                DrawTextWithBackground(
+                    text: HeroSugg.title.Item1,
+                    x: HeroSugg.title.Item4 + distanceFromDefaultHorizontal,
+                    y: HeroSugg.title.Item5 + distanceFromDefaultVertical,
+                    font: textFont,
+                    brush: color,
+                    backgroundBrush: background);
 
                 // Loop through all 5 the suggestions and hero intro
                 for (int i = 0; i < 6; i++)
@@ -2258,18 +2332,31 @@ namespace Yato.DirectXOverlay
                     if (messages[i].on)
                     {
                         float modifier;
-                        DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background, out modifier);
+                        DrawTextWithBackground(
+                            text: messages[i].text,
+                            x: messages[i].x + distanceFromDefaultHorizontal,
+                            y: messages[i].y + distanceFromDefaultVertical,
+                            tfont: messages[i].font,
+                            tcolor: messages[i].color,
+                            tbackground: messages[i].background,
+                            modifier: out modifier);
                         if (messages[i].imgName != "")
                         {
                             Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
-                            DrawBitmap(bmp, 1, messages[i].img_x, messages[i].img_y - modifier, messages[i].img_width, messages[i].img_height);
+                            DrawBitmap(
+                                bmp: bmp,
+                                opacity: 1,
+                                x: messages[i].img_x + distanceFromDefaultHorizontal,
+                                y: messages[i].img_y - modifier + distanceFromDefaultVertical,
+                                width: messages[i].img_width,
+                                height: messages[i].img_height);
 
                             bmp.SharpDXBitmap.Dispose();
                         }
                     }
                     // Green Check or Red X
-                    CheckBanPick();
-                    DrawLogo(HeroSugg,0,0);
+                    CheckBanPick(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
+                    DrawLogo(HeroSugg, distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                 }
                 CheckToShowHeroSuggestion();
                 EndScene();
@@ -2292,6 +2379,13 @@ namespace Yato.DirectXOverlay
         }
 
         static private Stopwatch button_timer = new Stopwatch();
+
+        public void HideInitialInstructions()
+        {
+            instruction.show = false;
+            button_timer.Stop();
+        }
+
         public void Intructions_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, float positionX, float positionY, IntPtr doNotIgnoreHandle)
         {
             IntPtr fg = GetForegroundWindow();
@@ -2442,7 +2536,7 @@ namespace Yato.DirectXOverlay
             float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
             float box_top = message.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
             float box_right = box_left + modifier_x * 14 * Direct2DRenderer.size_scale;
-            float box_bottem = box_top + modifier_y * 22 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 24 * Direct2DRenderer.size_scale;
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             // Title setup
             float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;

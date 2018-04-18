@@ -12,17 +12,20 @@ namespace GamingSupervisor
     {
         static void Main()
         {
+
+            //itemConvert ic = new itemConvert();
             //string path = @"C:\Users\yuchengy\Source\Repos\GamingSupervisor\GamingSupervisor\GamingSupervisor\Parser\";
             //replay_version01 r = new replay_version01(path);
             //Dictionary<string, int> h = r.getHerosLowercase();
             //double[,,] info = r.getReplayInfo();
-            heroID h_ID = new heroID();
-            Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
-            Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
+            //heroID h_ID = new heroID();
+            //Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
+            //Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
             //hero_intro h_Intro = new hero_intro();
-            //item_info i_info = new item_info();
-
-            //string[] heroName = h_ID.getHeroName();
+            //Dictionary<string, int> h_Intro_dic = h_Intro.getIntroHero();
+            //heroAttribute hA = new heroAttribute();
+            item_info i_info = new item_info();
+            
             //foreach (KeyValuePair<int, string> kvp in ID_table)
             //{
             //    Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);

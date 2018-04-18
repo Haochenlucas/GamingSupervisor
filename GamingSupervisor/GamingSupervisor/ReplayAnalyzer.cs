@@ -17,6 +17,7 @@ namespace GamingSupervisor
         private List<int> teamIDGraph = new List<int>();
         private ReplayTick replayTick;
         private ReplayHighlights replayHighlights;
+        private int closestGaming = 0;
         private LastHitCalculator lastHitCalculator;
         private Retreat retreat;
 
@@ -29,14 +30,25 @@ namespace GamingSupervisor
         // the object for the selection analyzer.
         private static counter_pick_logic cp = new counter_pick_logic(GUISelection.replayDataFolderLocation);
         private static heroID h_ID = new heroID();
+
         private int[,] table = cp.selectTable();
         private Dictionary<string, int> hero_table = h_ID.getIDHero();
         private Dictionary<string, int> lower_hero_table = h_ID.getIDfromLowercaseHeroname();
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
+        private hero_intro hero_Intro = new hero_intro();
         private int[] enemiesHeroID;
+
+        private static item_info i_info = new item_info();
+        private string[,] item_Info_Table = i_info.get_Info_Table();
+        private Dictionary<int, int> i_suggestion = i_info.item_suggestion(0, GUISelection.replayDataFolderLocation, GUISelection.heroName);
 
         private float screen_width = Screen.PrimaryScreen.Bounds.Width;
         private float screen_height = Screen.PrimaryScreen.Bounds.Height;
+        private int itemflag = 0;
+        private int item_Time_Mark = 0;
+        private int team_side;
+        private int[,] suggestiontable;
+        private int[,] table_checkmark;
 
         private int CurrentTick
         {
@@ -45,6 +57,7 @@ namespace GamingSupervisor
         }
 
         private readonly int heroID;
+        private bool ranHeroSelectionAtLeastOnce = false; // Hero selection has code other parts depend on
 
 
         public ReplayAnalyzer() : base()
@@ -60,6 +73,18 @@ namespace GamingSupervisor
             retreat = new Retreat();
 
             heroID = heroIDData.getHeroID(GUISelection.heroName);
+            string heroname = GUISelection.heroName;
+
+            team_side = 0;
+            for (int i = 0; i < table.Length / 4; i++)
+            {
+                if (table[i, 0] == hero_table[heroname])
+                {
+                    team_side = table[i, 2];
+                }
+            }
+            suggestiontable = cp.suggestionTable_1(team_side, 3);
+            table_checkmark = cp.checkMark();
         }
 
         public override void Start()
@@ -75,6 +100,7 @@ namespace GamingSupervisor
             string instru_OpenReplay = "1: Click Watch on the top.\n2: Click Downloads\n3: Click Watch to start\n   the replay "
                 + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName);
             overlay.Intructions_setup(instru_OpenReplay);
+
             while (!announcer.isReplayStarted())
             {
                 if (!IsDotaRunning())
@@ -90,19 +116,29 @@ namespace GamingSupervisor
                     return;
                 }
 
-                double positionX = 0;
-                double positionY = 0;
+                bool isInitialInstructionsBoxVisible = true;
                 System.Windows.Application.Current.Dispatcher.Invoke(
                     () =>
                     {
-                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
-                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
+                        isInitialInstructionsBoxVisible = initialInstructionsBox.IsOverlayVisible;
                     });
-                // draw instruction to watch the replay in dota2 client
-                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
 
-                Thread.Sleep(10);
+                if (isInitialInstructionsBoxVisible)
+                {
+                    double positionX = 0;
+                    double positionY = 0;
+                    GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
+                    // draw instruction to watch the replay in dota2 client
+                    overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+                }
+                else
+                {
+                    overlay.Clear();
+                }
             }
+
+            overlay.Clear();
+
             tickTimer.Start();
 
             int lastGameTime = announcer.GetCurrentGameTime();
@@ -115,6 +151,7 @@ namespace GamingSupervisor
             lastTickWhenGameTimeChanged = CurrentTick;
 
             Console.WriteLine("Currently analyzing...");
+            string lastGameState = "";
             while (keepLooping)
             {
                 if (!IsDotaRunning())
@@ -130,12 +167,24 @@ namespace GamingSupervisor
                     return;
                 }
 
-                Console.WriteLine(announcer.GetCurrentGameState());
                 switch (announcer.GetCurrentGameState())
                 {
                     case null:
                     case "":
                     case "Undefined":
+                        if (lastGameState != "Undefined")
+                        {
+                            lastGameState = "Undefined";
+                            System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Hidden;
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
+                                itemBox.Visibility = Visibility.Hidden;
+                            });
+                        }
                         if (replayStarted)
                         {
                             tickTimer.Stop();
@@ -143,18 +192,114 @@ namespace GamingSupervisor
                         }
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
-                        replayStarted = true;
+                        if (lastGameState != "DOTA_GAMERULES_STATE_HERO_SELECTION")
+                        {
+                            lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
+                            System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Visible;
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
+                                itemBox.Visibility = Visibility.Hidden;
+                            });
+
+                            replayStarted = true;
+                        }
+
+                        bool isHeroSelectionBoxVisible = true;
+                        System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                isHeroSelectionBoxVisible = heroSelectionBox.IsOverlayVisible;
+                            });
+
                         HandleHeroSelection();
-                        ShowDraftHints();
+
+                        if (isHeroSelectionBoxVisible)
+                        {
+                            ShowHeroSelectionSuggestions();
+                        }
+                        else
+                        {
+                            overlay.Clear();
+                        }
+
+                        if (!ranHeroSelectionAtLeastOnce)
+                            ranHeroSelectionAtLeastOnce = true;
+
+                        break;
+                    case "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD":
+                        if (lastGameState != "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD")
+                        {
+                            if (!ranHeroSelectionAtLeastOnce)
+                            {
+                                ranHeroSelectionAtLeastOnce = true;
+                                HandleHeroSelection();
+                                overlay.ClearHeroSuggestion();
+                            }
+
+                            lastGameState = "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD";
+                            overlay.Clear();
+                            replayStarted = true;
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_PRE_GAME":
                     case "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS":
+                        if (lastGameState != "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS")
+                        {
+                            if (!ranHeroSelectionAtLeastOnce)
+                            {
+                                ranHeroSelectionAtLeastOnce = true;
+                                HandleHeroSelection();
+                            }
+                            lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
+
+                            overlay.ClearHeroSuggestion();
+
+                            System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Hidden;
+                                highlightBarBox.Visibility = Visibility.Visible;
+                                healthGraphsBox.Visibility = Visibility.Visible;
+                                itemBox.Visibility = Visibility.Visible;
+                            });
+                            replayStarted = true;
+                        }
+
+                        bool isHighlightBarBoxVisible = true;
+                        bool isHealthGraphsBoxVisible = true;
+                        bool isItemSuggestionsBoxVisible = true;
+                        System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                isHighlightBarBoxVisible = highlightBarBox.IsOverlayVisible;
+                                isHealthGraphsBoxVisible = healthGraphsBox.IsOverlayVisible;
+                                isItemSuggestionsBoxVisible = itemBox.IsOverlayVisible;
+                            });
+
                         SetEnemiesHeroIDs();
-                        replayStarted = true;
-                        overlay.ClearHeroSuggestion();
+
+                        if (isHighlightBarBoxVisible)
+                            HandleHighlight();
+                        else
+                            overlay.ToggleHighlight(false);
+
+                        if (isHealthGraphsBoxVisible)
+                            overlay.ShowHealthGraphs();
+                        else
+                            overlay.HideHealthGraphs();
+
+                        if (isItemSuggestionsBoxVisible)
+                            overlay.ShowItemSuggestions();
+                        else
+                            overlay.HideItemSuggestions();
+
                         HandleGamePlay();
-                        HandleHighlight();
-                        ShowIngameHints();
+                        UpdateInGameOverlay();
                         break;
                     default:
                         replayStarted = true;
@@ -166,7 +311,7 @@ namespace GamingSupervisor
                     break;
                 }
 
-                Thread.Sleep(10);
+                //Thread.Sleep(10);
 
                 currentGameTime = announcer.GetCurrentGameTime();
                 if (currentGameTime < 1)
@@ -197,7 +342,7 @@ namespace GamingSupervisor
             }
 
             overlay.Clear();
-
+            System.Windows.Application.Current.Dispatcher.Invoke(() => { visualCustomize.CloseWindow(); });
             Console.WriteLine("Replay stopped!");
         }
 
@@ -225,14 +370,36 @@ namespace GamingSupervisor
             enemiesHeroID = cp.GetEnemiesHeroID(enemyTeam);
         }
 
-        private void ShowIngameHints()
-        {
-            overlay.ShowIngameMessage();
+        private void UpdateInGameOverlay()
+        { 
+            double highlightBarPositionX = 0;
+            double highlightBarPositionY = 0;
+            GetBoxPosition(highlightBarBox, out highlightBarPositionX, out highlightBarPositionY);
+            double highlightBarWidth = 0;
+            GetBoxWidth(highlightBarBox, out highlightBarWidth);
+
+            double healthGraphPositionX = 0;
+            double healthGraphPositionY = 0;
+            GetBoxPosition(healthGraphsBox, out healthGraphPositionX, out healthGraphPositionY);
+
+            double itemPositionX = 0;
+            double itemPositionY = 0;
+            GetBoxPosition(itemBox, out itemPositionX, out itemPositionY);
+
+            overlay.ShowInGameOverlay(visualCustomizeHandle,
+                highlightBarPositionX, highlightBarPositionY,
+                healthGraphPositionX, healthGraphPositionY,
+                itemPositionX, itemPositionY,
+                highlightBarWidth);
         }
         
-        private void ShowDraftHints()
+        private void ShowHeroSelectionSuggestions()
         {
-            overlay.ShowDraftMessage();
+            double positionX = 0;
+            double positionY = 0;
+            GetBoxPosition(heroSelectionBox, out positionX, out positionY);
+            
+            overlay.ShowDraftMessage(positionX, positionY, visualCustomizeHandle);
         }
 
         /*
@@ -240,18 +407,7 @@ namespace GamingSupervisor
          */
         private void HandleHeroSelection()
         {
-            string heroname = GUISelection.heroName;
 
-            int team_side = 0;
-            for (int i = 0; i < table.Length / 4; i++)
-            {
-                if (table[i, 0] == hero_table[heroname])
-                {
-                    team_side = table[i, 2];
-                }
-            }
-            int[,] suggestiontable = cp.suggestionTable_1(team_side,3);
-            int[,] table_checkmark = cp.checkMark();
             for (int i = 0; i < 30; i++)
             {
                 if (table[i, 2] == team_side)
@@ -323,7 +479,7 @@ namespace GamingSupervisor
 
         private void HandleHighlight()
         {
-            overlay.ToggleHighlight();
+            overlay.ToggleHighlight(true);
             overlay.UpdateHighlight(replayHighlights.tickInfo, replayHighlights.lastTick);
         }
 
@@ -333,33 +489,86 @@ namespace GamingSupervisor
             if (announcer.GetCurrentGameTime() >= 750 && announcer.GetCurrentGameTime() <= 760)
             {
                 // TODO: Replace with the true intruction
-                string temp = "Lycan is a remarkable pusher who can wear down buildings and force enemies to react quickly to his regular tower onslaughts; as towers melt incredibly fast under Lycan's and his units' pressure, boosted by their canine Feral Impulse. His only contribution to full-on team fights will be the bonus damage he grants with Howl to his allies, his allies' summons, his owns summons, and himself, as well as his formidable physical attacks. Else he can surge out of the woods for a quick gank or push after he transformed with Shapeshift, moving at a haste speed of 650. Finally, good players will make the best usage of his Summon Wolves ability and scout the enemies' position while remaining undetected with invisibility at level 4.";
-
-                overlay.AddHeroInfoMessage(temp, "");
-                overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "Necronomicon_1_icon");
+                Dictionary<int, string> hero_Intro_Dic = hero_Intro.getHeroIntro();
+                string hero_Intro_String = hero_Intro_Dic[hero_table[GUISelection.heroName]];
+                overlay.AddHeroInfoMessage(hero_Intro_String, "");
             }
             else
             {
-                overlay.ClearItemSuggestion();
                 overlay.ClearHeroInfo();
             }
+
+            // show on death or enough gold
+            //overlay.ClearItemSuggestion();
+            //overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "Necronomicon_1_icon");
 
             // Add item suggestion
             //if (announcer.GetCurrentGameTime() >= 1380 && announcer.GetCurrentGameTime() <= 1390)
             //{
             //    overlay.AddItemSuggestionMessage("Necronomicon", "");
             //}
-
             int health = 0;
+            if (announcer.GetCurrentGameTime() >= 780)
+            {
+                
+                health = heroData.getHealth(CurrentTick, heroID);
+                int gametime = announcer.GetCurrentGameTime();
+                if (itemflag == 0 && health == 0)
+                {
+                    item_Time_Mark = 0;
+                    
 
-            //int maxHealth = 0;
+                    foreach (KeyValuePair<int, int> pair in i_suggestion)
+                    {
+                        if (closestGaming < pair.Key && pair.Key < CurrentTick/30)
+                        {
+                            closestGaming = pair.Key;
+                        }
+                        else if (pair.Key == CurrentTick)
+                        {
+                            closestGaming = pair.Key;
+                        }
+                        else
+                        {
+                            itemflag = 1;
+                            item_Time_Mark = announcer.GetCurrentGameTime();
+                            break;
+                        }
+                    }
+                }
+                if (itemflag == 1 && announcer.GetCurrentGameTime() >= item_Time_Mark && announcer.GetCurrentGameTime() <= (item_Time_Mark + 10))
+                {
+                    string item_name = item_Info_Table[i_suggestion[closestGaming] + 2, 2];
+                    string item_tip = item_Info_Table[i_suggestion[closestGaming] + 2, 117];
+                    string item_content;
+                    if (item_tip == "0")
+                    {
+                         item_content = item_name + ": This is a good choice.";
+                    }
+                    else
+                    {
+                         item_content = item_name + ": " + item_tip;
+                    }
+                    
+                    overlay.AddItemSuggestionMessage(item_content, "");
+                }
+                else
+                {
+                    itemflag = 0;
+                    overlay.ClearItemSuggestion();
+                }
+
+            }           
+
+
+            // bar graph
 
             double[] hpToSend = new double[5] { 0, 0, 0, 0, 0 };
             double[] maxHpToSend = new double[5] { 0, 0, 0, 0, 0 };
 
-            Console.WriteLine(CurrentTick + " getting health " + heroID);
+            //Console.WriteLine(CurrentTick + " getting health " + heroID);
             health = heroData.getHealth(CurrentTick, heroID);
-            Console.WriteLine("Tick " + CurrentTick + " Health " + health);
+            //Console.WriteLine("Tick " + CurrentTick + " Health " + health);
             //maxHealth = (int)heroData.getMaxHealth(CurrentTick, heroID);
             //if (health <= 600)
 
@@ -476,7 +685,7 @@ namespace GamingSupervisor
             Tuple<double, double, double> enemyHeroPosition = null;
             double dis = Int32.MaxValue;
             int[] enemyHeroIDs;
-            if (heroID >= 0 && heroID <= 4)
+            if (heroID <= 4)
             {
                 enemyHeroIDs = new int[] { 5, 6, 7, 8, 9 };
             }

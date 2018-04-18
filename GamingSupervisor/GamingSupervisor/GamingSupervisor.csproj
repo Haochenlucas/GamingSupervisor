@@ -252,6 +252,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <SplashScreen Include="GUI\logo.png" />
     <Content Include="Parser\parser.jar" />
     <Content Include="Retreat\retreat_predict.exe" />
   </ItemGroup>

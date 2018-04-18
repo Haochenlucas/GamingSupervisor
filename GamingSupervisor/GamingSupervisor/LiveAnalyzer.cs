@@ -87,20 +87,29 @@ namespace GamingSupervisor
                     return;
                 }
 
-                double positionX = 0;
-                double positionY = 0;
+                bool isInitialInstructionsBoxVisible = true;
                 System.Windows.Application.Current.Dispatcher.Invoke(
                     () =>
                     {
-                        positionX = Canvas.GetLeft(initialInstructions) / visualCustomize.ActualWidth * visualCustomize.ScreenWidth;
-                        positionY = Canvas.GetTop(initialInstructions) / visualCustomize.ActualHeight * visualCustomize.ScreenHeight;
+                        isInitialInstructionsBoxVisible = initialInstructionsBox.IsOverlayVisible;
                     });
 
-                overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+                if (isInitialInstructionsBoxVisible)
+                {
+                    double positionX = 0;
+                    double positionY = 0;
+                    GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
 
-                Thread.Sleep(10);
+                    overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
+                }
+                else
+                {
+                    overlay.Clear();
+                }
             }
-            
+
+            overlay.Clear();
+
             bool keepLooping = true;
 
             Console.WriteLine("Currently analyzing...");
@@ -119,15 +128,54 @@ namespace GamingSupervisor
                     case null:
                     case "":
                     case "Undefined":
+                        if (lastGameState != "Undefined")
+                        {
+                            lastGameState = "Undefined";
+                            System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Hidden;
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
+                                itemBox.Visibility = Visibility.Hidden;
+                            });
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_HERO_SELECTION":
                         if (lastGameState != "DOTA_GAMERULES_STATE_HERO_SELECTION")
                         {
                             lastGameState = "DOTA_GAMERULES_STATE_HERO_SELECTION";
                             consoleData.StartHeroSelectionParsing();
+
+                            System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Visible;
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
+                                itemBox.Visibility = Visibility.Hidden;
+                            });
                         }
+
+                        bool isHeroSelectionBoxVisible = true;
+                        System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                isHeroSelectionBoxVisible = heroSelectionBox.IsOverlayVisible;
+                            });
+
                         HandleHeroSelection();
-                        overlay.ShowDraftMessage();
+
+                        if (isHeroSelectionBoxVisible)
+                        {
+                            ShowHeroSelectionSuggestions();
+                        }
+                        else
+                        {
+                            overlay.Clear();
+                        }
                         break;
                     case "DOTA_GAMERULES_STATE_STRATEGY_TIME":
                         if (lastGameState != "DOTA_GAMERULES_STATE_STRATEGY_TIME")
@@ -140,6 +188,7 @@ namespace GamingSupervisor
                             consoleData.StopHeroSelectionParsing();
 
                             overlay.ClearHeroSuggestion();
+                            overlay.Clear();
                         }
                         break;
                     case "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD":
@@ -151,14 +200,43 @@ namespace GamingSupervisor
                             lastGameState = "DOTA_GAMERULES_STATE_GAME_IN_PROGRESS";
 
                             consoleData.StartHeroDataParsing();
+
+                            System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                initialInstructionsBox.Visibility = Visibility.Hidden;
+                                heroSelectionBox.Visibility = Visibility.Hidden;
+                                highlightBarBox.Visibility = Visibility.Hidden;
+                                healthGraphsBox.Visibility = Visibility.Visible;
+                                itemBox.Visibility = Visibility.Visible;
+                            });
                         }
                         
                         SendCommandsToDota();
 
+                        bool isHealthGraphsBoxVisible = true;
+                        bool isItemSuggestionsBoxVisible = true;
+                        System.Windows.Application.Current.Dispatcher.Invoke(
+                            () =>
+                            {
+                                isHealthGraphsBoxVisible = healthGraphsBox.IsOverlayVisible;
+                                isItemSuggestionsBoxVisible = itemBox.IsOverlayVisible;
+                            });
+
+                        if (isHealthGraphsBoxVisible)
+                            overlay.ShowHealthGraphs();
+                        else
+                            overlay.HideHealthGraphs();
+
+                        if (isItemSuggestionsBoxVisible)
+                            overlay.ShowItemSuggestions();
+                        else
+                            overlay.HideItemSuggestions();
+
                         HandleGamePlay();
                         HandleHeroGraph();
 
-                        overlay.ShowIngameMessage();
+                        UpdateInGameOverlay();
                         break;
                     default:
                         lastGameState = "Other";
@@ -174,11 +252,43 @@ namespace GamingSupervisor
             }
 
             overlay.Clear();
-
+            System.Windows.Application.Current.Dispatcher.Invoke(() => { visualCustomize.CloseWindow(); });
             Console.WriteLine("Game stopped!");
         }
 
-        private long timeSinceLastKeyPress_ms = 0;
+        private void ShowHeroSelectionSuggestions()
+        {
+            double positionX = 0;
+            double positionY = 0;
+            GetBoxPosition(heroSelectionBox, out positionX, out positionY);
+
+            overlay.ShowDraftMessage(positionX, positionY, visualCustomizeHandle);
+        }
+
+        private void UpdateInGameOverlay()
+        {
+            double highlightBarPositionX = 0;
+            double highlightBarPositionY = 0;
+            GetBoxPosition(highlightBarBox, out highlightBarPositionX, out highlightBarPositionY);
+            double highlightBarWidth = 0;
+            GetBoxWidth(highlightBarBox, out highlightBarWidth);
+
+            double healthGraphPositionX = 0;
+            double healthGraphPositionY = 0;
+            GetBoxPosition(healthGraphsBox, out healthGraphPositionX, out healthGraphPositionY);
+
+            double itemPositionX = 0;
+            double itemPositionY = 0;
+            GetBoxPosition(itemBox, out itemPositionX, out itemPositionY);
+
+            overlay.ShowInGameOverlay(visualCustomizeHandle,
+                highlightBarPositionX, highlightBarPositionY,
+                healthGraphPositionX, healthGraphPositionY,
+                itemPositionX, itemPositionY,
+                highlightBarWidth);
+        }
+
+    private long timeSinceLastKeyPress_ms = 0;
         private void SendCommandsToDota()
         {
             long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -385,7 +495,6 @@ namespace GamingSupervisor
                 }
             }
 
-            overlay.ToggleGraphForHeroHP();
             overlay.AddHeroGraphIcons(heroIDs);
             overlay.AddHPs(teamHealth.ToArray(), teamMaxHealth.ToArray());
             overlay.AddHp(teamHealth[0]);
