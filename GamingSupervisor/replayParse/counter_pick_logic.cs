@@ -398,6 +398,7 @@ namespace replayParse
                         }
                         shootIndex = (j - 1) * banorpick;
                         checkTable[index, 0] = tic_2;
+                        //System.IndexOutOfRangeException: 'Index was outside the bounds of the array.'
                         if ((tic_2 + (int)(tic_3 - tic_2) / 2) > 60)
                         {
                             checkTable[index, 1] = tic_2 + 60;

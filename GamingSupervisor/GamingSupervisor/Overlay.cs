@@ -71,7 +71,10 @@ namespace GamingSupervisor
         {
             renderer.HeroInfoHints(message, img);
         }
-        
+        public void AddJungleStackingMessage(string message, string img, double _x, double _y)
+        {
+            renderer.JungleStacking(message, img, _x, _y);
+        }
         public void ShowCloestEnemy(double x, double y)
         {
             renderer.SetClosetHeroPosition(x, y);
@@ -166,7 +169,7 @@ namespace GamingSupervisor
             renderer.HeroSelection_Draw(dotaProcessHandle, window, (float) positionX, (float) positionY, visualCustomizeHandle);
         }
 
-        public void ClearMessage(Direct2DRenderer.hints hint)
+        private void ClearMessage(Direct2DRenderer.hints hint)
         {
             renderer.DeleteMessage(hint);
         }
@@ -193,6 +196,10 @@ namespace GamingSupervisor
         public void ClearRetreat()
         {
             renderer.DeleteMessage(Direct2DRenderer.hints.retreat);
+        }
+        public void ClearJungle()
+        {
+            renderer.DeleteMessage(Direct2DRenderer.hints.jungle);
         }
 
         public void XorCheck(int code)

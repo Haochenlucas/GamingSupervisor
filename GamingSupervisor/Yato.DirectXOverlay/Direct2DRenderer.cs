@@ -1466,13 +1466,13 @@ namespace Yato.DirectXOverlay
                     // 9: last hit
                     case 9:
                         string last_hit = "Last hit message slot";
-                        messages[i] = new Message(last_hit, "", i * 200, 0);
+                        messages[i] = new Message(last_hit, "", i * 20, 0);
                         break;
 
                     // 10: jungle
                     case 10:
                         string jungle = "Jungle message slot";
-                        messages[i] = new Message(jungle, "", i * 200, 0);
+                        messages[i] = new Message(jungle, "", i * 20, 0);
                         break;
                         
                     // 11: safe farming
@@ -1549,6 +1549,15 @@ namespace Yato.DirectXOverlay
             string temp = BreakText(info, 42);
             AddMessage(hints.heroinformation, temp, img);
             HeroInfo = new HeroInfo(messages[(int)hints.heroinformation], "Tutorial");
+        }
+
+        // Dynamic positioning for the message to should on the camp position
+        public void JungleStacking(string content, string img, double _x, double _y)
+        {
+            messages[(int)hints.jungle].x = (float)_x;
+            messages[(int)hints.jungle].y = (float)_y;
+
+            AddMessage(hints.jungle, content, img);
         }
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
@@ -1916,8 +1925,14 @@ namespace Yato.DirectXOverlay
                 // Hero information
                 DrawHeroInformation();
 
+                // Item selection
+                DrawItemSelection();
+
                 // Circle out the closet enemy hero
                 DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
+
+                // Jungle Stacking
+                DrawJungleStacking();
 
                 // Move these two parts down for item suggestion
                 if (drawHighlight)
@@ -1980,7 +1995,7 @@ namespace Yato.DirectXOverlay
 
                     CheckToShowHighlightTime(highlightBarDistanceFromDefaultHorizontal, hightlightBarDistanceFromDefaultVertical, highlightBarWidth);
                 }
-                
+
                 if (drawGraphs)
                 {
                     float currY = screen_height / 2;
@@ -2007,9 +2022,9 @@ namespace Yato.DirectXOverlay
                                 y: (currY - (float)barHeight) * .3f + currY / 2 + healthGraphsDistanceFromDefaultVertical,     
                                 width: 50,                                               
                                 height: (float)barHeight * .3f,                             
-                                stroke: 1,                                               
+                                stroke: 1,
                                 interiorBrush: color,
-                                brush: CreateBrush(r: 0, g: 0, b: 0, a: 1)               
+                                brush: CreateBrush(r: 0, g: 0, b: 0, a: 1)
                                 );
 
                             DrawBox2D(
@@ -2041,9 +2056,9 @@ namespace Yato.DirectXOverlay
                         start_y: currY - 100 + 28 + healthGraphsDistanceFromDefaultVertical,
                         end_x: 250 + healthGraphsDistanceFromDefaultHorizontal,               
                         end_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,  
-                        stroke: 2,                
+                        stroke: 2, 
                         brush: redBrush
-                        );              
+                        );
 
                     // horizontal line
                     DrawLine(
@@ -2051,9 +2066,9 @@ namespace Yato.DirectXOverlay
                         start_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,
                         end_x: 250 + healthGraphsDistanceFromDefaultHorizontal,               
                         end_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,  
-                        stroke: 2,                
+                        stroke: 2,
                         brush: redBrush
-                        );                   
+                        );
 
                     // line graph
                     for (int j = 0; j < currHp.Count - 1; j++)
@@ -2077,6 +2092,33 @@ namespace Yato.DirectXOverlay
                 clear();
             }
         }
+        private void DrawJungleStacking()
+        {
+            if (messages[(int)hints.jungle].on)
+            {
+                // Text of the content
+                float modifier;
+                DrawTextWithBackground(
+                    text: messages[(int)hints.jungle].text,
+                    x: (screen_width / 2) + messages[(int)hints.jungle].x,
+                    y: (screen_height / 2) - messages[(int)hints.jungle].y,
+                    tfont: messages[(int)hints.jungle].font,
+                    tcolor: messages[(int)hints.jungle].color,
+                    tbackground: messages[(int)hints.jungle].background,
+                    modifier: out modifier);
+
+                // Draw LOGO
+                //DrawLogo(ItemSugg, 0, 0);
+                // Draw image
+                if (messages[(int)hints.jungle].imgName != "")
+                {
+                    string path = SelectFolder((int)hints.jungle);
+                    if (path == "") { throw new Exception("path not initialized"); }
+                    ShowImage(path, (int)hints.jungle, modifier);
+                }
+            }
+        }
+        
 
         private void DrawItemSelection(float itemPositionX, float itemPositionY)
         {
