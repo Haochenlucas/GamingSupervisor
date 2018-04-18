@@ -55,9 +55,15 @@ namespace replayParse
             }
         }     
         
-        public static void ConstructTickInfo()
+        public void ConstructTickInfo(ReplayTick rt)
         {
-
+            foreach(var a in listInfo)
+            {
+                int currTick = rt[a.Key];
+                int currSec = (currTick - rt.GameStartTick) / 30;
+                TimeSpan currTime = TimeSpan.FromSeconds(currSec);
+                tickInfo[a.Key] = new Tuple<string, List<Tuple<string, string, string>>>(currTime.ToString(@"hh\:mm\:ss"), a.Value);
+            }
         }
 
 

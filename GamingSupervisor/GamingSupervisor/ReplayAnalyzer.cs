@@ -69,9 +69,10 @@ namespace GamingSupervisor
             heroIDData = new ReplayHeroID(GUISelection.replayDataFolderLocation);
             replayTick = new ReplayTick(GUISelection.replayDataFolderLocation);
             replayHighlights = new ReplayHighlights(GUISelection.replayDataFolderLocation, GUISelection.heroName);
+            replayHighlights.ConstructTickInfo(replayTick);
             lastHitCalculator = new LastHitCalculator();
             retreat = new Retreat();
-
+            
             heroID = heroIDData.getHeroID(GUISelection.heroName);
             string heroname = GUISelection.heroName;
 
@@ -407,8 +408,6 @@ namespace GamingSupervisor
          */
         private void HandleHeroSelection()
         {
-            Repla
-
             for (int i = 0; i < 30; i++)
             {
                 if (table[i, 2] == team_side)

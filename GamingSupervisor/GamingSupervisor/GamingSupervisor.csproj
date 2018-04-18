@@ -151,7 +151,6 @@
       <DependentUpon>ReplayHeroSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReplayStartAnnouncer.cs" />
-    <Compile Include="ReplayTick.cs" />
     <Compile Include="GUI\WaitForCompletion.xaml.cs">
       <DependentUpon>WaitForCompletion.xaml</DependentUpon>
     </Compile>

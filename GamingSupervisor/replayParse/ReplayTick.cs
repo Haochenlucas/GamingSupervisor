@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamingSupervisor
+namespace replayParse
 {
-    class ReplayTick
+    public class ReplayTick
     {
         private Dictionary<int, int> gameTimeToTick;
 
