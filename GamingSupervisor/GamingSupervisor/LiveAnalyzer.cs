@@ -57,6 +57,8 @@ namespace GamingSupervisor
         private Dictionary<int, string> ID_table = h_ID.getHeroID();
         private List<int> teamHeroIds = new List<int>(4);
         private List<int> teamIDGraph = new List<int>();
+        private static item_info i_info = new item_info();
+        private string[,] item_Info_Table = i_info.get_Info_Table();
 
         private string playerName = null;
 
@@ -73,10 +75,7 @@ namespace GamingSupervisor
             overlay = OverlaySingleton.Instance;
             gsi = GameStateIntegrationSingleton.Instance;
 
-            gsi.StartListener();
-
-            if (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
-                overlay.Intructions_setup("Start a game");
+            gsi.StartListener();                
 
             while (gsi.GameState == "Undefined" || gsi.GameState == null || gsi.GameState == "")
             {
@@ -100,6 +99,8 @@ namespace GamingSupervisor
                     double positionY = 0;
                     GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
 
+                    overlay.UpdateWindowHandler();
+                    overlay.Intructions_setup("Start a game");
                     overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
                 }
                 else
@@ -288,7 +289,7 @@ namespace GamingSupervisor
                 highlightBarWidth);
         }
 
-    private long timeSinceLastKeyPress_ms = 0;
+        private long timeSinceLastKeyPress_ms = 0;
         private void SendCommandsToDota()
         {
             long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -320,6 +321,8 @@ namespace GamingSupervisor
             }
         }
 
+        private long timeSinceItemSuggestion_ms = 0;
+        private int itemflag = 0;
         private void HandleGamePlay()
         {
             // placeholders
@@ -334,11 +337,84 @@ namespace GamingSupervisor
             if (true)//healthPercent < 25)
             {
                 overlay.AddRetreatMessage("Health " + gsi.Health, "");
-
             }
             else
             {
                 //overlay.ClearMessage(7);
+            }
+
+            // For suggestion for tango and Healing_Salve.
+            if (gsi.Health < (gsi.MaxHealth - 130) && gsi.Health != 0)
+            {
+                if (gsi.Health < (gsi.MaxHealth - 430) && gsi.Health != 0 && gsi.Items.Contains("Healing_Salve"))
+                {
+                    long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    if (itemflag == 0)
+                    {
+                        itemflag = 1;
+                        timeSinceItemSuggestion_ms = now_ms;
+                    }
+                    if (now_ms - timeSinceItemSuggestion_ms <= 5000)
+                    {
+                        string item_name = item_Info_Table[8 + 2, 2];
+                        string item_tip = item_Info_Table[8 + 2, 117];
+                        string item_content;
+                        if (item_tip == "0")
+                        {
+                            item_content = item_name + ": This is a good choice.";
+                        }
+                        else
+                        {
+                            item_content = item_name + ": " + item_tip;
+                        }
+                        if (itemflag == 1)
+                        {
+                            overlay.AddItemSuggestionMessage(item_content, "");
+                        }
+
+                    }
+                    else
+                    {
+                        overlay.ClearItemSuggestion();
+                    }
+                }
+                else if (gsi.Items.Contains("Tango"))
+                {
+                    long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    if (itemflag == 0)
+                    {
+                        itemflag = 1;
+                        timeSinceItemSuggestion_ms = now_ms;
+                    }
+                    if (now_ms - timeSinceItemSuggestion_ms <= 5000)
+                    {
+                        string item_name = item_Info_Table[9 + 2, 2];
+                        string item_tip = item_Info_Table[9 + 2, 117];
+                        string item_content;
+                        if (item_tip == "0")
+                        {
+                            item_content = item_name + ": This is a good choice.";
+                        }
+                        else
+                        {
+                            item_content = item_name + ": " + item_tip;
+                        }
+                        if(itemflag == 1)
+                        {
+                            overlay.AddItemSuggestionMessage(item_content, "");
+                        }
+                        
+                    }
+                    else
+                    {
+                        overlay.ClearItemSuggestion();
+                    }
+                }
+            }
+            else if (gsi.Health == 0)
+            {
+                itemflag = 0;
+                overlay.ClearItemSuggestion();
             }
         }
 

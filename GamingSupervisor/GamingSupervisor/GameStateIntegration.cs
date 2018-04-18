@@ -171,7 +171,7 @@ namespace GamingSupervisor
         }
 
         private readonly object gameTimeLock = new object();
-        private int gameTime;
+        public int gameTime;
         public int GameTime
         {
             get { lock (gameTimeLock) { return gameTime; } }

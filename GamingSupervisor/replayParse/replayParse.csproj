@@ -84,6 +84,7 @@
     <Compile Include="ingame_analysis.cs" />
     <Compile Include="itemConvert.cs" />
     <Compile Include="item_info.cs" />
+    <Compile Include="JungleCampData.cs" />
     <Compile Include="LastHitCalculator.cs" />
     <Compile Include="makeup_difficulty-table.cs" />
     <Compile Include="replayHighlights.cs" />
