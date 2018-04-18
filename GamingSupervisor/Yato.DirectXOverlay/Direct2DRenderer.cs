@@ -317,14 +317,8 @@ namespace Yato.DirectXOverlay
 
             long tag_0 = 0L, tag_1 = 0L;
             
-            Result result;
-            // shadow object cast exception
-            try
-            {
-                result = device.TryEndDraw(out tag_0, out tag_1);
-            }
-            catch (System.ArgumentOutOfRangeException e) { return; }
-            //catch (System.InvalidCastException e) { return; }
+            
+            var result = device.TryEndDraw(out tag_0, out tag_1);
 
             if (result.Failure)
             {
@@ -1925,9 +1919,6 @@ namespace Yato.DirectXOverlay
                 // Hero information
                 DrawHeroInformation();
 
-                // Item selection
-                DrawItemSelection();
-
                 // Circle out the closet enemy hero
                 DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
 
@@ -2137,8 +2128,8 @@ namespace Yato.DirectXOverlay
                 device.FillRectangle(
                     new RawRectangleF(
                         left: ItemSugg.box_pos.Item1 + itemDistanceFromDefaultHorizontal,
-                        top: ItemSugg.box_pos.Item2 + itemDistanceFromDefaultHorizontal,
-                        right: ItemSugg.box_pos.Item3 + itemDistanceFromDefaultVertical,
+                        top: ItemSugg.box_pos.Item2 + itemDistanceFromDefaultVertical,
+                        right: ItemSugg.box_pos.Item3 + itemDistanceFromDefaultHorizontal,
                         bottom: ItemSugg.box_pos.Item4 + itemDistanceFromDefaultVertical),
                     box_background);
 
