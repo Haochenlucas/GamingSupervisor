@@ -167,6 +167,7 @@ namespace GamingSupervisor
                                 isHeroSelectionBoxVisible = heroSelectionBox.IsOverlayVisible;
                             });
 
+                        
                         HandleHeroSelection();
 
                         if (isHeroSelectionBoxVisible)
@@ -187,10 +188,10 @@ namespace GamingSupervisor
                             lastGameState = "DOTA_GAMERULES_STATE_STRATEGY_TIME";
 
                             consoleData.StopHeroSelectionParsing();
-
-                            overlay.ClearHeroSuggestion();
-                            overlay.Clear();
                         }
+
+                        overlay.ClearHeroSuggestion();
+                        overlay.Clear();
                         break;
                     case "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD":
                         break;
@@ -224,9 +225,9 @@ namespace GamingSupervisor
                                 isItemSuggestionsBoxVisible = itemBox.IsOverlayVisible;
                             });
 
-                        if (isHealthGraphsBoxVisible)
-                            overlay.ShowHealthGraphs();
-                        else
+                        //if (isHealthGraphsBoxVisible)
+                            //overlay.ShowHealthGraphs();
+                        //else
                             overlay.HideHealthGraphs();
 
                         if (isItemSuggestionsBoxVisible)
@@ -359,17 +360,19 @@ namespace GamingSupervisor
                         string item_name = item_Info_Table[8 + 2, 2];
                         string item_tip = item_Info_Table[8 + 2, 117];
                         string item_content;
-                        if (item_tip == "0")
+                        if (item_tip == " 0")
                         {
-                            item_content = item_name + ": This is a good choice.";
+                            item_content = item_name + ":\n This is a good choice.";
                         }
                         else
                         {
-                            item_content = item_name + ": " + item_tip;
+                            item_content = item_name + ":\n " + item_tip;
                         }
                         if (itemflag == 1)
                         {
-                            overlay.AddItemSuggestionMessage(item_content, "");
+                            item_name = item_name.TrimStart(' ');
+                            string item_img = item_name.Replace(" ", "_");
+                            overlay.AddItemSuggestionMessage(item_content, item_img + "_icon");
                         }
 
                     }
@@ -391,17 +394,19 @@ namespace GamingSupervisor
                         string item_name = item_Info_Table[9 + 2, 2];
                         string item_tip = item_Info_Table[9 + 2, 117];
                         string item_content;
-                        if (item_tip == "0")
+                        if (item_tip == " 0")
                         {
-                            item_content = item_name + ": This is a good choice.";
+                            item_content = item_name + ":\nThis is a good choice.";
                         }
                         else
                         {
-                            item_content = item_name + ": " + item_tip;
+                            item_content = item_name + ":\n " + item_tip;
                         }
                         if(itemflag == 1)
                         {
-                            overlay.AddItemSuggestionMessage(item_content, "");
+                            item_name = item_name.TrimStart(' ');
+                            string item_img = item_name.Replace(" ", "_");
+                            overlay.AddItemSuggestionMessage(item_content, item_img + "_icon");
                         }
                         
                     }

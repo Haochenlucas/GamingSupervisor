@@ -83,6 +83,7 @@ namespace GamingSupervisor
 
         public void ReportHeroData()
         {
+            consoleFileStream = File.Open(consoleLogPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             consoleFileStream.Seek(0, SeekOrigin.End);
             using (StreamReader streamReader = new StreamReader(consoleFileStream))
             {
@@ -162,7 +163,7 @@ namespace GamingSupervisor
             using (StreamReader streamReader = new StreamReader(consoleFileStream))
             {
                 string readSoFar = "";
-                while (HeroCount < 10 || !stopHeroSelection)
+                while (HeroCount < 10 && !stopHeroSelection)
                 {
                     Thread.Sleep(500);
                     try
