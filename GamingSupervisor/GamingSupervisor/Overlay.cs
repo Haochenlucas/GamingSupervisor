@@ -67,6 +67,16 @@ namespace GamingSupervisor
             renderer.clear();
         }
 
+        public void CreepLowEnough()
+        {
+            renderer.LastHit();
+        }
+
+        public void CreepDied()
+        {
+            renderer.LastHitted();
+        }
+
         public void AddRetreatMessage(string message, string img)
         {
             renderer.Retreat(message, img);
@@ -155,7 +165,7 @@ namespace GamingSupervisor
             renderer.ToggleHightlight(tog);
         }
 
-        public void UpdateHighlight(Dictionary<int, List<Tuple<String, String, String>>> ticks, float maxTick)
+        public void UpdateHighlight(Dictionary<int, Tuple<string, List<Tuple<String, String, String>>>> ticks, float maxTick)
         {
             renderer.UpdateHighlightTime(ticks, maxTick);
         }

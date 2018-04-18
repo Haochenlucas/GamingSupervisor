@@ -66,7 +66,16 @@ namespace replayParse
             {
                 name = "zeus";
             }
-            else if (name.Contains("underlord"))
+
+            else if (name.Contains("abyssal"))
+            {
+                name = "underlord";
+            }
+            else if (name.Contains("furion"))
+            {
+                name = "nature'sprophet";
+            }
+            else if (name.Contains("underload"))
             {
                 name = "underlord";
             }

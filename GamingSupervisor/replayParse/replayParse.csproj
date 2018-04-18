@@ -91,6 +91,8 @@
     <Compile Include="replayParse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReplayHeroID.cs" />
+    <Compile Include="ReplayTick.cs" />
+    <Compile Include="Retreat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
