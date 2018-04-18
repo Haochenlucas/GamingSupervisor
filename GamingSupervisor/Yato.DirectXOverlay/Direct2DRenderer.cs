@@ -1847,6 +1847,8 @@ namespace Yato.DirectXOverlay
             int avgG = (int)totals[1] / (w * h);
             int avgR = (int)totals[2] / (w * h);
 
+            bmp.UnlockBits(scrData);
+
             return new Tuple<int, int, int>(avgR, avgG, avgB); ;
         }
 
@@ -1867,15 +1869,12 @@ namespace Yato.DirectXOverlay
 
         public void LastHitted()
         {
-
         }
-
 
         public void HideItemSuggestions()
         {
             drawItemSuggestions = false;
         }
-
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, IntPtr doNotIgnoreHandle,
             float highlightBarPositionX, float highlightBarPositionY,
             float healthGraphsPositionX, float healthGraphsPositionY,
@@ -2019,6 +2018,8 @@ namespace Yato.DirectXOverlay
                             System.Drawing.Bitmap csb = new System.Drawing.Bitmap(@"hero_icon_images\" + heroIds[i] + ".png");
 
                             Tuple<int, int, int> rgb = AveragePixelColor(csb);
+                            csb.Dispose();
+
                             Direct2DBrush color = CreateBrush(rgb.Item1, rgb.Item2, rgb.Item3);
                             double barHeight = CalculateBarGraphHeight(maxHps[i], hps[i]);
 
@@ -2052,7 +2053,6 @@ namespace Yato.DirectXOverlay
                                 );
 
                             bmp.SharpDXBitmap.Dispose();
-                            csb.Dispose();
                         }
                     }
 
@@ -2077,18 +2077,18 @@ namespace Yato.DirectXOverlay
                         );                   
 
                     // line graph
-                    for (int j = 0; j < currHp.Count - 1; j++)
-                    {
-                        double[] tempCurrHp = currHp.ToArray();
-                        DrawLine(
-                            start_x: j + healthGraphsDistanceFromDefaultHorizontal,
-                            start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
-                            end_x: 1 + j + healthGraphsDistanceFromDefaultHorizontal,
-                            end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
-                            stroke: 1,
-                            brush: redBrush
-                            );
-                    }
+                    //for (int j = 0; j < currHp.Count - 1; j++)
+                    //{
+                    //    double[] tempCurrHp = currHp.ToArray();
+                    //    DrawLine(
+                    //        start_x: j + healthGraphsDistanceFromDefaultHorizontal,
+                    //        start_y: (float)(currY - tempCurrHp[j]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
+                    //        end_x: 1 + j + healthGraphsDistanceFromDefaultHorizontal,
+                    //        end_y: (float)(currY - tempCurrHp[j + 1]) / 6 + currY + 28 + healthGraphsDistanceFromDefaultVertical,
+                    //        stroke: 1,
+                    //        brush: redBrush
+                    //        );
+                    //}
                 }
 
                 EndScene();

@@ -74,6 +74,10 @@ namespace replayParse
             {
                 name = "nature'sprophet";
             }
+            else if (name.Contains("underload"))
+            {
+                name = "underload";
+            }
 
             return name;
         }
