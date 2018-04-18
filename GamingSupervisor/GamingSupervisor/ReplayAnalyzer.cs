@@ -97,9 +97,6 @@ namespace GamingSupervisor
             overlay = OverlaySingleton.Instance;
 
             CurrentTick = 0;
-            string instru_OpenReplay = "1: Click Watch on the top.\n2: Click Downloads\n3: Click Watch to start\n   the replay "
-                + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName);
-            overlay.Intructions_setup(instru_OpenReplay);
 
             while (!announcer.isReplayStarted())
             {
@@ -129,6 +126,10 @@ namespace GamingSupervisor
                     double positionY = 0;
                     GetBoxPosition(initialInstructionsBox, out positionX, out positionY);
                     // draw instruction to watch the replay in dota2 client
+                    overlay.UpdateWindowHandler();
+                    string instru_OpenReplay = "1: Click Watch on the top.\n2: Click Downloads\n3: Click Watch to start\n   the replay "
+                        + System.IO.Path.GetFileNameWithoutExtension(GUISelection.fileName);
+                    overlay.Intructions_setup(instru_OpenReplay);
                     overlay.ShowInstructionMessage(positionX, positionY, visualCustomizeHandle);
                 }
                 else
@@ -154,6 +155,7 @@ namespace GamingSupervisor
             string lastGameState = "";
             while (keepLooping)
             {
+                overlay.UpdateWindowHandler();
                 if (!IsDotaRunning())
                 {
                     overlay.Clear();
@@ -490,10 +492,8 @@ namespace GamingSupervisor
 
         private void HandleGamePlay()
         {
-            #region Hero introduction
-            /*
             // TODO: Set this to be the beginning of the time
-            if (announcer.GetCurrentGameTime() >= 750 && announcer.GetCurrentGameTime() <= 760)
+            if (CurrentTick > replayTick.GameStartTick && CurrentTick < replayTick.GameStartTick + 300)
             {
                 // TODO: Replace with the true intruction
                 Dictionary<int, string> hero_Intro_Dic = hero_Intro.getHeroIntro();
@@ -504,29 +504,15 @@ namespace GamingSupervisor
             {
                 overlay.ClearHeroInfo();
             }
-            */
-            #endregion
-
-            #region Item
-            // show on death or enough gold
-            //overlay.ClearItemSuggestion();
-            //overlay.AddItemSuggestionMessage("Buy this. It is good for you.", "Necronomicon_1_icon");
-
-            // Add item suggestion
-            //if (announcer.GetCurrentGameTime() >= 1380 && announcer.GetCurrentGameTime() <= 1390)
-            //{
-            //    overlay.AddItemSuggestionMessage("Necronomicon", "");
-            //}
-            #endregion
-
-            #region Jungle Stacking
+            
             int currentGameTime = announcer.GetCurrentGameTime();
-            // if timer is right, check for every 50 sec mark
-            if (true)
+            // if timer is after the game start and every last 8 sec of a minute
+            int eclipsedSec = (CurrentTick - replayTick.GameStartTick) / 30;
+            //if (eclipsedSec > 0 && (eclipsedSec / 60) > 52)
+            if(true)
             {
                 AnalizeJungleCamps();
             }
-            #endregion
 
             int health = 0;
             if (announcer.GetCurrentGameTime() >= 780)
@@ -674,12 +660,14 @@ namespace GamingSupervisor
             {
                 closestCampPos = JungleCamps.GetCampPos(closestJungleCamp);
                 string content = "";
-                int totalsecond = (int) fakeGameTime.ElapsedMilliseconds / 1000;
-                content += "Fake Game Time: " + totalsecond.ToString() + "\n";
+                int totalsecond = (CurrentTick - replayTick.GameStartTick) / 30;
+                
+                content += "Game Time: " + totalsecond.ToString() + "\n";
                 int secondMark = JungleCamps.GetCampSecMark(closestJungleCamp);
                 int second = totalsecond % 60;
                 int countdown = secondMark - second;
-                if (countdown < 5)
+                //if (countdown < 5)
+                if(true)
                 {
                     content += "Count down: " + countdown + "\n";
                 }
