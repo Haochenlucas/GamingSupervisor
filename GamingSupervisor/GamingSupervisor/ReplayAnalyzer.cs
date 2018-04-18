@@ -17,6 +17,7 @@ namespace GamingSupervisor
         private List<int> teamIDGraph = new List<int>();
         private ReplayTick replayTick;
         private ReplayHighlights replayHighlights;
+        private int closestGaming = 0;
 
         private ReplayStartAnnouncer announcer = null;
 
@@ -501,45 +502,58 @@ namespace GamingSupervisor
             //{
             //    overlay.AddItemSuggestionMessage("Necronomicon", "");
             //}
-            
-           
             int health = 0;
-            int closestTic = 0;
-            if (itemflag == 0)
+            if (announcer.GetCurrentGameTime() >= 780)
             {
-                item_Time_Mark = 0;
-                health = heroData.getHealth(CurrentTick, heroID);
                 
-                foreach (KeyValuePair<int, int> pair in i_suggestion)
+                health = heroData.getHealth(CurrentTick, heroID);
+                int gametime = announcer.GetCurrentGameTime();
+                if (itemflag == 0 && health == 0)
                 {
-                    if (closestTic < pair.Key && pair.Key < CurrentTick)
+                    item_Time_Mark = 0;
+                    
+
+                    foreach (KeyValuePair<int, int> pair in i_suggestion)
                     {
-                        closestTic = pair.Key;
+                        if (closestGaming < pair.Key && pair.Key < CurrentTick/30)
+                        {
+                            closestGaming = pair.Key;
+                        }
+                        else if (pair.Key == CurrentTick)
+                        {
+                            closestGaming = pair.Key;
+                        }
+                        else
+                        {
+                            itemflag = 1;
+                            item_Time_Mark = announcer.GetCurrentGameTime();
+                            break;
+                        }
                     }
-                    else if (pair.Key == CurrentTick)
+                }
+                if (itemflag == 1 && announcer.GetCurrentGameTime() >= item_Time_Mark && announcer.GetCurrentGameTime() <= (item_Time_Mark + 10))
+                {
+                    string item_name = item_Info_Table[i_suggestion[closestGaming] + 2, 2];
+                    string item_tip = item_Info_Table[i_suggestion[closestGaming] + 2, 117];
+                    string item_content;
+                    if (item_tip == "0")
                     {
-                        closestTic = pair.Key;
+                         item_content = item_name + ": This is a good choice.";
                     }
                     else
                     {
-                        itemflag = 1;
-                        item_Time_Mark = announcer.GetCurrentGameTime();
-                        break;
+                         item_content = item_name + ": " + item_tip;
                     }
+                    
+                    overlay.AddItemSuggestionMessage(item_content, "");
                 }
-            }
-            if (itemflag == 1 && announcer.GetCurrentGameTime() >= item_Time_Mark && announcer.GetCurrentGameTime() <= (item_Time_Mark + 10))
-            {
-                string item_name = item_Info_Table[i_suggestion[closestTic] + 2, 2];
-                string item_tip = item_Info_Table[i_suggestion[closestTic] + 2, 117];
-                overlay.AddItemSuggestionMessage(item_name, item_tip);
-            }
-            else
-            {
-                itemflag = 0;
-                overlay.ClearItemSuggestion();
-            }
+                else
+                {
+                    itemflag = 0;
+                    overlay.ClearItemSuggestion();
+                }
 
+            }           
 
 
             // bar graph
