@@ -86,6 +86,7 @@ namespace GamingSupervisor
         }
 
         private static GameStateListener gameStateListener = null;
+        private static bool gsiStarted = false;
 
         public GameStateIntegration()
         {
@@ -114,10 +115,15 @@ namespace GamingSupervisor
 
         public void StartListener()
         {
+            if (gsiStarted)
+                return;
+
             if (!gameStateListener.Start())
             {
                 throw new Exception("GameStateListener could not start. Try running this program as Administrator. Exiting.");
             }
+
+            gsiStarted = true;
             Console.WriteLine("Listening for game integration calls...");
         }
 

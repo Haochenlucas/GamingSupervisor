@@ -26,11 +26,13 @@ namespace GamingSupervisor
 #endif
             while (Process.GetProcessesByName("dota2").Length == 0)
             {
+                Console.WriteLine("Waiting for dota to start...");
                 Thread.Sleep(500);
             }
 
             while (Process.GetProcessesByName("dota2")[0].MainWindowHandle == IntPtr.Zero)
             {
+                Console.WriteLine("Waiting for dota window handle to appear...");
                 Thread.Sleep(500);
             }
 
@@ -64,6 +66,7 @@ namespace GamingSupervisor
         { 
             renderer.ItemSelectionHints(message, img);
         }
+
         public void AddHeroInfoMessage(string message, string img)
         {
             renderer.HeroInfoHints(message, img);
@@ -107,6 +110,31 @@ namespace GamingSupervisor
             renderer.Intructions_Draw(dotaProcessHandle, window, (float)positionX, (float)positionY, visualCustomizeHandle);
         }
 
+        public void HideInitialInstructions()
+        {
+            renderer.HideInitialInstructions();
+        }
+
+        public void ShowHealthGraphs()
+        {
+            renderer.ToggleGraph(true);
+        }
+
+        public void HideHealthGraphs()
+        {
+            renderer.ToggleGraph(false);
+        }
+
+        public void ShowItemSuggestions()
+        {
+            renderer.ShowItemSuggestions();
+        }
+
+        public void HideItemSuggestions()
+        {
+            renderer.HideItemSuggestions();
+        }
+
         public void ToggleHighlight(bool tog = true)
         {
             renderer.ToggleHightlight(tog);
@@ -117,14 +145,28 @@ namespace GamingSupervisor
             renderer.UpdateHighlightTime(ticks, maxTick);
         }
 
-        public void ShowIngameMessage()
+        public void ShowInGameOverlay(IntPtr visualCustomizeHandle,
+            double highlightBarPositionX, double highlightBarPositionY,
+            double healthGraphsPositionX, double healthGraphsPositionY,
+            double itemPositionX, double itemPositionY,
+            double highlightBarWidth)
         {
-            renderer.Ingame_Draw(dotaProcessHandle, window);
+            renderer.Ingame_Draw(
+                parentWindowHandle: dotaProcessHandle,
+                overlay: window,
+                doNotIgnoreHandle: visualCustomizeHandle,
+                highlightBarPositionX: (float)highlightBarPositionX,
+                highlightBarPositionY: (float)highlightBarPositionY,
+                healthGraphsPositionX: (float)healthGraphsPositionX,
+                healthGraphsPositionY: (float)healthGraphsPositionY,
+                itemPositionX: (float)itemPositionX,
+                itemPositionY: (float)itemPositionY,
+                highlightBarWidth: (float)highlightBarWidth);
         }
 
-        public void ShowDraftMessage()
+        public void ShowDraftMessage(double positionX, double positionY, IntPtr visualCustomizeHandle)
         {
-            renderer.HeroSelection_Draw(dotaProcessHandle, window);
+            renderer.HeroSelection_Draw(dotaProcessHandle, window, (float) positionX, (float) positionY, visualCustomizeHandle);
         }
 
         private void ClearMessage(Direct2DRenderer.hints hint)

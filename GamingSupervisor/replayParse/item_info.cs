@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Excel = Microsoft.Office.Interop.Excel;
+
 
 
 namespace replayParse
@@ -17,71 +17,42 @@ namespace replayParse
         private int[,] item_KB = new int[116, 3];
         public item_info()
         {
-            //Create COM Objects. Create a COM object for everything that is referenced
-            Excel.Application xlApp = new Excel.Application();
-            string s = Path.Combine(Environment.CurrentDirectory, "../../Properties/item_info.xlsx");
-            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(s);
-            Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
-            Excel.Range xlRange = xlWorksheet.UsedRange;
-            
-            int rowCount = xlRange.Rows.Count;
-            int colCount = xlRange.Columns.Count;
 
-            //iterate over the rows and columns and print to the console as it appears in the file
-            //excel is not zero based!!
-            for (int i = 1; i <= 157; i++)
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/item_info.txt");
+            string[] item_Lines = System.IO.File.ReadAllLines(s);
+            int startline = 3;
+            foreach (string line in item_Lines)
             {
-                for (int j = 1; j <= colCount; j++)
+                string[] words = line.Split('*');
+                for( int i  = 0; i< words.Length; i++)
                 {
-                    if (j == 1)
-                    {
-                        Console.Write("\r\n");
-                    }
-                    //write the value to the console
-                    if (xlRange.Cells[i, j] != null && xlRange.Cells[i, j].Value2 != null)
-                    {
-                        item_table_info[i,j] = xlRange.Cells[i, j].Value2.ToString();
-                    }
+                    item_table_info[startline, i+1] = words[i];
                 }
+                startline++;
             }
 
 
-            //cleanup
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
 
-            //rule of thumb for releasing com objects:
-            //  never use two dots, all COM objects must be referenced and released individually
-            //  ex: [somthing].[something].[something] is bad
-
-            //release com objects to fully kill excel process from running in the background
-            Marshal.ReleaseComObject(xlRange);
-            Marshal.ReleaseComObject(xlWorksheet);
-
-            //close and release
-            xlWorkbook.Close();
-            Marshal.ReleaseComObject(xlWorkbook);
-
-            //quit and release
-            xlApp.Quit();
-            Marshal.ReleaseComObject(xlApp);
-
-            s = Path.Combine(Environment.CurrentDirectory, "../../Properties/hero_item.txt");
+            s = Path.Combine(Environment.CurrentDirectory, "Properties/hero_item.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
 
             for( int i = 0; i < lines.Length; i ++ )
             {
-                if (lines.Contains("["))
+                if (lines[i].Contains("["))
                 {
                     string[] three_items = lines[i].Split('[');
-                    three_items[1].Remove('[');
-                    three_items[1].Remove(']');
+                    three_items[1] = three_items[1].Remove(three_items[1].Length-1);
                     string[] three_item_cur = three_items[1].Split(' ');
                     item_KB[i + 1, 0] = int.Parse(three_item_cur[0]);
                     item_KB[i + 1, 1] = int.Parse(three_item_cur[1]);
                     item_KB[i + 1, 2] = int.Parse(three_item_cur[2]);
                 }
             }
+        }
+
+        public string[,] get_Info_Table()
+        {
+            return item_table_info;
         }
 
         public Dictionary<int,int> item_suggestion(int money, string dataFolderLocation, string myHero)
@@ -124,7 +95,6 @@ namespace replayParse
                         if (prevTime == currTime)
                         {
                             teamfight[currInd].Add(contents[0]);
-                            //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
                             teamfight[currInd].Add(contents[2] + " " + contents[3]);
                         }
                         else if (prevTime.Add(thirty) > currTime)
@@ -137,7 +107,6 @@ namespace replayParse
                             teamfight.Add(new List<String>());
                             prevTime = currTime;
                             teamfight[currInd].Add(contents[0]);
-                            //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
                             teamfight[currInd].Add(contents[2] + " " + contents[3]);
                         }
 
@@ -152,17 +121,12 @@ namespace replayParse
                     string[] cont = kills[i].Split(new char[] { ' ' });
                     string killed = ID_table[hero_table[ConvertedHeroName.Get(cont[0])]];
                     string killer = ID_table[hero_table[ConvertedHeroName.Get(cont[1])]];
-
-                    string color = "we";
                     if (killed == myHero)
                     {
-                        item_ID.Add((int)Double.Parse(kills[0]),item_KB[hero_table[killed],0]);
+                        int killedID = hero_table[ConvertedHeroName.Get(killed)];
+                        int itemInfo = item_KB[killedID, 0];
+                        item_ID.Add((int)(Double.Parse(kills[0])), itemInfo);
                     }
-                    else if (killer == myHero)
-                    {
-                        item_ID.Add((int)Double.Parse(kills[0]), item_KB[hero_table[killer], 2]);
-                    }
-                    tickInfo[(int)Double.Parse(kills[0])].Add(new Tuple<string, string, string>(killer, killed, color));
                 }
             }
             return item_ID;

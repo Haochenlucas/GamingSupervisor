@@ -34,6 +34,7 @@ public class App
     private PrintWriter stateWriter;
     private PrintWriter heroIdWriter;
     private PrintWriter timeWriter;
+    private PrintWriter startTimeWriter;
     private PrintWriter combatWriter;
     private PrintWriter neutralMonsterWriter;
     private PrintWriter laneCreepWriter;
@@ -272,18 +273,26 @@ public class App
     	initializeTime(e);
         
         boolean updateTime = false;
+        boolean updateStartTime = false;
         for (int i = 0; i < updateCount; i++)
         {
-            if (time.isTime(updatedPaths[i]))
+            if (time.isRealTime(updatedPaths[i]))
             {
                 updateTime = true;
-                break;
+            }
+            if (time.isReplayTime(updatedPaths[i]))
+            {
+            	updateStartTime = true;
             }
         }
         
         if (updateTime)
         {
-        	writeToFile(timeWriter, ctx, e, "TIME", time.time);
+        	writeToFile(timeWriter, ctx, e, "TIME", time.realTime);
+        }
+        if (updateStartTime)
+        {
+        	writeToFile(startTimeWriter, ctx, e, "TIME", time.replayTime);
         }
     }
     
@@ -611,6 +620,7 @@ public class App
 	        File stateFile = new File(args[1] + "/state.txt");
 	        File heroIdFile = new File(args[1] + "/heroId.txt");
 	        File timeFile = new File(args[1] + "/time.txt");
+	        File startTimeFile = new File(args[1] + "/startTime.txt");
 	        File combatFile = new File(args[1] + "/combat.txt");
 	        File neutralMonsterFile = new File(args[1] + "/neutral_creep.txt");
 	        File laneCreepFile = new File(args[1] + "/lane_creep.txt");
@@ -621,6 +631,7 @@ public class App
 	        stateWriter = new PrintWriter(stateFile);
 	        heroIdWriter = new PrintWriter(heroIdFile);
 	        timeWriter = new PrintWriter(timeFile);
+	        startTimeWriter = new PrintWriter(startTimeFile);
 	        combatWriter = new PrintWriter(combatFile);
 	        neutralMonsterWriter = new PrintWriter(neutralMonsterFile);
 	        laneCreepWriter = new PrintWriter(laneCreepFile);
@@ -644,6 +655,7 @@ public class App
 	        stateWriter.close();
 	        heroIdWriter.close();
 	        timeWriter.close();
+	        startTimeWriter.close();
 	        combatWriter.close();
 	        neutralMonsterWriter.close();
 	        laneCreepWriter.close();

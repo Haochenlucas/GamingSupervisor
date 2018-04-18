@@ -84,7 +84,7 @@ namespace GamingSupervisor
 
             while (!p.HasExited)
             {
-                Console.WriteLine(p.StandardOutput.ReadLine());
+                Console.WriteLine("parser.jar: " + p.StandardOutput.ReadLine());
             }
 
             p.WaitForExit();
@@ -92,12 +92,14 @@ namespace GamingSupervisor
 
         public static void WaitForFullParsing()
         {
-            fullThread.Join();
+            if (fullThread != null)
+                fullThread.Join();
         }
 
         public static void WaitForInfoParsing()
         {
-            infoThread.Join();
+            if (infoThread != null)
+                infoThread.Join();
         }
 
         public static List<string> GetHeroNameList(string directory)

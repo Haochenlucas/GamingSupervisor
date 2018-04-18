@@ -168,7 +168,7 @@ namespace Yato.DirectXOverlay
                 }
                 else
                 {
-                    d2d.Ingame_Draw(VS_HWND, overlay);
+                    //d2d.Ingame_Draw(VS_HWND, overlay);
                 }
                 //Console.WriteLine(Direct2DRenderer.hits.hero_selection_1);
 
