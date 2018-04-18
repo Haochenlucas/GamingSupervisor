@@ -2065,25 +2065,25 @@ namespace Yato.DirectXOverlay
                     }
 
                     // vertical line
-                    DrawLine(
-                        start_x: 250 + healthGraphsDistanceFromDefaultHorizontal,           
-                        start_y: currY - 100 + 28 + healthGraphsDistanceFromDefaultVertical,
-                        end_x: 250 + healthGraphsDistanceFromDefaultHorizontal,               
-                        end_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,  
-                        stroke: 2, 
-                        brush: redBrush
-                        );
-
-                    // horizontal line
-                    DrawLine(
-                        start_x: 0 + healthGraphsDistanceFromDefaultHorizontal,             
-                        start_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,
-                        end_x: 250 + healthGraphsDistanceFromDefaultHorizontal,               
-                        end_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,  
-                        stroke: 2,
-                        brush: redBrush
-                        );
-
+                    //DrawLine(
+                    //    start_x: 250 + healthGraphsDistanceFromDefaultHorizontal,           
+                    //    start_y: currY - 100 + 28 + healthGraphsDistanceFromDefaultVertical,
+                    //    end_x: 250 + healthGraphsDistanceFromDefaultHorizontal,               
+                    //    end_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,  
+                    //    stroke: 2, 
+                    //    brush: redBrush
+                    //    );
+                    //
+                    //// horizontal line
+                    //DrawLine(
+                    //    start_x: 0 + healthGraphsDistanceFromDefaultHorizontal,             
+                    //    start_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,
+                    //    end_x: 250 + healthGraphsDistanceFromDefaultHorizontal,               
+                    //    end_y: currY + 150 + 28 + healthGraphsDistanceFromDefaultVertical,  
+                    //    stroke: 2,
+                    //    brush: redBrush
+                    //    );
+                    //
                     // line graph
                     //for (int j = 0; j < currHp.Count - 1; j++)
                     //{

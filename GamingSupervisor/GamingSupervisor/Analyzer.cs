@@ -166,7 +166,6 @@ namespace GamingSupervisor
             double end_x = 250 / visualCustomize.ScreenWidth * visualCustomize.ActualWidth;
             double start_y = visualCustomize.ActualHeight / 2 + (-100 + 28) / visualCustomize.ScreenHeight * visualCustomize.ActualHeight;
             double end_y = visualCustomize.ActualHeight / 2 + (150 + 28) / visualCustomize.ScreenHeight * visualCustomize.ActualHeight;
-            start_y -= end_y - start_y; // Just use the line graph height as the bar graph height
 
             healthGraphsBox = new OverlayBox
             {
