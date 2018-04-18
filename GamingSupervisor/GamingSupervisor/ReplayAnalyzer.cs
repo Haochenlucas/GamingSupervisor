@@ -60,6 +60,8 @@ namespace GamingSupervisor
             retreat = new Retreat();
 
             heroID = heroIDData.getHeroID(GUISelection.heroName);
+
+            
         }
 
         public override void Start()
@@ -240,6 +242,7 @@ namespace GamingSupervisor
          */
         private void HandleHeroSelection()
         {
+            Repla
             string heroname = GUISelection.heroName;
 
             int team_side = 0;

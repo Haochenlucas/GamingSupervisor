@@ -86,7 +86,7 @@ namespace Yato.DirectXOverlay
         private Queue<double> currHp = new Queue<double>(250);
 
         private List<int> heroIds;
-        private Dictionary<int, List<Tuple<String, String, String>>> ticksInfo;
+        private Dictionary<int, Tuple<String, List<Tuple<String, String, String>>>> ticksInfo;
 
         private bool drawHighlight = false;
         
@@ -1652,7 +1652,7 @@ namespace Yato.DirectXOverlay
         #endregion
 
         #region High Light
-        public void UpdateHighlightTime(Dictionary<int, List<Tuple<String, String, String>>> ticks, float maxTick)
+        public void UpdateHighlightTime(Dictionary<int, Tuple<String, List<Tuple<String, String, String>>>> ticks, float maxTick)
 
         {
             this.ticksInfo = ticks;
@@ -1685,10 +1685,10 @@ namespace Yato.DirectXOverlay
                 float xCurr = xInit + (xEnd - xInit) * percent;
 
                 List<Tuple<String, Direct2DBrush>> killText = new List<Tuple<String, Direct2DBrush>>();
-                foreach (var k in a.Value)
+                foreach (var k in a.Value.Item2)
                 {
                     if (killText.Count == 0)
-                        killText.Add(new Tuple<string, Direct2DBrush>(TimeSpan.FromSeconds(a.Key).ToString(@"hh\:mm\:ss"), CreateBrush(200, 200, 200)));
+                        killText.Add(new Tuple<string, Direct2DBrush>(a.Value.Item1, CreateBrush(200, 200, 200)));
                     Direct2DBrush brush = null;
                     switch (k.Item3)
                     {
@@ -1934,7 +1934,7 @@ namespace Yato.DirectXOverlay
                         Boolean redflag = false;
                         Boolean greenflag = false;
 
-                        foreach (var k in a.Value)
+                        foreach (var k in a.Value.Item2)
                         {
                             if (k.Item3 == "R")
                                 redflag = true;

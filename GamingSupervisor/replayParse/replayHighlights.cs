@@ -11,7 +11,8 @@ namespace replayParse
     {
         public int firstTick;
         public float lastTick;
-        public Dictionary<int, List<Tuple<String, String, String>>> tickInfo;
+        public Dictionary<int, Tuple<String, List<Tuple<String, String, String>>>> tickInfo;
+        private Dictionary<int, List<Tuple<String, String, String>>> listInfo;
 
         public ReplayHighlights(string dataFolderLocation, string myHero)
         {
@@ -28,11 +29,12 @@ namespace replayParse
 
             List<String> combatLines = new List<String>(System.IO.File.ReadAllLines(combatPath));
             List<List<String>> killLines = GetTeamfight(combatLines);
-            this.tickInfo = new Dictionary<int, List<Tuple<string, string, string>>>();
+            this.tickInfo = new Dictionary<int, Tuple<String, List<Tuple<String, String, String>>>>();
+            listInfo = new Dictionary<int, List<Tuple<string, string, string>>>();
 
             foreach (var kills in killLines)
             {
-                tickInfo[(int)Double.Parse(kills[0])] = new List<Tuple<string, string, string>>();
+                listInfo[(int)Double.Parse(kills[0])] = new List<Tuple<string, string, string>>();
                 for (int i = 1; i < kills.Count; i++)
                 {
                     string[] cont = kills[i].Split(new char[] { ' ' });
@@ -48,15 +50,21 @@ namespace replayParse
                     {
                         color = "G";
                     }
-                    tickInfo[(int)Double.Parse(kills[0])].Add(new Tuple<string, string, string>(killer, killed, color));
+                    listInfo[(int)Double.Parse(kills[0])].Add(new Tuple<string, string, string>(killer, killed, color));
                 }
             }
-        }        
+        }     
+        
+        public static void ConstructTickInfo()
+        {
+
+        }
+
 
         /** Finds teamfights, returns them in a list with each item being a teamfight
          Each teamfight starts with a time, then followed by strings of "killed killer"
             **/
-        public static List<List<String>> GetTeamfight(List<String> lines)
+        private static List<List<String>> GetTeamfight(List<String> lines)
         {
             List<List<String>> teamfight = new List<List<string>>();
             int currInd = 0;
