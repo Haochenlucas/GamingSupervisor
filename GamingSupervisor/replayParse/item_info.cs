@@ -19,7 +19,7 @@ namespace replayParse
         {
             //Create COM Objects. Create a COM object for everything that is referenced
             Excel.Application xlApp = new Excel.Application();
-            string s = Path.Combine(Environment.CurrentDirectory, "../../Properties/item_info.xlsx");
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/item_info.xlsx");
             Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(s);
             Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
             Excel.Range xlRange = xlWorksheet.UsedRange;
@@ -35,7 +35,7 @@ namespace replayParse
                 {
                     if (j == 1)
                     {
-                        Console.Write("\r\n");
+                        //Console.Write("\r\n");
                     }
                     //write the value to the console
                     if (xlRange.Cells[i, j] != null && xlRange.Cells[i, j].Value2 != null)
@@ -66,7 +66,7 @@ namespace replayParse
             xlApp.Quit();
             Marshal.ReleaseComObject(xlApp);
 
-            s = Path.Combine(Environment.CurrentDirectory, "../../Properties/hero_item.txt");
+            s = Path.Combine(Environment.CurrentDirectory, "Properties/hero_item.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
 
             for( int i = 0; i < lines.Length; i ++ )
@@ -82,6 +82,11 @@ namespace replayParse
                     item_KB[i + 1, 2] = int.Parse(three_item_cur[2]);
                 }
             }
+        }
+
+        public string[,] get_Info_Table()
+        {
+            return item_table_info;
         }
 
         public Dictionary<int,int> item_suggestion(int money, string dataFolderLocation, string myHero)
@@ -124,7 +129,6 @@ namespace replayParse
                         if (prevTime == currTime)
                         {
                             teamfight[currInd].Add(contents[0]);
-                            //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
                             teamfight[currInd].Add(contents[2] + " " + contents[3]);
                         }
                         else if (prevTime.Add(thirty) > currTime)
@@ -137,7 +141,6 @@ namespace replayParse
                             teamfight.Add(new List<String>());
                             prevTime = currTime;
                             teamfight[currInd].Add(contents[0]);
-                            //teamfight[currInd].Add(currTime.ToString(@"hh\:mm\:ss"));
                             teamfight[currInd].Add(contents[2] + " " + contents[3]);
                         }
 
@@ -152,17 +155,12 @@ namespace replayParse
                     string[] cont = kills[i].Split(new char[] { ' ' });
                     string killed = ID_table[hero_table[ConvertedHeroName.Get(cont[0])]];
                     string killer = ID_table[hero_table[ConvertedHeroName.Get(cont[1])]];
-
-                    string color = "we";
                     if (killed == myHero)
                     {
-                        item_ID.Add((int)Double.Parse(kills[0]),item_KB[hero_table[killed],0]);
+                        int killedID = hero_table[ConvertedHeroName.Get(killed)];
+                        int itemInfo = item_KB[killedID, 0];
+                        item_ID.Add((int)Double.Parse(kills[0]), itemInfo);
                     }
-                    else if (killer == myHero)
-                    {
-                        item_ID.Add((int)Double.Parse(kills[0]), item_KB[hero_table[killer], 2]);
-                    }
-                    tickInfo[(int)Double.Parse(kills[0])].Add(new Tuple<string, string, string>(killer, killed, color));
                 }
             }
             return item_ID;

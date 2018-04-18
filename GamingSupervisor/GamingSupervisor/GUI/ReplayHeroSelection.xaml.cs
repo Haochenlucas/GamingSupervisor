@@ -40,6 +40,11 @@ namespace GamingSupervisor
             }
 
             HeroNameListBox.ItemsSource = heros;
+            
+            ConfirmButton.IsEnabled = false;
+
+            MainWindow.HeroList.Visibility = Visibility.Collapsed;
+            MainWindow.Description.Visibility = Visibility.Visible;
         }
 
         private void ListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)

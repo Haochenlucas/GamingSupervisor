@@ -7,7 +7,7 @@
       xmlns:fa="http://schemas.fontawesome.io/icons/"
       xmlns:local="clr-namespace:GamingSupervisor"
       mc:Ignorable="d" 
-      d:DesignHeight="640" d:DesignWidth="480"
+      d:DesignHeight="590" d:DesignWidth="480"
       Title="ReplaySelection">
     <Grid Margin="50" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -17,7 +17,7 @@
         </StackPanel>
         <Grid Name="GridHolder" Visibility="Collapsed">
             <Grid.RowDefinitions>
-                <RowDefinition Height="400"/>
+                <RowDefinition Height="350"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 

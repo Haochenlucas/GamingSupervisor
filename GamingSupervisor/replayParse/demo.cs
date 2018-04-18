@@ -19,9 +19,10 @@ namespace GamingSupervisor
             heroID h_ID = new heroID();
             Dictionary<int, string> ID_table = h_ID.getHeroID(); // key is ID, value is hero_name;
             Dictionary<string, int> hero_table = h_ID.getIDHero(); // key is hero_name, value is ID;
-            //hero_intro h_Intro = new hero_intro();
-            //item_info i_info = new item_info();
-
+            hero_intro h_Intro = new hero_intro();
+            Dictionary<string, int> h_Intro_dic = h_Intro.getIntroHero();
+            heroAttribute hA = new heroAttribute();
+            item_info i_info = new item_info();
             //string[] heroName = h_ID.getHeroName();
             //foreach (KeyValuePair<int, string> kvp in ID_table)
             //{

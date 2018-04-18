@@ -6,6 +6,20 @@ using System.Windows.Shapes;
 
 namespace GamingSupervisor
 {
+    public class OverlayBox : ContentControl
+    {
+        public bool IsOverlayVisible
+        {
+            get;
+            set;
+        }
+
+        public OverlayBox() : base()
+        {
+            IsOverlayVisible = true;
+        }
+    }
+
     /// <summary>
     /// Interaction logic for VisualCustomize.xaml
     /// </summary>
@@ -21,8 +35,12 @@ namespace GamingSupervisor
         {
             InitializeComponent();
 
+            Closing += VisualCustomize_Closing;
+
             aspectRatio = SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth;
-            ScreenHeight = SystemParameters.PrimaryScreenHeight + SystemParameters.WindowCaptionHeight;
+            ScreenHeight = SystemParameters.PrimaryScreenHeight +
+                SystemParameters.WindowCaptionHeight +
+                SystemParameters.ResizeFrameHorizontalBorderHeight;
             ScreenWidth = SystemParameters.PrimaryScreenWidth;
 
             Height = ScreenHeight * 3 / 4; // Arbitrarily assign the height of the window to 3/4 the height of the screen
@@ -32,21 +50,43 @@ namespace GamingSupervisor
             CustomizeCanvas.Width = Width;
         }
 
-        public void AddElement(ContentControl contentControl, int positionX, int positionY)
+        public void CloseWindow()
         {
-            contentControl.Template = FindResource("DesignerItemTemplate") as ControlTemplate;
+            Closing -= VisualCustomize_Closing;
+            Close();
+        }
+
+        private void VisualCustomize_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Prevent window from closing
+            e.Cancel = true;
+        }
+
+        public void AddBox(OverlayBox box, int positionX, int positionY)
+        {
+            box.Template = FindResource("DesignerItemTemplate") as ControlTemplate;
 
             Rectangle rectangle = new Rectangle
             {
                 Fill = new SolidColorBrush(Colors.Black),
                 IsHitTestVisible = false
             };
-            contentControl.Content = rectangle;
+            box.Content = rectangle;
+            box.MouseDoubleClick += Box_MouseDoubleClick;
 
-            CustomizeCanvas.Children.Add(contentControl);
+            CustomizeCanvas.Children.Add(box);
 
-            Canvas.SetLeft(contentControl, positionX);
-            Canvas.SetTop(contentControl, positionY);
+            Canvas.SetLeft(box, positionX);
+            Canvas.SetTop(box, positionY);
+        }
+
+        private void Box_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            OverlayBox box = sender as OverlayBox;
+            if (box.IsOverlayVisible)
+                box.IsOverlayVisible = false;
+            else
+                box.IsOverlayVisible = true;
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
@@ -57,7 +97,11 @@ namespace GamingSupervisor
             double oldWidth = CustomizeCanvas.Width;
             double oldHeight = CustomizeCanvas.Height;
 
-            if (Math.Abs(percentWidthChange) > Math.Abs(percentHeightChange))
+            if (ActualWidth * aspectRatio >= ActualHeight && Math.Abs(percentWidthChange) > Math.Abs(percentHeightChange))
+            {
+                // Skip
+            }
+            else if (Math.Abs(percentWidthChange) > Math.Abs(percentHeightChange))
             {
                 if (WindowState == WindowState.Maximized)
                 {
@@ -73,15 +117,15 @@ namespace GamingSupervisor
                 }
                 foreach (var c in CustomizeCanvas.Children)
                 {
-                    if (c.GetType() == typeof(ContentControl))
+                    if(c.GetType() == typeof(OverlayBox))
                     {
-                        ContentControl child = c as ContentControl;
-                        double childAspectRatio = child.Height / child.Width;
-                        child.Width *= 1 + percentWidthChange;
-                        child.Height = child.Width * childAspectRatio;
+                        OverlayBox box = c as OverlayBox;
+                        double childAspectRatio = box.Height / box.Width;
+                        box.Width *= 1 + percentWidthChange;
+                        box.Height = box.Width * childAspectRatio;
 
-                        Canvas.SetLeft(child, Canvas.GetLeft(child) / oldWidth * CustomizeCanvas.Width);
-                        Canvas.SetTop(child, Canvas.GetTop(child) / oldHeight * CustomizeCanvas.Height);
+                        Canvas.SetLeft(box, Canvas.GetLeft(box) / oldWidth * CustomizeCanvas.Width);
+                        Canvas.SetTop(box, Canvas.GetTop(box) / oldHeight * CustomizeCanvas.Height);
                     }
                 }
             }
@@ -91,15 +135,15 @@ namespace GamingSupervisor
                 CustomizeCanvas.Height = ActualHeight;
                 foreach (var c in CustomizeCanvas.Children)
                 {
-                    if (c.GetType() == typeof(ContentControl))
+                    if (c.GetType() == typeof(OverlayBox))
                     {
-                        ContentControl child = c as ContentControl;
-                        double childAspectRatio = child.Height / child.Width;
-                        child.Height *= 1 + percentHeightChange;
-                        child.Width = child.Height / childAspectRatio;
+                        OverlayBox box = c as OverlayBox;
+                        double childAspectRatio = box.Height / box.Width;
+                        box.Height *= 1 + percentHeightChange;
+                        box.Width = box.Height / childAspectRatio;
 
-                        Canvas.SetLeft(child, Canvas.GetLeft(child) / oldWidth * CustomizeCanvas.Width);
-                        Canvas.SetTop(child, Canvas.GetTop(child) / oldHeight * CustomizeCanvas.Height);
+                        Canvas.SetLeft(box, Canvas.GetLeft(box) / oldWidth * CustomizeCanvas.Width);
+                        Canvas.SetTop(box, Canvas.GetTop(box) / oldHeight * CustomizeCanvas.Height);
                     }
                 }
             }
