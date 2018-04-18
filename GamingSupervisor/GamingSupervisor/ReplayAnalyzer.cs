@@ -553,16 +553,17 @@ namespace GamingSupervisor
                     string item_name = item_Info_Table[i_suggestion[closestGaming] + 2, 2];
                     string item_tip = item_Info_Table[i_suggestion[closestGaming] + 2, 117];
                     string item_content;
-                    if (item_tip == "0")
+                    if (item_tip == " 0")
                     {
-                         item_content = item_name + ": This is a good choice.";
+                        item_content = item_name + ":\nThis is a good choice.";
                     }
                     else
                     {
-                         item_content = item_name + ": " + item_tip;
+                        item_content = item_name + ":\n " + item_tip;
                     }
-                    
-                    overlay.AddItemSuggestionMessage(item_content, "");
+                    item_name = item_name.TrimStart(' ');
+                    string item_img = item_name.Replace(" ", "_");
+                    overlay.AddItemSuggestionMessage(item_content, item_img + "_icon");
                 }
                 else
                 {
