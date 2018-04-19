@@ -1555,7 +1555,7 @@ namespace Yato.DirectXOverlay
             AddMessage(hints.jungle, content, img);
         }
 
-        public void SelectedHeroSuggestion(int HeroID, float mouse_Y)
+        public void SelectedHeroSuggestion(int HeroID, float mouse_Y, float img_x, float img_y)
         {
             //Console.WriteLine(Directory.GetCurrentDirectory());
             string path = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\hero_difficulty_version_1.txt");
@@ -1576,6 +1576,7 @@ namespace Yato.DirectXOverlay
 
             AddMessage(hints.hero_introduction, suggestion, "", color, background, font);
             messages[Convert.ToInt32(hints.hero_introduction)].y = mouse_Y;
+            messages[Convert.ToInt32(hints.hero_introduction)].x = img_x - width_unit * 10 * Direct2DRenderer.size_scale;
         }
 
         // 7: retreat
@@ -2307,15 +2308,17 @@ namespace Yato.DirectXOverlay
             }
         }
 
-        // TODO: optimize this function cuz it is really slow now
-        private void CheckToShowHeroSuggestion()
+        private void CheckToShowHeroSuggestion(float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
             for (int i = 0; i < 5; i++)
             {
                 var mouse_pos = Control.MousePosition;
-                if (mouse_pos.X > messages[i].img_x && mouse_pos.X < messages[i].img_x + messages[i].img_width && mouse_pos.Y > messages[i].img_y && mouse_pos.Y < messages[i].img_y + messages[i].img_height)
+                if (mouse_pos.X > messages[i].img_x + distanceFromDefaultHorizontal
+                    && mouse_pos.X < messages[i].img_x + messages[i].img_width + distanceFromDefaultHorizontal
+                    && mouse_pos.Y > messages[i].img_y + distanceFromDefaultVertical
+                    && mouse_pos.Y < messages[i].img_y + messages[i].img_height + distanceFromDefaultVertical)
                 {
-                    SelectedHeroSuggestion(Int32.Parse(messages[i].imgName), Cursor.Position.Y);
+                    SelectedHeroSuggestion(Int32.Parse(messages[i].imgName), Cursor.Position.Y - distanceFromDefaultVertical, messages[i].img_x, messages[i].img_y);
                     return;
                 }
                 else
@@ -2389,11 +2392,12 @@ namespace Yato.DirectXOverlay
                             bmp.SharpDXBitmap.Dispose();
                         }
                     }
+
                     // Green Check or Red X
                     CheckBanPick(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                     DrawLogo(HeroSugg, distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                 }
-                CheckToShowHeroSuggestion();
+                CheckToShowHeroSuggestion(distanceFromDefaultHorizontal, distanceFromDefaultVertical);
                 EndScene();
             }
             else
