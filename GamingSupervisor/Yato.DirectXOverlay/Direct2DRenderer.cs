@@ -1922,7 +1922,6 @@ namespace Yato.DirectXOverlay
                 // Jungle Stacking
                 DrawJungleStacking();
 
-
                 // Move these two parts down for item suggestion
                 if (drawHighlight)
                 {
