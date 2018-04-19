@@ -362,16 +362,17 @@ namespace GamingSupervisor
 
             overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
-            
 
-            if (true)//healthPercent < 25)
+
+            if (gsi.Health < (gsi.MaxHealth - 430) && gsi.Health != 0)
             {
-                overlay.AddRetreatMessage("Health " + gsi.Health, "");
+                overlay.AddRetreatMessage("Low health warning! " + "Current Health: " + gsi.Health, "exclamation_mark");
             }
             else
             {
-                //overlay.ClearMessage(7);
+                overlay.ClearRetreat();
             }
+
 
             // For suggestion for tango and Healing_Salve.
             if (gsi.Health < (gsi.MaxHealth - 130) && gsi.Health != 0)
@@ -379,7 +380,7 @@ namespace GamingSupervisor
                 if (gsi.Health < (gsi.MaxHealth - 430) && gsi.Health != 0 && gsi.Items.Contains("item_flask"))
                 {
                     long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    if (itemflag == 0 || itemflag ==1)
+                    if (itemflag == 0 || itemflag == 1)
                     {
                         itemflag = 2;
                         timeSinceItemSuggestion_ms = now_ms;
@@ -409,6 +410,7 @@ namespace GamingSupervisor
                     {
                         overlay.ClearItemSuggestion();
                     }
+
                 }
                 else if (gsi.Items.Contains("item_tango"))
                 {

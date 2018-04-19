@@ -1534,7 +1534,7 @@ namespace Yato.DirectXOverlay
 
         public void ItemSelectionHints(string item, string img)
         {
-            string temp = BreakText(item, 50);
+            string temp = BreakText(item, 30);
             AddMessage(hints.items_selection, temp, img);
             ItemSugg = new ItemSuggestion(messages[(int)hints.items_selection], "Item Suggestion");
         }
@@ -1890,6 +1890,20 @@ namespace Yato.DirectXOverlay
             {
                 BeginScene();
                 ClearScene();
+
+                // show retreatDirect2DFont font = CreateFont("Century Gothic", 12);
+                if (messages[(int)hints.retreat].on)
+                {
+                    float modifier;
+                    DrawTextWithBackground(messages[(int)hints.retreat].text, messages[(int)hints.retreat].x, messages[(int)hints.retreat].y, messages[(int)hints.retreat].font, messages[(int)hints.retreat].color, messages[(int)hints.retreat].background, out modifier);
+                    if (messages[(int)hints.retreat].imgName != "")
+                    {
+                        string path = SelectFolder((int)hints.retreat);
+                        if (path == "") { throw new Exception("path not initialized"); }
+                        ShowImage(path, (int)hints.retreat, modifier);
+                    }
+                }
+                
 
                 // Item suggestion
                 if (drawItemSuggestions)
@@ -2567,8 +2581,8 @@ namespace Yato.DirectXOverlay
 
             float box_left = _message.img_x - modifier_x * 0.5f * Direct2DRenderer.size_scale;
             float box_top = _message.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
-            float box_right = box_left + modifier_x * 10 * Direct2DRenderer.size_scale;
-            float box_bottem = box_top + modifier_y * 8 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 12 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 14 * Direct2DRenderer.size_scale;
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             float title_left = _message.x - modifier_x * Direct2DRenderer.size_scale;
             float title_top = _message.y - modifier_y * 3 * Direct2DRenderer.size_scale;

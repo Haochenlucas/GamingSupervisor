@@ -498,6 +498,7 @@ namespace GamingSupervisor
         private void HandleGamePlay()
         {
             int gameStartTime = replayTick.GameStartTick - 90 * 30;
+            
             if (CurrentTick > gameStartTime && CurrentTick < gameStartTime + 300)
             {
                 Dictionary<int, string> hero_Intro_Dic = hero_Intro.getHeroIntro();
@@ -554,7 +555,7 @@ namespace GamingSupervisor
                     string item_content;
                     if (item_tip == " 0")
                     {
-                        item_content = item_name + ":\nThis is a good choice.";
+                        item_content = item_name + ":\nSummons a Warrior and an Archer to fight for you for 50 seconds. Lycan gives his summons a long-duration haste, as well as providing a critical strike aura.";
                     }
                     else
                     {
@@ -604,7 +605,8 @@ namespace GamingSupervisor
             int fEID = lower_hero_table[heroIDData.getHeroName(closestEnemyID)];
             int fHID = lower_hero_table[heroIDData.getHeroName(heroID)];
 
-            bool shouldRetreat = retreat.CreateInput(myID: fHID,
+            bool shouldRetreat = heroData.getHealth(CurrentTick, heroID) < 400 ||
+                retreat.CreateInput(myID: fHID,
                 myLvl: heroData.getLevel(CurrentTick, heroID),
                 myHP: health,
                 myMana: heroData.getMana(CurrentTick, heroID),
@@ -612,7 +614,8 @@ namespace GamingSupervisor
                 enemyLvl: heroData.getLevel(CurrentTick, closestEnemyID),
                 enemyHP: heroData.getHealth(CurrentTick, closestEnemyID),
                 enemyMana: heroData.getMana(CurrentTick, closestEnemyID));
-            
+
+
 
             //overlay.ToggleGraphForHeroHP();
             //overlay.AddHPs(hpToSend);
