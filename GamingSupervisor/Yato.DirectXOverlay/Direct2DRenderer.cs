@@ -1900,6 +1900,11 @@ namespace Yato.DirectXOverlay
                 // Hero information
                 DrawHeroInformation();
 
+                for (int i = 0; i < creepX.Count; i ++)
+                {
+                    DrawCircle((screen_width / 2) + (float)creepX[i], (screen_height / 2) - (float)creepY[i], Screen.PrimaryScreen.Bounds.Height / 10, 5f, redBrush);
+                }
+
                 // Circle out the closet enemy hero
                 //DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
 
@@ -2210,6 +2215,16 @@ namespace Yato.DirectXOverlay
 
         private double closestHero_X;
         private double closestHero_Y;
+
+        private List<double> creepX;
+        private List<double> creepY;
+
+        public void SetCreepPos(List<double> x, List<double> y)
+        {
+            creepX = x;
+            creepY = y;
+        }
+
         public void SetClosetHeroPosition(double x, double y)
         {
             closestHero_X = x;
