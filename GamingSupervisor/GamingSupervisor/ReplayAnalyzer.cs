@@ -723,7 +723,7 @@ namespace GamingSupervisor
                     content += "Count down: " + countdown + "\n";
                 }
                 content += JungleCamps.GetDirection(closestJungleCamp);
-                overlay.AddJungleStackingMessage(content, "", 0.8 * (closestCampPos.Item1-x), 0.9 * (closestCampPos.Item2-y));
+                overlay.AddJungleStackingMessage(content, "");
             }
             else
             {

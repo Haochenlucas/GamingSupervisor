@@ -96,9 +96,9 @@ namespace GamingSupervisor
         {
             renderer.HeroInfoHints(message, img);
         }
-        public void AddJungleStackingMessage(string message, string img, double _x, double _y)
+        public void AddJungleStackingMessage(string message, string img)
         {
-            renderer.JungleStacking(message, img, _x, _y);
+            renderer.JungleStacking(message, img);
         }
         public void ShowCloestEnemy(double x, double y)
         {

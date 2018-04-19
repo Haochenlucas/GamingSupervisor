@@ -1547,11 +1547,8 @@ namespace Yato.DirectXOverlay
         }
 
         // Dynamic positioning for the message to should on the camp position
-        public void JungleStacking(string content, string img, double _x, double _y)
+        public void JungleStacking(string content, string img)
         {
-            messages[(int)hints.jungle].x = (float)_x;
-            messages[(int)hints.jungle].y = (float)_y;
-
             AddMessage(hints.jungle, content, img);
         }
 
