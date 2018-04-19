@@ -497,10 +497,9 @@ namespace GamingSupervisor
 
         private void HandleGamePlay()
         {
-            // TODO: Set this to be the beginning of the time
-            if (CurrentTick > replayTick.GameStartTick && CurrentTick < replayTick.GameStartTick + 300)
+            int gameStartTime = replayTick.GameStartTick - 90 * 30;
+            if (CurrentTick > gameStartTime && CurrentTick < gameStartTime + 300)
             {
-                // TODO: Replace with the true intruction
                 Dictionary<int, string> hero_Intro_Dic = hero_Intro.getHeroIntro();
                 string hero_Intro_String = hero_Intro_Dic[hero_table[GUISelection.heroName]];
                 overlay.AddHeroInfoMessage(hero_Intro_String, "");
