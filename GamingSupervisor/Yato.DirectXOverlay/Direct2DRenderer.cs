@@ -1764,7 +1764,7 @@ namespace Yato.DirectXOverlay
         private void DrawLogo(MessageBox messageBox, float Horizontal, float Vertical)
         {
             Direct2DBrush color = CreateBrush(255, 255, 255, 255);
-            Direct2DBrush backgroundColor = blackBrush;
+            Direct2DBrush backgroundColor = CreateBrush(255, 255, 255, 0);
             Direct2DFont font = CreateFont(messageBox.Logo.Item2, messageBox.Logo.Item3);
 
             var layout = new TextLayout(fontFactory, instruction.Logo.Item1, font, float.MaxValue, float.MaxValue);
@@ -1894,33 +1894,7 @@ namespace Yato.DirectXOverlay
                 BeginScene();
                 ClearScene();
 
-                // Loop through all the messages (not include: hero information and two instructions)
-                // 6: items selection
-                // 7: retreat
-                // 8: press on
-                // 9: last hit
-                // 10: jungle
-                // 11: safe farming
-                // 12: hero information
-                /*
-                for (int i = 6; i < 13; i++)
-                {
-                    // REDO this part
-                    if (messages[i].on)
-                    {
-                        float modifier;
-                        DrawTextWithBackground(messages[i].text, messages[i].x, messages[i].y, messages[i].font, messages[i].color, messages[i].background, out modifier);
-                        if (messages[i].imgName != "")
-                        {
-                            string path = SelectFolder(i);
-                            if (path == "") { throw new Exception("path not initialized"); }
-                            ShowImage(path, i, modifier);
-                        }
-                    }
-                }
-                */
-
-                // Hero information
+                // Item suggestion
                 if (drawItemSuggestions)
                 {
                     DrawItemSelection(itemPositionX, itemPositionY);
@@ -1930,7 +1904,7 @@ namespace Yato.DirectXOverlay
                 DrawHeroInformation();
 
                 // Circle out the closet enemy hero
-                DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
+                //DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
 
 
                 if (creepTimer.ElapsedMilliseconds > 7000)
