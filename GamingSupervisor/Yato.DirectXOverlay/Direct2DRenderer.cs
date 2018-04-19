@@ -2554,7 +2554,7 @@ namespace Yato.DirectXOverlay
             float title_left = heroes[0].x - modifier_x * Direct2DRenderer.size_scale;
             float title_top = heroes[0].y - modifier_y * 3 * Direct2DRenderer.size_scale;
             title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
-            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan", 20, box_left, box_top);
+            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan Pro 3", 20, box_left, box_top);
         }
     }
     #endregion
@@ -2599,7 +2599,7 @@ namespace Yato.DirectXOverlay
             float title_left = _message.x - modifier_x * Direct2DRenderer.size_scale;
             float title_top = _message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
             title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
-            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan", 20, box_left, box_top);
+            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan Pro 3", 20, box_left, box_top);
         }
     }
     #endregion
@@ -2641,7 +2641,7 @@ namespace Yato.DirectXOverlay
         // left, top, right, bottem
         public Tuple<float, float, float, float> box_pos;
         // Tuple<red, green, blue, alpha>
-        public Tuple<int, int, int, int> box_background = new Tuple<int, int, int, int>(109, 109, 109, 150);
+        public Tuple<int, int, int, int> box_background = new Tuple<int, int, int, int>(60, 60, 60, 150);
         protected float modifier_x = Screen.PrimaryScreen.Bounds.Width / 32;
         protected float modifier_y = Screen.PrimaryScreen.Bounds.Height / 32;
 
