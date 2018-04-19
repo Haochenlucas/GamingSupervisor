@@ -105,6 +105,11 @@ namespace GamingSupervisor
             renderer.SetClosetHeroPosition(x, y);
         }
 
+        public void ShowCreep(List<double> x, List<double> y)
+        {
+            renderer.SetCreepPos(x, y);
+        }
+
         public void ToggleGraphForHeroHP(bool tog = true)
         {
             renderer.ToggleGraph(tog);

@@ -661,6 +661,8 @@ namespace GamingSupervisor
                     break;
             }
             double minAtk = heroData.getDamageMin(currentTick, heroID);
+            List<double> creepX = new List<double>();
+            List<double> creepY = new List<double>();
             foreach (var c in creeps)
             {
                 double cArmor = c.armor;
@@ -669,10 +671,19 @@ namespace GamingSupervisor
 
                 if (canKill && cHp > 0)
                 {
+                    (double x, double y, double z) = heroData.getHeroPosition(CurrentTick + 6, heroID);
                     overlay.CreepLowEnough();
-                }
+                    double dis = Int32.MaxValue;
+                    double temp = Math.Pow((Math.Pow(x - c.x, 2) + Math.Pow(y - c.y, 2)), 0.5);
 
+                    if (temp < dis)
+                    {
+                        creepX.Add(c.x - x);
+                        creepY.Add(c.y - y);
+                    }
+                }
             }
+            overlay.ShowCreep(creepX, creepY);
             overlay.AddHeroGraphIcons(teamIDGraph);
             overlay.AddHPs(hpToSend, maxHpToSend);
             overlay.AddHp(hpToSend[0]);
