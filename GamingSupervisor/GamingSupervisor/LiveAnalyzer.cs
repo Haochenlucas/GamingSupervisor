@@ -379,9 +379,9 @@ namespace GamingSupervisor
                 if (gsi.Health < (gsi.MaxHealth - 430) && gsi.Health != 0 && gsi.Items.Contains("item_flask"))
                 {
                     long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    if (itemflag == 0)
+                    if (itemflag == 0 || itemflag ==1)
                     {
-                        itemflag = 1;
+                        itemflag = 2;
                         timeSinceItemSuggestion_ms = now_ms;
                     }
                     if (now_ms - timeSinceItemSuggestion_ms <= 10000)
@@ -397,7 +397,7 @@ namespace GamingSupervisor
                         {
                             item_content = item_name + ":\n " + item_tip;
                         }
-                        if (itemflag == 1)
+                        if (itemflag == 2)
                         {
                             item_name = item_name.TrimStart(' ');
                             string item_img = item_name.Replace(" ", "_");
@@ -413,7 +413,7 @@ namespace GamingSupervisor
                 else if (gsi.Items.Contains("item_tango"))
                 {
                     long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    if (itemflag == 0)
+                    if (itemflag == 0 || itemflag == 2)
                     {
                         itemflag = 1;
                         timeSinceItemSuggestion_ms = now_ms;
@@ -445,7 +445,7 @@ namespace GamingSupervisor
                     }
                 }
             }
-            if (gsi.Health == 0)
+            if (gsi.Health == 0|| gsi.Health == gsi.MaxHealth)
             {
                 itemflag = 0;
                 overlay.ClearItemSuggestion();
