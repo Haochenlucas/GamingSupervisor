@@ -2315,7 +2315,7 @@ namespace Yato.DirectXOverlay
                 var mouse_pos = Control.MousePosition;
                 if (mouse_pos.X > messages[i].img_x && mouse_pos.X < messages[i].img_x + messages[i].img_width && mouse_pos.Y > messages[i].img_y && mouse_pos.Y < messages[i].img_y + messages[i].img_height)
                 {
-                    SelectedHeroSuggestion(Int32.Parse(messages[i].imgName), messages[i].img_y);
+                    SelectedHeroSuggestion(Int32.Parse(messages[i].imgName), Cursor.Position.Y);
                     return;
                 }
                 else
@@ -2340,10 +2340,10 @@ namespace Yato.DirectXOverlay
                 float distanceFromDefaultVertical = positionY - HeroSugg.box_pos.Item2;
 
                 // Draw hero selection suggestion box
-                Direct2DBrush color = CreateBrush(messages[0].color.Item1, messages[0].color.Item2, messages[0].color.Item3, messages[0].color.Item4);
-                Direct2DBrush background = CreateBrush(messages[0].background.Item1, messages[0].background.Item2, messages[0].background.Item3, messages[0].background.Item4);
-                Direct2DFont textFont = CreateFont(messages[0].font.Item1, messages[0].font.Item2);
-                Direct2DBrush box_background = CreateBrush(109, 109, 109, 150);
+                Direct2DBrush color = CreateBrush(HeroSugg.tColor.Item1, HeroSugg.tColor.Item2, HeroSugg.tColor.Item3, HeroSugg.tColor.Item4);
+                Direct2DBrush background = CreateBrush(HeroSugg.tBackColor.Item1, HeroSugg.tBackColor.Item2, HeroSugg.tBackColor.Item3, HeroSugg.tBackColor.Item4);
+                Direct2DFont textFont = CreateFont(HeroSugg.title.Item2, HeroSugg.title.Item3);
+                Direct2DBrush box_background = CreateBrush(HeroSugg.box_background.Item1, HeroSugg.box_background.Item2, HeroSugg.box_background.Item3, HeroSugg.box_background.Item4);
                 // The box
                 device.FillRectangle(
                     new RawRectangleF(
