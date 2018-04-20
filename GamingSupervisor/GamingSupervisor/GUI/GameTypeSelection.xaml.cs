@@ -20,6 +20,9 @@ namespace GamingSupervisor
             MainWindow.Description.Text += "\n\n";
             MainWindow.Description.Text += "Select 'Replay' to analyze a replay with the Gaming Supervisor.";
             MainWindow.Description.Text += " You must have played at least one live game or downloaded a replay to select this option.";
+
+            MainWindow.HeroList.Visibility = Visibility.Collapsed;
+            MainWindow.Description.Visibility = Visibility.Visible;
         }
 
         private void SelectLive(object sender, RoutedEventArgs e)

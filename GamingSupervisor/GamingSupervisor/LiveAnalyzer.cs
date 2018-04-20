@@ -210,7 +210,7 @@ namespace GamingSupervisor
                                 initialInstructionsBox.Visibility = Visibility.Hidden;
                                 heroSelectionBox.Visibility = Visibility.Hidden;
                                 highlightBarBox.Visibility = Visibility.Hidden;
-                                healthGraphsBox.Visibility = Visibility.Visible;
+                                healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Visible;
                             });
 
@@ -230,7 +230,8 @@ namespace GamingSupervisor
                         //if (isHealthGraphsBoxVisible)
                             //overlay.ShowHealthGraphs();
                         //else
-                            overlay.HideHealthGraphs();
+                        overlay.HideHealthGraphs();
+                        overlay.ToggleHighlight(false);
 
                         if (isItemSuggestionsBoxVisible)
                             overlay.ShowItemSuggestions();

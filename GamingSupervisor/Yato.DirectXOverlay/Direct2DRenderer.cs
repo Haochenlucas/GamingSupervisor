@@ -1914,10 +1914,10 @@ namespace Yato.DirectXOverlay
                 // Hero information
                 DrawHeroInformation();
 
-                for (int i = 0; i < creepX.Count; i ++)
-                {
-                    DrawCircle((screen_width / 2) + (float)creepX[i], (screen_height / 2) - (float)creepY[i], Screen.PrimaryScreen.Bounds.Height / 10, 5f, redBrush);
-                }
+                //for (int i = 0; i < creepX.Count; i ++)
+                //{
+                //    DrawCircle((screen_width / 2) + (float)creepX[i], (screen_height / 2) - (float)creepY[i], Screen.PrimaryScreen.Bounds.Height / 10, 5f, redBrush);
+                //}
 
                 // Circle out the closet enemy hero
                 //DrawCircle((screen_width/2) + (float)closestHero_X, (screen_height / 2) - (float)closestHero_Y, Screen.PrimaryScreen.Bounds.Height / 5, 2f, redBrush);
@@ -2667,7 +2667,7 @@ namespace Yato.DirectXOverlay
             float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
             float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
             title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
-            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan", 20, box_left, box_top);
+            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan Pro 3", 20, box_left, box_top);
         }
     }
     #endregion
