@@ -7,21 +7,24 @@ Haochen Zhang
 
 University of Utah School of Computing Senior Project
 
-## Dota2GSI
+## Build:
 
-Game state integration, used to sync replay with overlay.
+1. Go to Dota2GSI in Visual Studio. Build the project.
 
-## Dota2Parser
+2. Go to Dota2Api in Visual Studio. Build the project, if it fails, clean the project, and build it again. (This is usually due to NuGet.)
 
-Parser used to parse replay files (.dem).
+3. Open GamingSupervisor in Visual Studio. Build the project.
 
-## GamingSupervisor
+4. If running in Visual Studio, make sure the default project is GamingSupervisor, and run. The executable produced is `GamingSupervisor.exe`.
 
-Program UI and logic controller for the overlay.
+## Requirements:
 
-## Yato.DirectXOverlay
+- OS: Windows 10 (Potentially working on other versions of Windows, but untested)
 
-Library used to produce the overlays and graphics shown on the game screen.
+- Programs: [DotA 2](https://store.steampowered.com/app/570/Dota_2/)
+
+All other required libraries are packed in the code.
+
 
 ## Website
 
