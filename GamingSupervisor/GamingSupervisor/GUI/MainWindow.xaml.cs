@@ -1,5 +1,6 @@
 ﻿using MahApps.Metro.Controls;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,6 +16,17 @@ namespace GamingSupervisor
 
         public MainWindow()
         {
+            if (Process.GetProcessesByName("GamingSupervisor").Length != 1)
+            {
+                MessageBox.Show(this, "Gaming Supervisor is already running. Close the other instance and try again.", "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information,
+                    MessageBoxResult.OK,
+                    MessageBoxOptions.DefaultDesktopOnly);
+
+                    Application.Current.Shutdown();
+            }
+
             InitializeComponent();
 
             HideInstructions();
