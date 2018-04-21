@@ -23,7 +23,23 @@ University of Utah School of Computing Senior Project
 
 - Programs: [DotA 2](https://store.steampowered.com/app/570/Dota_2/)
 
-All other required libraries are packed in the code.
+## External Libraries Used:
+
+- Dota2GSI
+
+- Dota2Api
+
+- Clarity Parser
+
+- SharpDX (Yato)
+
+- scikit-learn
+
+- numpy
+
+- scipy
+
+- pyinstaller
 
 
 ## Website
