@@ -1715,7 +1715,10 @@ namespace Yato.DirectXOverlay
                 }
                 killText.Reverse();
                 //killText = killText.TrimEnd('\r', '\n');
-                if (mX > xCurr - 2 && mX < xCurr + 2 && mY > (3 * y / 4) - 14 && mY < (3 * y / 4) + 10)
+                if (mX > xCurr - 2 + highlightBarDistanceFromDefaultHorizontal &&
+                    mX < xCurr + 2 + highlightBarDistanceFromDefaultHorizontal &&
+                    mY > (3 * y / 4) - 14 + hightlightBarDistanceFromDefaultVertical &&
+                    mY < (3 * y / 4) + 10 + hightlightBarDistanceFromDefaultVertical)
                     DrawTextWithBackground(
                         text: killText, 
                         x: xCurr + highlightBarDistanceFromDefaultHorizontal, 
