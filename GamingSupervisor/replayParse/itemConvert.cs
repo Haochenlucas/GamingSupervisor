@@ -13,7 +13,7 @@ namespace replayParse
         public itemConvert()
         {
             Excel.Application xlApp = new Excel.Application();
-            string s = Path.Combine(Environment.CurrentDirectory, "../../Properties/item_info.xlsx");
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/item_info.xlsx");
             Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(s);
             Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[1];
             Excel.Range xlRange = xlWorksheet.UsedRange;
@@ -45,7 +45,7 @@ namespace replayParse
             }
 
 
-            string path = Path.Combine(Environment.CurrentDirectory, "../../Properties/item_info.txt");
+            string path = Path.Combine(Environment.CurrentDirectory, "Properties/item_info.txt");
             if (!File.Exists(path))
             {
                 // Create a file to write to.

@@ -19,7 +19,7 @@ namespace replayParse
         {
             heroID hero_id = new heroID();
             Dictionary<int, string> hero_id_name = hero_id.getHeroID();
-            string s = Path.Combine(Environment.CurrentDirectory, "../../Properties/dota_hero_info_1.txt");
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/dota_hero_info_1.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
             string[] second_lines = lines;
             int key = 0;

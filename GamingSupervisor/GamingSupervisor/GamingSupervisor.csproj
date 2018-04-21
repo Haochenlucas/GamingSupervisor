@@ -70,6 +70,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dota2Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -240,6 +246,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -248,10 +257,13 @@
     <None Include="Retreat\model.pkl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="GUI\logo.png" />
+    <Resource Include="logo.ico" />
     <Content Include="Parser\parser.jar" />
     <Content Include="Retreat\retreat_predict.exe" />
   </ItemGroup>
@@ -286,6 +298,7 @@ xcopy "$(ProjectDir)Parser\parser.jar" "$(ProjectDir)bin\$(ConfigurationName)" /
 xcopy "$(ProjectDir)hero_icon_images" "$(ProjectDir)bin\$(ConfigurationName)\hero_icon_images\" /R /Y /I
 xcopy "$(ProjectDir)other_images" "$(ProjectDir)bin\$(ConfigurationName)\other_images\"  /R /Y /I
 xcopy "$(ProjectDir)buttons" "$(ProjectDir)bin\$(ConfigurationName)\buttons\"  /R /Y /I
+xcopy "$(ProjectDir)items_icon" "$(ProjectDir)bin\$(ConfigurationName)\items_icon\"  /R /Y /I
 xcopy "$(ProjectDir)..\replayParse\Properties" "$(ProjectDir)bin\$(ConfigurationName)\Properties\"  /R /Y /I</PostBuildEvent>
   </PropertyGroup>
 </Project>

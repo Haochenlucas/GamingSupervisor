@@ -1555,7 +1555,7 @@ namespace Yato.DirectXOverlay
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y, float img_x, float img_y)
         {
             //Console.WriteLine(Directory.GetCurrentDirectory());
-            string path = Path.Combine(Environment.CurrentDirectory, @"..\..\..\replayParse\Properties\hero_difficulty_version_1.txt");
+            string path = Path.Combine(Environment.CurrentDirectory, "Properties/hero_difficulty_version_1.txt");
 
             hero_difficulty dt = new hero_difficulty(path);
             string suggestion = dt.mainDiff(HeroID);
@@ -1730,7 +1730,7 @@ namespace Yato.DirectXOverlay
         // one of the five suggested heroes get banned by the other team
         public void SuggestedHeroBanned(int heroIndex, float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
-            Direct2DBitmap cross = new Direct2DBitmap(device, @"..\\..\\other_images\red_cross.png");
+            Direct2DBitmap cross = new Direct2DBitmap(device, "other_images/red_cross.png");
 
             DrawBitmap(
                 bmp: cross,
@@ -1745,7 +1745,7 @@ namespace Yato.DirectXOverlay
         // one of the five suggested heroes get picked by our team
         public void SuggestedHeroPicked(int heroIndex, float distanceFromDefaultHorizontal, float distanceFromDefaultVertical)
         {
-            Direct2DBitmap check = new Direct2DBitmap(device, @"..\\..\\other_images\green_check.png");
+            Direct2DBitmap check = new Direct2DBitmap(device, "other_images/green_check.png");
             DrawBitmap(
                 bmp: check,
                 opacity: 1,
@@ -1791,15 +1791,15 @@ namespace Yato.DirectXOverlay
             {
                 // Hero selection slot1
                 case 6:
-                    path = @"..\\..\\items_icon\";
+                    path = "items_icon/";
                     break;
                 case int n when (n >= 7 && n <= 11):
-                    path = @"..\\..\\other_images\";
+                    path = "other_images/";
                     messages[i].img_width = (144 / 2) * Direct2DRenderer.size_scale;
                     messages[i].img_height = (144 / 2) * Direct2DRenderer.size_scale;
                     break;
                 case 12:
-                    path = @"..\\..\\hero_icon_images\";
+                    path = "hero_icon_images/";
                     break;
             }
             return path;
@@ -2379,7 +2379,7 @@ namespace Yato.DirectXOverlay
                             modifier: out modifier);
                         if (messages[i].imgName != "")
                         {
-                            Direct2DBitmap bmp = new Direct2DBitmap(device, @"..\\..\\hero_icon_images\" + messages[i].imgName + ".png");
+                            Direct2DBitmap bmp = new Direct2DBitmap(device, "hero_icon_images/" + messages[i].imgName + ".png");
                             DrawBitmap(
                                 bmp: bmp,
                                 opacity: 1,
@@ -2499,7 +2499,7 @@ namespace Yato.DirectXOverlay
                 mouse_pos.Y < instruction.close_button_pos.Item2 + instruction.close_button_pos.Item4 + distanceFromDefaultVertical)
             {
                 button_timer.Start();
-                Direct2DBitmap close_button_red = new Direct2DBitmap(device, @"..\\..\\..\\GamingSupervisor\\buttons\" + instruction.close_button_red + ".png");
+                Direct2DBitmap close_button_red = new Direct2DBitmap(device, "buttons/" + instruction.close_button_red + ".png");
 
                 float scale = button_timer.ElapsedMilliseconds;
                 scale = scale / button_time;
@@ -2515,7 +2515,7 @@ namespace Yato.DirectXOverlay
             else
             {
                 button_timer.Reset();
-                Direct2DBitmap close_button_black = new Direct2DBitmap(device, @"..\\..\\..\\GamingSupervisor\\buttons\" + instruction.close_button_black + ".png");
+                Direct2DBitmap close_button_black = new Direct2DBitmap(device, "buttons/" + instruction.close_button_black + ".png");
                 DrawBitmap(
                     bmp: close_button_black,
                     opacity: 1,

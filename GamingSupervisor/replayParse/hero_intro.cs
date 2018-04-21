@@ -14,7 +14,7 @@ namespace replayParse
 
         public hero_intro()
         {
-            string s = Path.Combine(Environment.CurrentDirectory, "../../../replayParse/Properties/hero_intro.txt");
+            string s = Path.Combine(Environment.CurrentDirectory, "Properties/hero_intro.txt");
             string[] lines = System.IO.File.ReadAllLines(s);
             string[] second_lines = lines;
             int length_name = 0;
