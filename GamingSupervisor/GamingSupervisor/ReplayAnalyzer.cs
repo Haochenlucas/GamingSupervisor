@@ -512,12 +512,7 @@ namespace GamingSupervisor
             
             int currentGameTime = announcer.GetCurrentGameTime();
             // if timer is after the game start and every last 8 sec of a minute
-            int eclipsedSec = (CurrentTick - replayTick.GameStartTick) / 30;
-            //if (eclipsedSec > 0 && (eclipsedSec / 60) > 52)
-            if(true)
-            {
-                AnalizeJungleCamps();
-            }
+            AnalizeJungleCamps();
 
             int health = 0;
             if (announcer.GetCurrentGameTime() >= 780)
@@ -727,17 +722,17 @@ namespace GamingSupervisor
                 string content = "";
                 int totalsecond = (CurrentTick - replayTick.GameStartTick) / 30;
                 
-                content += "Game Time: " + totalsecond.ToString() + "\n";
                 int secondMark = JungleCamps.GetCampSecMark(closestJungleCamp);
                 int second = totalsecond % 60;
+                int minute = totalsecond / 60 - second;
+                //content += "Game Time: " + minute.ToString() + ":" + second.ToString() + "\n";
                 int countdown = secondMark - second;
-                //if (countdown < 5)
-                if(true)
+                if (countdown < 5)
                 {
                     content += "Count down: " + countdown + "\n";
+                    content += JungleCamps.GetDirection(closestJungleCamp);
+                    overlay.AddJungleStackingMessage(content, "");
                 }
-                content += JungleCamps.GetDirection(closestJungleCamp);
-                overlay.AddJungleStackingMessage(content, "");
             }
             else
             {
