@@ -342,8 +342,8 @@ namespace GamingSupervisor
             {
                 Dictionary<int, string> hero_Intro_Dic = hero_Intro.getHeroIntro();
                 name = gsi.Name.Replace("hero_","*");
-                string[] namestr = name.Split('*');
-                name = string.Join("", namestr[namestr.Length-1].Split(new string[] { "_" }, StringSplitOptions.None));
+                string[] namestr1 = name.Split('*');
+                name = string.Join("", namestr1[namestr1.Length-1].Split(new string[] { "_" }, StringSplitOptions.None));
                 name = ConvertedHeroName.Get(name);
                 string hero_Intro_String = hero_Intro_Dic[hero_table[name]];
                 overlay.AddHeroInfoMessage(hero_Intro_String, "");
@@ -458,8 +458,11 @@ namespace GamingSupervisor
 
             // item suggestion to buy something
             int item_suggestion_flag = 0;
-
-            if(gsi.Health == 0)
+            name = gsi.Name.Replace("hero_", "*");
+            string[] namestr = name.Split('*');
+            name = string.Join("", namestr[namestr.Length - 1].Split(new string[] { "_" }, StringSplitOptions.None));
+            name = ConvertedHeroName.Get(name);
+            if (gsi.Health == 0)
             {
                 int item_id = i_info.item_suggestion_for_live(gsi.Items, name);
                 long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -492,6 +495,7 @@ namespace GamingSupervisor
                 else
                 {
                     overlay.ClearItemSuggestion();
+                    item_suggestion_flag = 0;
                 }
             }
         }

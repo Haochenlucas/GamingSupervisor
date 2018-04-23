@@ -67,6 +67,7 @@ namespace Yato.DirectXOverlay
 
                 PInvoke.Message message = new PInvoke.Message();
 
+                //Managed Debugging Assistant 'LoaderLock' : 'Attempting managed execution inside OS Loader lock. Do not attempt to run managed code inside a DllMain or image initialization function since doing so can cause the application to hang.'
                 if (PInvoke.PeekMessageW(ref message, WindowHandle, 0, 0, 1) != 0)
                 {
                     if (message.Msg == PInvoke.WindowsMessage.WM_QUIT) continue;

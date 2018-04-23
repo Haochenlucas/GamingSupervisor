@@ -161,14 +161,23 @@ namespace replayParse
             string item_lower = "";
             foreach(string s in items)
             {
-                item_name = s.Replace("item_","");
-                item_name = s.Replace("_", " ");
-                for (int i = 2; i< 157; i++)
+                item_name = s.Replace("item","");
+                item_name = item_name.Replace("_", "");
+                if (item_name.Contains("travel"))
                 {
-                    item_lower = item_table_info[i, 2].ToLower();
+                    item_name = "bootsoftravel";
+                }
+                else if (item_name.Contains("cyclone"))
+                {
+                    item_name = "eul";
+                }
+                for (int i = 3; i< 156; i++)
+                {
+                    item_lower = item_table_info[i,2].ToLower();
+                    item_lower = item_lower.Replace(" ", "");
                     if (item_lower.Contains(item_name))
                     {
-                        itemsID.Add(i);
+                        itemsID.Add(i-2);
                     }
                 }
             }
