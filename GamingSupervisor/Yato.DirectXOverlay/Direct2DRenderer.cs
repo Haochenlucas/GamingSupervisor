@@ -72,9 +72,10 @@ namespace Yato.DirectXOverlay
         private Message[] messages = new Message[13];
 
         private Instruction instruction;
-        private HeroSuggestion HeroSugg = new HeroSuggestion();
-        private HeroInfo HeroInfo = new HeroInfo();
-        private ItemSuggestion ItemSugg = new ItemSuggestion();
+        private HeroSuggestion HeroSugg;
+        private HeroInfo HeroInfo;
+        private ItemSuggestion ItemSugg;
+        private JungleStacking JungleStack;
 
         // Contains information about hero health
         private double[] hps = new double[5];
@@ -1464,10 +1465,10 @@ namespace Yato.DirectXOverlay
                         messages[i] = new Message(last_hit, "", i * 20, 0);
                         break;
 
-                    // 10: jungle
+                    // 10: jungle stacking
                     case 10:
                         string jungle = "Jungle message slot";
-                        messages[i] = new Message(jungle, "", i * 20, 0);
+                        messages[i] = new Message(jungle, "", width_unit * 23, height_unit * 24);
                         break;
                         
                     // 11: safe farming
@@ -1543,13 +1544,14 @@ namespace Yato.DirectXOverlay
         {
             string temp = BreakText(info, 42);
             AddMessage(hints.heroinformation, temp, img);
-            HeroInfo = new HeroInfo(messages[(int)hints.heroinformation], "Tutorial");
+            HeroInfo = new HeroInfo(messages[(int)hints.heroinformation], "Hero Guide");
         }
 
         // Dynamic positioning for the message to should on the camp position
         public void JungleStacking(string content, string img)
         {
             AddMessage(hints.jungle, content, img);
+            JungleStack = new JungleStacking(messages[(int)hints.jungle], "Jungle Stacking");
         }
 
         public void SelectedHeroSuggestion(int HeroID, float mouse_Y, float img_x, float img_y)
@@ -2103,25 +2105,51 @@ namespace Yato.DirectXOverlay
         {
             if (messages[(int)hints.jungle].on)
             {
+
+                // Draw Jungles Stacking box
+                Direct2DBrush box_background = CreateBrush(
+                    r: JungleStack.box_background.Item1,
+                    g: JungleStack.box_background.Item2,
+                    b: JungleStack.box_background.Item3,
+                    a: JungleStack.box_background.Item4);
+                // The box
+                device.FillRectangle(
+                    new RawRectangleF(
+                        left: JungleStack.box_pos.Item1,
+                        top: JungleStack.box_pos.Item2,
+                        right: JungleStack.box_pos.Item3,
+                        bottom: JungleStack.box_pos.Item4),
+                    box_background);
+
+                // Title of the box
+                Tuple<string, int> textFont = new Tuple<string, int>(JungleStack.title.Item2, (int)JungleStack.title.Item3);
+                DrawTextWithBackground(
+                    text: JungleStack.title.Item1,
+                    x: JungleStack.title.Item4,
+                    y: JungleStack.title.Item5,
+                    tfont: textFont,
+                    tcolor: JungleStack.tColor,
+                    tbackground: JungleStack.tBackColor);
+
                 // Text of the content
                 float modifier;
                 DrawTextWithBackground(
-                    text: messages[(int)hints.jungle].text,
-                    x: (screen_width / 2) + messages[(int)hints.jungle].x,
-                    y: (screen_height / 2) - messages[(int)hints.jungle].y,
-                    tfont: messages[(int)hints.jungle].font,
-                    tcolor: messages[(int)hints.jungle].color,
-                    tbackground: messages[(int)hints.jungle].background,
+                    text: JungleStack.message.text,
+                    x: JungleStack.message.x,
+                    y: JungleStack.message.y,
+                    tfont: JungleStack.message.font,
+                    tcolor: JungleStack.message.color,
+                    tbackground: JungleStack.message.background,
                     modifier: out modifier);
 
                 // Draw LOGO
-                //DrawLogo(ItemSugg, 0, 0);
+                DrawLogo(JungleStack, 0, 0);
                 // Draw image
-                if (messages[(int)hints.jungle].imgName != "")
+                if (messages[(int)hints.items_selection].imgName != "")
                 {
-                    string path = SelectFolder((int)hints.jungle);
+                    string path = SelectFolder((int)hints.items_selection);
                     if (path == "") { throw new Exception("path not initialized"); }
-                    ShowImage(path, (int)hints.jungle, modifier);
+                    ShowImage(path, (int)hints.items_selection, modifier);
                 }
             }
         }
@@ -2538,6 +2566,29 @@ namespace Yato.DirectXOverlay
             EndScene();
         }
     }
+    #region JungleStacking class
+
+    public class JungleStacking : MessageBox
+    {
+        public JungleStacking()
+        {
+        }
+
+        public JungleStacking(Message _content, string _title) : base(_content, _title)
+        {
+            float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
+            float box_top = message.img_y - modifier_y * 3 * Direct2DRenderer.size_scale;
+            float box_right = box_left + modifier_x * 10 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 6* Direct2DRenderer.size_scale;
+            box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
+            // Title setup
+            float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
+            float title_top = message.y - modifier_y * 2 * Direct2DRenderer.size_scale;
+            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan Pro 3", 20, box_left, box_top);
+            title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
+        }
+    }
+    #endregion
 
     #region HeroSuggestion class
 
@@ -2577,11 +2628,12 @@ namespace Yato.DirectXOverlay
             float box_left = message.img_x + modifier_x * 2 * Direct2DRenderer.size_scale;
             float box_top = message.img_y - modifier_y * 4 * Direct2DRenderer.size_scale;
             float box_right = box_left + modifier_x * 14 * Direct2DRenderer.size_scale;
-            float box_bottem = box_top + modifier_y * 24 * Direct2DRenderer.size_scale;
+            float box_bottem = box_top + modifier_y * 26 * Direct2DRenderer.size_scale;
             box_pos = new Tuple<float, float, float, float>(box_left, box_top, box_right, box_bottem);
             // Title setup
             float title_left = (box_left + box_right) / 2 - modifier_x * 2 * Direct2DRenderer.size_scale;
-            float title_top = message.y - modifier_y * 3 * Direct2DRenderer.size_scale;
+            float title_top = message.y - modifier_y * 2 * Direct2DRenderer.size_scale;
+            Logo = new Tuple<string, string, float, float, float>("GAMING SUPERVISOR", "Trajan Pro 3", 20, box_left, box_top);
             title = new Tuple<string, string, float, float, float>(_title, "Century Gothic", 32, title_left, title_top);
         }
     }
