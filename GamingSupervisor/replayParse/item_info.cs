@@ -113,6 +113,8 @@ namespace replayParse
                     }
                 }
             }
+            int oneThird = (2 * firstTick + lastTick) / 3;
+            int twoThird = (firstTick + 2*lastTick) / 3;
             foreach (var kills in teamfight)
             {
                 tickInfo[(int)Double.Parse(kills[0])] = new List<Tuple<string, string, string>>();
@@ -123,8 +125,21 @@ namespace replayParse
                     string killer = ID_table[hero_table[ConvertedHeroName.Get(cont[1])]];
                     if (killed == myHero)
                     {
+                        int itemInfo;
                         int killedID = hero_table[ConvertedHeroName.Get(killed)];
-                        int itemInfo = item_KB[killedID, 1];
+                        int curtick = (int)(Double.Parse(kills[0]));
+                        if(curtick<= oneThird)
+                        {
+                            itemInfo = item_KB[killedID, 0];
+                        }
+                        else if (twoThird > curtick && curtick > oneThird)
+                        {
+                            itemInfo = item_KB[killedID, 1];
+                        }
+                        else
+                        {
+                            itemInfo = item_KB[killedID, 2];
+                        }
                         item_ID.Add((int)(Double.Parse(kills[0])), itemInfo);
                     }
                 }
