@@ -332,6 +332,7 @@ namespace GamingSupervisor
         private void HandleGamePlay()
         {
             long item_now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            string name = "";
             if (heroInfoflag == 0)
             {
                 heroInfoflag = 1;
@@ -340,7 +341,7 @@ namespace GamingSupervisor
             if (item_now_ms - timeSinceheroInfo_ms <= 20000 && heroInfoflag == 1)
             {
                 Dictionary<int, string> hero_Intro_Dic = hero_Intro.getHeroIntro();
-                string name = gsi.Name.Replace("hero_","*");
+                name = gsi.Name.Replace("hero_","*");
                 string[] namestr = name.Split('*');
                 name = string.Join("", namestr[namestr.Length-1].Split(new string[] { "_" }, StringSplitOptions.None));
                 name = ConvertedHeroName.Get(name);
@@ -376,7 +377,7 @@ namespace GamingSupervisor
 
 
             // For suggestion for tango and Healing_Salve.
-            if (gsi.Health < (gsi.MaxHealth - 130) && gsi.Health != 0)
+            if (gsi.Health != 0 && gsi.Health < (gsi.MaxHealth - 130))
             {
                 if (gsi.Health < (gsi.MaxHealth - 430) && gsi.Health != 0 && gsi.Items.Contains("item_flask"))
                 {
@@ -452,6 +453,46 @@ namespace GamingSupervisor
             {
                 itemflag = 0;
                 overlay.ClearItemSuggestion();
+            }
+
+
+            // item suggestion to buy something
+            int item_suggestion_flag = 0;
+
+            if(gsi.Health == 0)
+            {
+                int item_id = i_info.item_suggestion_for_live(gsi.Items, name);
+                long now_ms = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                if (item_suggestion_flag == 0)
+                {
+                    item_suggestion_flag = 1;
+                    timeSinceItemSuggestion_ms = now_ms;
+                }
+                if (now_ms - timeSinceItemSuggestion_ms <= 10000)
+                {
+                    string item_name = item_Info_Table[item_id + 2, 2];
+                    string item_tip = item_Info_Table[item_id + 2, 117];
+                    string item_content;
+                    if (item_tip == " 0")
+                    {
+                        item_content = item_name + ":\n This is a good choice.";
+                    }
+                    else
+                    {
+                        item_content = item_name + ":\n " + item_tip;
+                    }
+                    if (item_suggestion_flag == 1)
+                    {
+                        item_name = item_name.TrimStart(' ');
+                        string item_img = item_name.Replace(" ", "_");
+                        overlay.AddItemSuggestionMessage(item_content, item_img + "_icon");
+                    }
+
+                }
+                else
+                {
+                    overlay.ClearItemSuggestion();
+                }
             }
         }
 
