@@ -145,7 +145,52 @@ namespace replayParse
                 }
             }
             return item_ID;
-        }        
+        }
+
+
+
+        public int item_suggestion_for_live(List<string> items,  string myHero)
+        {
+            Dictionary<int, int> item_ID = new Dictionary<int, int>();
+            heroID hid = new heroID();
+            Dictionary<int, string> ID_table = hid.getHeroID(); // key is ID, value is hero_name;
+            Dictionary<string, int> hero_table = hid.getIDfromLowercaseHeroname(); // key is hero_name, value is ID;
+            int hero_cur_id = hero_table[myHero];
+            List<int> itemsID = new List<int>();
+            string item_name = "";
+            string item_lower = "";
+            foreach(string s in items)
+            {
+                item_name = s.Replace("item","");
+                item_name = item_name.Replace("_", "");
+                if (item_name.Contains("travel"))
+                {
+                    item_name = "bootsoftravel";
+                }
+                else if (item_name.Contains("cyclone"))
+                {
+                    item_name = "eul";
+                }
+                for (int i = 3; i< 156; i++)
+                {
+                    item_lower = item_table_info[i,2].ToLower();
+                    item_lower = item_lower.Replace(" ", "");
+                    if (item_lower.Contains(item_name))
+                    {
+                        itemsID.Add(i-2);
+                    }
+                }
+            }
+
+            for(int i = 0; i< 3; i++)
+            {
+                if (!itemsID.Contains(item_KB[hero_cur_id, i]))
+                {
+                    return item_KB[hero_cur_id, i];
+                }
+            }
+            return 121;
+        }
     }
 
 }

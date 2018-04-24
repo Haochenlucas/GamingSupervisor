@@ -558,14 +558,14 @@ namespace GamingSupervisor
                         }
                     }
                 }
-                if (itemflag == 1 && announcer.GetCurrentGameTime() >= item_Time_Mark && announcer.GetCurrentGameTime() <= (item_Time_Mark + 10))
+                if (itemflag == 1 && health ==  0 && announcer.GetCurrentGameTime() >= item_Time_Mark && announcer.GetCurrentGameTime() <= (item_Time_Mark + 10))
                 {
                     string item_name = item_Info_Table[i_suggestion[closestGaming] + 2, 2];
                     string item_tip = item_Info_Table[i_suggestion[closestGaming] + 2, 117];
                     string item_content;
                     if (item_tip == " 0")
                     {
-                        item_content = item_name + ":\nSummons a Warrior and an Archer to fight for you for 50 seconds. Lycan gives his summons a long-duration haste, as well as providing a critical strike aura.";
+                        item_content = item_name + ":\n This item will be a good choice";
                     }
                     else
                     {
