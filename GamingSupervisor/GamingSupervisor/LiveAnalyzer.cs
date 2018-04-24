@@ -141,6 +141,7 @@ namespace GamingSupervisor
                                 highlightBarBox.Visibility = Visibility.Hidden;
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Hidden;
+                                junglingBox.Visibility = Visibility.Hidden;
                             });
                         }
                         break;
@@ -158,6 +159,7 @@ namespace GamingSupervisor
                                 highlightBarBox.Visibility = Visibility.Hidden;
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Hidden;
+                                junglingBox.Visibility = Visibility.Hidden;
                             });
                         }
 
@@ -212,6 +214,7 @@ namespace GamingSupervisor
                                 highlightBarBox.Visibility = Visibility.Hidden;
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Visible;
+                                junglingBox.Visibility = Visibility.Hidden;
                             });
 
                         }
@@ -286,10 +289,15 @@ namespace GamingSupervisor
             double itemPositionY = 0;
             GetBoxPosition(itemBox, out itemPositionX, out itemPositionY);
 
+            double junglingPositionX = 0;
+            double junglingPositionY = 0;
+            GetBoxPosition(junglingBox, out junglingPositionX, out junglingPositionY);
+
             overlay.ShowInGameOverlay(visualCustomizeHandle,
                 highlightBarPositionX, highlightBarPositionY,
                 healthGraphPositionX, healthGraphPositionY,
                 itemPositionX, itemPositionY,
+                junglingPositionX, junglingPositionY,
                 highlightBarWidth);
         }
 

@@ -21,6 +21,7 @@ namespace GamingSupervisor
         protected OverlayBox highlightBarBox;
         protected OverlayBox healthGraphsBox;
         protected OverlayBox itemBox;
+        protected OverlayBox junglingBox;
         protected IntPtr visualCustomizeHandle;
 
         public Analyzer()
@@ -40,6 +41,7 @@ namespace GamingSupervisor
                     AddHighlightBarBox();
                     AddHealthGraphsBox();
                     AddItemBox();
+                    AddJunglingBox();
                 });
         }
 
@@ -164,8 +166,8 @@ namespace GamingSupervisor
             // Calculations taken directly from Direct2DRenderer.cs
             double start_x = 0;
             double end_x = 250 / visualCustomize.ScreenWidth * visualCustomize.ActualWidth;
-            double start_y = visualCustomize.ActualHeight / 2 + (-100 + 28) / visualCustomize.ScreenHeight * visualCustomize.ActualHeight;
-            double end_y = visualCustomize.ActualHeight / 2 + (150 + 28) / visualCustomize.ScreenHeight * visualCustomize.ActualHeight;
+            double end_y = visualCustomize.ActualHeight / 2 + (-108 + 28) / visualCustomize.ScreenHeight * visualCustomize.ActualHeight;
+            double start_y = visualCustomize.ActualHeight / 4;
 
             healthGraphsBox = new OverlayBox
             {
@@ -211,6 +213,33 @@ namespace GamingSupervisor
                 (int)Math.Round(itemBoxY));
 
             itemBox.Visibility = Visibility.Hidden;
+        }
+
+        private void AddJunglingBox()
+        {
+            // Calculations taken directly from Direct2DRenderer.cs
+            double box_left = visualCustomize.ActualWidth / 32 * 23 - Direct2DRenderer.size_scale * visualCustomize.ActualWidth / 32 * 2 * Direct2DRenderer.size_scale;
+            double box_top = visualCustomize.ActualHeight / 32 * 24 - visualCustomize.ActualHeight / 32 * 3 * Direct2DRenderer.size_scale;
+            double box_right = box_left + visualCustomize.ActualWidth / 32 * 10 * Direct2DRenderer.size_scale;
+            double box_bottom = box_top + visualCustomize.ActualHeight / 32 * 6 * Direct2DRenderer.size_scale;
+
+            junglingBox = new OverlayBox
+            {
+                Width = box_right - box_left,
+                MinWidth = 1,
+                Height = box_bottom - box_top,
+                MinHeight = 1,
+            };
+
+            double junglingBoxX = box_left;
+            double junglingBoxY = box_top;
+
+            visualCustomize.AddBox(
+                junglingBox,
+                (int)Math.Round(junglingBoxX),
+                (int)Math.Round(junglingBoxY));
+
+            junglingBox.Visibility = Visibility.Hidden;
         }
 
         public abstract void Start();

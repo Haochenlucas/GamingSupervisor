@@ -191,6 +191,7 @@ namespace GamingSupervisor
                                 highlightBarBox.Visibility = Visibility.Hidden;
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Hidden;
+                                junglingBox.Visibility = Visibility.Hidden;
                             });
                         }
                         if (replayStarted)
@@ -211,6 +212,7 @@ namespace GamingSupervisor
                                 highlightBarBox.Visibility = Visibility.Hidden;
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Hidden;
+                                junglingBox.Visibility = Visibility.Hidden;
                             });
 
                             replayStarted = true;
@@ -238,6 +240,7 @@ namespace GamingSupervisor
                             ranHeroSelectionAtLeastOnce = true;
 
                         break;
+                    case "DOTA_GAMERULES_STATE_STRATEGY_TIME":
                     case "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD":
                         if (lastGameState != "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD")
                         {
@@ -245,8 +248,9 @@ namespace GamingSupervisor
                             {
                                 ranHeroSelectionAtLeastOnce = true;
                                 HandleHeroSelection();
-                                overlay.ClearHeroSuggestion();
                             }
+
+                            overlay.ClearHeroSuggestion();
 
                             lastGameState = "DOTA_GAMERULES_STATE_WAIT_FOR_MAP_TO_LOAD";
                             overlay.Clear();
@@ -279,6 +283,7 @@ namespace GamingSupervisor
                                 highlightBarBox.Visibility = Visibility.Visible;
                                 healthGraphsBox.Visibility = Visibility.Visible;
                                 itemBox.Visibility = Visibility.Visible;
+                                junglingBox.Visibility = Visibility.Visible;
                             });
                             replayStarted = true;
                         }
@@ -286,12 +291,14 @@ namespace GamingSupervisor
                         bool isHighlightBarBoxVisible = true;
                         bool isHealthGraphsBoxVisible = true;
                         bool isItemSuggestionsBoxVisible = true;
+                        bool isJunglingBoxVisible = true;
                         System.Windows.Application.Current.Dispatcher.Invoke(
                             () =>
                             {
                                 isHighlightBarBoxVisible = highlightBarBox.IsOverlayVisible;
                                 isHealthGraphsBoxVisible = healthGraphsBox.IsOverlayVisible;
                                 isItemSuggestionsBoxVisible = itemBox.IsOverlayVisible;
+                                isJunglingBoxVisible = junglingBox.IsOverlayVisible;
                             });
 
                         SetEnemiesHeroIDs();
@@ -311,6 +318,11 @@ namespace GamingSupervisor
                         else
                             overlay.HideItemSuggestions();
 
+                        if (isJunglingBoxVisible)
+                            overlay.ShowItemSuggestions();
+                        else
+                            overlay.HideItemSuggestions();
+
                         HandleGamePlay();
                         UpdateInGameOverlay();
                         break;
@@ -323,8 +335,6 @@ namespace GamingSupervisor
                 {
                     break;
                 }
-
-                //Thread.Sleep(10);
 
                 currentGameTime = announcer.GetCurrentGameTime();
                 if (currentGameTime < 1)
@@ -399,10 +409,15 @@ namespace GamingSupervisor
             double itemPositionY = 0;
             GetBoxPosition(itemBox, out itemPositionX, out itemPositionY);
 
+            double junglingPositionX = 0;
+            double junglingPositionY = 0;
+            GetBoxPosition(junglingBox, out junglingPositionX, out junglingPositionY);
+
             overlay.ShowInGameOverlay(visualCustomizeHandle,
                 highlightBarPositionX, highlightBarPositionY,
                 healthGraphPositionX, healthGraphPositionY,
                 itemPositionX, itemPositionY,
+                junglingPositionX, junglingPositionY,
                 highlightBarWidth);
         }
         

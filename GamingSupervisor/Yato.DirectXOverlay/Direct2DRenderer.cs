@@ -1881,10 +1881,24 @@ namespace Yato.DirectXOverlay
         {
             drawItemSuggestions = false;
         }
+
+        private bool drawJungleStacking = false;
+        public void ShowJungleStacking()
+        {
+
+            drawJungleStacking = true;
+        }
+
+        public void HideJungleStacking()
+        {
+            drawJungleStacking = false;
+        }
+
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, IntPtr doNotIgnoreHandle,
             float highlightBarPositionX, float highlightBarPositionY,
             float healthGraphsPositionX, float healthGraphsPositionY,
             float itemPositionX, float itemPositionY,
+            float junglingPositionX, float junglingPositionY,
             float highlightBarWidth)
         {
             IntPtr fg = GetForegroundWindow();
@@ -1941,7 +1955,8 @@ namespace Yato.DirectXOverlay
                 }
 
                 // Jungle Stacking
-                DrawJungleStacking();
+                if (drawJungleStacking)
+                    DrawJungleStacking(junglingPositionX, junglingPositionY);
 
                 // Move these two parts down for item suggestion
                 if (drawHighlight)
@@ -2010,7 +2025,7 @@ namespace Yato.DirectXOverlay
                     float currY = screen_height / 2;
 
                     float healthGraphsDistanceFromDefaultHorizontal = healthGraphsPositionX - 0;
-                    float healthGraphsDistanceFromDefaultVertical = healthGraphsPositionY - currY;
+                    float healthGraphsDistanceFromDefaultVertical = healthGraphsPositionY - currY / 2;
 
                     // bar graph
                     for (int i = 0; i < 5; i++)
@@ -2101,10 +2116,12 @@ namespace Yato.DirectXOverlay
                 clear();
             }
         }
-        private void DrawJungleStacking()
+        private void DrawJungleStacking(float junglingPositionX, float junglingPositionY)
         {
             if (messages[(int)hints.jungle].on)
             {
+                float itemDistanceFromDefaultHorizontal = junglingPositionX - ItemSugg.box_pos.Item1;
+                float itemDistanceFromDefaultVertical = junglingPositionY - ItemSugg.box_pos.Item2;
 
                 // Draw Jungles Stacking box
                 Direct2DBrush box_background = CreateBrush(
@@ -2115,18 +2132,18 @@ namespace Yato.DirectXOverlay
                 // The box
                 device.FillRectangle(
                     new RawRectangleF(
-                        left: JungleStack.box_pos.Item1,
-                        top: JungleStack.box_pos.Item2,
-                        right: JungleStack.box_pos.Item3,
-                        bottom: JungleStack.box_pos.Item4),
+                        left: JungleStack.box_pos.Item1 + itemDistanceFromDefaultHorizontal,
+                        top: JungleStack.box_pos.Item2 + itemDistanceFromDefaultVertical,
+                        right: JungleStack.box_pos.Item3 + itemDistanceFromDefaultHorizontal,
+                        bottom: JungleStack.box_pos.Item4 + itemDistanceFromDefaultVertical),
                     box_background);
 
                 // Title of the box
                 Tuple<string, int> textFont = new Tuple<string, int>(JungleStack.title.Item2, (int)JungleStack.title.Item3);
                 DrawTextWithBackground(
                     text: JungleStack.title.Item1,
-                    x: JungleStack.title.Item4,
-                    y: JungleStack.title.Item5,
+                    x: JungleStack.title.Item4 + itemDistanceFromDefaultHorizontal,
+                    y: JungleStack.title.Item5 + itemDistanceFromDefaultVertical,
                     tfont: textFont,
                     tcolor: JungleStack.tColor,
                     tbackground: JungleStack.tBackColor);
@@ -2135,21 +2152,21 @@ namespace Yato.DirectXOverlay
                 float modifier;
                 DrawTextWithBackground(
                     text: JungleStack.message.text,
-                    x: JungleStack.message.x,
-                    y: JungleStack.message.y,
+                    x: JungleStack.message.x + itemDistanceFromDefaultHorizontal,
+                    y: JungleStack.message.y + itemDistanceFromDefaultVertical,
                     tfont: JungleStack.message.font,
                     tcolor: JungleStack.message.color,
                     tbackground: JungleStack.message.background,
                     modifier: out modifier);
 
                 // Draw LOGO
-                DrawLogo(JungleStack, 0, 0);
+                DrawLogo(JungleStack, itemDistanceFromDefaultHorizontal, itemDistanceFromDefaultVertical);
                 // Draw image
                 if (messages[(int)hints.items_selection].imgName != "")
                 {
                     string path = SelectFolder((int)hints.items_selection);
                     if (path == "") { throw new Exception("path not initialized"); }
-                    ShowImage(path, (int)hints.items_selection, modifier);
+                    ShowImage(path, (int)hints.items_selection, modifier, itemDistanceFromDefaultHorizontal, itemDistanceFromDefaultVertical);
                 }
             }
         }

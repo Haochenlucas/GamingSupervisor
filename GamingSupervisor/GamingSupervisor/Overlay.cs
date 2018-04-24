@@ -179,6 +179,7 @@ namespace GamingSupervisor
             double highlightBarPositionX, double highlightBarPositionY,
             double healthGraphsPositionX, double healthGraphsPositionY,
             double itemPositionX, double itemPositionY,
+            double junglingPositionX, double junglingPositionY,
             double highlightBarWidth)
         {
             renderer.Ingame_Draw(
@@ -191,6 +192,8 @@ namespace GamingSupervisor
                 healthGraphsPositionY: (float)healthGraphsPositionY,
                 itemPositionX: (float)itemPositionX,
                 itemPositionY: (float)itemPositionY,
+                junglingPositionX: (float)junglingPositionX,
+                junglingPositionY: (float)junglingPositionY,
                 highlightBarWidth: (float)highlightBarWidth);
         }
 
