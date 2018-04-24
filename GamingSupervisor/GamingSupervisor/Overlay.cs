@@ -165,6 +165,16 @@ namespace GamingSupervisor
             renderer.HideItemSuggestions();
         }
 
+        public void ShowJungleStacking()
+        {
+            renderer.ShowJungleStacking();
+        }
+
+        public void HideJungleStacking()
+        {
+            renderer.HideJungleStacking();
+        }
+
         public void ToggleHighlight(bool tog = true)
         {
             renderer.ToggleHightlight(tog);

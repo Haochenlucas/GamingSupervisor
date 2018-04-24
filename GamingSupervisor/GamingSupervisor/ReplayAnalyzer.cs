@@ -319,9 +319,9 @@ namespace GamingSupervisor
                             overlay.HideItemSuggestions();
 
                         if (isJunglingBoxVisible)
-                            overlay.ShowItemSuggestions();
+                            overlay.ShowJungleStacking();
                         else
-                            overlay.HideItemSuggestions();
+                            overlay.HideJungleStacking();
 
                         HandleGamePlay();
                         UpdateInGameOverlay();
@@ -742,7 +742,7 @@ namespace GamingSupervisor
                 int minute = totalsecond / 60 - second;
                 //content += "Game Time: " + minute.ToString() + ":" + second.ToString() + "\n";
                 int countdown = secondMark - second;
-                if (countdown < 5)
+                if (countdown < 6)
                 {
                     content += "Count down: " + countdown + "\n";
                     content += JungleCamps.GetDirection(closestJungleCamp);

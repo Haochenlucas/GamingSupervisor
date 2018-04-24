@@ -2120,8 +2120,8 @@ namespace Yato.DirectXOverlay
         {
             if (messages[(int)hints.jungle].on)
             {
-                float itemDistanceFromDefaultHorizontal = junglingPositionX - ItemSugg.box_pos.Item1;
-                float itemDistanceFromDefaultVertical = junglingPositionY - ItemSugg.box_pos.Item2;
+                float itemDistanceFromDefaultHorizontal = junglingPositionX - JungleStack.box_pos.Item1;
+                float itemDistanceFromDefaultVertical = junglingPositionY - JungleStack.box_pos.Item2;
 
                 // Draw Jungles Stacking box
                 Direct2DBrush box_background = CreateBrush(
