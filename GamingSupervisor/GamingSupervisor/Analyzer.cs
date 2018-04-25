@@ -22,6 +22,7 @@ namespace GamingSupervisor
         protected OverlayBox healthGraphsBox;
         protected OverlayBox itemBox;
         protected OverlayBox junglingBox;
+        protected OverlayBox retreatBox;
         protected IntPtr visualCustomizeHandle;
 
         public Analyzer()
@@ -42,6 +43,7 @@ namespace GamingSupervisor
                     AddHealthGraphsBox();
                     AddItemBox();
                     AddJunglingBox();
+                    AddRetreatBox();
                 });
         }
 
@@ -240,6 +242,33 @@ namespace GamingSupervisor
                 (int)Math.Round(junglingBoxY));
 
             junglingBox.Visibility = Visibility.Hidden;
+        }
+
+        private void AddRetreatBox()
+        {
+            // Calculations taken directly from Direct2DRenderer.cs
+            double box_left = visualCustomize.ActualWidth / 32 * 23 - Direct2DRenderer.size_scale * visualCustomize.ActualWidth / 32 * 2 * Direct2DRenderer.size_scale;
+            double box_top = visualCustomize.ActualHeight / 32 * 24 - visualCustomize.ActualHeight / 32 * 3 * Direct2DRenderer.size_scale;
+            double box_right = box_left + visualCustomize.ActualWidth / 32 * 10 * Direct2DRenderer.size_scale;
+            double box_bottom = box_top + visualCustomize.ActualHeight / 32 * 6 * Direct2DRenderer.size_scale;
+
+            retreatBox = new OverlayBox
+            {
+                Width = box_right - box_left,
+                MinWidth = 1,
+                Height = box_bottom - box_top,
+                MinHeight = 1,
+            };
+
+            double retreatBoxX = box_left;
+            double retreatBoxY = box_top;
+
+            visualCustomize.AddBox(
+                retreatBox,
+                (int)Math.Round(retreatBoxX),
+                (int)Math.Round(retreatBoxY));
+
+            retreatBox.Visibility = Visibility.Hidden;
         }
 
         public abstract void Start();

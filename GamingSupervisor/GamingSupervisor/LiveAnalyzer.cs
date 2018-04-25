@@ -142,6 +142,7 @@ namespace GamingSupervisor
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Hidden;
                                 junglingBox.Visibility = Visibility.Hidden;
+                                retreatBox.Visibility = Visibility.Hidden;
                             });
                         }
                         break;
@@ -160,6 +161,7 @@ namespace GamingSupervisor
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Hidden;
                                 junglingBox.Visibility = Visibility.Hidden;
+                                retreatBox.Visibility = Visibility.Hidden;
                             });
                         }
 
@@ -215,6 +217,7 @@ namespace GamingSupervisor
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Visible;
                                 junglingBox.Visibility = Visibility.Hidden;
+                                retreatBox.Visibility = Visibility.Visible;
                             });
 
                         }
@@ -223,11 +226,13 @@ namespace GamingSupervisor
 
                         bool isHealthGraphsBoxVisible = true;
                         bool isItemSuggestionsBoxVisible = true;
+                        bool isRetreatBoxVisible = true;
                         System.Windows.Application.Current.Dispatcher.Invoke(
                             () =>
                             {
                                 isHealthGraphsBoxVisible = healthGraphsBox.IsOverlayVisible;
                                 isItemSuggestionsBoxVisible = itemBox.IsOverlayVisible;
+                                isRetreatBoxVisible = retreatBox.IsOverlayVisible;
                             });
 
                         //if (isHealthGraphsBoxVisible)
@@ -240,6 +245,11 @@ namespace GamingSupervisor
                             overlay.ShowItemSuggestions();
                         else
                             overlay.HideItemSuggestions();
+
+                        if (isRetreatBoxVisible)
+                            overlay.ShowRetreat();
+                        else
+                            overlay.HideRetreat();
 
                         HandleGamePlay();
                         HandleHeroGraph();
