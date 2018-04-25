@@ -69,6 +69,17 @@ namespace GamingSupervisor
             positionX = posX;
             positionY = posY;
         }
+
+        protected void SetBoxPosition(OverlayBox box, double posX, double posY)
+        {
+            Application.Current.Dispatcher.Invoke(
+                () =>
+                {
+                    Canvas.SetLeft(box, posX * visualCustomize.ActualWidth / visualCustomize.ScreenWidth);
+                    Canvas.SetTop(box, posY * visualCustomize.ActualHeight / visualCustomize.ScreenHeight);
+                }
+                );
+        }
  
         protected void GetBoxWidth(OverlayBox box, out double width)
         {
@@ -79,6 +90,16 @@ namespace GamingSupervisor
                     w = box.Width / visualCustomize.ActualWidth* visualCustomize.ScreenWidth;
                 });
             width = w;
+        }
+
+        protected void SetBoxWidth(OverlayBox box, double width)
+        {
+            Application.Current.Dispatcher.Invoke(
+                () =>
+                {
+                    box.Width = width * visualCustomize.ActualWidth / visualCustomize.ScreenWidth;
+                }
+                );
         }
 
         private void AddInitialInstructionsBox()
