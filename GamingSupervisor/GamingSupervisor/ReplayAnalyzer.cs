@@ -21,6 +21,7 @@ namespace GamingSupervisor
         private int closestGaming = 0;
         private LastHitCalculator lastHitCalculator;
         private Retreat retreat;
+        private Boolean firstTime = true;
 
         private ReplayStartAnnouncer announcer = null;
 
@@ -334,6 +335,9 @@ namespace GamingSupervisor
                             overlay.HideRetreat();
 
                         HandleGamePlay();
+                        if (firstTime)
+                            UpdateInGameOverlay(out firstTime);
+                        else
                         UpdateInGameOverlay();
                         break;
                     default:
@@ -410,6 +414,7 @@ namespace GamingSupervisor
             GetBoxPosition(highlightBarBox, out highlightBarPositionX, out highlightBarPositionY);
             double highlightBarWidth = 0;
             GetBoxWidth(highlightBarBox, out highlightBarWidth);
+            
 
             double healthGraphPositionX = 0;
             double healthGraphPositionY = 0;
@@ -435,7 +440,46 @@ namespace GamingSupervisor
                 retreatPositionX, retreatPositionY,
                 highlightBarWidth);
         }
-        
+
+        private void UpdateInGameOverlay(out Boolean flag)
+        {
+            double highlightBarPositionX = 0;
+            double highlightBarPositionY = 0;
+            GetBoxPosition(highlightBarBox, out highlightBarPositionX, out highlightBarPositionY);
+            double highlightBarWidth = 0;
+            GetBoxWidth(highlightBarBox, out highlightBarWidth);
+
+            SetBoxPosition(highlightBarBox, 694.63414634146352, 1041.6469879518072);
+            SetBoxWidth(highlightBarBox, 491.70731707317077);
+
+
+            double healthGraphPositionX = 0;
+            double healthGraphPositionY = 0;
+            GetBoxPosition(healthGraphsBox, out healthGraphPositionX, out healthGraphPositionY);
+
+            double itemPositionX = 0;
+            double itemPositionY = 0;
+            GetBoxPosition(itemBox, out itemPositionX, out itemPositionY);
+
+            double junglingPositionX = 0;
+            double junglingPositionY = 0;
+            GetBoxPosition(junglingBox, out junglingPositionX, out junglingPositionY);
+
+            double retreatPositionX = 0;
+            double retreatPositionY = 0;
+            GetBoxPosition(retreatBox, out retreatPositionX, out retreatPositionY);
+
+            overlay.ShowInGameOverlay(visualCustomizeHandle,
+                highlightBarPositionX, highlightBarPositionY,
+                healthGraphPositionX, healthGraphPositionY,
+                itemPositionX, itemPositionY,
+                junglingPositionX, junglingPositionY,
+                retreatPositionX, retreatPositionY,
+                highlightBarWidth);
+            flag = false;
+        }
+
+
         private void ShowHeroSelectionSuggestions()
         {
             double positionX = 0;
