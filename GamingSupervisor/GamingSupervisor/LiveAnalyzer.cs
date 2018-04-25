@@ -303,11 +303,16 @@ namespace GamingSupervisor
             double junglingPositionY = 0;
             GetBoxPosition(junglingBox, out junglingPositionX, out junglingPositionY);
 
+            double retreatPositionX = 0;
+            double retreatPositionY = 0;
+            GetBoxPosition(retreatBox, out retreatPositionX, out retreatPositionY);
+
             overlay.ShowInGameOverlay(visualCustomizeHandle,
                 highlightBarPositionX, highlightBarPositionY,
                 healthGraphPositionX, healthGraphPositionY,
                 itemPositionX, itemPositionY,
                 junglingPositionX, junglingPositionY,
+                retreatPositionX, retreatPositionY,
                 highlightBarWidth);
         }
 

@@ -1927,8 +1927,8 @@ namespace Yato.DirectXOverlay
                 {
                     if (messages[(int)hints.retreat].on)
                     {
-                        float retreatDistanceFromDefaultHorizontal = retreatPositionX - LEFTMOSTVALUEHERE;
-                        float retreatDistanceFromDefaultVertical = retreatPositionY - TOPMOSTVALUEHERE;
+                        float retreatDistanceFromDefaultHorizontal = retreatPositionX - (messages[7].img_x - messages[7].img_width);
+                        float retreatDistanceFromDefaultVertical = retreatPositionY - (messages[7].img_y - messages[7].img_height);
 
                         float modifier;
                         DrawTextWithBackground(
