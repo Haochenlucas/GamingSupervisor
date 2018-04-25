@@ -113,7 +113,7 @@ namespace replayParse
                     }
                 }
             }
-            int oneThird = (2 * firstTick + lastTick) / 3;
+            int oneThird = (2 * firstTick + lastTick) / 8;
             int twoThird = (firstTick + 2*lastTick) / 3;
             foreach (var kills in teamfight)
             {
@@ -130,7 +130,7 @@ namespace replayParse
                         int curtick = (int)(Double.Parse(kills[0]));
                         if(curtick<= oneThird)
                         {
-                            itemInfo = item_KB[killedID, 0];
+                            itemInfo = item_KB[killedID, 1];
                         }
                         else if (twoThird > curtick && curtick > oneThird)
                         {
