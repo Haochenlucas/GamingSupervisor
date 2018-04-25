@@ -192,6 +192,7 @@ namespace GamingSupervisor
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Hidden;
                                 junglingBox.Visibility = Visibility.Hidden;
+                                retreatBox.Visibility = Visibility.Hidden;
                             });
                         }
                         if (replayStarted)
@@ -213,6 +214,7 @@ namespace GamingSupervisor
                                 healthGraphsBox.Visibility = Visibility.Hidden;
                                 itemBox.Visibility = Visibility.Hidden;
                                 junglingBox.Visibility = Visibility.Hidden;
+                                retreatBox.Visibility = Visibility.Hidden;
                             });
 
                             replayStarted = true;
@@ -284,6 +286,7 @@ namespace GamingSupervisor
                                 healthGraphsBox.Visibility = Visibility.Visible;
                                 itemBox.Visibility = Visibility.Visible;
                                 junglingBox.Visibility = Visibility.Visible;
+                                retreatBox.Visibility = Visibility.Visible;
                             });
                             replayStarted = true;
                         }
@@ -292,6 +295,7 @@ namespace GamingSupervisor
                         bool isHealthGraphsBoxVisible = true;
                         bool isItemSuggestionsBoxVisible = true;
                         bool isJunglingBoxVisible = true;
+                        bool isRetreatVisible = true;
                         System.Windows.Application.Current.Dispatcher.Invoke(
                             () =>
                             {
@@ -299,6 +303,7 @@ namespace GamingSupervisor
                                 isHealthGraphsBoxVisible = healthGraphsBox.IsOverlayVisible;
                                 isItemSuggestionsBoxVisible = itemBox.IsOverlayVisible;
                                 isJunglingBoxVisible = junglingBox.IsOverlayVisible;
+                                isRetreatVisible = retreatBox.IsOverlayVisible;
                             });
 
                         SetEnemiesHeroIDs();
@@ -322,6 +327,11 @@ namespace GamingSupervisor
                             overlay.ShowJungleStacking();
                         else
                             overlay.HideJungleStacking();
+
+                        if (isRetreatVisible)
+                            overlay.ShowRetreat();
+                        else
+                            overlay.HideRetreat();
 
                         HandleGamePlay();
                         UpdateInGameOverlay();
@@ -413,11 +423,16 @@ namespace GamingSupervisor
             double junglingPositionY = 0;
             GetBoxPosition(junglingBox, out junglingPositionX, out junglingPositionY);
 
+            double retreatPositionX = 0;
+            double retreatPositionY = 0;
+            GetBoxPosition(retreatBox, out retreatPositionX, out retreatPositionY);
+
             overlay.ShowInGameOverlay(visualCustomizeHandle,
                 highlightBarPositionX, highlightBarPositionY,
                 healthGraphPositionX, healthGraphPositionY,
                 itemPositionX, itemPositionY,
                 junglingPositionX, junglingPositionY,
+                retreatPositionX, retreatPositionY,
                 highlightBarWidth);
         }
         

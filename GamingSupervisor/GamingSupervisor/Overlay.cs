@@ -175,6 +175,16 @@ namespace GamingSupervisor
             renderer.HideJungleStacking();
         }
 
+        public void ShowRetreat()
+        {
+            renderer.ShowRetreat();
+        }
+
+        public void HideRetreat()
+        {
+            renderer.HideRetreat();
+        }
+
         public void ToggleHighlight(bool tog = true)
         {
             renderer.ToggleHightlight(tog);
@@ -190,6 +200,7 @@ namespace GamingSupervisor
             double healthGraphsPositionX, double healthGraphsPositionY,
             double itemPositionX, double itemPositionY,
             double junglingPositionX, double junglingPositionY,
+            double retreatPositionX, double retreatPositionY,
             double highlightBarWidth)
         {
             renderer.Ingame_Draw(
@@ -204,6 +215,8 @@ namespace GamingSupervisor
                 itemPositionY: (float)itemPositionY,
                 junglingPositionX: (float)junglingPositionX,
                 junglingPositionY: (float)junglingPositionY,
+                retreatPositionX: (float)retreatPositionX,
+                retreatPositionY: (float)retreatPositionY,
                 highlightBarWidth: (float)highlightBarWidth);
         }
 

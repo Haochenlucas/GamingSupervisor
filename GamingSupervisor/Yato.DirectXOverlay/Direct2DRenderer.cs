@@ -1894,11 +1894,24 @@ namespace Yato.DirectXOverlay
             drawJungleStacking = false;
         }
 
+        private bool drawRetreat = true;
+        public void ShowRetreat()
+        {
+
+            drawRetreat = true;
+        }
+
+        public void HideRetreat()
+        {
+            drawRetreat = false;
+        }
+
         public void Ingame_Draw(IntPtr parentWindowHandle, OverlayWindow overlay, IntPtr doNotIgnoreHandle,
             float highlightBarPositionX, float highlightBarPositionY,
             float healthGraphsPositionX, float healthGraphsPositionY,
             float itemPositionX, float itemPositionY,
             float junglingPositionX, float junglingPositionY,
+            float retreatPositionX, float retreatPositionY,
             float highlightBarWidth)
         {
             IntPtr fg = GetForegroundWindow();
@@ -1910,16 +1923,28 @@ namespace Yato.DirectXOverlay
                 BeginScene();
                 ClearScene();
 
-                // show retreatDirect2DFont font = CreateFont("Century Gothic", 12);
-                if (messages[(int)hints.retreat].on)
+                if (drawRetreat)
                 {
-                    float modifier;
-                    DrawTextWithBackground(messages[(int)hints.retreat].text, messages[(int)hints.retreat].x, messages[(int)hints.retreat].y, messages[(int)hints.retreat].font, messages[(int)hints.retreat].color, messages[(int)hints.retreat].background, out modifier);
-                    if (messages[(int)hints.retreat].imgName != "")
+                    if (messages[(int)hints.retreat].on)
                     {
-                        string path = SelectFolder((int)hints.retreat);
-                        if (path == "") { throw new Exception("path not initialized"); }
-                        ShowImage(path, (int)hints.retreat, modifier);
+                        float retreatDistanceFromDefaultHorizontal = retreatPositionX - (messages[7].img_x - messages[7].img_width);
+                        float retreatDistanceFromDefaultVertical = retreatPositionY - (messages[7].img_y - messages[7].img_height);
+
+                        float modifier;
+                        DrawTextWithBackground(
+                            text: messages[(int)hints.retreat].text,
+                            x: messages[(int)hints.retreat].x + retreatDistanceFromDefaultHorizontal,
+                            y: messages[(int)hints.retreat].y + retreatDistanceFromDefaultVertical,
+                            tfont: messages[(int)hints.retreat].font,
+                            tcolor: messages[(int)hints.retreat].color,
+                            tbackground: messages[(int)hints.retreat].background,
+                            modifier: out modifier);
+                        if (messages[(int)hints.retreat].imgName != "")
+                        {
+                            string path = SelectFolder((int)hints.retreat);
+                            if (path == "") { throw new Exception("path not initialized"); }
+                            ShowImage(path, (int)hints.retreat, modifier, retreatDistanceFromDefaultHorizontal, retreatDistanceFromDefaultVertical);
+                        }
                     }
                 }
                 
